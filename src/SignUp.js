@@ -12,13 +12,9 @@ function SignUp() {
     const nickname = data.get("nickname");
     const password = data.get("password");
 
-    console.log(userid);
-    console.log(nickname);
-    console.log(password);
-
     signup({ userid: userid, nickname: nickname, password: password }).then(
       (response) => {
-        //window.location.href = "/login";
+        window.location.href = "/login";
       }
     );
   };
