@@ -1,7 +1,7 @@
 ---
 name: branch 단위 이슈생성 기본 폼
 about: 브랜치 단위 이슈 제작을 위한 기본 템플릿 입니다.
-title: "[branch] feature/이슈 제목을 입력해주세요."
+title: "[branch] feature명_브랜치명"
 labels: ''
 assignees: ''
 
