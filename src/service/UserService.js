@@ -6,14 +6,16 @@ export function signup(userDTO) {
 }
 
 export function signin(userDTO) {
-  return call("/auth/signin", "POST", userDTO).then((response) => {
-    //console.log("response: ", response);
-    //alert("token: " + response.token);
-    if (response.token) {
-      localStorage.setItem("ACCESS_TOKEN", response.token);
-      window.location.href = "/";
-    }
-  });
+  return call("/auth/signin", "POST", userDTO)
+    .then((response) => {
+      if (response && response.token) {
+        localStorage.setItem("ACCESS_TOKEN", response.token);
+        window.location.href = "/";
+      }
+    })
+    .catch((error) => {
+      console.log("로그인 오류");
+    });
 }
 
 export function socialLogin(provider) {

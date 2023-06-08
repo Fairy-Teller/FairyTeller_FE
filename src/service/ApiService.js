@@ -27,11 +27,11 @@ export function call(api, method, request) {
         window.location.href = "/login";
       } else {
         Promise.reject(response);
+        console.log(response);
         throw Error(response);
       }
     })
     .catch((error) => {
       console.log("http error");
-      console.log("error");
     });
 }
