@@ -21,17 +21,17 @@ export function call(api, method, request) {
 
   return fetch(options.url, options)
     .then((response) => {
+      console.log(response);
       if (response.status === 200) {
         return response.json();
       } else if (response.status === 403) {
         window.location.href = "/login";
       } else {
-        Promise.reject(response);
-        console.log(response);
-        throw Error(response);
+        return Promise.reject(response);
       }
     })
     .catch((error) => {
-      console.log("http error");
+      console.log(error);
+      throw error;
     });
 }

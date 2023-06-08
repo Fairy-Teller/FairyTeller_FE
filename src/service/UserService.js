@@ -8,13 +8,15 @@ export function signup(userDTO) {
 export function signin(userDTO) {
   return call("/auth/signin", "POST", userDTO)
     .then((response) => {
+      console.log(response);
       if (response && response.token) {
         localStorage.setItem("ACCESS_TOKEN", response.token);
         window.location.href = "/";
       }
     })
     .catch((error) => {
-      console.log("로그인 오류");
+      console.error(error);
+      alert("로그인에 실패하였습니다. 아이디 혹은 비밀번호를 확인해주세요.");
     });
 }
 
