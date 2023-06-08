@@ -1,5 +1,5 @@
 ---
-name: 이슈생성 기본 폼
+name: feature 단위 이슈생성 기본 폼
 about: 이슈 제작을 위한 기본 템플릿 입니다. 추가 필요하신 부분은 DM주세영
 title: "[feature] 이슈 제목을 입력해주세요."
 labels: ''
