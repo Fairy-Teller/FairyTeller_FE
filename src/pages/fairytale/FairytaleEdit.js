@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Moveable from 'react-moveable';
 import keycon from 'keycon';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { throttle } from '@daybrush/utils';
 
 const Container = styled.div`
@@ -25,6 +25,12 @@ const Button = styled.button`
     height: 9%;
     top: 216px;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    ${({ clicked }) =>
+        clicked &&
+        css`
+            background-color: black;
+            color: white;
+        `}
 `;
 const Frame = styled.div`
     position: relative;
@@ -47,20 +53,56 @@ const Page = styled.div`
 
 function FairytaleEdit() {
     const [showButtonFunction, setShowButtonFunction] = React.useState(false);
+    const [buttonClicked, setButtonClicked] = React.useState(false);
+    const [activeButton, setActiveButton] = React.useState(null);
+
+    const buttonLabels = ['그림', '배경', '글꼴', '채도', '스티커'];
+
+    const handleButtonClick = (label) => {
+        setButtonClicked(!buttonClicked);
+        setActiveButton(label === activeButton ? null : label);
+
+        if (label === '배경') {
+            console.log(label);
+            const randomColor = getRandomColor();
+            const buttonFunctionDiv = document.querySelector('.background');
+
+            if (buttonFunctionDiv) {
+                buttonFunctionDiv.style.background = randomColor;
+            }
+        } else {
+            setShowButtonFunction(!showButtonFunction);
+        }
+    };
+
+    const getRandomColor = () => {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    };
+
     return (
         <div>
             <Container>
                 <Nav>
-                    <Button onClick={() => setShowButtonFunction(!showButtonFunction)}>그림</Button>
-                    <Button onClick={() => setShowButtonFunction(!showButtonFunction)}>배경</Button>
-                    <Button onClick={() => setShowButtonFunction(!showButtonFunction)}>글꼴</Button>
-                    <Button onClick={() => setShowButtonFunction(!showButtonFunction)}>채도</Button>
-                    <Button onClick={() => setShowButtonFunction(!showButtonFunction)}>스티커</Button>
+                    {buttonLabels.map((label) => (
+                        <Button
+                            key={label}
+                            clicked={buttonClicked && activeButton === label}
+                            onClick={() => handleButtonClick(label)}
+                        >
+                            {label}
+                        </Button>
+                    ))}
                 </Nav>
                 <ButtonFunction style={{ display: showButtonFunction ? 'block' : 'none' }}></ButtonFunction>
                 <Frame>
                     <Canverce>
                         <div
+                            class="background"
                             style={{
                                 width: `80%`,
                                 height: '90%',
