@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { call } from "../../service/ApiService";
+import { Link } from "react-router-dom";
 
 const BoardBookList = () => {
   const [books, setBooks] = useState([]);
@@ -40,23 +41,24 @@ const BoardBookList = () => {
         }}
       >
         {books.map((book, index) => (
-          <div
-            key={book.boardId}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              order: index + 1,
-            }}
-          >
-            <img
-              src={book.thumbnailUrl}
-              alt={book.title}
-              style={{ width: "100%", height: "auto", objectFit: "cover" }}
-            />
-            <h6 style={{ fontSize: "18px", marginTop: "10px" }}>{truncateTitle(book.title)}</h6>
-          </div>
+          <Link to={`/board/${book.boardId}`} key={book.boardId} style={{ textDecoration: "none" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                order: index + 1,
+              }}
+            >
+              <img
+                src={book.thumbnailUrl}
+                alt={book.title}
+                style={{ width: "100%", height: "auto", objectFit: "cover" }}
+              />
+              <h6 style={{ fontSize: "18px", marginTop: "10px" }}>{truncateTitle(book.title)}</h6>
+            </div>
+          </Link>
         ))}
       </div>
     </div>
