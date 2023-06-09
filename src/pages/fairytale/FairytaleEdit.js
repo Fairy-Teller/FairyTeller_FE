@@ -5,7 +5,6 @@ import styled, { css } from 'styled-components';
 import { throttle } from '@daybrush/utils';
 import html2canvas from 'html2canvas';
 
-
 const Container = styled.div`
     display: flex;
     position: relative;
@@ -47,10 +46,25 @@ const Canverce = styled.div`
     align-items: center;
     height: 80vh;
 `;
-const Page = styled.div`
+const PageFrame = styled.div`
     background: red;
-    flex-direction: column;
+
+    display: flex;
+    position: relative;
     height: 20vh;
+    padding: 10px 10% 0 5%;
+`;
+const Page = styled.div`
+    background: white;
+    width: 10vw;
+    height: 16vh;
+    margin-left: 5%;
+`;
+const NextPage = styled.div`
+    background: white;
+    width: 10vw;
+    height: 16vh;
+    margin-left: 5%;
 `;
 
 function FairytaleEdit() {
@@ -187,11 +201,23 @@ function FairytaleEdit() {
                             />
                         </div>
                     </Canverce>
-                    <Page>
-                        <button type="button" onClick={handleDownloadImage}>
-                            Download as Image
-                        </button>
-                    </Page>
+                    <button
+                        style={{
+                            position: 'absolute',
+                        }}
+                        type="button"
+                        onClick={handleDownloadImage}
+                    >
+                        Download as Image
+                    </button>
+                    <PageFrame>
+                        <Page>1</Page>
+                        <Page>2</Page>
+                        <Page>3</Page>
+                        <Page>4</Page>
+                        <Page>5</Page>
+                        <NextPage>next</NextPage>
+                    </PageFrame>
                 </Frame>
             </Container>
         </div>
