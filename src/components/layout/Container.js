@@ -1,10 +1,11 @@
-import "../../assets/css/common.scss";
+import '../../assets/css/common.scss';
 const Container = (props) => {
-  return (
-    <div className={`container ${props.className == undefined ? "" : props.className}`}>
-      {props.children}
-    </div>
-  );
+    return (
+        <div className={`container ${props.className === undefined ? '' : props.className}`}>
+            {props.children}
+            <div className="yellow-bar"></div>
+        </div>
+    );
 };
 
 export default Container;
