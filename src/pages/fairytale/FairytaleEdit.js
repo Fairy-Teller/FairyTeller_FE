@@ -3,6 +3,8 @@ import Moveable from 'react-moveable';
 import keycon from 'keycon';
 import styled, { css } from 'styled-components';
 import { throttle } from '@daybrush/utils';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 const Container = styled.div`
     display: flex;
@@ -55,6 +57,7 @@ function FairytaleEdit() {
     const [showButtonFunction, setShowButtonFunction] = React.useState(false);
     const [buttonClicked, setButtonClicked] = React.useState(false);
     const [activeButton, setActiveButton] = React.useState(null);
+    const printRef = React.useRef();
 
     const buttonLabels = ['그림', '배경', '글꼴', '채도', '스티커'];
 
@@ -70,8 +73,34 @@ function FairytaleEdit() {
             if (buttonFunctionDiv) {
                 buttonFunctionDiv.style.background = randomColor;
             }
+        } else if (label === '그림') {
+            handleExportPDF();
         } else {
             setShowButtonFunction(!showButtonFunction);
+        }
+    };
+
+    const handleDownloadImage = async () => {
+        const element = printRef.current;
+        const canvas = await html2canvas(element, {
+            backgroundColor: 'none',
+            logging: true,
+            useCORS: true,
+        });
+
+        const data = canvas.toDataURL('image/jpg');
+        const link = document.createElement('a');
+
+        if (typeof link.download === 'string') {
+            link.href = data;
+            console.log('');
+            link.download = 'image.jpg';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } else {
+            window.open(data);
         }
     };
 
@@ -82,6 +111,28 @@ function FairytaleEdit() {
             color += letters[Math.floor(Math.random() * 16)];
         }
         return color;
+    };
+
+    const handleExportPDF = () => {
+        // Canverce 컴포넌트를 HTML 요소로 변환합니다.
+        const canverceElement = document.getElementById('canverce');
+
+        // html2canvas을 사용하여 Canverce 컴포넌트의 스크린샷을 생성합니다.
+        html2canvas(canverceElement).then((canvas) => {
+            // 스크린샷을 이미지 데이터로 변환합니다.
+            const imageData = canvas.toDataURL('image/png');
+
+            // jspdf를 사용하여 PDF 문서를 생성합니다.
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+
+            // 이미지를 PDF에 추가합니다.
+            pdf.addImage(imageData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
+            // PDF를 다운로드합니다.
+            pdf.save('exported.pdf');
+        });
     };
 
     return (
@@ -102,6 +153,7 @@ function FairytaleEdit() {
                 <Frame>
                     <Canverce>
                         <div
+                            ref={printRef}
                             class="background"
                             style={{
                                 width: `80%`,
@@ -159,7 +211,11 @@ function FairytaleEdit() {
                             />
                         </div>
                     </Canverce>
-                    <Page></Page>
+                    <Page>
+                        <button type="button" onClick={handleDownloadImage}>
+                            Download as Image
+                        </button>
+                    </Page>
                 </Frame>
             </Container>
         </div>
