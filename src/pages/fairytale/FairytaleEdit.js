@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import styled, { css } from "styled-components";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 // import Moveable from "react-moveable";
 // import keycon from "keycon";
 import EditTools from "../../components/EditTools";
@@ -61,9 +63,24 @@ const Background = styled.div`
   background-color: white;
   border: 1px solid black;
 `;
-const Pages = styled.div`
+const PageFrame = styled.div`
   background: red;
+  display: flex;
+  position: relative;
   height: 20vh;
+  padding: 10px 10% 0 5%;
+`;
+const Page = styled.div`
+  background: white;
+  width: 10vw;
+  height: 16vh;
+  margin-left: 5%;
+`;
+const NextPage = styled.div`
+  background: white;
+  width: 10vw;
+  height: 16vh;
+  margin-left: 5%;
 `;
 
 const classNameCleaner = (str) => {
@@ -85,9 +102,9 @@ function FairytaleEdit() {
   const imageLabels = [AI, USER, STI];
 
   const moveableRef = useRef(null);
-  const selectoRef = useRef(null);
+  const printRef = React.useRef();
 
-  // const [showButtonFunc, setShowButtonFunc] = useState(false);
+  const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
   // const [buttonClicked, setButtonClicked] = useState(false);
   const [activeTab, setActiveTab] = useState(null);
   const [importFile, setImportFile] = useState(null);
@@ -103,6 +120,31 @@ function FairytaleEdit() {
       if (buttonFunctionDiv) {
         buttonFunctionDiv.style.background = randomColor;
       }
+    } else {
+      setShowButtonFunctiontion(!showButtonFunction);
+    }
+  };
+
+  const handleDownloadImage = async () => {
+    const element = printRef.current;
+    const canvas = await html2canvas(element, {
+      backgroundColor: "none",
+      logging: true,
+      useCORS: true,
+    });
+
+    const data = canvas.toDataURL("image/jpg");
+    const link = document.createElement("a");
+
+    if (typeof link.download === "string") {
+      link.href = data;
+      link.download = "image.jpg";
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      window.open(data);
     }
   };
 
@@ -118,6 +160,28 @@ function FairytaleEdit() {
       color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
+  };
+
+  const handleExportPDF = () => {
+    // Canverce 컴포넌트를 HTML 요소로 변환합니다.
+    const canvasElement = document.getElementById("canvas");
+
+    // html2canvas을 사용하여 Canverce 컴포넌트의 스크린샷을 생성합니다.
+    html2canvas(canvasElement).then((canvas) => {
+      // 스크린샷을 이미지 데이터로 변환합니다.
+      const imageData = canvas.toDataURL("image/png");
+
+      // jspdf를 사용하여 PDF 문서를 생성합니다.
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+
+      // 이미지를 PDF에 추가합니다.
+      pdf.addImage(imageData, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+      // PDF를 다운로드합니다.
+      pdf.save("exported.pdf");
+    });
   };
 
   const [tarIdx, setTarIdx] = useState(1);
@@ -151,7 +215,6 @@ function FairytaleEdit() {
   };
 
   const handleStiSelect = (ele, elename, src) => {
-    console.log(moveableRef, selectoRef);
     if (ele.classList.contains("selected")) {
       setSelectedSti((prev) => {
         return NULL;
@@ -180,7 +243,24 @@ function FairytaleEdit() {
           ))}
         </Nav>
 
-        {activeTab === IMAGE && <EditTools>ai생성일러리스트</EditTools>}
+        {activeTab === IMAGE && (
+          <EditTools>
+            <button
+              className='create-button'
+              onClick={() => {
+                handleExportPDF();
+              }}
+              style={{
+                width: "200px",
+                height: "50px",
+                display: "block",
+                backgroundColor: "lightGray",
+                borderRadius: "25%",
+              }}>
+              Export Pdf
+            </button>
+          </EditTools>
+        )}
         {activeTab === USERIMAGE && (
           <EditTools>
             <input
@@ -283,7 +363,22 @@ function FairytaleEdit() {
               ))}
             </Background>
           </Canvas>
-          <Pages></Pages>
+          <button
+            // style={{
+            //   position: "absolute",
+            // }}
+            type='button'
+            onClick={handleDownloadImage}>
+            Download as Image
+          </button>
+          <PageFrame>
+            <Page>1</Page>
+            <Page>2</Page>
+            <Page>3</Page>
+            <Page>4</Page>
+            <Page>5</Page>
+            <NextPage>next</NextPage>
+          </PageFrame>
         </Frame>
       </Container>
     </div>
