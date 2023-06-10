@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { call } from "../../service/ApiService";
+import CommentSection from "./CommentSection";
 
 const BoardDetail = () => {
   const { boardId } = useParams();
@@ -19,6 +20,19 @@ const BoardDetail = () => {
     }
   };
 
+  const handleCommentSubmit = async (comment) => {
+    try {
+      const response = await call(`/board/${boardId}/comment`, "POST", comment);
+      const updatedCommentList = response.data.map((comment) => comment.content);
+      setBoard((prevBoard) => ({
+        ...prevBoard,
+        comments: updatedCommentList,
+      }));
+    } catch (error) {
+      console.log("Error submitting comment:", error);
+    }
+  };
+
   if (!board) {
     return <div>Loading...</div>;
   }
@@ -32,6 +46,7 @@ const BoardDetail = () => {
           <img src={board.thumbnailUrl} alt="Thumbnail" style={styles.thumbnail} />
         </div>
         <p style={styles.content}>{board.content}</p>
+        <CommentSection comments={board.comments} onCommentSubmit={handleCommentSubmit} />
       </div>
     </div>
   );
