@@ -18,7 +18,8 @@ function SignUp() {
         return;
       }
       const response = await axios.get(
-        "http://localhost:8080/auth/signup/check-userid",
+        //"http://localhost:8080/auth/signup/check-userid",
+        "http://52.79.227.173:8080/auth/signup/check-userid",
         {
           params: { userid: userInputUserId },
         }
@@ -26,7 +27,11 @@ function SignUp() {
       setIsUidAvailable(response.data);
     } catch (error) {
       console.error("There was an error!", error);
-      setIsUidAvailable(null);
+      if (error.response && error.response.status === 400) {
+        setIsUidAvailable(true);
+      } else {
+        setIsUidAvailable(null);
+      }
     }
   };
 
@@ -37,7 +42,8 @@ function SignUp() {
         return;
       }
       const response = await axios.get(
-        "http://localhost:8080/auth/signup/check-nickname",
+        //"http://localhost:8080/auth/signup/check-nickname",
+        "http://52.79.227.173:8080/auth/signup/check-nickname",
         {
           params: { nickname: userInputNickname },
         }
@@ -45,7 +51,11 @@ function SignUp() {
       setIsNicknameAvailable(response.data);
     } catch (error) {
       console.error("There was an error!", error);
-      setIsNicknameAvailable(null);
+      if (error.response && error.response.status === 400) {
+        setIsNicknameAvailable(true);
+      } else {
+        setIsNicknameAvailable(null);
+      }
     }
   };
 
