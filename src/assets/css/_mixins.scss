@@ -1,0 +1,30 @@
+@charset "utf-8";
+
+// transform
+@mixin transform($transforms) {
+  -webkit-transform: $transforms;
+  -moz-transform: $transforms;
+  -o-transform: $transforms;
+  -ms-transform: $transforms;
+  transform: $transforms;
+}
+
+//ellipse
+@mixin ellipse($line) {
+  @if ($line > 1) {
+    white-space: normal;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: $line;
+    -webkit-box-orient: vertical;
+  } @else {
+    // white-space:nowrap;
+    white-space: normal;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: $line;
+    -webkit-box-orient: vertical;
+  }
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
