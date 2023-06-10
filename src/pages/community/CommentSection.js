@@ -1,26 +1,25 @@
 import React, { useState } from "react";
-import { call } from "../../service/ApiService";
 
-const CommentSection = ({ comments, onCommentSubmit }) => {
+const CommentSection = ({ comments, setComments, onCommentSubmit }) => {
   const [comment, setComment] = useState("");
-  const [commentList, setCommentList] = useState(comments);
 
   const handleChange = (e) => {
     setComment(e.target.value);
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
     if (comment.trim() !== "") {
       const newComment = {
         content: comment,
       };
-
+  
       try {
-        const response = await onCommentSubmit(newComment); // Call onCommentSubmit prop function
-        const savedComment = response.data.data[0];
-        setCommentList([...commentList, savedComment]);
-        setComment("");
+        const response = await onCommentSubmit(newComment);
+        const savedComment = response?.data?.[0];
+        if (savedComment) {
+          setComments((prevComments) => [...prevComments, savedComment]);
+          setComment("");
+        }
       } catch (error) {
         console.log("Error submitting comment:", error);
       }
@@ -40,7 +39,7 @@ const CommentSection = ({ comments, onCommentSubmit }) => {
         <button type="submit">등록</button>
       </form>
       <ul>
-        {commentList.map((comment) => (
+        {comments.map((comment) => (
           <li key={comment.commentId}>
             <strong>{comment.author}</strong>: {comment.content}
           </li>

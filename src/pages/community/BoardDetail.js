@@ -6,6 +6,7 @@ import CommentSection from "./CommentSection";
 const BoardDetail = () => {
   const { boardId } = useParams();
   const [board, setBoard] = useState(null);
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -15,24 +16,25 @@ const BoardDetail = () => {
     try {
       const response = await call(`/board/${boardId}`, "GET", null);
       setBoard(response.data[0]);
+      setComments(response.data[0].comments);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
   };
-
+  
   const handleCommentSubmit = async (comment) => {
     try {
       const response = await call(`/board/${boardId}/comment`, "POST", comment);
-      const updatedCommentList = response.data.map((comment) => comment.content);
+      const savedComment = response.data.data[0];
       setBoard((prevBoard) => ({
         ...prevBoard,
-        comments: updatedCommentList,
+        comments: [...prevBoard.comments, savedComment],
       }));
     } catch (error) {
       console.log("Error submitting comment:", error);
     }
   };
-
+  
   if (!board) {
     return <div>Loading...</div>;
   }
@@ -46,7 +48,11 @@ const BoardDetail = () => {
           <img src={board.thumbnailUrl} alt="Thumbnail" style={styles.thumbnail} />
         </div>
         <p style={styles.content}>{board.content}</p>
-        <CommentSection comments={board.comments} onCommentSubmit={handleCommentSubmit} />
+        <CommentSection
+          comments={comments}
+          setComments={setComments}
+          onCommentSubmit={handleCommentSubmit}
+        />
       </div>
     </div>
   );
