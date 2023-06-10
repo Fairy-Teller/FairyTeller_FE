@@ -7,26 +7,23 @@ function UpdateUser() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleUpdate = () => {
-    // 입력 값 유효성 검사
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    const nickname = data.get("nickname");
+    const password = data.get("password");
+
     if (!nickname || !password || !confirmPassword) {
       alert("모든 필드를 입력해주세요.");
       return;
     }
 
-    // 패스워드 일치 검사
     if (password !== confirmPassword) {
       alert("패스워드가 일치하지 않습니다.");
       return;
     }
 
-    // 회원 정보 업데이트 요청
-    const userData = {
-      nickname: nickname,
-      password: password,
-    };
-
-    updateUser(userData)
+    updateUser({ nickname: nickname, password: password })
       .then(() => {
         alert("회원 정보가 수정되었습니다.");
       })
@@ -38,14 +35,16 @@ function UpdateUser() {
 
   return (
     <Container component="main" maxWidth="xs" style={{ marginTop: "8%" }}>
-      <form noValidate onSubmit={handleUpdate}>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Typography component="h1" variant="h5">
+            회원 정보 수정
+          </Typography>
+        </Grid>
+      </Grid>
+      <form noValidate onSubmit={handleSubmit}>
+        {" "}
         <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography component="h1" variant="h5">
-              회원 정보 수정
-            </Typography>
-          </Grid>
-
           <Grid item xs={12}>
             <TextField
               variant="outlined"

@@ -32,5 +32,7 @@ export function signout() {
 }
 
 export function updateUser(userDTO) {
-  return call("/mypage/update-user", "PUT", userDTO);
+  return call("/mypage/update-user", "PUT", userDTO).then((response) => {
+    window.location.href = "/";
+  });
 }
