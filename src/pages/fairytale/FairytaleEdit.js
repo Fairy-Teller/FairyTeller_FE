@@ -1,19 +1,23 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled, { css } from "styled-components";
+import { fabric } from "fabric";
+import Section from "../../components/layout/Section";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-// import Moveable from "react-moveable";
-// import keycon from "keycon";
-import EditTools from "../../components/EditTools";
-import CanvasMoveable from "../../components/CanvasMoveable";
 
 const NULL = "NULL";
+const SRC_LINK = "/images/img-default.png";
+const STI_LINKS = [
+  { key: 1, link: "/images/st1.png" },
+  { key: 2, link: "/images/st2.png" },
+  { key: 3, link: "/images/st3.png" },
+];
 
 const [IMAGE, USERIMAGE, BG, TEXT, FILTER, STICKER] = [
-  "삽화",
+  "AI삽화",
   "유저이미지",
   "배경",
-  "글꼴",
+  "텍스트",
   "채도",
   "스티커",
 ];
@@ -47,37 +51,29 @@ const Frame = styled.div`
   width: 100vw;
   height: 100vh;
 `;
-const Canvas = styled.div`
-  background: pink;
-  position: relative;
-  align-items: center;
+const Bg = styled.div`
+  width: 100%;
   height: 80vh;
 `;
-const Background = styled.div`
-  width: 80%;
-  height: 90%;
-  position: absolute;
-  top: auto;
-  left: 10%;
-  margin-top: 2%;
-  background-color: white;
-  border: 1px solid black;
+const Canvas = styled.canvas`
+  width: 100%;
+  height: 100%;
 `;
 const PageFrame = styled.div`
-  background: red;
+  background-color: red;
   display: flex;
   position: relative;
   height: 20vh;
   padding: 10px 10% 0 5%;
 `;
 const Page = styled.div`
-  background: white;
+  background-color: white;
   width: 10vw;
   height: 16vh;
   margin-left: 5%;
 `;
 const NextPage = styled.div`
-  background: white;
+  background-color: white;
   width: 10vw;
   height: 16vh;
   margin-left: 5%;
@@ -91,17 +87,10 @@ const classNameCleaner = (str) => {
 };
 
 function FairytaleEdit() {
-  const SRC_LINK = "/images/sad_face.png";
-  const STI_LINKS = [
-    { key: 1, link: "/images/st1.png" },
-    { key: 2, link: "/images/st2.png" },
-    { key: 3, link: "/images/st3.png" },
-  ];
+  const btnLabels = [IMAGE, USERIMAGE, BG, TEXT, FILTER, STICKER];
+  const imgLabels = [AI, USER, STI];
 
-  const buttonLabels = [IMAGE, USERIMAGE, BG, TEXT, FILTER, STICKER];
-  const imageLabels = [AI, USER, STI];
-
-  const moveableRef = useRef(null);
+  // const moveableRef = useRef(null);
   const printRef = React.useRef();
 
   const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
@@ -114,7 +103,7 @@ function FairytaleEdit() {
     // setButtonClicked(!buttonClicked);
     setActiveTab(label === activeTab ? null : label);
     if (label === BG) {
-      setActiveTab(null);
+      // setActiveTab(null);
       const randomColor = getRandomColor();
       const buttonFunctionDiv = document.querySelector("#bg");
       if (buttonFunctionDiv) {
@@ -229,11 +218,37 @@ function FairytaleEdit() {
     }
   };
 
+  // ****** fabric ******
+  const [canvasWidth, casvasHeight] = [1920, 1080];
+  const [color, setColor] = useState("#35363a");
+
+  useEffect(() => {
+    var c = new fabric.Canvas("c", {
+      backgroundColor: "silver",
+      width: canvasWidth,
+      height: casvasHeight,
+    });
+    c.selection = true; // disable group selection
+
+    fabric.Image.fromURL(SRC_LINK, function (def1) {
+      c.add(def1);
+    });
+    var def2 = new fabric.Rect({
+      top: 100,
+      left: 100,
+      fill: "red",
+      angle: 45,
+      width: 20,
+      height: 20,
+    });
+    c.add(def2);
+  }, []);
+
   return (
     <div>
       <Container>
         <Nav>
-          {buttonLabels.map((label) => (
+          {btnLabels.map((label) => (
             <Tab
               key={label}
               clicked={activeTab === label} // buttonClicked && activeTab
@@ -242,127 +257,57 @@ function FairytaleEdit() {
             </Tab>
           ))}
         </Nav>
-
-        {activeTab === IMAGE && (
-          <EditTools>
-            <button
-              className='create-button'
-              onClick={() => {
-                handleExportPDF();
-              }}
-              style={{
-                width: "200px",
-                height: "50px",
-                display: "block",
-                backgroundColor: "lightGray",
-                borderRadius: "25%",
-              }}>
-              Export Pdf
-            </button>
-          </EditTools>
-        )}
-        {activeTab === USERIMAGE && (
-          <EditTools>
-            <input
-              type='file'
-              onChange={handleFileChange}
-              style={{
-                width: "200px",
-                height: "50px",
-                display: "block",
-                backgroundColor: "lightGray",
-                borderRadius: "25%",
-              }}
-            />
-            {importFile !== null && (
-              <div className='preview'>
-                <p>미리보기</p>
-                <img
-                  src={URL.createObjectURL(importFile)}
-                  alt={USERIMAGE}
-                />
-              </div>
-            )}
-            <button
-              className='create-button'
-              onClick={() => {
-                handleCreate();
-              }}
-              style={{
-                width: "200px",
-                height: "50px",
-                display: "block",
-                backgroundColor: "lightGray",
-                borderRadius: "25%",
-              }}>
-              Create Target
-            </button>
-          </EditTools>
-        )}
-        {activeTab === BG && <EditTools>랜덤BG</EditTools>}
-        {activeTab === TEXT && <EditTools>텍스트편집</EditTools>}
-        {activeTab === FILTER && <EditTools>필터</EditTools>}
-        {activeTab === STICKER && (
-          <EditTools>
-            <ul>
-              {STI_LINKS.map((item) => (
-                <li
-                  key={item.key}
-                  onClick={(e) => {
-                    handleStiSelect(e.target, e.target.className, item.link);
-                  }}>
-                  <img
-                    className={"sti" + item.key}
-                    src={item.link}
-                    alt={STI}
-                    style={{ width: "200px", height: "100px" }}
-                  />
-                </li>
-              ))}
-            </ul>
-            <button
-              className='create-button'
-              onClick={() => {
-                handleCreate();
-              }}
-              style={{
-                width: "200px",
-                height: "50px",
-                display: "block",
-                backgroundColor: "lightGray",
-                borderRadius: "25%",
-              }}>
-              Create Target
-            </button>
-          </EditTools>
-        )}
-
-        <Frame>
-          <Canvas id='canvas'>
-            <Background id='bg'>
-              {targets.map((item) => (
-                <div className='movable-kit'>
-                  <img
-                    key={item.key}
-                    className={item.class}
-                    src={item.src}
-                    alt={item.label}
+        <Frame id='frame'>
+          <Bg id='bg'>
+            <Canvas id='c'></Canvas>
+            <div id='edit-tools'>
+              {/* <button onClick={undo}>Undo</button>
+              <button onClick={redo}>Redo</button>
+              <button onClick={clear}>Clear</button>
+              <button onClick={removeSelectedObject}>Delete</button> */}
+              {activeTab === IMAGE && <Section>{IMAGE}</Section>}
+              {activeTab === USERIMAGE && <Section>{USERIMAGE}</Section>}
+              {activeTab === BG && <Section>{BG}</Section>}
+              {activeTab === TEXT && (
+                <Section>{/* <button onClick={addText}>{TEXT}</button> */}</Section>
+              )}
+              {activeTab === FILTER && <Section>{FILTER}</Section>}
+              {activeTab === STICKER && (
+                <section>
+                  <ul>
+                    {STI_LINKS.map((item) => (
+                      <li
+                        key={item.key}
+                        onClick={(e) => {
+                          handleStiSelect(e.target, e.target.className, item.link);
+                        }}>
+                        <img
+                          className={"sti" + item.key}
+                          src={item.link}
+                          alt={STI}
+                          style={{ width: "200px", height: "100px" }}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                  <button
+                    className='create-button'
+                    onClick={() => {
+                      handleCreate();
+                    }}
                     style={{
                       width: "200px",
-                      height: "160px",
-                      position: "absolute",
-                      backgroundColor: "transparent",
-                    }}
-                  />
-                  <CanvasMoveable
-                    ref={moveableRef}
-                    target={["." + item.class]}
-                    onUpdate={handleDelete}
-                  />
-                </div>
-              ))}
-            </Background>
-          </Canvas>
+                      height: "50px",
+                      display: "block",
+                      backgroundColor: "lightGray",
+                      borderRadius: "25%",
+                    }}>
+                    Create Target
+                  </button>
+                </section>
+              )}
+            </div>
+          </Bg>
           <button
             // style={{
             //   position: "absolute",
