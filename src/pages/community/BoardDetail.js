@@ -7,6 +7,8 @@ const BoardDetail = () => {
   const { boardId } = useParams();
   const [board, setBoard] = useState(null);
   const [comments, setComments] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -15,13 +17,16 @@ const BoardDetail = () => {
   const fetchData = async () => {
     try {
       const response = await call(`/board/${boardId}`, "GET", null);
-      setBoard(response.data[0]);
-      setComments(response.data[0].comments);
+      const boardData = response.data[0];
+      setBoard(boardData);
+      setComments(boardData.comments);
+      setCurrentPage(response.currentPage);
+      setTotalPages(response.totalPages);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
   };
-  
+
   const handleCommentSubmit = async (comment) => {
     try {
       await call(`/board/${boardId}/comment`, "POST", comment);
@@ -31,6 +36,23 @@ const BoardDetail = () => {
     }
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchDataComments(page);
+  };
+
+  const fetchDataComments = async (page) => {
+    try {
+      const pageSize = 8;
+      const response = await call(`/board/${boardId}/comments?page=${page}&size=${pageSize}`, "GET", null);
+      setComments(response.data);
+      setCurrentPage(response.currentPage);
+      setTotalPages(response.totalPages);
+    } catch (error) {
+      console.log("Error fetching comments:", error);
+    }
+  };
+  
   if (!board) {
     return <div>Loading...</div>;
   }
@@ -39,7 +61,7 @@ const BoardDetail = () => {
     <div style={styles.container}>
       <h2 style={styles.title}>{board.title}</h2>
       <div style={styles.center}>
-        <p style={styles.author}>Author: {board.author}</p>
+        <p style={styles.author}>Author: {board.nickname}</p>
         <div style={styles.thumbnailContainer}>
           <img src={board.thumbnailUrl} alt="Thumbnail" style={styles.thumbnail} />
         </div>
@@ -48,11 +70,26 @@ const BoardDetail = () => {
           comments={comments}
           setComments={setComments}
           onCommentSubmit={handleCommentSubmit}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
         />
+        <div style={styles.pagination}>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              style={currentPage === index ? styles.activePageButton : styles.pageButton}
+              onClick={() => handlePageChange(index)}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
+// ...이전 코드 생략...
 
 const styles = {
   container: {
@@ -88,6 +125,25 @@ const styles = {
     fontSize: "18px",
     lineHeight: "1.4",
   },
+  pagination: {
+    marginTop: "20px",
+  },
+  pageButton: {
+    marginLeft: "5px",
+    padding: "5px 10px",
+    border: "none",
+    background: "#eee",
+    cursor: "pointer",
+  },
+  activePageButton: {
+    marginLeft: "5px",
+    padding: "5px 10px",
+    border: "none",
+    background: "blue",
+    color: "#fff",
+    cursor: "pointer",
+  },
 };
 
 export default BoardDetail;
+
