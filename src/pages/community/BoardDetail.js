@@ -24,17 +24,13 @@ const BoardDetail = () => {
   
   const handleCommentSubmit = async (comment) => {
     try {
-      const response = await call(`/board/${boardId}/comment`, "POST", comment);
-      const savedComment = response?.data?.[0]; // 유효성을 확인하고 필요한 값을 추출
-      if (savedComment) {
-        setComments((prevComments) => [...prevComments, savedComment]);
-      }
+      await call(`/board/${boardId}/comment`, "POST", comment);
+      fetchData(); // 새로운 댓글이 추가된 후 전체 댓글 목록을 다시 가져옴
     } catch (error) {
       console.log("Error submitting comment:", error);
     }
   };
-  
-  
+
   if (!board) {
     return <div>Loading...</div>;
   }
