@@ -124,6 +124,12 @@ class CanvasFabric extends Component {
     activeObj && canvas.bringToFront(activeObj).discardActiveObject(activeObj).renderAll();
   };
 
+  exportSVG = (e) => {
+    e.preventDefault();
+    let canvas = this.state.canvas;
+    fabric.log("Normal SVG output: ", canvas.toSVG());
+  };
+
   componentDidUpdate(prevProps) {
     if (this.props.fabricObjectsState !== prevProps.fabricObjectsState) {
       this.fetchData(this.props.fabricObjectsState);
@@ -189,6 +195,7 @@ class CanvasFabric extends Component {
         />
         <div>
           <button onClick={this.bringToFront}>Bring to front</button>
+          <button onClick={this.exportSVG}>exportSVG</button>
           <button onClick={this.addRect}>Rectangle</button>
           <form onSubmit={this.addText}>
             <div>
