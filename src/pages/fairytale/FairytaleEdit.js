@@ -1,11 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled, { css } from "styled-components";
-import { fabric } from "fabric";
-import Section from "../../components/layout/Section";
+import { RecoilRoot } from "recoil";
+import EditToolTab from "../../components/EditToolTab";
+import CanvasFabric from "../../components/CanvasFabric";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
 const NULL = "NULL";
+
+const [IMAGE, USERIMAGE, BG, TEXT, FILTER, STICKER, DOWNLOAD] = [
+  "AI삽화",
+  "유저이미지",
+  "배경",
+  "텍스트",
+  "채도",
+  "스티커",
+  "다운로드",
+];
+const [AI, USER, STI] = ["AI", "USER", "STI"];
 const SRC_LINK = "/images/img-default.png";
 const STI_LINKS = [
   { key: 1, link: "/images/st1.png" },
@@ -13,23 +25,12 @@ const STI_LINKS = [
   { key: 3, link: "/images/st3.png" },
 ];
 
-const [IMAGE, USERIMAGE, BG, TEXT, FILTER, STICKER] = [
-  "AI삽화",
-  "유저이미지",
-  "배경",
-  "텍스트",
-  "채도",
-  "스티커",
-];
-const [AI, USER, STI] = ["AI", "USER", "STI"];
-
 const Container = styled.div`
   display: flex;
   position: relative;
 `;
 const Nav = styled.nav`
-  width: 5%;
-  padding: 0.25rem;
+  width: 5vw;
   display: flex;
   flex-direction: column;
 `;
@@ -48,12 +49,8 @@ const Tab = styled.button`
 `;
 const Frame = styled.div`
   position: relative;
-  width: 100vw;
-  height: 100vh;
-`;
-const Bg = styled.div`
-  width: 100%;
-  height: 80vh;
+  width: 95vw;
+  // height: 100vh;
 `;
 const Canvas = styled.canvas`
   width: 100%;
@@ -86,11 +83,12 @@ const classNameCleaner = (str) => {
   }
 };
 
+//   const [fabricObjects, setFabricObjects] = useRecoilState(fabricObjectsState);
+
 function FairytaleEdit() {
-  const btnLabels = [IMAGE, USERIMAGE, BG, TEXT, FILTER, STICKER];
+  const btnLabels = [IMAGE, USERIMAGE, BG, TEXT, FILTER, STICKER, DOWNLOAD];
   const imgLabels = [AI, USER, STI];
 
-  // const moveableRef = useRef(null);
   const printRef = React.useRef();
 
   const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
@@ -102,16 +100,11 @@ function FairytaleEdit() {
   const handleButtonClick = (label) => {
     // setButtonClicked(!buttonClicked);
     setActiveTab(label === activeTab ? null : label);
-    if (label === BG) {
-      // setActiveTab(null);
-      const randomColor = getRandomColor();
-      const buttonFunctionDiv = document.querySelector("#bg");
-      if (buttonFunctionDiv) {
-        buttonFunctionDiv.style.background = randomColor;
-      }
-    } else {
-      setShowButtonFunctiontion(!showButtonFunction);
-    }
+    // if (label === BG) {
+    //   // setActiveTab(null);
+    // } else {
+    setShowButtonFunctiontion(!showButtonFunction);
+    // }
   };
 
   const handleDownloadImage = async () => {
@@ -140,15 +133,6 @@ function FairytaleEdit() {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setImportFile(file);
-  };
-
-  const getRandomColor = () => {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
   };
 
   const handleExportPDF = () => {
@@ -218,31 +202,20 @@ function FairytaleEdit() {
     }
   };
 
-  // ****** fabric ******
-  const [canvasWidth, casvasHeight] = [1920, 1080];
-  const [color, setColor] = useState("#35363a");
-
-  useEffect(() => {
-    var c = new fabric.Canvas("c", {
-      backgroundColor: "silver",
-      width: canvasWidth,
-      height: casvasHeight,
-    });
-    c.selection = true; // disable group selection
-
-    fabric.Image.fromURL(SRC_LINK, function (def1) {
-      c.add(def1);
-    });
-    var def2 = new fabric.Rect({
-      top: 100,
-      left: 100,
-      fill: "red",
-      angle: 45,
-      width: 20,
-      height: 20,
-    });
-    c.add(def2);
-  }, []);
+  // const HandleRandomBg = () => {
+  //   useEffect(() => {
+  //     const letters = "0123456789ABCDEF";
+  //     let result = "#";
+  //     for (let i = 0; i < 6; i++) {
+  //       result += letters[Math.floor(Math.random() * 16)];
+  //     }
+  //     setBgColor(result);
+  //     const buttonFunctionDiv = document.querySelector("#c");
+  //     if (buttonFunctionDiv) {
+  //       buttonFunctionDiv.style.background = result;
+  //     }
+  //   });
+  // };
 
   return (
     <div>
@@ -257,73 +230,102 @@ function FairytaleEdit() {
             </Tab>
           ))}
         </Nav>
-        <Frame id='frame'>
-          <Bg id='bg'>
-            <Canvas id='c'></Canvas>
-            <div id='edit-tools'>
-              {/* <button onClick={undo}>Undo</button>
-              <button onClick={redo}>Redo</button>
-              <button onClick={clear}>Clear</button>
-              <button onClick={removeSelectedObject}>Delete</button> */}
-              {activeTab === IMAGE && <Section>{IMAGE}</Section>}
-              {activeTab === USERIMAGE && <Section>{USERIMAGE}</Section>}
-              {activeTab === BG && <Section>{BG}</Section>}
-              {activeTab === TEXT && (
-                <Section>{/* <button onClick={addText}>{TEXT}</button> */}</Section>
-              )}
-              {activeTab === FILTER && <Section>{FILTER}</Section>}
-              {activeTab === STICKER && (
-                <section>
-                  <ul>
-                    {STI_LINKS.map((item) => (
-                      <li
-                        key={item.key}
-                        onClick={(e) => {
-                          handleStiSelect(e.target, e.target.className, item.link);
-                        }}>
-                        <img
-                          className={"sti" + item.key}
-                          src={item.link}
-                          alt={STI}
-                          style={{ width: "200px", height: "100px" }}
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                  <button
-                    className='create-button'
-                    onClick={() => {
-                      handleCreate();
-                    }}
-                    style={{
-                      width: "200px",
-                      height: "50px",
-                      display: "block",
-                      backgroundColor: "lightGray",
-                      borderRadius: "25%",
-                    }}>
-                    Create Target
-                  </button>
-                </section>
-              )}
-            </div>
-          </Bg>
-          <button
-            // style={{
-            //   position: "absolute",
-            // }}
-            type='button'
-            onClick={handleDownloadImage}>
-            Download as Image
-          </button>
-          <PageFrame>
+        <Frame>
+          <RecoilRoot>
+            <CanvasFabric />
+          </RecoilRoot>
+          <div id='edit-tools'>
+            {activeTab === IMAGE && (
+              <EditToolTab title={IMAGE}>
+                {/* <button onClick={undo}>Undo</button>
+                  <button onClick={redo}>Redo</button> */}
+              </EditToolTab>
+            )}
+            {activeTab === USERIMAGE && <EditToolTab title={USERIMAGE}></EditToolTab>}
+            {activeTab === BG && (
+              <EditToolTab title={BG}>
+                <button
+                  className='create-button'
+                  // onClick={() => {
+                  //   HandleRandomBg();
+                  // }}
+                  style={{
+                    width: "200px",
+                    height: "50px",
+                    display: "block",
+                    backgroundColor: "lightGray",
+                    borderRadius: "25%",
+                  }}>
+                  handleRandomBg
+                </button>
+              </EditToolTab>
+            )}
+            {activeTab === TEXT && (
+              <EditToolTab title={TEXT}>{<button>{TEXT}</button>}</EditToolTab>
+            )}
+            {activeTab === FILTER && <EditToolTab title={FILTER}></EditToolTab>}
+            {activeTab === STICKER && (
+              <EditToolTab title={STICKER}>
+                <ul>
+                  {STI_LINKS.map((item) => (
+                    <li
+                      key={item.key}
+                      onClick={(e) => {
+                        handleStiSelect(e.target, e.target.className, item.link);
+                      }}>
+                      <img
+                        className={"sti" + item.key}
+                        src={item.link}
+                        alt={STI}
+                        style={{ width: "200px", height: "100px" }}
+                      />
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  className='create-button'
+                  onClick={() => {
+                    handleCreate();
+                  }}
+                  style={{
+                    width: "200px",
+                    height: "50px",
+                    display: "block",
+                    backgroundColor: "lightGray",
+                    borderRadius: "25%",
+                  }}>
+                  Create Target
+                </button>
+              </EditToolTab>
+            )}
+            {activeTab === DOWNLOAD && (
+              <EditToolTab title={DOWNLOAD}>
+                <button
+                  className='create-button'
+                  type='button'
+                  onClick={() => {
+                    handleDownloadImage();
+                  }}
+                  style={{
+                    width: "200px",
+                    height: "50px",
+                    display: "block",
+                    backgroundColor: "lightGray",
+                    borderRadius: "25%",
+                  }}>
+                  DownloadImage
+                </button>
+              </EditToolTab>
+            )}
+          </div>
+          {/* <PageFrame>
             <Page>1</Page>
             <Page>2</Page>
             <Page>3</Page>
             <Page>4</Page>
             <Page>5</Page>
             <NextPage>next</NextPage>
-          </PageFrame>
+          </PageFrame> */}
         </Frame>
       </Container>
     </div>
