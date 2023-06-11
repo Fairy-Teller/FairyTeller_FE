@@ -8,6 +8,8 @@ const CommentSection = ({ comments, setComments, onCommentSubmit }) => {
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault(); // 기본적인 폼 제출 동작 방지
+  
     if (comment.trim() !== "") {
       const newComment = {
         content: comment,
@@ -25,6 +27,7 @@ const CommentSection = ({ comments, setComments, onCommentSubmit }) => {
       }
     }
   };
+  
 
   return (
     <div>

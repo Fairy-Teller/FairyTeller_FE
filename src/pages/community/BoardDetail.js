@@ -25,15 +25,15 @@ const BoardDetail = () => {
   const handleCommentSubmit = async (comment) => {
     try {
       const response = await call(`/board/${boardId}/comment`, "POST", comment);
-      const savedComment = response.data.data[0];
-      setBoard((prevBoard) => ({
-        ...prevBoard,
-        comments: [...prevBoard.comments, savedComment],
-      }));
+      const savedComment = response?.data?.[0]; // 유효성을 확인하고 필요한 값을 추출
+      if (savedComment) {
+        setComments((prevComments) => [...prevComments, savedComment]);
+      }
     } catch (error) {
       console.log("Error submitting comment:", error);
     }
   };
+  
   
   if (!board) {
     return <div>Loading...</div>;
