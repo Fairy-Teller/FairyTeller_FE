@@ -3,6 +3,7 @@ import { TextField, Typography, Grid, Button, Container } from '@mui/material';
 import axios from 'axios';
 import { signup } from '../../service/UserService';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../../api-config';
 
 function SignUp() {
     const [userInputUserId, setUserInputUserId] = useState('');
@@ -11,54 +12,45 @@ function SignUp() {
     const [userInputNickname, setUserInputNickname] = useState('');
     const [isNicknameAvailable, setIsNicknameAvailable] = useState(null);
 
-
-  const checkUidAvailability = async () => {
-    try {
-      if (userInputUserId === "") {
-        alert("아이디를 입력해주세요");
-        return;
-      }
-      const response = await axios.get(
-        //"http://localhost:8080/auth/signup/check-userid",
-        "http://52.79.227.173:8080/auth/signup/check-userid",
-        {
-          params: { userid: userInputUserId },
+    const checkUidAvailability = async () => {
+        try {
+            if (userInputUserId === '') {
+                alert('아이디를 입력해주세요');
+                return;
+            }
+            const response = await axios.get(API_BASE_URL + '/auth/signup/check-userid', {
+                params: { userid: userInputUserId },
+            });
+            setIsUidAvailable(response.data);
+        } catch (error) {
+            console.error('There was an error!', error);
+            if (error.response && error.response.status === 400) {
+                setIsUidAvailable(true);
+            } else {
+                setIsUidAvailable(null);
+            }
         }
-      );
-      setIsUidAvailable(response.data);
-    } catch (error) {
-      console.error("There was an error!", error);
-      if (error.response && error.response.status === 400) {
-        setIsUidAvailable(true);
-      } else {
-        setIsUidAvailable(null);
-      }
-    }
-  };
+    };
 
-  const checkNicknameAvailability = async () => {
-    try {
-      if (userInputNickname === "") {
-        alert("별명을 입력해주세요");
-        return;
-      }
-      const response = await axios.get(
-        //"http://localhost:8080/auth/signup/check-nickname",
-        "http://52.79.227.173:8080/auth/signup/check-nickname",
-        {
-          params: { nickname: userInputNickname },
+    const checkNicknameAvailability = async () => {
+        try {
+            if (userInputNickname === '') {
+                alert('별명을 입력해주세요');
+                return;
+            }
+            const response = await axios.get(API_BASE_URL + '/auth/signup/check-nickname', {
+                params: { nickname: userInputNickname },
+            });
+            setIsNicknameAvailable(response.data);
+        } catch (error) {
+            console.error('There was an error!', error);
+            if (error.response && error.response.status === 400) {
+                setIsNicknameAvailable(true);
+            } else {
+                setIsNicknameAvailable(null);
+            }
         }
-      );
-      setIsNicknameAvailable(response.data);
-    } catch (error) {
-      console.error("There was an error!", error);
-      if (error.response && error.response.status === 400) {
-        setIsNicknameAvailable(true);
-      } else {
-        setIsNicknameAvailable(null);
-      }
-    }
-  };
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
