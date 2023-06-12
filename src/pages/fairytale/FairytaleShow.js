@@ -1,70 +1,77 @@
 import React, { useState, useEffect } from 'react';
-import Container from '../../components/layout/Container';
-import { call } from '../../service/ApiService';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import styled, { css, keyframes } from 'styled-components';
 
-const BookCover = styled.div`
-    width: 100vw;
-    height: 100vh;
-    background-image: url(https://raw.githubusercontent.com/roadmanfong/react-cropper/master/example/img/child.jpg);
-    background-size: cover;
-`;
-const FairytaleTitle = styled.div`
-    font-weight: 400;
-    font-size: 96px;
-    line-height: 162px;
-    text-align: left;
-    color: #ffffff;
-    padding-left: 5%;
-`;
-const ButtomFrame = styled.div`
-    width: 100vw;
-    display: flex;
-    justify-content: flex-end;
-    padding-right: 5%;
-    margin-bottom: 10px;
-`;
-const Button = styled.button`
-    width: 15%;
-    height: 104px;
-    left: 375px;
-    top: 873px;
-    background-color: white;
-    font-size: 150%;
-    border-radius: 51.5px;
-    margin-right: 1%;
-`;
 function FairytaleShow() {
-    useEffect(() => {
-        fetchData();
-    }, []);
+    const CardContainer = styled.div`
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        position: relative;
+    `;
 
-    const fetchData = async () => {
-        try {
-            const response = await call('/book/my-newest', 'GET', null);
-            console.log(response.data);
-        } catch (error) {
-            console.log('Error fetching data:', error);
-        }
-    };
+    const BackgroundImage = styled.div`
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('images/baebang.jpg');
+        background-size: cover;
+        background-position: center;
+        filter: blur(8px);
+    `;
+
+    const contentAnimation = keyframes`
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  `;
+
+    const Content = styled.img`
+        max-width: 100%;
+        max-height: 100%;
+        position: relative;
+        z-index: 1;
+        border: 2px solid black;
+        opacity: ${(props) => (props.isContentUp ? 1 : 0)};
+        transform: translateY(${(props) => (props.isContentUp ? '0' : '100%')});
+        animation: ${(props) =>
+            props.isContentUp
+                ? css`
+                      ${contentAnimation} 0.5s ease forwards;
+                  `
+                : 'none'};
+    `;
+
+    const [isContentUp, setIsContentUp] = useState(false);
+
+    useEffect(() => {
+        const handleKeyPress = (event) => {
+            if (event.code === 'Space' && !isContentUp) {
+                setIsContentUp(true);
+            } else if (event.code === 'Space' && isContentUp) {
+                event.preventDefault();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyPress);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [isContentUp]);
 
     return (
-        <div>
-            <Container className={''}>
-                <BookCover>
-                    <div style={{ position: 'absolute', bottom: '0px' }}>
-                        <FairytaleTitle>My Little Fairytale </FairytaleTitle>
-
-                        <ButtomFrame>
-                            <Button>게시판 전시하기</Button>
-                            <Button>PDF로 내보내기</Button>
-                            <Button>동화책 보기</Button>
-                        </ButtomFrame>
-                    </div>
-                </BookCover>
-            </Container>
-        </div>
+        <CardContainer>
+            <BackgroundImage />
+            <Content className="phoneImage" src="images/baebang.jpg" isContentUp={isContentUp} />
+        </CardContainer>
     );
 }
 
