@@ -5,31 +5,83 @@ import { signup } from '../../service/UserService';
 import { Link } from 'react-router-dom';
 
 function SignUp() {
-    const [uid, setUid] = useState('');
+    const [userInputUserId, setUserInputUserId] = useState('');
     const [isUidAvailable, setIsUidAvailable] = useState(null);
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [userInputNickname, setUserInputNickname] = useState('');
+    const [isNicknameAvailable, setIsNicknameAvailable] = useState(null);
 
-    const checkUidAvailability = async () => {
-        if (uid === '') {
-            alert('아이디를 입력해주세요');
+
+  const checkUidAvailability = async () => {
+    try {
+      if (userInputUserId === "") {
+        alert("아이디를 입력해주세요");
+        return;
+      }
+      const response = await axios.get(
+        //"http://localhost:8080/auth/signup/check-userid",
+        "http://52.79.227.173:8080/auth/signup/check-userid",
+        {
+          params: { userid: userInputUserId },
         }
-        try {
-            const response = await axios.get('http://localhost:8080/auth/signup/check-userid', {
-                params: { uid },
-            });
-            setIsUidAvailable(response.data);
-        } catch (error) {
-            console.error('There was an error!', error);
-            setIsUidAvailable(null);
+      );
+      setIsUidAvailable(response.data);
+    } catch (error) {
+      console.error("There was an error!", error);
+      if (error.response && error.response.status === 400) {
+        setIsUidAvailable(true);
+      } else {
+        setIsUidAvailable(null);
+      }
+    }
+  };
+
+  const checkNicknameAvailability = async () => {
+    try {
+      if (userInputNickname === "") {
+        alert("별명을 입력해주세요");
+        return;
+      }
+      const response = await axios.get(
+        //"http://localhost:8080/auth/signup/check-nickname",
+        "http://52.79.227.173:8080/auth/signup/check-nickname",
+        {
+          params: { nickname: userInputNickname },
         }
-    };
+      );
+      setIsNicknameAvailable(response.data);
+    } catch (error) {
+      console.error("There was an error!", error);
+      if (error.response && error.response.status === 400) {
+        setIsNicknameAvailable(true);
+      } else {
+        setIsNicknameAvailable(null);
+      }
+    }
+  };
 
     const handleSubmit = (event) => {
         event.preventDefault();
+
+        if (isUidAvailable !== true) {
+            alert('아이디 중복확인을 해주세요');
+            return;
+        }
+
+        if (isNicknameAvailable !== true) {
+            alert('닉네임 중복확인을 해주세요');
+            return;
+        }
 
         const data = new FormData(event.target);
         const userid = data.get('userid');
         const nickname = data.get('nickname');
         const password = data.get('password');
+
+        if (password !== confirmPassword) {
+            alert('패스워드가 일치하지 않습니다.');
+            return;
+        }
 
         signup({ userid: userid, nickname: nickname, password: password }).then((response) => {
             window.location.href = '/login';
@@ -54,7 +106,7 @@ function SignUp() {
                             id="userid"
                             label="아이디"
                             autoFocus
-                            onChange={(e) => setUid(e.target.value)}
+                            onChange={(e) => setUserInputUserId(e.target.value)}
                         />
                         <Button onClick={checkUidAvailability} type="button" variant="contained" color="primary">
                             중복확인
@@ -79,14 +131,30 @@ function SignUp() {
                             variant="outlined"
                             required
                             fullWidth
+                            name="confirmPassword"
+                            label="패스워드 확인"
+                            type="password"
+                            id="confirmPassword"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            variant="outlined"
+                            required
+                            fullWidth
                             name="nickname"
                             label="닉네임"
                             id="nickname"
-                            autoComplete="current-password"
+                            onChange={(e) => setUserInputNickname(e.target.value)}
                         />
-                        <Button type="button" variant="contained" color="primary">
+                        <Button onClick={checkNicknameAvailability} type="button" variant="contained" color="primary">
                             중복확인
                         </Button>
+                        {isNicknameAvailable === false && <p>이미 존재하는 별명입니다</p>}
+                        {isNicknameAvailable === true && <p>사용가능한 별명입니다</p>}
+                        {isNicknameAvailable === null && <p>중복확인 버튼을 입력해주세요</p>}
                     </Grid>
                     <Grid item xs={12}>
                         <Button type="submit" fullWidth variant="contained" color="primary">

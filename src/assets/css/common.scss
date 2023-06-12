@@ -19,4 +19,13 @@
   font-size: 1.25rem;
   word-break: keep-all;
   background-color: lightgray;
+  padding: 0.25rem 0.5rem;
+}
+.yellow-bar {
+  position: absolute;
+  width: 100vw;
+  height: 4vh;
+  left: 0px;
+  top: 0px;
+  background-color: #ffb800;
 }
