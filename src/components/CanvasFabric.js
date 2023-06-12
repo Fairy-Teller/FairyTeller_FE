@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { atom } from "recoil";
 import { fabric } from "fabric";
 
@@ -18,25 +18,17 @@ const STI_LINKS = [
 ];
 const [canvasWidth, canvasHeight] = [1280, 720];
 
-class CanvasFabric extends Component {
-  constructor(props) {
-    super(props);
-    this.canvasWidth = canvasWidth;
-    this.canvasHeight = canvasHeight;
-    // this.canvasRef = createRef();
-    this.state = {
-      fabricObjects: [],
-      text: "",
-      imgsrc: SRC_LINK,
-    };
-  }
+const CanvasFabric = () => {
+  const [fabricObjects, setFabricObjects] = useState([]);
+  const [text, setText] = useState("");
+  const [imgURL, setImgURL] = useState(SRC_LINK);
+  const [canvas, setCanvas] = useState(null);
 
-  componentDidMount() {
-    this.init();
-  }
+  useEffect(() => {
+    init();
+  }, []);
 
-  init = () => {
-    // Create the canvas and initialzing...
+  const init = () => {
     let canvas = new fabric.Canvas("c", {
       width: canvasWidth,
       height: canvasHeight,
@@ -88,15 +80,14 @@ class CanvasFabric extends Component {
 
     canvas.add(rect1, rect3, circle, triangle);
 
-    fabric.Image.fromURL(this.state.imgsrc, (defimg, { imgsrc }) => {
+    fabric.Image.fromURL(imgURL, (defimg, { imgsrc }) => {
       if (defimg == null) {
         alert("Error: No Default Image");
       } else {
         defimg.scale(0.75);
         canvas.add(defimg);
-        this.setState({ defimg }); // Store defimg in component state
+        setImgURL(imgsrc);
         canvas.renderAll();
-        this.setState({ imgsrc });
       }
     });
 
@@ -114,113 +105,91 @@ class CanvasFabric extends Component {
       "object:rotating": onChangDetect,
     });
 
-    this.setState({ canvas });
+    setCanvas(canvas);
   };
 
-  bringToFront = (e) => {
+  const bringToFront = (e) => {
     e.preventDefault();
-    let canvas = this.state.canvas;
     let activeObj = canvas.getActiveObject();
     activeObj && canvas.bringToFront(activeObj).discardActiveObject(activeObj).renderAll();
   };
 
-  exportSVG = (e) => {
+  const exportSVG = (e) => {
     e.preventDefault();
-    let canvas = this.state.canvas;
     fabric.log("Normal SVG output: ", canvas.toSVG());
   };
 
-  componentDidUpdate(prevProps) {
-    if (this.props.fabricObjectsState !== prevProps.fabricObjectsState) {
-      this.fetchData(this.props.fabricObjectsState);
-    }
-  }
-
-  addRect = () => {
+  const addRect = () => {
     const rect = new fabric.Rect({
       height: 30,
       width: 300,
       fill: "yellow",
     });
 
-    this.canvas.add(rect);
-    this.setState((prevState) => ({
-      fabricObjects: [...prevState.fabricObjects, rect],
-    }));
-    this.canvas.renderAll();
+    canvas.add(rect);
+    setFabricObjects([...fabricObjects, rect]);
+    canvas.renderAll();
   };
 
-  addImg = (e) => {
+  const addImg = (e) => {
     e.preventDefault();
     const { imgURL } = this.state;
     new fabric.Image.fromURL(imgURL, (img) => {
       img.scale(0.75);
-      this.canvas.add(img);
-      this.setState((prevState) => ({
-        fabricObjects: [...prevState.fabricObjects, img],
-        imgURL: "",
-      }));
+      canvas.add(img);
+      setFabricObjects([...fabricObjects, img]);
+      setImgURL("");
     });
-    this.canvas.renderAll();
+    canvas.renderAll();
   };
 
-  addText = (e) => {
+  const addText = (e) => {
     e.preventDefault();
-    const { text } = this.state;
     const txt = new fabric.Text(text, { left: 50, top: 50 });
-    this.canvas.add(txt);
-    this.setState((prevState) => ({
-      fabricObjects: [...prevState.fabricObjects, txt],
-      text: "",
-    }));
-    this.canvas.renderAll();
+    canvas.add(txt);
+    setFabricObjects([...fabricObjects, txt]);
+    setText("");
+    canvas.renderAll();
   };
 
-  handleChangeText = (e) => {
-    this.setState({ text: e.target.value });
+  const handleChangeText = (e) => {
+    setText(e.target.value);
   };
 
-  handleChangeImgURL = (e) => {
-    this.setState({ imgURL: e.target.value });
+  const handleChangeImgURL = (e) => {
+    setImgURL(e.target.value);
   };
 
-  render() {
-    const { fabricObjects, text, imgURL } = this.state;
-
-    return (
+  return (
+    <div>
+      <canvas id='c' />
       <div>
-        <canvas
-          // ref={this.canvasRef}
-          id='c'
-        />
-        <div>
-          <button onClick={this.bringToFront}>Bring to front</button>
-          <button onClick={this.exportSVG}>exportSVG</button>
-          <button onClick={this.addRect}>Rectangle</button>
-          <form onSubmit={this.addText}>
-            <div>
-              <input
-                type='text'
-                value={text}
-                onChange={this.handleChangeText}
-              />
-              <button type='submit'>Add Text</button>
-            </div>
-          </form>
-          <form onSubmit={this.addImg}>
-            <div>
-              <input
-                type='text'
-                value={imgURL}
-                onChange={this.handleChangeImgURL}
-              />
-              <button type='submit'>Add Image</button>
-            </div>
-          </form>
-        </div>
+        <button onClick={bringToFront}>Bring to front</button>
+        <button onClick={exportSVG}>exportSVG</button>
+        <button onClick={addRect}>Rectangle</button>
+        <form onSubmit={addText}>
+          <div>
+            <input
+              type='text'
+              value={text}
+              onChange={handleChangeText}
+            />
+            <button type='submit'>Add Text</button>
+          </div>
+        </form>
+        <form onSubmit={addImg}>
+          <div>
+            <input
+              type='text'
+              value={imgURL}
+              onChange={handleChangeImgURL}
+            />
+            <button type='submit'>Add Image</button>
+          </div>
+        </form>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default CanvasFabric;
