@@ -36,7 +36,7 @@ function AppRouter() {
                 <Route path="sociallogin" element={<SocialLogin />} />
                 <Route path="logout" element={<Logout />} />
                 <Route path="board" element={<Board />} />
-                <Route path="boarddetail" element={<BoardDetail />} />
+                <Route path="board/:boardId" element={<BoardDetail />} />
                 <Route path="my" element={<My />} />
                 <Route path="artstyle" element={<Artstyle />} />
                 <Route path="f-edit" element={<FairytaleEdit />} />
