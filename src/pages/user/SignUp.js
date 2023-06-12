@@ -11,37 +11,54 @@ function SignUp() {
     const [userInputNickname, setUserInputNickname] = useState('');
     const [isNicknameAvailable, setIsNicknameAvailable] = useState(null);
 
-    const checkUidAvailability = async () => {
-        try {
-            if (userInputUserId === '') {
-                alert('아이디를 입력해주세요');
-                return;
-            }
-            const response = await axios.get('http://52.79.227.173:8080/auth/signup/check-userid', {
-                params: { userid: userInputUserId },
-            });
-            setIsUidAvailable(response.data);
-        } catch (error) {
-            console.error('There was an error!', error);
-            setIsUidAvailable(null);
-        }
-    };
 
-    const checkNicknameAvailability = async () => {
-        try {
-            if (userInputNickname === '') {
-                alert('별명을 입력해주세요');
-                return;
-            }
-            const response = await axios.get('http://52.79.227.173:8080/auth/signup/check-nickname', {
-                params: { nickname: userInputNickname },
-            });
-            setIsNicknameAvailable(response.data);
-        } catch (error) {
-            console.error('There was an error!', error);
-            setIsNicknameAvailable(null);
+  const checkUidAvailability = async () => {
+    try {
+      if (userInputUserId === "") {
+        alert("아이디를 입력해주세요");
+        return;
+      }
+      const response = await axios.get(
+        //"http://localhost:8080/auth/signup/check-userid",
+        "http://52.79.227.173:8080/auth/signup/check-userid",
+        {
+          params: { userid: userInputUserId },
         }
-    };
+      );
+      setIsUidAvailable(response.data);
+    } catch (error) {
+      console.error("There was an error!", error);
+      if (error.response && error.response.status === 400) {
+        setIsUidAvailable(true);
+      } else {
+        setIsUidAvailable(null);
+      }
+    }
+  };
+
+  const checkNicknameAvailability = async () => {
+    try {
+      if (userInputNickname === "") {
+        alert("별명을 입력해주세요");
+        return;
+      }
+      const response = await axios.get(
+        //"http://localhost:8080/auth/signup/check-nickname",
+        "http://52.79.227.173:8080/auth/signup/check-nickname",
+        {
+          params: { nickname: userInputNickname },
+        }
+      );
+      setIsNicknameAvailable(response.data);
+    } catch (error) {
+      console.error("There was an error!", error);
+      if (error.response && error.response.status === 400) {
+        setIsNicknameAvailable(true);
+      } else {
+        setIsNicknameAvailable(null);
+      }
+    }
+  };
 
     const handleSubmit = (event) => {
         event.preventDefault();
