@@ -43,7 +43,7 @@ const BoardDetail = () => {
 
   const fetchDataComments = async (page) => {
     try {
-      const pageSize = 8;
+      const pageSize = 10;
       const response = await call(`/board/${boardId}/comments?page=${page}&size=${pageSize}`, "GET", null);
       setComments(response.data);
       setCurrentPage(response.currentPage);
