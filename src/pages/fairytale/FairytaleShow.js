@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Container from '../../components/layout/Container';
+import { call } from '../../service/ApiService';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const BookCover = styled.div`
     width: 100vw;
@@ -34,12 +36,26 @@ const Button = styled.button`
     margin-right: 1%;
 `;
 function FairytaleShow() {
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            const response = await call('/book/my-newest', 'GET', null);
+            console.log(response.data);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
+    };
+
     return (
         <div>
             <Container className={''}>
                 <BookCover>
                     <div style={{ position: 'absolute', bottom: '0px' }}>
-                        <FairytaleTitle>My Little Fairytale</FairytaleTitle>
+                        <FairytaleTitle>My Little Fairytale </FairytaleTitle>
+
                         <ButtomFrame>
                             <Button>게시판 전시하기</Button>
                             <Button>PDF로 내보내기</Button>
