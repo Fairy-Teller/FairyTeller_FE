@@ -1,7 +1,7 @@
 import "../../assets/css/common.scss";
 const Section = (props) => {
   return (
-    <section className={`section  ${props.className == undefined ? "" : props.className}`}>
+    <section className={`section ${props.className == undefined ? "" : props.className}`}>
       {props.children}
     </section>
   );
