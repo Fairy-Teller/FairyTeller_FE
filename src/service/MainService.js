@@ -7,3 +7,10 @@ export function sendkeyword(userDTO) {
     window.location.href = "/story-generated";
   });
 }
+
+export function sendtext(userDTO) {
+  return call("/chat-gpt/summarize", "POST", userDTO).then((response) => {
+    console.log(response);
+    window.location.href = "/f-edit";
+  });
+}
