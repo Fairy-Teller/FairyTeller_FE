@@ -30,7 +30,7 @@ const BoardDetail = () => {
   const handleCommentSubmit = async (comment) => {
     try {
       await call(`/board/${boardId}/comment`, "POST", comment);
-      fetchData(); // 새로운 댓글이 추가된 후 전체 댓글 목록을 다시 가져옴
+      fetchDataComments(currentPage); // 새로운 댓글이 추가된 후 전체 댓글 목록을 다시 가져옴
     } catch (error) {
       console.log("Error submitting comment:", error);
     }
