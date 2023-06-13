@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useRecoilState, selector } from "recoil";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState, useRecoilCallback } from "recoil";
 import { SelectedKeywords, GeneratedStoryState } from "../../recoil/Fairytailstate";
 import { call } from "../../service/ApiService";
 import Container from "../../components/layout/Container";
@@ -8,8 +9,7 @@ import Section from "../../components/layout/Section";
 import ButtonWrap from "../../components/common/ButtonWrap";
 import styled from "styled-components";
 
-const ANIMAL = "ANIMAL";
-const PEOPLE = "PEOPLE";
+const [ANIMAL, PEOPLE] = ["ANIMAL", "PEOPLE"];
 
 const Keywords = styled.ul`
   background-color: pink;
@@ -34,6 +34,7 @@ function Keyword() {
   const [savedStory, setSavedStory] = useRecoilState(GeneratedStoryState);
   const [dataIdx, setDataIdx] = useState(0);
   const [options, setOptions] = useState([{}]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -81,13 +82,21 @@ function Keyword() {
     });
   };
 
-  const sendkeyword = async (userDTO) => {
-    await call("/chat-gpt/question", "POST", userDTO).then((response) => {
-      console.log(response); // 키워드로 생성된 텍스트
-      setSavedStory({ text: response });
-      window.location.href = "/story-generated";
-    });
-  };
+  const sendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
+    try {
+      const response = await call("/chat-gpt/question", "POST", userDTO);
+      await setSavedStory(response);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      navigate("/story-generated");
+    }
+  });
+
+  const callbackSavedStory = useRecoilCallback(({ set }) => async (response) => {
+    await set(GeneratedStoryState, { text: response });
+    console.log(GeneratedStoryState);
+  });
 
   return (
     <div>

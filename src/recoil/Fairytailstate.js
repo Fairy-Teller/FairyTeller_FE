@@ -7,16 +7,16 @@ import { call } from "../service/ApiService";
 //   default: "default",
 // });
 
-export const SelectedKeywords = atom({ key: "SelectedKeywords" });
+export const SelectedKeywords = atom({ key: "SelectedKeywords", default: [] });
 
 export const GeneratedStoryState = atom({
   key: "GeneratedStoryState",
-  text: "",
+  default: { text: "" },
 });
 
 export const WrittenStoryState = atom({
   key: "WrittenStoryState",
-  text: "",
+  default: { text: "" },
 });
 
 export const summarizedResponseSelector = selector({

@@ -27,17 +27,11 @@ const CenteredDiv = styled.div`
 `;
 
 function Start() {
-  const LOG = () => {
-    console.log("CLICKED");
-  };
-
   return (
     <Container className={""}>
       <h1></h1>
       <CenteredDiv>
-        <Link
-          to='/story-user'
-          onClick={LOG}>
+        <Link to='/story-generated'>
           <Button>input scenario</Button>
         </Link>
         <Link to='/keyword'>
