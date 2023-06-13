@@ -8,6 +8,9 @@ import Login from './pages/user/Login';
 import SignUp from './pages/user/SignUp';
 import SocialLogin from './pages/user/SocialLogin';
 import Logout from './pages/user/Logout';
+//mypage
+import UpdateUser from './pages/mypage/UpdateUser';
+import MyBookList from './pages/mypage/MyBookList';
 //community
 import Board from './pages/community/Board';
 import BoardDetail from './pages/community/BoardDetail';
@@ -25,8 +28,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function AppRouter() {
     return (
-        // prettier-ignore
+
         <BrowserRouter>
+   
             <Routes>
                 <Route path="/" element={<App />} />
                 <Route path="home" element={<Home />} />
@@ -35,8 +39,10 @@ function AppRouter() {
                 <Route path="signup" element={<SignUp />} />
                 <Route path="sociallogin" element={<SocialLogin />} />
                 <Route path="logout" element={<Logout />} />
+                <Route path="updateUser" element={<UpdateUser/>} />
+                <Route path="myBookList" element={<MyBookList/>} />
                 <Route path="board" element={<Board />} />
-                <Route path="boarddetail" element={<BoardDetail />} />
+                <Route path="board/:boardId" element={<BoardDetail />} />
                 <Route path="my" element={<My />} />
                 <Route path="artstyle" element={<Artstyle />} />
                 <Route path="f-edit" element={<FairytaleEdit />} />
@@ -46,6 +52,7 @@ function AppRouter() {
                 <Route path="story-generated" element={<StoryGenerated />} />
                 <Route path="story-user" element={<StoryUser />} />
             </Routes>
+       
         </BrowserRouter>
     );
 }
