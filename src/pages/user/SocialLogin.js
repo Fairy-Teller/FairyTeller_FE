@@ -18,7 +18,7 @@ const SocialLogin = (props) => {
     return (
       <Navigate
         to={{
-          pathname: "/",
+          pathname: "/start",
           state: { from: props.location },
         }}
       />

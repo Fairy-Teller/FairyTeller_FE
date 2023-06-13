@@ -57,7 +57,7 @@ function FairytaleExport() {
     return (
         <Container className="">
             <BookCover style={{ backgroundImage: `url(${thumbnailUrl})` }}>
-                <div style={{ position: 'absolute', bottom: '0px' }}>
+                <div style={{ position: 'absolute', bottom: '0px', width: '100%' }}>
                     <FairytaleTitle>My Little Fairytale</FairytaleTitle>
                     <ButtonFrame>
                         <Button>게시판 전시하기</Button>
