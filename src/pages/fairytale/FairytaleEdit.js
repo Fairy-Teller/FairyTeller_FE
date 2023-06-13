@@ -101,9 +101,14 @@ function FairytaleEdit() {
     const [importFile, setImportFile] = useState(null);
     const [selectedSti, setSelectedSti] = useState(NULL);
     const [imageLink, setimageLink] = useState(NULL);
+    const [isImageDownloaded, setIsImageDownloaded] = useState(false);
+
     const [canvasWidth, canvasHeight] = [1280, 720];
+
     useEffect(() => {
-        handleDownloadImage();
+        if (imageLink !== NULL) {
+            fetchData();
+        }
     }, [imageLink]);
 
     const handleButtonClick = (label) => {
@@ -125,32 +130,16 @@ function FairytaleEdit() {
         });
 
         const data = canvas.toDataURL('image/jpg');
-
         setimageLink(data);
-
-        // if (typeof link.download === 'string') {
-        //     link.href = data;
-        //     link.download = 'image.jpg';
-
-        //     document.body.appendChild(link);
-        //     link.click();
-        //     document.body.removeChild(link);
-        // } else {
-        //     window.open(data);
-        // }
     };
 
     const fetchData = async () => {
         try {
-            console.log(imageLink);
             await call('/book/create/final', 'POST', {
-                bookId: '131',
-                title: 'dddddd!!!',
+                bookId: '159',
+                title: '바로 업데이트?!!!!!!!',
                 thumbnailUrl: imageLink,
             });
-            // await call('/book/create/story', 'POST', {
-            //     fullStory: 'ha ha ha ha ha ha ha',
-            // });
         } catch (error) {
             console.log('Error fetching data:', error);
         }
@@ -206,8 +195,7 @@ function FairytaleEdit() {
         }
     };
     const nextPage = async () => {
-        handleDownloadImage();
-        fetchData();
+        await handleDownloadImage();
         window.location.href = '/f-export';
     };
 
