@@ -50,6 +50,7 @@ function Keyword() {
           title: item.title,
         }));
       });
+      setCheckedValues([]);
       setLoading(true);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -85,17 +86,13 @@ function Keyword() {
   const sendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
     try {
       const response = await call("/chat-gpt/question", "POST", userDTO);
-      await setSavedStory(response);
+      await set(GeneratedStoryState, { text: response });
+      await set(SelectedKeywords, { keywords: checkedValues });
     } catch (error) {
       console.log(error);
     } finally {
       navigate("/story-generated");
     }
-  });
-
-  const callbackSavedStory = useRecoilCallback(({ set }) => async (response) => {
-    await set(GeneratedStoryState, { text: response });
-    console.log(GeneratedStoryState);
   });
 
   return (

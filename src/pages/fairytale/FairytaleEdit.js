@@ -8,7 +8,7 @@ import {
 
 function FairytaleEdit() {
   const writtenStory = useRecoilValue(WrittenStoryState);
-  const generatedStory = useRecoilValue(GeneratedStoryState);
+  const savedStory = useRecoilValue(GeneratedStoryState);
   const selectedKeywords = useRecoilValue(SelectedKeywords);
 
   return (
@@ -16,7 +16,7 @@ function FairytaleEdit() {
       <h1>whw</h1>
       <ul>
         <li>{writtenStory.text}</li>
-        <li>{generatedStory.text}</li>
+        <li>{savedStory.text}</li>
         {/* <li>{selectedKeywords.text}</li> */}
       </ul>
     </div>

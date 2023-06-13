@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState, useResetRecoilState, useRecoilCallback } from "recoil";
 import { SelectedKeywords, GeneratedStoryState } from "../../recoil/Fairytailstate";
 import { Link } from "react-router-dom";
 import { call } from "../../service/ApiService";
@@ -16,24 +17,26 @@ const TextArea = styled.textarea`
 
 function StoryGenerated() {
   const [loading, setLoading] = useState(false);
-  const selectedKeywords = useRecoilValue(SelectedKeywords);
+  const [selectedKeywords, setSelectedKeywords] = useRecoilState(SelectedKeywords);
   const [savedStory, setSavedStory] = useRecoilState(GeneratedStoryState);
   const [dataIdx, setDataIdx] = useState(0);
   const [textareas, setTextareas] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
-  }, [savedStory]);
+    console.log(savedStory.text["text"]);
+    console.log(selectedKeywords); // {keywords: Array(3)} // [{key: undefined, theme: 'ANIMAL', title: '공룡'}, {key: undefined, theme: 'PEOPLE', title: '의사'}, {key: undefined, theme: 'ANIMAL', title: '개구리'}]
+  }, [selectedKeywords]);
 
   const fetchData = async () => {
     try {
-      const data = await call("/chat-gpt/question", "GET", null);
-      setTextareas(() => {
-        return data.map((item) => ({
-          key: setDataIdx((prev) => prev + 1),
-          text: item.text,
-        }));
-      });
+      setTextareas(savedStory.text["text"]);
+      // setSelectedKeywords(() => {
+      //   return selectedKeywords.map((item) => ({
+      //     key: setDataIdx((prev) => prev + 1),
+      //   }));
+      // });
       setLoading(true);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -59,52 +62,72 @@ function StoryGenerated() {
     });
   };
 
-  const resendkeyword = async (userDTO) => {
-    await call("/chat-gpt/question", "POST", userDTO).then((response) => {
-      setSavedStory(response);
-    });
-  };
-
   const regenerateHandler = (e) => {
     e.preventDefault();
 
-    console.log(selectedKeywords);
-    resendkeyword(SelectedKeywords);
+    resendkeyword({
+      parameter1: selectedKeywords.keywords[0].title,
+      parameter2: selectedKeywords.keywords[1].title,
+      parameter3: selectedKeywords.keywords[2].title,
+    });
   };
+
+  const resendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
+    try {
+      const response = await call("/chat-gpt/question", "POST", userDTO);
+      await set(GeneratedStoryState, { text: response });
+      await set(SelectedKeywords, { keywords: selectedKeywords.keywords });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      navigate("/story-generated");
+    }
+  });
+
+  const callbackSavedStory = useRecoilCallback(({ set }) => async (response) => {
+    await set(GeneratedStoryState, { text: response });
+  });
+
+  const resetSelectedKeywords = useResetRecoilState(SelectedKeywords);
 
   return (
     <div>
-      <Container className={""}>
-        <h1>만들어진 시나리오를 확인하고 수정해보아요</h1>
-        <form onSubmit={onSubmitHandler}>
-          <Section className={""}>
-            <TextArea
-              value={textareas}
-              placeholder='만들어진 시나리오를 확인하고 수정해보아요'
-              onChange={(e) => onChangeHandler(e)}
-            />
-          </Section>
-          <ButtonWrap>
-            <Link
-              to='/keyword'
-              className='button'>
-              키워드 다시 고르기
-            </Link>
+      {loading ? (
+        <Container className={""}>
+          <h1>만들어진 시나리오를 확인하고 수정해보아요</h1>
+          <form onSubmit={onSubmitHandler}>
+            <Section className={""}>
+              <TextArea
+                value={textareas}
+                placeholder='만들어진 시나리오를 확인하고 수정해보아요'
+                onChange={(e) => onChangeHandler(e)}
+              />
+            </Section>
+            <ButtonWrap>
+              <Link
+                to='/keyword'
+                onClick={resetSelectedKeywords}
+                className='button'>
+                키워드 다시 고르기
+              </Link>
+              <button
+                type='submit'
+                className='button'>
+                동화책 만들러 가기(or 동화책 테마 정하기)
+              </button>
+            </ButtonWrap>
+          </form>
+          <form onSubmit={regenerateHandler}>
             <button
               type='submit'
               className='button'>
-              동화책 만들러 가기(or 동화책 테마 정하기)
+              이야기 다시 만들기
             </button>
-          </ButtonWrap>
-        </form>
-        <form onSubmit={regenerateHandler}>
-          <button
-            type='submit'
-            className='button'>
-            이야기 다시 만들기
-          </button>
-        </form>
-      </Container>
+          </form>
+        </Container>
+      ) : (
+        <div>되는 중...</div>
+      )}
     </div>
   );
 }

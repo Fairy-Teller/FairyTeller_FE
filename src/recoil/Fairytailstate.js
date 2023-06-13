@@ -18,15 +18,3 @@ export const WrittenStoryState = atom({
   key: "WrittenStoryState",
   default: { text: "" },
 });
-
-export const summarizedResponseSelector = selector({
-  key: "summarizedResponseSelector",
-  get: async ({ get }) => {
-    const writtenStory = get(WrittenStoryState);
-    console.log(writtenStory);
-    // const response = await call("/chat-gpt/summarize", "POST", {
-    //   text: writtenStory.text,
-    // });
-    // return response;
-  },
-});

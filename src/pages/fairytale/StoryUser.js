@@ -14,7 +14,6 @@ const TextArea = styled.textarea`
 
 function StoryUser() {
   const [writtenStory, setWrittenStory] = useRecoilState(WrittenStoryState);
-  const [res, setRes] = useRecoilState(summarizedResponseSelector);
   const [texts, setTexts] = useState("");
 
   const onChangeHandler = (e) => {
@@ -31,13 +30,9 @@ function StoryUser() {
 
   const sendtext = async (userDTO) => {
     await call("/chat-gpt/summarize", "POST", userDTO).then((response) => {
-      setRes(response);
-      console.log("summarize: ", res);
+      console.log(response);
+      window.location.href = "/f-edit";
     });
-    // .finally(() => {
-    //   console.log(summarizedResponse);
-    //   window.location.href = "/f-edit";
-    // });
   };
 
   return (
