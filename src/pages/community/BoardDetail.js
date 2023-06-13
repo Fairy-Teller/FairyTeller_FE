@@ -30,7 +30,7 @@ const BoardDetail = () => {
   const handleCommentSubmit = async (comment) => {
     try {
       await call(`/board/${boardId}/comment`, "POST", comment);
-      fetchData(); // 새로운 댓글이 추가된 후 전체 댓글 목록을 다시 가져옴
+      fetchDataComments(currentPage); // 새로운 댓글이 추가된 후 전체 댓글 목록을 다시 가져옴
     } catch (error) {
       console.log("Error submitting comment:", error);
     }
@@ -43,7 +43,7 @@ const BoardDetail = () => {
 
   const fetchDataComments = async (page) => {
     try {
-      const pageSize = 8;
+      const pageSize = 10;
       const response = await call(`/board/${boardId}/comments?page=${page}&size=${pageSize}`, "GET", null);
       setComments(response.data);
       setCurrentPage(response.currentPage);
