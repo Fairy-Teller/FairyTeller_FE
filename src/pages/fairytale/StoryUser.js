@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, startTransition } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { WrittenStoryState, summarizedResponseSelector } from "../../recoil/Fairytailstate";
+import { call } from "../../service/ApiService";
 import Container from "../../components/layout/Container";
 import Section from "../../components/layout/Section";
 import ButtonWrap from "../../components/common/ButtonWrap";
@@ -10,28 +13,31 @@ const TextArea = styled.textarea`
 `;
 
 function StoryUser() {
-  const [textareas, setTextareas] = useState(["", "", ""]);
+  const [writtenStory, setWrittenStory] = useRecoilState(WrittenStoryState);
+  const [res, setRes] = useRecoilState(summarizedResponseSelector);
+  const [texts, setTexts] = useState("");
 
-  const onChangeHandler = (e, idx) => {
-    const updatedTextareas = [...textareas];
-    updatedTextareas[idx] = e.target.value;
-    setTextareas(updatedTextareas);
+  const onChangeHandler = (e) => {
+    setTexts(e.target.value);
   };
 
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
-    fetch("http://localhost:8080/chat-gpt/????", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        parameter1: textareas[0],
-        parameter2: textareas[1],
-        parameter3: textareas[2],
-      }),
+    setWrittenStory({ text: texts });
+    await sendtext({
+      text: writtenStory.text,
     });
-    setTextareas(["", "", ""]);
+  };
+
+  const sendtext = async (userDTO) => {
+    await call("/chat-gpt/summarize", "POST", userDTO).then((response) => {
+      setRes(response);
+      console.log("summarize: ", res);
+    });
+    // .finally(() => {
+    //   console.log(summarizedResponse);
+    //   window.location.href = "/f-edit";
+    // });
   };
 
   return (
@@ -41,17 +47,10 @@ function StoryUser() {
         <form onSubmit={onSubmitHandler}>
           <Section className={""}>
             <TextArea
-              value={textareas[0]}
-              placeholder={0 + "번째 페이지"}
-              onChange={(e) => onChangeHandler(e, 0)}></TextArea>
-            <TextArea
-              value={textareas[1]}
-              placeholder={1 + "번째 페이지"}
-              onChange={(e) => onChangeHandler(e, 1)}></TextArea>
-            <TextArea
-              value={textareas[2]}
-              placeholder={2 + "번째 페이지"}
-              onChange={(e) => onChangeHandler(e, 2)}></TextArea>
+              value={texts}
+              placeholder='동화책에 넣을 첫번째 문단을 작성해보아요'
+              onChange={(e) => onChangeHandler(e)}
+            />
           </Section>
           <ButtonWrap>
             <button
