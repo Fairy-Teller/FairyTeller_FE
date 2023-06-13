@@ -14,6 +14,12 @@ const TextArea = styled.textarea`
   height: 10rem;
   background-color: lightgray;
 `;
+const ImageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
 
 function StoryGenerated() {
   const [loading, setLoading] = useState(false);
@@ -21,6 +27,7 @@ function StoryGenerated() {
   const [savedStory, setSavedStory] = useRecoilState(GeneratedStoryState);
   const [dataIdx, setDataIdx] = useState(0);
   const [texts, setTexts] = useState("");
+  const [url, setUrl] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,8 +57,10 @@ function StoryGenerated() {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     setSavedStory(texts);
+    // callbackSavedStory();
+    console.log(savedStory);
     sendtext({
-      text: texts,
+      text: savedStory,
     });
   };
 
@@ -113,7 +122,7 @@ function StoryGenerated() {
               <button
                 type='submit'
                 className='button'>
-                동화책 만들러 가기(or 동화책 테마 정하기)
+                동화책 만들러 가기
               </button>
             </ButtonWrap>
           </form>
@@ -124,6 +133,15 @@ function StoryGenerated() {
               이야기 다시 만들기
             </button>
           </form>
+
+          {url && (
+            <ImageContainer>
+              <img
+                src={url}
+                alt='AI-generated'
+              />
+            </ImageContainer>
+          )}
         </Container>
       ) : (
         <div>되는 중...</div>
