@@ -31,7 +31,7 @@ function Start() {
     <Container className={""}>
       <h1></h1>
       <CenteredDiv>
-        <Link to='/story-generated'>
+        <Link to='/story-user'>
           <Button>input scenario</Button>
         </Link>
         <Link to='/keyword'>
