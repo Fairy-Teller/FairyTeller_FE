@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css, keyframes } from 'styled-components';
+import { useLocation } from 'react-router-dom';
 
 function FairytaleShow() {
+    const location = useLocation();
+    const propValue = location.state;
     const CardContainer = styled.div`
         display: flex;
         justify-content: center;
@@ -67,6 +70,9 @@ function FairytaleShow() {
         };
     }, [isContentUp]);
 
+    console.log(location);
+    console.log(propValue);
+
     return (
         <CardContainer>
             <BackgroundImage />
@@ -76,4 +82,3 @@ function FairytaleShow() {
 }
 
 export default FairytaleShow;
-

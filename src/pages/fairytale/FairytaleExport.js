@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Container from '../../components/layout/Container';
 import { call } from '../../service/ApiService';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const FairytaleTitle = styled.div`
     font-weight: 400;
@@ -19,19 +20,24 @@ const ButtonFrame = styled.div`
     margin-bottom: 10px;
 `;
 
-const Button = styled.button`
+const Button = styled(Link)`
     width: 15%;
     height: 104px;
     background-color: white;
     font-size: 150%;
     border-radius: 51.5px;
     margin-right: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
 `;
 
 const BookCover = styled.div`
     width: 100vw;
     height: 100vh;
     background-size: cover;
+    background-color: black;
 `;
 
 function FairytaleExport() {
@@ -47,8 +53,8 @@ function FairytaleExport() {
             const response = await call('/book/my-newest', 'GET', null);
             setThumbnailUrl(response.thumbnailUrl);
             setBookId(response.bookId);
-            const boardresponse = await call('/board/save', 'POST', { bookId: BookId });
-            console.log(boardresponse);
+            // const boardresponse = await call('/board/save', 'POST', { bookId: '11' });
+            // console.log(boardresponse);
         } catch (error) {
             console.log('Error fetching data:', error);
         }
@@ -62,7 +68,10 @@ function FairytaleExport() {
                     <ButtonFrame>
                         <Button>게시판 전시하기</Button>
                         <Button>PDF로 내보내기</Button>
-                        <Button>동화책 보기</Button>
+
+                        <Button to="/f-show" state={BookId}>
+                            동화보기
+                        </Button>
                     </ButtonFrame>
                 </div>
             </BookCover>
