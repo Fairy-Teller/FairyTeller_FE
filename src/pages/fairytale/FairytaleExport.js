@@ -44,6 +44,7 @@ const BookCover = styled.div`
 function FairytaleExport() {
     const [thumbnailUrl, setThumbnailUrl] = useState('');
     const [BookId, setBookId] = useState('');
+    const [Title, setTitle] = useState('');
 
     useEffect(() => {
         fetchData();
@@ -67,6 +68,7 @@ function FairytaleExport() {
             const data = await call('/book/my-newest', 'GET', null);
             setThumbnailUrl('https://s3.ap-northeast-2.amazonaws.com/' + data.thumbnailUrl);
             setBookId(data.bookId);
+            setTitle(data.title);
             console.log(data);
             console.log(thumbnailUrl);
             // await call('/book/create/story', 'POST', {
@@ -106,7 +108,7 @@ function FairytaleExport() {
         <Container className="">
             <BookCover style={{ backgroundImage: `url(${thumbnailUrl})` }}>
                 <div style={{ position: 'absolute', bottom: '0px', width: '100%' }}>
-                    <FairytaleTitle>My Little Fairytale</FairytaleTitle>
+                    <FairytaleTitle>{Title}</FairytaleTitle>
                     <ButtonFrame>
                         <Button onClick={gotoBoard}>게시판 전시하기</Button>
                         <Button onClick={exportPDF}>PDF로 내보내기</Button>

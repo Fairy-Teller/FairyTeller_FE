@@ -87,6 +87,18 @@ const classNameCleaner = (str) => {
     }
 };
 
+const TitleInputWrapper = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+`;
+
+const TitleInput = styled.input`
+    width: 150px;
+    height: 30px;
+`;
+
 //   const [fabricObjects, setFabricObjects] = useRecoilState(fabricObjectsState);
 
 function FairytaleEdit() {
@@ -101,7 +113,12 @@ function FairytaleEdit() {
     const [importFile, setImportFile] = useState(null);
     const [selectedSti, setSelectedSti] = useState(NULL);
     const [imageLink, setimageLink] = useState(NULL);
-    const [isImageDownloaded, setIsImageDownloaded] = useState(false);
+    const [title, setTitle] = useState('');
+
+    const handlehowTitleInpuClick = () => {
+        setActiveTab(null);
+        // Perform additional actions here if needed
+    };
 
     const [canvasWidth, canvasHeight] = [1280, 720];
 
@@ -135,14 +152,20 @@ function FairytaleEdit() {
 
     const fetchData = async () => {
         try {
+            console.log(imageLink);
             await call('/book/create/final', 'POST', {
-                bookId: '159',
-                title: '바로 업데이트?!!!!!!!',
+                bookId: '172',
+                title: title,
                 thumbnailUrl: imageLink,
             });
+            window.location.href = '/f-export';
         } catch (error) {
             console.log('Error fetching data:', error);
         }
+    };
+
+    const handleTitleChange = (event) => {
+        setTitle(event.target.value);
     };
 
     const handleFileChange = (event) => {
@@ -196,7 +219,6 @@ function FairytaleEdit() {
     };
     const nextPage = async () => {
         await handleDownloadImage();
-        window.location.href = '/f-export';
     };
 
     // const HandleRandomBg = () => {
@@ -268,7 +290,29 @@ function FairytaleEdit() {
                                 </button>
                             </EditToolTab>
                         )}
-                        {activeTab === TEXT && <EditToolTab title={TEXT}>{<button>{TEXT}</button>}</EditToolTab>}
+                        {activeTab === TEXT && (
+                            <TitleInputWrapper style={{ border: '4px solid black' }}>
+                                <TitleInput
+                                    type="text"
+                                    value={title}
+                                    onChange={handleTitleChange}
+                                    placeholder="제목을 입력해 주세요"
+                                    style={{ width: '700px', height: '100px' }}
+                                />
+                                <button
+                                    className="create-button"
+                                    onClick={handlehowTitleInpuClick}
+                                    style={{
+                                        width: '700px',
+                                        height: '50px',
+                                        display: 'block',
+                                        backgroundColor: 'lightGray',
+                                    }}
+                                >
+                                    Submit
+                                </button>
+                            </TitleInputWrapper>
+                        )}
                         {activeTab === FILTER && <EditToolTab title={FILTER}></EditToolTab>}
                         {activeTab === STICKER && (
                             <EditToolTab title={STICKER}>

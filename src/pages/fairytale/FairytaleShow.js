@@ -88,7 +88,7 @@ function FairytaleShow() {
     return (
         <CardContainer>
             <BackgroundImage />
-            <Content className="phoneImage" src="images/baebang.jpg" isContentUp={isContentUp} />
+            <Content className="phoneImage" src={thumbnailUrl} isContentUp={isContentUp} />
         </CardContainer>
     );
 }
