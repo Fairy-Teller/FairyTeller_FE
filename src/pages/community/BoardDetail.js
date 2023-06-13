@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { call } from "../../service/ApiService";
 import CommentSection from "./CommentSection";
+import MusicBar from "./MusicBar";
 
 const BoardDetail = () => {
   const { boardId } = useParams();
@@ -66,6 +67,7 @@ const BoardDetail = () => {
           <img src={board.thumbnailUrl} alt="Thumbnail" style={styles.thumbnail} />
         </div>
         <p style={styles.content}>{board.content}</p>
+        <MusicBar audioUrl={board.audioUrl} />
         <CommentSection
           comments={comments}
           setComments={setComments}
@@ -89,7 +91,6 @@ const BoardDetail = () => {
     </div>
   );
 };
-// ...이전 코드 생략...
 
 const styles = {
   container: {
