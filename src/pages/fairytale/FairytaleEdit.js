@@ -214,17 +214,18 @@ function FairytaleEdit() {
                     ))}
                 </Nav>
                 <Frame>
-                    <RecoilRoot>
-                        <div
-                            ref={printRef}
-                            style={{
-                                width: canvasWidth,
-                                height: canvasHeight,
-                            }}
-                        >
-                            <CanvasFabric />
-                        </div>
-                    </RecoilRoot>
+                    <div
+                        ref={printRef}
+                        style={{
+                            width: canvasWidth,
+                            height: canvasHeight,
+                            marginLeft: '15%',
+                            marginTop: '0.5%',
+                        }}
+                    >
+                        <CanvasFabric />
+                    </div>
+
                     <div id="edit-tools">
                         {activeTab === IMAGE && (
                             <EditToolTab title={IMAGE}>
