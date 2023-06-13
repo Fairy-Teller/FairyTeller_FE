@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { SelectedKeywordsContext } from "../../context/SelectedKeywordsContext";
+import { useRecoilState } from "recoil";
+import { SelectedKeywords, GeneratedStory } from "../../recoil/Fairytailstate";
 import { call } from "../../service/ApiService";
-import { sendkeyword } from "../../service/MainService";
 import Container from "../../components/layout/Container";
 import Row from "../../components/layout/Row";
 import Section from "../../components/layout/Section";
@@ -14,17 +14,14 @@ const PEOPLE = "PEOPLE";
 const Keywords = styled.ul`
   background-color: pink;
 `;
-
 const KeywordItem = styled.li`
   list-style: none;
   flex: 1 0 auto;
   padding: 0.625rem;
 `;
-
 const ItemTitle = styled.p`
   font-size: 14px;
 `;
-
 const ItemInput = styled.input`
   width: 2rem;
   height: 2rem;
@@ -32,8 +29,8 @@ const ItemInput = styled.input`
 `;
 
 function Keyword() {
-  const [selectedKeywords, setSelectedKeywords] = useState([]);
-  const [checkedValues, setCheckedValues] = useState([]);
+  const [checkedValues, setCheckedValues] = useRecoilState(SelectedKeywords);
+  const [savedStory, setSavedStory] = useRecoilState(GeneratedStory);
   const [dataIdx, setDataIdx] = useState(0);
   const [options, setOptions] = useState([{}]);
 
@@ -69,7 +66,7 @@ function Keyword() {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    setSelectedKeywords((prev) => [
+    setCheckedValues((prev) => [
       ...prev,
       checkedValues[0].title,
       checkedValues[1].title,
@@ -81,8 +78,6 @@ function Keyword() {
       parameter2: checkedValues[1].title,
       parameter3: checkedValues[2].title,
     });
-
-    console.log(selectedKeywords, checkedValues);
   };
 
   // fetch("http://localhost:8080/chat-gpt/question", {
@@ -97,68 +92,74 @@ function Keyword() {
   //   }),
   // });
 
+  const sendkeyword = async (userDTO) => {
+    await call("/chat-gpt/question", "POST", userDTO).then((response) => {
+      console.log(response); // 키워드로 생성된 텍스트
+      setSavedStory(response);
+      window.location.href = "/story-generated";
+    });
+  };
+
   return (
     <div>
-      <SelectedKeywordsContext.Provider value={{ selectedKeywords, setSelectedKeywords }}>
-        <Container className={""}>
-          <h1>
-            추천 키워드<p>최대 3개</p>
-          </h1>
-          <form onSubmit={onSubmitHandler}>
-            <Section className={ANIMAL}>
-              <h2>{ANIMAL}</h2>
-              <Keywords>
-                <Row>
-                  {options.map((item) =>
-                    item.theme === ANIMAL ? (
-                      <KeywordItem>
-                        <ItemInput
-                          id={`keyword${item.key}`}
-                          name={item.title}
-                          type='checkbox'
-                          checked={item.checked}
-                          className='ItemInput'
-                          onChange={(e) => handleChecked(e.target.name)}
-                        />
-                        <ItemTitle>{item.title}</ItemTitle>
-                      </KeywordItem>
-                    ) : null
-                  )}
-                </Row>
-              </Keywords>
-            </Section>
-            <Section className={PEOPLE}>
-              <h2>{PEOPLE}</h2>
-              <Keywords>
-                <Row>
-                  {options.map((item) =>
-                    item.theme === PEOPLE ? (
-                      <KeywordItem>
-                        <ItemInput
-                          id={`keyword${item.key}`}
-                          name={item.title}
-                          type='checkbox'
-                          checked={item.checked}
-                          className='ItemInput'
-                          onChange={(e) => handleChecked(e.target.name)}
-                        />
-                        <ItemTitle>{item.title}</ItemTitle>
-                      </KeywordItem>
-                    ) : null
-                  )}
-                </Row>
-              </Keywords>
-            </Section>
-            <ButtonWrap>
-              <button
-                type='submit'
-                className='button'>
-                이야기 만들러 가기
-              </button>
-            </ButtonWrap>
-          </form>
-        </Container>
-      </SelectedKeywordsContext.Provider>
+      <Container className={""}>
+        <h1>
+          추천 키워드<p>최대 3개</p>
+        </h1>
+        <form onSubmit={onSubmitHandler}>
+          <Section className={ANIMAL}>
+            <h2>{ANIMAL}</h2>
+            <Keywords>
+              <Row>
+                {options.map((item) =>
+                  item.theme === ANIMAL ? (
+                    <KeywordItem>
+                      <ItemInput
+                        id={`keyword${item.key}`}
+                        name={item.title}
+                        type='checkbox'
+                        checked={item.checked}
+                        className='ItemInput'
+                        onChange={(e) => handleChecked(e.target.name)}
+                      />
+                      <ItemTitle>{item.title}</ItemTitle>
+                    </KeywordItem>
+                  ) : null
+                )}
+              </Row>
+            </Keywords>
+          </Section>
+          <Section className={PEOPLE}>
+            <h2>{PEOPLE}</h2>
+            <Keywords>
+              <Row>
+                {options.map((item) =>
+                  item.theme === PEOPLE ? (
+                    <KeywordItem>
+                      <ItemInput
+                        id={`keyword${item.key}`}
+                        name={item.title}
+                        type='checkbox'
+                        checked={item.checked}
+                        className='ItemInput'
+                        onChange={(e) => handleChecked(e.target.name)}
+                      />
+                      <ItemTitle>{item.title}</ItemTitle>
+                    </KeywordItem>
+                  ) : null
+                )}
+              </Row>
+            </Keywords>
+          </Section>
+          <ButtonWrap>
+            <button
+              type='submit'
+              className='button'>
+              이야기 만들러 가기
+            </button>
+          </ButtonWrap>
+        </form>
+      </Container>
     </div>
   );
 }

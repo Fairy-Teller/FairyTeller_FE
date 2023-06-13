@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
-import { SelectedKeywordsContext } from "../../context/SelectedKeywordsContext";
+import React, { useState, useEffect } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { SelectedKeywords, GeneratedStory } from "../../recoil/Fairytailstate";
 import { Link } from "react-router-dom";
 import { call } from "../../service/ApiService";
-import { sendkeyword, sendtext } from "../../service/MainService";
 import Container from "../../components/layout/Container";
 import Section from "../../components/layout/Section";
 import ButtonWrap from "../../components/common/ButtonWrap";
@@ -15,14 +15,14 @@ const TextArea = styled.textarea`
 `;
 
 function StoryGenerated() {
-  const { selectedKeywords, setSelectedKeywords } = useContext(SelectedKeywordsContext);
+  const selectedKeywords = useRecoilValue(SelectedKeywords);
+  const [generatedStory, setGeneratedStory] = useRecoilState(GeneratedStory);
   const [dataIdx, setDataIdx] = useState(0);
   const [textareas, setTextareas] = useState([]);
 
   useEffect(() => {
     fetchData();
-    console.log(selectedKeywords); // undefined
-  }, []);
+  }, [generatedStory]);
 
   const fetchData = async () => {
     try {
@@ -53,17 +53,6 @@ function StoryGenerated() {
     console.log(textareas);
   };
 
-  const resendKeyword = (e) => {
-    e.preventDefault();
-
-    sendkeyword({
-      parameter1: selectedKeywords[0],
-      parameter2: selectedKeywords[1],
-      parameter3: selectedKeywords[2],
-    });
-    console.log(selectedKeywords);
-  };
-
   // const onSubmitHandler = (e) => {
   //   e.preventDefault();
   //   fetch("http://localhost:8080/images/create", {
@@ -80,6 +69,26 @@ function StoryGenerated() {
   //   setTextareas([]);
   // };
 
+  const sendtext = async (userDTO) => {
+    await call("/chat-gpt/summarize", "POST", userDTO).then((response) => {
+      console.log(response);
+      window.location.href = "/f-edit";
+    });
+  };
+
+  const resendkeyword = async (userDTO) => {
+    await call("/chat-gpt/question", "POST", userDTO).then((response) => {
+      setGeneratedStory(response);
+    });
+  };
+
+  const regenerateHandler = (e) => {
+    e.preventDefault();
+
+    console.log(selectedKeywords);
+    resendkeyword(SelectedKeywords);
+  };
+
   return (
     <div>
       <Container className={""}>
@@ -89,7 +98,8 @@ function StoryGenerated() {
             <TextArea
               value={textareas}
               // placeholder={textareas[0].key + 1 + "번째 문단"}
-              onChange={(e) => onChangeHandler(e)}></TextArea>
+              onChange={(e) => onChangeHandler(e)}
+            />
           </Section>
           <ButtonWrap>
             <Link
@@ -98,19 +108,18 @@ function StoryGenerated() {
               키워드 다시 고르기
             </Link>
             <button
-              type='button'
-              onClick={(e) => {
-                resendKeyword(e);
-              }}
-              className='button'>
-              이야기 다시 만들기
-            </button>
-            <button
               type='submit'
               className='button'>
               동화책 만들러 가기(or 동화책 테마 정하기)
             </button>
           </ButtonWrap>
+        </form>
+        <form onSubmit={regenerateHandler}>
+          <button
+            type='submit'
+            className='button'>
+            이야기 다시 만들기
+          </button>
         </form>
       </Container>
     </div>
