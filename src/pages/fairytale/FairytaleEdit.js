@@ -4,7 +4,7 @@ import { RecoilRoot } from 'recoil';
 import EditToolTab from '../../components/EditToolTab';
 import CanvasFabric from '../../components/CanvasFabric';
 import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import { call } from '../../service/ApiService';
 
 const NULL = 'NULL';
 
@@ -72,11 +72,12 @@ const Page = styled.div`
     height: 16vh;
     margin-left: 5%;
 `;
-const NextPage = styled.div`
+const NextPage = styled.button`
     background-color: white;
     width: 10vw;
     height: 16vh;
     margin-left: 5%;
+    border-radius: 700px;
 `;
 
 const classNameCleaner = (str) => {
@@ -99,7 +100,11 @@ function FairytaleEdit() {
     const [activeTab, setActiveTab] = useState(null);
     const [importFile, setImportFile] = useState(null);
     const [selectedSti, setSelectedSti] = useState(NULL);
+    const [imageLink, setimageLink] = useState(NULL);
     const [canvasWidth, canvasHeight] = [1280, 720];
+    useEffect(() => {
+        handleDownloadImage();
+    }, [imageLink]);
 
     const handleButtonClick = (label) => {
         // setButtonClicked(!buttonClicked);
@@ -120,17 +125,34 @@ function FairytaleEdit() {
         });
 
         const data = canvas.toDataURL('image/jpg');
-        const link = document.createElement('a');
 
-        if (typeof link.download === 'string') {
-            link.href = data;
-            link.download = 'image.jpg';
+        setimageLink(data);
 
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } else {
-            window.open(data);
+        // if (typeof link.download === 'string') {
+        //     link.href = data;
+        //     link.download = 'image.jpg';
+
+        //     document.body.appendChild(link);
+        //     link.click();
+        //     document.body.removeChild(link);
+        // } else {
+        //     window.open(data);
+        // }
+    };
+
+    const fetchData = async () => {
+        try {
+            console.log(imageLink);
+            await call('/book/create/final', 'POST', {
+                bookId: '131',
+                title: 'dddddd!!!',
+                thumbnailUrl: imageLink,
+            });
+            // await call('/book/create/story', 'POST', {
+            //     fullStory: 'ha ha ha ha ha ha ha',
+            // });
+        } catch (error) {
+            console.log('Error fetching data:', error);
         }
     };
 
@@ -182,6 +204,11 @@ function FairytaleEdit() {
                 return src;
             });
         }
+    };
+    const nextPage = async () => {
+        handleDownloadImage();
+        fetchData();
+        window.location.href = '/f-export';
     };
 
     // const HandleRandomBg = () => {
@@ -318,7 +345,7 @@ function FairytaleEdit() {
                         <Page>3</Page>
                         <Page>4</Page>
                         <Page>5</Page>
-                        <NextPage>next</NextPage>
+                        <NextPage onClick={nextPage}>next</NextPage>
                     </PageFrame>
                 </Frame>
             </Container>

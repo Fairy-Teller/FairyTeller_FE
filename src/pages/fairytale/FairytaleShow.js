@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import { useLocation } from 'react-router-dom';
+import { call } from '../../service/ApiService';
 
 function FairytaleShow() {
+    const [isContentUp, setIsContentUp] = useState(false);
+    const [thumbnailUrl, setThumbnailUrl] = useState('');
+
     const location = useLocation();
     const propValue = location.state;
     const CardContainer = styled.div`
@@ -19,7 +23,7 @@ function FairytaleShow() {
         left: 0;
         width: 100%;
         height: 100%;
-        background-image: url('images/baebang.jpg');
+        background-image: url(${thumbnailUrl});
         background-size: cover;
         background-position: center;
         filter: blur(8px);
@@ -52,9 +56,8 @@ function FairytaleShow() {
                 : 'none'};
     `;
 
-    const [isContentUp, setIsContentUp] = useState(false);
-
     useEffect(() => {
+        gotoBoard();
         const handleKeyPress = (event) => {
             if (event.code === 'Space' && !isContentUp) {
                 setIsContentUp(true);
@@ -70,8 +73,17 @@ function FairytaleShow() {
         };
     }, [isContentUp]);
 
-    console.log(location);
-    console.log(propValue);
+    const gotoBoard = async () => {
+        try {
+            const image = await call('/book/getBookById', 'POST', { bookId: propValue });
+            setThumbnailUrl('https://s3.ap-northeast-2.amazonaws.com/' + image.thumbnailUrl);
+            console.log(thumbnailUrl);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
+    };
+
+    console.log(propValue); // 이걸로 동화정보 가져오기
 
     return (
         <CardContainer>
