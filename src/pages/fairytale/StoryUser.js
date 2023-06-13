@@ -35,6 +35,7 @@ function StoryUser() {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    setWrittenStory(texts);
     sendtext({
       text: texts,
     });
@@ -46,7 +47,6 @@ function StoryUser() {
     try {
       const response = await call("/chat-gpt/summarize", "POST", userDTO);
       await set(WrittenStoryState, { text: texts });
-      console.log(writtenStory);
 
       const imageData = response; // 응답 데이터 - Base64 문자열
       const byteCharacters = atob(imageData); // Base64 디코딩

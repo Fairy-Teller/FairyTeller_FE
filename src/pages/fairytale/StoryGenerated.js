@@ -57,19 +57,35 @@ function StoryGenerated() {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     setSavedStory(texts);
-    // callbackSavedStory();
     console.log(savedStory);
     sendtext({
-      text: savedStory,
+      text: texts,
     });
   };
 
-  const sendtext = async (userDTO) => {
-    await call("/chat-gpt/summarize", "POST", userDTO).then((response) => {
-      console.log(response);
-      window.location.href = "/f-edit";
-    });
-  };
+  const sendtext = useRecoilCallback(({ set }) => async (userDTO) => {
+    try {
+      const response = await call("/chat-gpt/summarize", "POST", userDTO);
+      await set(GeneratedStoryState, { text: texts });
+
+      const imageData = response; // 응답 데이터 - Base64 문자열
+      const byteCharacters = atob(imageData); // Base64 디코딩
+      const byteArrays = [];
+
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteArrays.push(byteCharacters.charCodeAt(i));
+      }
+
+      const imageBlob = new Blob([new Uint8Array(byteArrays)], { type: "image/jpeg" });
+      const imageUrl = URL.createObjectURL(imageBlob);
+
+      setUrl(imageUrl);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      // navigate("/f-edit");
+    }
+  });
 
   const regenerateHandler = (e) => {
     e.preventDefault();
@@ -122,10 +138,15 @@ function StoryGenerated() {
               <button
                 type='submit'
                 className='button'>
-                동화책 만들러 가기
+                그림 뽑기
               </button>
             </ButtonWrap>
           </form>
+          {/* <Link
+            to='/keyword'
+            onClick={resetSelectedKeywords}
+            className='button'
+          /> */}
           <form onSubmit={regenerateHandler}>
             <button
               type='submit'
