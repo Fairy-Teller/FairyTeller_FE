@@ -67,7 +67,7 @@ const BoardDetail = () => {
           <img src={board.thumbnailUrl} alt="Thumbnail" style={styles.thumbnail} />
         </div>
         <p style={styles.content}>{board.content}</p>
-        <MusicBar audioUrl={board.audioUrl} />
+        {board.audioUrl !== null && <MusicBar audioUrl={board.audioUrl} />}
         <CommentSection
           comments={comments}
           setComments={setComments}
