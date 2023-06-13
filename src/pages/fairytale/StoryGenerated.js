@@ -20,7 +20,7 @@ function StoryGenerated() {
   const [selectedKeywords, setSelectedKeywords] = useRecoilState(SelectedKeywords);
   const [savedStory, setSavedStory] = useRecoilState(GeneratedStoryState);
   const [dataIdx, setDataIdx] = useState(0);
-  const [textareas, setTextareas] = useState("");
+  const [texts, setTexts] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,7 +31,7 @@ function StoryGenerated() {
 
   const fetchData = async () => {
     try {
-      setTextareas(savedStory.text["text"]);
+      setTexts(savedStory.text["text"]);
       // setSelectedKeywords(() => {
       //   return selectedKeywords.map((item) => ({
       //     key: setDataIdx((prev) => prev + 1),
@@ -44,14 +44,14 @@ function StoryGenerated() {
   };
 
   const onChangeHandler = (e) => {
-    setTextareas(e.target.value);
+    setTexts(e.target.value);
   };
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    setSavedStory(textareas);
+    setSavedStory(texts);
     sendtext({
-      text: textareas,
+      text: texts,
     });
   };
 
@@ -98,7 +98,7 @@ function StoryGenerated() {
           <form onSubmit={onSubmitHandler}>
             <Section className={""}>
               <TextArea
-                value={textareas}
+                value={texts}
                 placeholder='만들어진 시나리오를 확인하고 수정해보아요'
                 onChange={(e) => onChangeHandler(e)}
               />

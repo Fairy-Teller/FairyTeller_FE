@@ -22,9 +22,9 @@ function StoryUser() {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    setWrittenStory({ text: texts });
-    await sendtext({
-      text: writtenStory.text,
+    setWrittenStory(texts);
+    sendtext({
+      text: texts,
     });
   };
 
