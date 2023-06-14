@@ -1,5 +1,16 @@
 @charset "utf-8";
 
+$txt1: #3f545b;
+$txt2: #90adb7;
+
+$bgc1: #a2b5bc;
+$bgc2: #c1debf;
+$bgc3: #fee080;
+
+$thc1: #fe5c6b;
+$thc2: #ff9768;
+$thc3: #87ddde;
+
 // transform
 @mixin transform($transforms) {
   -webkit-transform: $transforms;

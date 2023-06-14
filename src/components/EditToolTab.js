@@ -1,5 +1,4 @@
 import styled, { css } from "styled-components";
-import "../assets/css/common.scss";
 
 const Title = styled.h1`
   color: white;

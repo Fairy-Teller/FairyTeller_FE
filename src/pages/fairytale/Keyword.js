@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilCallback } from "recoil";
 import { SelectedKeywords, GeneratedStoryState } from "../../recoil/Fairytailstate";
 import { call } from "../../service/ApiService";
-import Container from "../../components/layout/Container";
-import Row from "../../components/layout/Row";
-import Section from "../../components/layout/Section";
+import Container from "../../components/global/Container";
+import Row from "../../components/global/Row";
+import Section from "../../components/global/Section";
 import ButtonWrap from "../../components/common/ButtonWrap";
 import styled from "styled-components";
 
@@ -96,11 +96,11 @@ function Keyword() {
   });
 
   return (
-    <div>
+    <div className='story keyword'>
       {loading ? (
-        <Container className={""}>
+        <Container className={"fixed wide"}>
           <h1>
-            추천 키워드<p>최대 3개</p>
+            고를 수 있는 키워드<p>최대 3개</p>
           </h1>
           <form onSubmit={onSubmitHandler}>
             <Section className={ANIMAL}>

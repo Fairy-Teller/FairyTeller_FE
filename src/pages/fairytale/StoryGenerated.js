@@ -4,8 +4,8 @@ import { useRecoilState, useResetRecoilState, useRecoilCallback } from "recoil";
 import { SelectedKeywords, GeneratedStoryState } from "../../recoil/Fairytailstate";
 import { Link } from "react-router-dom";
 import { call } from "../../service/ApiService";
-import Container from "../../components/layout/Container";
-import Section from "../../components/layout/Section";
+import Container from "../../components/global/Container";
+import Section from "../../components/global/Section";
 import ButtonWrap from "../../components/common/ButtonWrap";
 import styled from "styled-components";
 
@@ -57,7 +57,6 @@ function StoryGenerated() {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     setSavedStory(texts);
-    console.log(savedStory);
     sendtext({
       text: texts,
     });
@@ -116,10 +115,13 @@ function StoryGenerated() {
   const resetSelectedKeywords = useResetRecoilState(SelectedKeywords);
 
   return (
-    <div>
+    <div className='story story-generated'>
       {loading ? (
-        <Container className={""}>
-          <h1>만들어진 시나리오를 확인하고 수정해보아요</h1>
+        <Container className={"fixed narrow"}>
+          <h1>
+            만들어진 시나리오를 확인하고 <br />
+            수정해보아요
+          </h1>
           <form onSubmit={onSubmitHandler}>
             <Section className={""}>
               <TextArea
@@ -148,11 +150,13 @@ function StoryGenerated() {
             className='button'
           /> */}
           <form onSubmit={regenerateHandler}>
-            <button
-              type='submit'
-              className='button'>
-              이야기 다시 만들기
-            </button>
+            <ButtonWrap>
+              <button
+                type='submit'
+                className='button'>
+                이야기 다시 만들기
+              </button>
+            </ButtonWrap>
           </form>
 
           {url && (
