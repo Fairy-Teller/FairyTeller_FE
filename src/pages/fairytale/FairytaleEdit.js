@@ -6,6 +6,8 @@ import CanvasFabric from '../../components/CanvasFabric';
 import html2canvas from 'html2canvas';
 import { call } from '../../service/ApiService';
 
+import { useNavigate } from 'react-router-dom';
+
 const NULL = 'NULL';
 
 const [IMAGE, USERIMAGE, BG, TEXT, FILTER, STICKER, DOWNLOAD] = [
@@ -114,6 +116,8 @@ function FairytaleEdit() {
     const [selectedSti, setSelectedSti] = useState(NULL);
     const [imageLink, setimageLink] = useState(NULL);
     const [title, setTitle] = useState('');
+    const [newest, setNewest] = useState('');
+    const navigate = useNavigate();
 
     const handlehowTitleInpuClick = () => {
         setActiveTab(null);
@@ -123,10 +127,21 @@ function FairytaleEdit() {
     const [canvasWidth, canvasHeight] = [1280, 720];
 
     useEffect(() => {
+        settingnewest();
         if (imageLink !== NULL) {
             fetchData();
         }
     }, [imageLink]);
+
+    const settingnewest = async () => {
+        try {
+            const data = await call('/book/my-newest', 'GET', null);
+            await setNewest(data.bookId);
+            console.log('성공!', newest);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
+    };
 
     const handleButtonClick = (label) => {
         // setButtonClicked(!buttonClicked);
@@ -154,11 +169,11 @@ function FairytaleEdit() {
         try {
             console.log(imageLink);
             await call('/book/create/final', 'POST', {
-                bookId: '172',
+                bookId: newest,
                 title: title,
                 thumbnailUrl: imageLink,
             });
-            window.location.href = '/f-export';
+            navigate('/f-export');
         } catch (error) {
             console.log('Error fetching data:', error);
         }
