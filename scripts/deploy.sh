@@ -2,8 +2,8 @@
 
 cd /home/ubuntu/fe
 
-npm start
+rm -rf node_modules
+npm install
+npm run build
 pm2 start npm --name "fairyteller" -- start
-pm2 startup
-pm2 save
-pm2 restart all
+npm save
