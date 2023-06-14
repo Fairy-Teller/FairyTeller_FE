@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
-# echo stopping server
-# pm2 stop npm
-# exit
+cd /home/ubuntu/fe
+npm install
+npm install --save react react-dom react-scripts react-particles-js
+npm install pm2 -g

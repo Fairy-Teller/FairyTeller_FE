@@ -2,8 +2,8 @@
 
 cd /home/ubuntu/fe
 
-# Build the application
-#npm run build
-
-echo starting application...
-sudo pm2 start npm --name "fairyteller" -- start
+npm start
+pm2 start npm --name "fairyteller" -- start
+pm2 startup
+pm2 save
+pm2 restart all
