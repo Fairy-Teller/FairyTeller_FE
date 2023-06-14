@@ -9,12 +9,11 @@ import { call } from "../service/ApiService";
 
 export const SelectedKeywords = atom({ key: "SelectedKeywords", default: [] });
 
-export const GeneratedStoryState = atom({
-  key: "GeneratedStoryState",
+export const StoryState = atom({
+  key: "StoryState",
   default: { text: "" },
 });
-
-export const WrittenStoryState = atom({
-  key: "WrittenStoryState",
-  default: { text: "" },
+export const ImageState = atom({
+  key: "ImageState",
+  default: { url: "" },
 });
