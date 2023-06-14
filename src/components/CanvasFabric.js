@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
 import { call } from "../service/ApiService";
 import { ImageState, StoryState } from "../recoil/Fairytailstate";
 import { fabric } from "fabric";
@@ -8,27 +8,26 @@ const [canvasWidth, canvasHeight] = [1280, 720];
 
 const CanvasFabric = () => {
   const [fabricObjects, setFabricObjects] = useState([]);
+  const [storyTEXT, setStoryTEXT] = useRecoilState(StoryState);
   const [imgURL, setImgURL] = useRecoilState(ImageState);
-  const storytext = useRecoilValue(StoryState);
   const [canvas, setCanvas] = useState(null);
 
   useEffect(() => {
-    getnewest();
-    // console.log(storytext.text);
-    // console.log(imgURL.url);
-    // init();
+    init();
   }, []);
 
-  const getnewest = async () => {
+  const init = async () => {
     try {
-      const data = await call("/book/my-newest", "GET", null);
-      console.log(data);
+      await getnewest();
+      await sendtext();
     } catch (error) {
-      console.log("Error fetching data:", error);
+      console.log(error);
+    } finally {
+      cinit();
     }
   };
 
-  const init = () => {
+  const cinit = () => {
     let canvas = new fabric.Canvas("c", {
       width: canvasWidth,
       height: canvasHeight,
@@ -36,7 +35,7 @@ const CanvasFabric = () => {
       opacity: 0.5,
     });
 
-    const deftxt1 = new fabric.Text(storytext.text, { left: 50, top: 140 });
+    const deftxt1 = new fabric.Text(storyTEXT.text, { left: 50, top: 140 });
     // const deftxt2 = new fabric.Text(__________2, { left: 50, top: 350 });
     // const deftxt3 = new fabric.Text(__________3, { left: 50, top: 500 });
     canvas.add(deftxt1);
@@ -80,13 +79,13 @@ const CanvasFabric = () => {
 
     canvas.add(rect1, rect3, circle, triangle);
 
-    fabric.Image.fromURL(imgURL, (defimg, { imgsrc }) => {
+    fabric.Image.fromURL(imgURL.url, (defimg, { imgsrc }) => {
       if (defimg == null) {
         alert("Error: No Default Image");
       } else {
         defimg.scale(0.75);
         canvas.add(defimg);
-        setImgURL(imgsrc);
+        setImgURL(imgsrc); // ???
         canvas.renderAll();
       }
     });
@@ -107,6 +106,38 @@ const CanvasFabric = () => {
 
     setCanvas(canvas);
   };
+
+  const getnewest = async () => {
+    try {
+      const data = await call("/book/my-newest", "GET", null);
+      setStoryTEXT(data.fullStory);
+      setImgURL(data.thumbnailUrl);
+      //test
+      console.log(storyTEXT.text);
+      console.log(imgURL.url);
+    } catch (error) {
+      console.log("Error fetching data:", error);
+    }
+  };
+
+  const sendtext = useRecoilCallback(({ set }) => async (userDTO) => {
+    try {
+      const response = await call("/chat-gpt/summarize", "POST", userDTO);
+
+      const imageData = response; // 응답 데이터 - Base64 문자열
+      const byteCharacters = atob(imageData); // Base64 디코딩
+      const byteArrays = [];
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteArrays.push(byteCharacters.charCodeAt(i));
+      }
+
+      const imageBlob = new Blob([new Uint8Array(byteArrays)], { type: "image/jpeg" });
+      const imageUrl = URL.createObjectURL(imageBlob);
+      await set(ImageState, { url: imageUrl });
+    } catch (error) {
+      console.log("Error fetching data:", error);
+    }
+  });
 
   const bringToFront = (e) => {
     e.preventDefault();

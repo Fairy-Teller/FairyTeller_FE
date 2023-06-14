@@ -112,6 +112,8 @@ const FairytaleEdit = () => {
   const [selectedSti, setSelectedSti] = useState(NULL);
   const [imageLink, setimageLink] = useState(NULL);
   const [title, setTitle] = useState("");
+  const [newest, setNewest] = useState("");
+  const navigate = useNavigate();
 
   const handlehowTitleInpuClick = () => {
     setActiveTab(null);
@@ -120,6 +122,7 @@ const FairytaleEdit = () => {
   const [canvasWidth, canvasHeight] = [1280, 720];
 
   useEffect(() => {
+    settingnewest();
     if (imageLink !== NULL) {
       fetchData();
     }
@@ -133,6 +136,17 @@ const FairytaleEdit = () => {
         title: title,
         thumbnailUrl: imageLink,
       });
+      window.location.href = "/f-export";
+    } catch (error) {
+      console.log("Error fetching data:", error);
+    }
+  };
+
+  const settingnewest = async () => {
+    try {
+      const data = await call("/book/my-newest", "GET", null);
+      await setNewest(data.bookId);
+      console.log("성공!", newest);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
