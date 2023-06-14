@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { call } from "../../service/ApiService";
 import CommentSection from "./CommentSection";
@@ -10,7 +10,7 @@ const BoardDetail = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await call(`/board/${boardId}`, "GET", null);
       const boardData = response.data[0];
@@ -21,7 +21,7 @@ const BoardDetail = () => {
     } catch (error) {
       console.log("Error fetching data:", error);
     }
-  };
+  }, [boardId]);
 
   useEffect(() => {
     fetchData();
