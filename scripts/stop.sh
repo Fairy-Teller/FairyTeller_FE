@@ -2,4 +2,4 @@
 
 cd /home/ubuntu/fe
 
-npm install pm2 -g
+sudo npm install pm2 -g
