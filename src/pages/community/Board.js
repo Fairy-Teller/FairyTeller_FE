@@ -2,8 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { call } from "../../service/ApiService";
 import { Link } from "react-router-dom";
 
-import { API_BASE_URL } from "../../api-config";
-
 const Board = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [books, setBooks] = useState([]);
