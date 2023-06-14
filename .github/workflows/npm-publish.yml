@@ -29,7 +29,7 @@ jobs: # Job 설정
 
       # (3) Dependencies 설치
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
 
       # (4) React Build
       - name: React Build
