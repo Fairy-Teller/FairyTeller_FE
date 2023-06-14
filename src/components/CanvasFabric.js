@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useRecoilState, useRecoilValue, useRecoilCallback } from 'recoil';
+import { useRecoilState, useRecoilValue, useRecoilCallback, useSetRecoilState } from 'recoil';
 import { call } from '../service/ApiService';
-import { ImageState, StoryState } from '../recoil/Fairytailstate';
+import { ImageState, StoryState, ImageFix } from '../recoil/Fairytailstate';
 import { fabric } from 'fabric';
 
 const canvasWidth = 1280;
@@ -12,6 +12,9 @@ const CanvasFabric = () => {
     const [storyText, setStoryText] = useRecoilState(StoryState);
     const [imgURL, setImgURL] = useRecoilState(ImageState);
     const [canvas, setCanvas] = useState(null);
+
+    const setImageFIX = useSetRecoilState(ImageFix);
+    const showImage = useRecoilValue(ImageFix);
     const SRC_LINK = '/images/img-default.png';
     const [contentImg, setContentImg] = useState(SRC_LINK);
 
@@ -21,14 +24,21 @@ const CanvasFabric = () => {
 
     useEffect(() => {
         cinit();
-    }, [contentImg]);
+        console.log('값이 변경됩니다.');
+    }, [showImage]);
 
-    console.log('랜더링이 몇번 되는가?');
+    console.log('리코일 showImage의 값 입니다.', showImage);
+
+    // setImageFIX(contentImg)
 
     const init = async () => {
         try {
             await getNewest();
-            await sendText();
+
+            if (showImage === '') {
+                await sendText();
+                console.log('첫번째만 들어와야합니다.');
+            }
         } catch (error) {
             console.log(error);
         }
@@ -42,8 +52,18 @@ const CanvasFabric = () => {
             opacity: 0.5,
         });
 
-        const deftxt1 = new fabric.Text(storyText, { left: 50, top: 140 });
-        canvas.add(deftxt1);
+        fabric.Image.fromURL(showImage, function (img) {
+            canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+                scaleX: canvas.width / img.width,
+                scaleY: canvas.height / img.height,
+            });
+        });
+
+        const deftxt1 = new fabric.Text(storyText, {
+            left: 50,
+            top: 340,
+            fill: 'white', // Set the fill color to white
+        });
 
         var rect1 = new fabric.Rect({
             width: 200,
@@ -82,17 +102,19 @@ const CanvasFabric = () => {
 
         canvas.add(rect1, rect3, circle, triangle);
 
-        fabric.Image.fromURL(contentImg, (defimg) => {
-            console.log('contentImg 상태 >>>>>>>>>>>', contentImg);
-            if (defimg == null) {
-                alert('Error: No Default Image');
-            } else {
-                defimg.scale(0.75);
-                canvas.add(defimg);
-                setImgURL(defimg.toDataURL()); // 이미지 URL을 저장
-                canvas.renderAll();
-            }
-        });
+        // fabric.Image.fromURL(contentImg, (defimg) => {
+        //     console.log('contentImg 상태 >>>>>>>>>>>', contentImg);
+        //     if (defimg == null) {
+        //         alert('Error: No Default Image');
+        //     } else {
+        //         defimg.scale(0.95);
+        //         canvas.add(defimg);
+        //         setImgURL(defimg.toDataURL()); // 이미지 URL을 저장
+        //         canvas.renderAll();
+        //     }
+        // });
+
+        canvas.add(deftxt1);
 
         const onChangeDetect = (options) => {
             options.target.setCoords();
@@ -134,13 +156,20 @@ const CanvasFabric = () => {
             }
             const imageBlob = new Blob([byteArrays], { type: 'image/jpeg' });
             const imageUrl = URL.createObjectURL(imageBlob);
-            setContentImg(imageUrl);
+            await setContentImg(imageUrl);
+            if (showImage === '') {
+                console.log('가장처음에만 들어올 수 있는 공간입니다.');
+                setImageFIX(imageUrl);
+            }
+
             setImgURL(imageUrl);
             // set(ImageState, { url: imageUrl });
         } catch (error) {
             console.log('Error fetching data:', error);
         }
     };
+
+    console.log('가장 처음에 들어온 값과 계속 일관성있게 유지되야 합니다.>>>>>', showImage);
 
     const bringToFront = (e) => {
         e.preventDefault();
@@ -177,7 +206,7 @@ const CanvasFabric = () => {
 
     return (
         <div>
-            <canvas id="c" />
+            <canvas id="c" src={contentImg} />
         </div>
     );
 };
