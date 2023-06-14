@@ -16,5 +16,5 @@ hooks:
       runas: ubuntu
   ApplicationStart:
     - location: scripts/deploy.sh
-      timeout: 300
+      timeout: 360
       runas: ubuntu
