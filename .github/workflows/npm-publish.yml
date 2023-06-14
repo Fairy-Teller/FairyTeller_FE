@@ -9,6 +9,7 @@ env:
   BUCKET_NAME: fairyteller-fe-dev-deploy
   CODE_DEPLOY_APP_NAME: fairyteller-fe-dev
   DEPLOYMENT_GROUP_NAME: fairyteller-fe-dev
+  CI: false
 
 permissions:
   contents: read
