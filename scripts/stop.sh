@@ -1,5 +1,5 @@
-#!/usr/bin/env bash
+!/usr/bin/env bash
 
-# echo stopping server
-# pm2 stop npm
-# exit
+echo stopping server
+pm2 stop npm
+exit
