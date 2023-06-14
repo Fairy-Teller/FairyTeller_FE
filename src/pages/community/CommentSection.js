@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const CommentSection = ({ comments, setComments, onCommentSubmit }) => {
+const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteComment }) => {
   const [comment, setComment] = useState("");
 
   const handleChange = (e) => {
@@ -35,7 +35,8 @@ const CommentSection = ({ comments, setComments, onCommentSubmit }) => {
 
   // 삭제 버튼 핸들러
   const handleDelete = (comment) => {
-    console.log("삭제 버튼 클릭:", comment);
+    // 서버에서 해당 댓글 삭제
+    onDeleteComment(comment.commentId);
   };
 
   return (
