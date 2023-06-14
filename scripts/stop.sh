@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 echo stopping server
-pm2 stop fairyteller
+pm2 stop npm
 exit
