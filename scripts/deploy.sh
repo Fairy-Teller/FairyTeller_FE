@@ -1,7 +1,10 @@
-#!/usr/bin/env bash
+#!/bin/bash
+REPOSITORY=/home/ubuntu/fe
 
-cd /home/ubuntu/fe
+cd $REPOSITORY
 
-sudo npm run build
-sudo pm2 start npm --name "fairyteller" -- start
-sudo pm2 save
+sudo pm2 kill
+
+sudo npm install
+
+sudo pm2 start node_modules/react-scripts/scripts/start.js
