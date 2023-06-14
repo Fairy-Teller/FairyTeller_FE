@@ -1,7 +1,7 @@
 name: React Deploy # Workflow 이름
 on:
   push:
-    branches: ["dev", "main", "40-feature-cicd-configuration"] 
+    branches: ["dev", "main", "40-feature-cicd-configuration"]
 
 env:
   AWS_REGION: ap-northeast-2
@@ -15,13 +15,12 @@ permissions:
 
 jobs: # Job 설정
   build:
-	# 내 EC2는 CentOS라서 바꿔야 할 것 같지만, 여기는 아래 상태로 둔다. 
     runs-on: ubuntu-latest
     steps:
       # (1) 기본 체크아웃
       - name: Checkout
         uses: actions/checkout@v3
-      
+
       # (2) Node v 확인
       - name: Check Node v
         run: node -v
@@ -29,13 +28,13 @@ jobs: # Job 설정
       # (3) Dependencies 설치
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
-      
+
       # (4) React Build
       - name: React Build
         run: yarn build
 
       # (5) 압축 파일 형태로 전달
-      - name: Make zip file 
+      - name: Make zip file
         run: zip -qq -r ./$GITHUB_SHA.zip .
         shell: bash
 
@@ -46,19 +45,19 @@ jobs: # Job 설정
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY}}
           aws-region: ap-northeast-2
-      
+
       # (7) S3 bucket으로 copy
       - name: Upload to S3 # Upload build file to S3
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
-      
+
       # (8) EC2 배포
       - name: Code Deploy To EC2 instance
-        run: aws deploy create-deployment 
-                --application-name ${{env.CODE_DEPLOY_APP_NAME}} 
-                --deployment-config-name CodeDeployDefault.AllAtOnce 
-                --deployment-group-name ${{env.DEPLOYMENT_GROUP_NAME}}  
-                --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
-    
+        run: aws deploy create-deployment
+          --application-name ${{env.CODE_DEPLOY_APP_NAME}}
+          --deployment-config-name CodeDeployDefault.AllAtOnce
+          --deployment-group-name ${{env.DEPLOYMENT_GROUP_NAME}}
+          --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
+
       # (9) Slack 알림
       - name: Send Slack notification
         uses: 8398a7/action-slack@v3
