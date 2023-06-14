@@ -43,6 +43,7 @@ function StoryGenerated() {
       //     key: setDataIdx((prev) => prev + 1),
       //   }));
       // });
+
       setLoading(true);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -56,34 +57,34 @@ function StoryGenerated() {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     setSavedStory(texts);
-    sendtext({
-      text: texts,
-    });
+    // sendtext({
+    //     text: texts,
+    // });
   };
 
-  const sendtext = useRecoilCallback(({ set }) => async (userDTO) => {
-    try {
-      const response = await call("/chat-gpt/summarize", "POST", userDTO);
-      await set(GeneratedStoryState, { text: texts });
+  // const sendtext = useRecoilCallback(({ set }) => async (userDTO) => {
+  //     try {
+  //         const response = await call('/chat-gpt/summarize', 'POST', userDTO);
+  //         await set(GeneratedStoryState, { text: texts });
 
-      const imageData = response; // 응답 데이터 - Base64 문자열
-      const byteCharacters = atob(imageData); // Base64 디코딩
-      const byteArrays = [];
+  //         const imageData = response; // 응답 데이터 - Base64 문자열
+  //         const byteCharacters = atob(imageData); // Base64 디코딩
+  //         const byteArrays = [];
 
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteArrays.push(byteCharacters.charCodeAt(i));
-      }
+  //         for (let i = 0; i < byteCharacters.length; i++) {
+  //             byteArrays.push(byteCharacters.charCodeAt(i));
+  //         }
 
-      const imageBlob = new Blob([new Uint8Array(byteArrays)], { type: "image/jpeg" });
-      const imageUrl = URL.createObjectURL(imageBlob);
+  //         const imageBlob = new Blob([new Uint8Array(byteArrays)], { type: 'image/jpeg' });
+  //         const imageUrl = URL.createObjectURL(imageBlob);
 
-      setUrl(imageUrl);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      // navigate("/f-edit");
-    }
-  });
+  //         setUrl(imageUrl);
+  //     } catch (error) {
+  //         console.log(error);
+  //     } finally {
+  //         // navigate("/f-edit");
+  //     }
+  // });
 
   const regenerateHandler = (e) => {
     e.preventDefault();
@@ -113,6 +114,18 @@ function StoryGenerated() {
 
   const resetSelectedKeywords = useResetRecoilState(SelectedKeywords);
 
+  const gotoEdit = async () => {
+    try {
+      const savedStorys = await call("/book/create/story", "POST", {
+        fullStory: texts,
+      });
+      console.log(savedStorys);
+      navigate("/f-edit");
+    } catch (error) {
+      console.log("Error fetching data:", error);
+    }
+  };
+
   return (
     <div className='story story-generated'>
       {loading ? (
@@ -136,9 +149,11 @@ function StoryGenerated() {
                 className='button'>
                 키워드 다시 고르기
               </Link>
+
               <button
                 type='submit'
-                className='button'>
+                className='button'
+                onClick={gotoEdit}>
                 그림 뽑기
               </button>
             </ButtonWrap>
