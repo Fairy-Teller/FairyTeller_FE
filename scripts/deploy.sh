@@ -1,3 +1,4 @@
 cd /home/ubuntu/fe
 
-npm run start
+npm ci
+npm run build
