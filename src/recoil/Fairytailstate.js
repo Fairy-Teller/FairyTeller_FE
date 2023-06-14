@@ -1,4 +1,5 @@
-import { atom } from "recoil";
+import { atom, selector } from "recoil";
+import { call } from "../service/ApiService";
 
 // 로그인 체크
 // export const FairytailImg = atom({
@@ -6,5 +7,14 @@ import { atom } from "recoil";
 //   default: "default",
 // });
 
-export const SelectedKeywords = atom({ key: "SelectedKeywords" });
-export const GeneratedStory = atom({ key: "GeneratedStory" });
+export const SelectedKeywords = atom({ key: "SelectedKeywords", default: [] });
+
+export const GeneratedStoryState = atom({
+  key: "GeneratedStoryState",
+  default: { text: "" },
+});
+
+export const WrittenStoryState = atom({
+  key: "WrittenStoryState",
+  default: { text: "" },
+});

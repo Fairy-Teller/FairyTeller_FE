@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useRecoilState } from "recoil";
-import { SelectedKeywords, GeneratedStory } from "../../recoil/Fairytailstate";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState, useRecoilCallback } from "recoil";
+import { SelectedKeywords, GeneratedStoryState } from "../../recoil/Fairytailstate";
 import { call } from "../../service/ApiService";
 import Container from "../../components/layout/Container";
 import Row from "../../components/layout/Row";
@@ -8,8 +9,7 @@ import Section from "../../components/layout/Section";
 import ButtonWrap from "../../components/common/ButtonWrap";
 import styled from "styled-components";
 
-const ANIMAL = "ANIMAL";
-const PEOPLE = "PEOPLE";
+const [ANIMAL, PEOPLE] = ["ANIMAL", "PEOPLE"];
 
 const Keywords = styled.ul`
   background-color: pink;
@@ -29,10 +29,12 @@ const ItemInput = styled.input`
 `;
 
 function Keyword() {
+  const [loading, setLoading] = useState(false);
   const [checkedValues, setCheckedValues] = useRecoilState(SelectedKeywords);
-  const [savedStory, setSavedStory] = useRecoilState(GeneratedStory);
+  const [savedStory, setSavedStory] = useRecoilState(GeneratedStoryState);
   const [dataIdx, setDataIdx] = useState(0);
   const [options, setOptions] = useState([{}]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -48,6 +50,8 @@ function Keyword() {
           title: item.title,
         }));
       });
+      setCheckedValues([]);
+      setLoading(true);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
@@ -72,7 +76,6 @@ function Keyword() {
       checkedValues[1].title,
       checkedValues[2].title,
     ]);
-
     sendkeyword({
       parameter1: checkedValues[0].title,
       parameter2: checkedValues[1].title,
@@ -80,86 +83,82 @@ function Keyword() {
     });
   };
 
-  // fetch("http://localhost:8080/chat-gpt/question", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     parameter1: checkedValues[0].title,
-  //     parameter2: checkedValues[1].title,
-  //     parameter3: checkedValues[2].title,
-  //   }),
-  // });
-
-  const sendkeyword = async (userDTO) => {
-    await call("/chat-gpt/question", "POST", userDTO).then((response) => {
-      console.log(response); // 키워드로 생성된 텍스트
-      setSavedStory(response);
-      window.location.href = "/story-generated";
-    });
-  };
+  const sendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
+    try {
+      const response = await call("/chat-gpt/question", "POST", userDTO);
+      await set(GeneratedStoryState, { text: response });
+      await set(SelectedKeywords, { keywords: checkedValues });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      navigate("/story-generated");
+    }
+  });
 
   return (
     <div>
-      <Container className={""}>
-        <h1>
-          추천 키워드<p>최대 3개</p>
-        </h1>
-        <form onSubmit={onSubmitHandler}>
-          <Section className={ANIMAL}>
-            <h2>{ANIMAL}</h2>
-            <Keywords>
-              <Row>
-                {options.map((item) =>
-                  item.theme === ANIMAL ? (
-                    <KeywordItem>
-                      <ItemInput
-                        id={`keyword${item.key}`}
-                        name={item.title}
-                        type='checkbox'
-                        checked={item.checked}
-                        className='ItemInput'
-                        onChange={(e) => handleChecked(e.target.name)}
-                      />
-                      <ItemTitle>{item.title}</ItemTitle>
-                    </KeywordItem>
-                  ) : null
-                )}
-              </Row>
-            </Keywords>
-          </Section>
-          <Section className={PEOPLE}>
-            <h2>{PEOPLE}</h2>
-            <Keywords>
-              <Row>
-                {options.map((item) =>
-                  item.theme === PEOPLE ? (
-                    <KeywordItem>
-                      <ItemInput
-                        id={`keyword${item.key}`}
-                        name={item.title}
-                        type='checkbox'
-                        checked={item.checked}
-                        className='ItemInput'
-                        onChange={(e) => handleChecked(e.target.name)}
-                      />
-                      <ItemTitle>{item.title}</ItemTitle>
-                    </KeywordItem>
-                  ) : null
-                )}
-              </Row>
-            </Keywords>
-          </Section>
-          <ButtonWrap>
-            <button
-              type='submit'
-              className='button'>
-              이야기 만들러 가기
-            </button>
-          </ButtonWrap>
-        </form>
-      </Container>
+      {loading ? (
+        <Container className={""}>
+          <h1>
+            추천 키워드<p>최대 3개</p>
+          </h1>
+          <form onSubmit={onSubmitHandler}>
+            <Section className={ANIMAL}>
+              <h2>{ANIMAL}</h2>
+              <Keywords>
+                <Row>
+                  {options.map((item) =>
+                    item.theme === ANIMAL ? (
+                      <KeywordItem>
+                        <ItemInput
+                          id={`keyword${item.key}`}
+                          name={item.title}
+                          type='checkbox'
+                          checked={item.checked}
+                          className='ItemInput'
+                          onChange={(e) => handleChecked(e.target.name)}
+                        />
+                        <ItemTitle>{item.title}</ItemTitle>
+                      </KeywordItem>
+                    ) : null
+                  )}
+                </Row>
+              </Keywords>
+            </Section>
+            <Section className={PEOPLE}>
+              <h2>{PEOPLE}</h2>
+              <Keywords>
+                <Row>
+                  {options.map((item) =>
+                    item.theme === PEOPLE ? (
+                      <KeywordItem>
+                        <ItemInput
+                          id={`keyword${item.key}`}
+                          name={item.title}
+                          type='checkbox'
+                          checked={item.checked}
+                          className='ItemInput'
+                          onChange={(e) => handleChecked(e.target.name)}
+                        />
+                        <ItemTitle>{item.title}</ItemTitle>
+                      </KeywordItem>
+                    ) : null
+                  )}
+                </Row>
+              </Keywords>
+            </Section>
+            <ButtonWrap>
+              <button
+                type='submit'
+                className='button'>
+                이야기 만들러 가기
+              </button>
+            </ButtonWrap>
+          </form>
+        </Container>
+      ) : (
+        <div>되는 중...</div>
+      )}
     </div>
   );
 }
