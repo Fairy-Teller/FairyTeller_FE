@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilCallback } from "recoil";
 import { WrittenStoryState } from "../../recoil/Fairytailstate";
 import { call } from "../../service/ApiService";
-import Container from "../../components/layout/Container";
-import Section from "../../components/layout/Section";
+import Container from "../../components/global/Container";
+import Section from "../../components/global/Section";
 import ButtonWrap from "../../components/common/ButtonWrap";
 import styled from "styled-components";
 
@@ -69,10 +69,13 @@ function StoryUser() {
   });
 
   return (
-    <div>
+    <div className='story story-user'>
       {loading ? (
-        <Container className={""}>
-          <h1>내가 생각한 이야기를 작성해보아요</h1>
+        <Container className={"fixed narrow"}>
+          <h1>
+            내가 생각한 이야기를 <br />
+            작성해보아요
+          </h1>
           <form onSubmit={onSubmitHandler}>
             <Section className={""}>
               <TextArea
