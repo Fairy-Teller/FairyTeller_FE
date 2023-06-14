@@ -28,7 +28,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function AppRouter() {
     return (
-        // prettier-ignore
+
         <BrowserRouter>
    
             <Routes>
