@@ -12,7 +12,7 @@ const BoardDetail = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const fetchData = async () => {
     try {
@@ -44,7 +44,11 @@ const BoardDetail = () => {
   const fetchDataComments = async (page) => {
     try {
       const pageSize = 10;
-      const response = await call(`/board/${boardId}/comments?page=${page}&size=${pageSize}`, "GET", null);
+      const response = await call(
+        `/board/${boardId}/comments?page=${page}&size=${pageSize}`,
+        "GET",
+        null
+      );
       setComments(response.data);
       setCurrentPage(response.currentPage);
       setTotalPages(response.totalPages);
@@ -52,7 +56,7 @@ const BoardDetail = () => {
       console.log("Error fetching comments:", error);
     }
   };
-  
+
   if (!board) {
     return <div>Loading...</div>;
   }
@@ -63,7 +67,11 @@ const BoardDetail = () => {
       <div style={styles.center}>
         <p style={styles.author}>Author: {board.nickname}</p>
         <div style={styles.thumbnailContainer}>
-          <img src={board.thumbnailUrl} alt="Thumbnail" style={styles.thumbnail} />
+          <img
+            src={board.thumbnailUrl}
+            alt="Thumbnail"
+            style={styles.thumbnail}
+          />
         </div>
         <p style={styles.content}>{board.content}</p>
         <CommentSection
@@ -78,7 +86,11 @@ const BoardDetail = () => {
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index}
-              style={currentPage === index ? styles.activePageButton : styles.pageButton}
+              style={
+                currentPage === index
+                  ? styles.activePageButton
+                  : styles.pageButton
+              }
               onClick={() => handlePageChange(index)}
             >
               {index + 1}
@@ -146,4 +158,3 @@ const styles = {
 };
 
 export default BoardDetail;
-
