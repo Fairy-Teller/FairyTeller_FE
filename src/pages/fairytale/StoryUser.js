@@ -18,6 +18,7 @@ const ImageContainer = styled.div`
   align-items: center;
   height: 100%;
 `;
+
 function StoryUser() {
   const [loading, setLoading] = useState(false);
   const [writtenStory, setWrittenStory] = useRecoilState(WrittenStoryState);

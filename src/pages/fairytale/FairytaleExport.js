@@ -3,6 +3,7 @@ import Container from '../../components/layout/Container';
 import { call } from '../../service/ApiService';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import html2canvas from 'html2canvas';
 
 const FairytaleTitle = styled.div`
     font-weight: 400;
@@ -43,20 +44,63 @@ const BookCover = styled.div`
 function FairytaleExport() {
     const [thumbnailUrl, setThumbnailUrl] = useState('');
     const [BookId, setBookId] = useState('');
+    const [Title, setTitle] = useState('');
 
     useEffect(() => {
         fetchData();
     }, []);
 
+    // const fetchData = async () => {
+    //     try {
+    //         const response = await call('/book/my-newest', 'GET', null);
+    //         setThumbnailUrl('https://s3.ap-northeast-2.amazonaws.com/' + response.thumbnailUrl);
+    //         setBookId(response.bookId);
+    //         console.log(BookId);
+    //         // const boardresponse = await call('/board/save', 'POST', { bookId: '11' });
+    //         // console.log(boardresponse);
+    //     } catch (error) {
+    //         console.log('Error fetching data:', error);
+    //     }
+    // };
+
     const fetchData = async () => {
         try {
-            const response = await call('/book/my-newest', 'GET', null);
-            setThumbnailUrl(response.thumbnailUrl);
-            setBookId(response.bookId);
-            // const boardresponse = await call('/board/save', 'POST', { bookId: '11' });
-            // console.log(boardresponse);
+            const data = await call('/book/my-newest', 'GET', null);
+            setThumbnailUrl('https://s3.ap-northeast-2.amazonaws.com/' + data.thumbnailUrl);
+            setBookId(data.bookId);
+            setTitle(data.title);
+            console.log(data);
+            console.log(thumbnailUrl);
+            // await call('/book/create/story', 'POST', {
+            //     fullStory: 'ha ha ha ha ha ha ha',
+            // });
         } catch (error) {
             console.log('Error fetching data:', error);
+        }
+    };
+
+    const gotoBoard = async () => {
+        try {
+            await call('/board/save', 'POST', { bookId: BookId });
+            alert('등록되었습니다');
+            window.location.href = '/board';
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
+    };
+    const exportPDF = async () => {
+        const data = { thumbnailUrl };
+        const link = document.createElement('a');
+
+        if (typeof link.download === 'string') {
+            link.href = data;
+            link.download = 'image.jpg';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } else {
+            window.open(data);
         }
     };
 
@@ -64,10 +108,10 @@ function FairytaleExport() {
         <Container className="">
             <BookCover style={{ backgroundImage: `url(${thumbnailUrl})` }}>
                 <div style={{ position: 'absolute', bottom: '0px', width: '100%' }}>
-                    <FairytaleTitle>My Little Fairytale</FairytaleTitle>
+                    <FairytaleTitle>{Title}</FairytaleTitle>
                     <ButtonFrame>
-                        <Button>게시판 전시하기</Button>
-                        <Button>PDF로 내보내기</Button>
+                        <Button onClick={gotoBoard}>게시판 전시하기</Button>
+                        <Button onClick={exportPDF}>PDF로 내보내기</Button>
 
                         <Button to="/f-show" state={BookId}>
                             동화보기
