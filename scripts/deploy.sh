@@ -2,5 +2,5 @@
 
 cd /home/ubuntu/fe
 
-npm ci
-npm run start
+npm install -g serve
+serve -s build
