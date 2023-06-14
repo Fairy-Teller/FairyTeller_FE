@@ -21,17 +21,19 @@ jobs: # Job 설정
       - name: Checkout
         uses: actions/checkout@v3
 
-      # (2) Node v 확인
-      - name: Check Node v
-        run: node -v
+      # (2) Node.js 설치
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
 
       # (3) Dependencies 설치
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: npm ci
 
       # (4) React Build
       - name: React Build
-        run: yarn build
+        run: npm run build
 
       # (5) 압축 파일 형태로 전달
       - name: Make zip file
