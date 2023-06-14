@@ -4,4 +4,4 @@
 npm install
 npm run build
 sudo pm2 start npm --name "fairyteller" -- start
-npm save
+sudo pm2 save
