@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilCallback } from "recoil";
-import { SelectedKeywords, GeneratedStoryState } from "../../recoil/Fairytailstate";
+import { SelectedKeywords, StoryState } from "../../recoil/Fairytailstate";
 import { call } from "../../service/ApiService";
 import Container from "../../components/global/Container";
 import Row from "../../components/global/Row";
@@ -31,7 +31,7 @@ const ItemInput = styled.input`
 function Keyword() {
   const [loading, setLoading] = useState(false);
   const [checkedValues, setCheckedValues] = useRecoilState(SelectedKeywords);
-  const [savedStory, setSavedStory] = useRecoilState(GeneratedStoryState);
+  const [savedStory, setSavedStory] = useRecoilState(StoryState);
   const [dataIdx, setDataIdx] = useState(0);
   const [options, setOptions] = useState([{}]);
   const navigate = useNavigate();
@@ -86,7 +86,7 @@ function Keyword() {
   const sendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
     try {
       const response = await call("/chat-gpt/question", "POST", userDTO);
-      await set(GeneratedStoryState, { text: response });
+      await set(StoryState, { text: response });
       await set(SelectedKeywords, { keywords: checkedValues });
     } catch (error) {
       console.log(error);
