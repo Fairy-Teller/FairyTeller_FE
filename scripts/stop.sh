@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
-# cd /home/ubuntu/fe
-
-# pm2 stop fairyteller
+echo stopping server
+sudo su
+pm2 stop npm
+exit
