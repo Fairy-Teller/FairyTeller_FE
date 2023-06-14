@@ -8,13 +8,13 @@ const CommentSection = ({ comments, setComments, onCommentSubmit }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // 기본적인 폼 제출 동작 방지
-  
+    e.preventDefault();
+
     if (comment.trim() !== "") {
       const newComment = {
         content: comment,
       };
-  
+
       try {
         const response = await onCommentSubmit(newComment);
         const savedComment = response?.data?.[0];
@@ -27,7 +27,16 @@ const CommentSection = ({ comments, setComments, onCommentSubmit }) => {
       }
     }
   };
-  
+
+  // 수정 버튼 핸들러
+  const handleEdit = (comment) => {
+    console.log("수정 버튼 클릭:", comment);
+  };
+
+  // 삭제 버튼 핸들러
+  const handleDelete = (comment) => {
+    console.log("삭제 버튼 클릭:", comment);
+  };
 
   return (
     <div>
@@ -43,13 +52,32 @@ const CommentSection = ({ comments, setComments, onCommentSubmit }) => {
       </form>
       <ul>
         {comments.map((comment) => (
-          <li key={comment.commentId}>
+          <li key={comment.commentId} style={styles.comment}>
             <strong>{comment.author}</strong>: {comment.content}
+            {comment.editable && (
+              <div style={styles.buttonContainer}>
+                <button onClick={() => handleEdit(comment)} style={styles.button}>수정</button>
+                <button onClick={() => handleDelete(comment)} style={styles.button}>삭제</button>
+              </div>
+            )}
           </li>
         ))}
       </ul>
     </div>
   );
+};
+
+const styles = {
+  comment: {
+    marginBottom: "10px",
+  },
+  buttonContainer: {
+    display: "inline-block",
+    marginLeft: "10px",
+  },
+  button: {
+    marginRight: "5px",
+  },
 };
 
 export default CommentSection;
