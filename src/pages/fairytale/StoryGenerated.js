@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useRecoilState, useResetRecoilState, useRecoilCallback } from "recoil";
+import { Link, useNavigate } from "react-router-dom";
+import { useRecoilState, useResetRecoilState, useRecoilCallback, useRecoilValue } from "recoil";
 import { SelectedKeywords, GeneratedStoryState } from "../../recoil/Fairytailstate";
-import { Link } from "react-router-dom";
 import { call } from "../../service/ApiService";
 import Container from "../../components/global/Container";
 import Section from "../../components/global/Section";
@@ -23,7 +22,7 @@ const ImageContainer = styled.div`
 
 function StoryGenerated() {
   const [loading, setLoading] = useState(false);
-  const [selectedKeywords, setSelectedKeywords] = useRecoilState(SelectedKeywords);
+  const selectedKeywords = useRecoilValue(SelectedKeywords);
   const [savedStory, setSavedStory] = useRecoilState(GeneratedStoryState);
   const [dataIdx, setDataIdx] = useState(0);
   const [texts, setTexts] = useState("");
