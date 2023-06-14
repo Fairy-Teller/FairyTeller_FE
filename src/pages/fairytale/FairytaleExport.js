@@ -112,7 +112,7 @@ function FairytaleExport() {
                     <FairytaleTitle>{Title}</FairytaleTitle>
                     <ButtonFrame>
                         <Button onClick={gotoBoard}>게시판 전시하기</Button>
-                        <Button onClick={exportPDF}>PDF로 내보내기</Button>
+                        <Button to={thumbnailUrl}>파일 저장하기</Button>
 
                         <Button to="/f-show" state={BookId}>
                             동화보기
