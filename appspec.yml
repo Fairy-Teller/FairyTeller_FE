@@ -12,13 +12,13 @@ permissions:
 hooks:
   BeforeInstall:
     - location: scripts/before.sh
-      timeout: 300
+      timeout: 600
       runas: ubuntu
   AfterInstall:
     - location: scripts/stop.sh
-      timeout: 300
+      timeout: 600
       runas: ubuntu
   ApplicationStart:
     - location: scripts/deploy.sh
-      timeout: 360
+      timeout: 600
       runas: ubuntu
