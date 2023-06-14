@@ -2,4 +2,4 @@
 
 cd /home/ubuntu/fe
 
-sudo npm install pm2 -g
+sudo pm2 delete fairyteller
