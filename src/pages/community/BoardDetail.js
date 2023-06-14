@@ -10,10 +10,6 @@ const BoardDetail = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
   const fetchData = async () => {
     try {
       const response = await call(`/board/${boardId}`, "GET", null);
@@ -26,6 +22,10 @@ const BoardDetail = () => {
       console.log("Error fetching data:", error);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleCommentSubmit = async (comment) => {
     try {
