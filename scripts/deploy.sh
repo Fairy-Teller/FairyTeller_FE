@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
 
-cd /home/ubuntu/fe
-
-npm ci
-npm run build
+echo "> FE 배포"
+sudo cp -rf /home/ubuntu/fe/dist/* /var/www/html
