@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { call } from "../../service/ApiService";
 
-const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteComment }) => {
+const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteComment, boardId }) => {
   const [comment, setComment] = useState("");
+  const [editingComment, setEditingComment] = useState(null);
+  const [editedComment, setEditedComment] = useState("");
 
   const handleChange = (e) => {
     setComment(e.target.value);
@@ -30,7 +33,30 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
 
   // 수정 버튼 핸들러
   const handleEdit = (comment) => {
-    console.log("수정 버튼 클릭:", comment);
+    setEditingComment(comment);
+    setEditedComment(comment.content);
+  };
+
+  const handleUpdate = async (comment) => {
+    try {
+      await call(`/board/${boardId}/comment/${comment.commentId}`, "PUT", { content: editedComment });
+      // Update the comments state with the modified comment
+      const updatedComments = comments.map((c) =>
+        c.commentId === comment.commentId ? { ...c, content: editedComment } : c
+      );
+      setComments(updatedComments);
+
+      // Clear the editing state variables
+      setEditingComment(null);
+      setEditedComment("");
+    } catch (error) {
+      console.log("Error updating comment:", error);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingComment(null);
+    setEditedComment("");
   };
 
   // 삭제 버튼 핸들러
@@ -38,6 +64,7 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
     // 서버에서 해당 댓글 삭제
     onDeleteComment(comment.commentId);
   };
+
 
   return (
     <div>
@@ -54,12 +81,28 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
       <ul>
         {comments.map((comment) => (
           <li key={comment.commentId} style={styles.comment}>
-            <strong>{comment.author}</strong>: {comment.content}
-            {comment.editable && (
-              <div style={styles.buttonContainer}>
-                <button onClick={() => handleEdit(comment)} style={styles.button}>수정</button>
-                <button onClick={() => handleDelete(comment)} style={styles.button}>삭제</button>
-              </div>
+            {editingComment === comment ? (
+              <>
+                <input
+                  type="text"
+                  value={editedComment}
+                  onChange={(e) => setEditedComment(e.target.value)}
+                />
+                <div style={styles.buttonContainer}>
+                  <button onClick={() => handleUpdate(comment)}>Update</button>
+                  <button onClick={() => handleCancelEdit()}>Cancel</button>
+                </div>
+              </>
+            ) : (
+              <>
+                <strong>{comment.author}</strong>: {comment.content}
+                {comment.editable && (
+                  <div style={styles.buttonContainer}>
+                    <button onClick={() => handleEdit(comment)}>Edit</button>
+                    <button onClick={() => handleDelete(comment)}>Delete</button>
+                  </div>
+                )}
+              </>
             )}
           </li>
         ))}
@@ -80,5 +123,4 @@ const styles = {
     marginRight: "5px",
   },
 };
-
 export default CommentSection;

@@ -85,6 +85,7 @@ const BoardDetail = () => {
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={handlePageChange}
+          boardId={boardId}
         />
         <div style={styles.pagination}>
           {Array.from({ length: totalPages }, (_, index) => (
