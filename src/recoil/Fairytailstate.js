@@ -57,27 +57,27 @@ export const SampleDataState = atom({
         {
           id: 1,
           src: "./images/sample.jpg",
-          sampledata: "green",
+          sampledata: "ivory",
         },
         {
           id: 2,
           src: "./images/sample.png",
-          sampledata: "violet",
+          sampledata: "orange",
         },
         {
           id: 3,
           src: "./images/img-default.png",
-          sampledata: "pink",
+          sampledata: "yellow",
         },
         {
           id: 4,
           src: "./images/sample.jpg",
-          sampledata: "skyblue",
+          sampledata: "green",
         },
         {
           id: 5,
           src: "./images/sample.png",
-          sampledata: "silver",
+          sampledata: "skyblue",
         },
       ],
     },

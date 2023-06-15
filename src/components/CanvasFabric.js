@@ -51,17 +51,6 @@ const CanvasFabric = (props) => {
       fill: "rgba(255,0,0,0.5)",
     });
 
-    var rect3 = new fabric.Rect({
-      width: 50,
-      height: 100,
-      left: 975,
-      top: 350,
-      angle: 45,
-      stroke: "#eee",
-      strokeWidth: 10,
-      fill: "rgba(0,0,200,0.5)",
-    });
-
     var circle = new fabric.Circle({
       radius: 50,
       left: 975,
@@ -77,7 +66,7 @@ const CanvasFabric = (props) => {
       fill: "#cca",
     });
 
-    canvas.add(rect1, rect3, circle, triangle);
+    canvas.add(rect1, circle, triangle);
 
     new fabric.Image.fromURL(props.dataurl, (defimg) => {
       if (defimg == null) {

@@ -1,21 +1,29 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { fabric } from "fabric";
+import { atomFamily, useRecoilState } from "recoil";
+
+const canvasState = atomFamily({
+  key: "canvasState",
+  default: null,
+});
 
 const TryCanvas = (props) => {
   const canvasRef = useRef(null);
   const fabricCanvasRef = useRef(null);
+  // const [canvasStates, setCanvasStates] = useState({});
+
+  const [savedCanvasState, setSavedCanvasState] = useRecoilState(canvasState(props.canvasid));
 
   useEffect(() => {
-    if (fabricCanvasRef.current) {
-      fabricCanvasRef.current.dispose();
-    }
-
     const fabricCanvas = new fabric.Canvas(canvasRef.current, {
       width: 1280,
-      hieght: 720,
-      backgroundColor: "ivory",
-      opacity: 0.01,
+      height: 500,
+      backgroundColor: props.bgcolor,
     });
+
+    if (savedCanvasState) {
+      fabricCanvas.loadFromJSON(savedCanvasState);
+    }
 
     var rect1 = new fabric.Rect({
       width: 200,
@@ -36,17 +44,27 @@ const TryCanvas = (props) => {
     var triangle = new fabric.Triangle({
       width: 100,
       height: 100,
-      left: 50,
-      top: 100,
+      left: 550,
+      top: 300,
       fill: "#cca",
     });
 
     fabricCanvas.add(rect1, circle, triangle);
-    fabricCanvasRef.current = fabricCanvas; // Store fabric.Canvas instance in ref
-  }, []);
+    fabricCanvasRef.current = fabricCanvas;
+
+    return () => {
+      // setCanvasStates((prevStates) => ({
+      //   ...prevStates,
+      //   [props.canvasid]: fabricCanvas.toJSON(),
+      // }));
+
+      setSavedCanvasState(fabricCanvas.toJSON());
+    };
+  }, [props.canvasid]);
 
   return (
     <canvas
+      key={props.canvasid + "c"}
       id={props.canvasid}
       ref={canvasRef}
     />

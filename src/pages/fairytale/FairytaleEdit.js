@@ -288,6 +288,22 @@ const FairytaleEdit = () => {
             })}
           </div>
 
+          <PageSelectionFrame>
+            {sampleDataStucure[0].pages.map((item) =>
+              sampleDataStucure[0].pages.length > 0 ? (
+                <PageSelection
+                  idx={item.id}
+                  src={item.src}
+                  onClick={(e) => {
+                    canvasChangeHandler(e.target);
+                  }}
+                />
+              ) : (
+                <div>가져오는 중...</div>
+              )
+            )}
+          </PageSelectionFrame>
+
           <div id='edit-tools'>
             {activeTab === IMAGE && (
               <EditToolTab title={IMAGE}>
@@ -391,22 +407,6 @@ const FairytaleEdit = () => {
               </EditToolTab>
             )}
           </div>
-
-          <PageSelectionFrame>
-            {sampleDataStucure[0].pages.map((item) =>
-              sampleDataStucure[0].pages.length > 0 ? (
-                <PageSelection
-                  idx={item.id}
-                  src={item.src}
-                  onClick={(e) => {
-                    canvasChangeHandler(e.target);
-                  }}
-                />
-              ) : (
-                <div>가져오는 중...</div>
-              )
-            )}
-          </PageSelectionFrame>
         </Frame>
       </Container>
     </div>
