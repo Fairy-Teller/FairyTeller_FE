@@ -31,7 +31,6 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
     }
   };
 
-  // 수정 버튼 핸들러
   const handleEdit = (comment) => {
     setEditingComment(comment);
     setEditedComment(comment.content);
@@ -40,13 +39,11 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
   const handleUpdate = async (comment) => {
     try {
       await call(`/board/${boardId}/comment/${comment.commentId}`, "PUT", { content: editedComment });
-      // Update the comments state with the modified comment
       const updatedComments = comments.map((c) =>
         c.commentId === comment.commentId ? { ...c, content: editedComment } : c
       );
       setComments(updatedComments);
 
-      // Clear the editing state variables
       setEditingComment(null);
       setEditedComment("");
     } catch (error) {
@@ -59,9 +56,7 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
     setEditedComment("");
   };
 
-  // 삭제 버튼 핸들러
   const handleDelete = (comment) => {
-    // 서버에서 해당 댓글 삭제
     onDeleteComment(comment.commentId);
   };
 
@@ -89,8 +84,8 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
                   onChange={(e) => setEditedComment(e.target.value)}
                 />
                 <div style={styles.buttonContainer}>
-                  <button onClick={() => handleUpdate(comment)}>Update</button>
-                  <button onClick={() => handleCancelEdit()}>Cancel</button>
+                  <button onClick={() => handleUpdate(comment)} style={styles.smallButton}>저장</button>
+                  <button onClick={() => handleCancelEdit()} style={styles.smallButton}>취소</button>
                 </div>
               </>
             ) : (
@@ -98,8 +93,8 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
                 <strong>{comment.author}</strong>: {comment.content}
                 {comment.editable && (
                   <div style={styles.buttonContainer}>
-                    <button onClick={() => handleEdit(comment)}>Edit</button>
-                    <button onClick={() => handleDelete(comment)}>Delete</button>
+                     <button onClick={() => handleEdit(comment)} style={styles.smallButton}>수정</button>
+                    <button onClick={() => handleDelete(comment)} style={styles.smallButton}>삭제</button>
                   </div>
                 )}
               </>
@@ -110,7 +105,6 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
     </div>
   );
 };
-
 const styles = {
   comment: {
     marginBottom: "10px",
@@ -119,8 +113,11 @@ const styles = {
     display: "inline-block",
     marginLeft: "10px",
   },
-  button: {
+  smallButton: {
     marginRight: "5px",
-  },
+    marginBottom: "5px",
+  }
 };
+
+
 export default CommentSection;
