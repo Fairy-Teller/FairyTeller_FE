@@ -29,6 +29,7 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
         console.log("Error submitting comment:", error);
       }
     }
+    setComment(""); // 댓글 입력칸 비우기
   };
 
   const handleEdit = (comment) => {
