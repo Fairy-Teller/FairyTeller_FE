@@ -67,9 +67,9 @@ function FairytaleExport() {
         try {
             const data = await call('/book/my-newest', 'GET', null);
             setThumbnailUrl('https://s3.ap-northeast-2.amazonaws.com/' + data.thumbnailUrl);
-            setBookId(data.bookId);
+            await setBookId(data.bookId);
             setTitle(data.title);
-            console.log(data);
+            console.log('확인해보자!', BookId);
             console.log(thumbnailUrl);
 
             // await call('/book/create/story', 'POST', {
