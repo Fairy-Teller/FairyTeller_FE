@@ -51,28 +51,33 @@ export const SampleDataState = atom({
     {
       id: 1,
       bookId: 1,
-      title: "sample-data",
+      title: null,
       thumbnailUrl: null,
       pages: [
         {
           id: 1,
           src: "./images/sample.jpg",
+          sampledata: "green",
         },
         {
           id: 2,
-          src: "./images/sample.jpg",
+          src: "./images/sample.png",
+          sampledata: "violet",
         },
         {
           id: 3,
-          src: "./images/sample.jpg",
+          src: "./images/img-default.png",
+          sampledata: "pink",
         },
         {
           id: 4,
           src: "./images/sample.jpg",
+          sampledata: "skyblue",
         },
         {
           id: 5,
-          src: "./images/sample.jpg",
+          src: "./images/sample.png",
+          sampledata: "silver",
         },
       ],
     },

@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { call } from "../../service/ApiService";
 import { SampleDataState, SelectedImageState, StoryState } from "../../recoil/Fairytailstate";
 import styled, { css } from "styled-components";
+import { fabric } from "fabric";
+import TryCanvas from "../../components/TryCanvas";
 import EditToolTab from "../../components/EditToolTab";
 import PageSelectionFrame from "../../components/PageSelectionFrame";
 import PageSelection from "../../components/PageSelection";
@@ -56,6 +58,14 @@ const Frame = styled.div`
   width: 95vw;
   // height: 100vh;
 `;
+const CanvasFrame = styled.div`
+  ${(props) =>
+    props.bgcolor &&
+    css`
+      background-color: ${props.bgcolor};
+    `}
+  width: 100%;
+`;
 const Canvas = styled.canvas`
   width: 100%;
   height: 100%;
@@ -89,6 +99,8 @@ const FairytaleEdit = () => {
   const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
   // const [buttonClicked, setButtonClicked] = useState(false);
   const [activeTab, setActiveTab] = useState(null);
+  const [activeCanvas, setActiveCanvas] = useState("1-page");
+
   const [importFile, setImportFile] = useState(null);
   const [selectedSti, setSelectedSti] = useState(NULL);
   const [imageLink, setimageLink] = useState(NULL);
@@ -107,10 +119,10 @@ const FairytaleEdit = () => {
   const [canvasWidth, canvasHeight] = [1280, 720];
 
   useEffect(() => {
-    settingnewest();
-    if (imageLink !== NULL) {
-      fetchData();
-    }
+    // settingnewest();
+    // if (imageLink !== NULL) {
+    //   fetchData();
+    // }
   }, [imageLink]);
 
   const fetchData = async () => {
@@ -236,7 +248,11 @@ const FairytaleEdit = () => {
   //   });
   // };
 
-  const canvasChangeHandler = () => {};
+  const canvasChangeHandler = (target) => {
+    setActiveCanvas(target.id);
+    console.log(target);
+    console.log(activeCanvas);
+  };
 
   return (
     <div className='edit'>
@@ -259,9 +275,17 @@ const FairytaleEdit = () => {
               width: canvasWidth,
               height: canvasHeight,
             }}>
-            {sampleDataStucure.map((item) =>
-              sampleDataStucure.length > 0 ? <CanvasFabric /> : <div>CANVVS</div>
-            )}
+            {sampleDataStucure[0].pages.map((item) => {
+              const canvasId = item.id + "-page";
+
+              return activeCanvas === canvasId ? (
+                <CanvasFrame bgcolor={item.sampledata}>
+                  <TryCanvas />
+                </CanvasFrame>
+              ) : (
+                <div>해당 캔버스가 가려짐</div>
+              );
+            })}
           </div>
 
           <div id='edit-tools'>
@@ -369,16 +393,18 @@ const FairytaleEdit = () => {
           </div>
 
           <PageSelectionFrame>
-            {selectedImages.map((item) =>
-              selectedImages.length > 0 ? (
+            {sampleDataStucure[0].pages.map((item) =>
+              sampleDataStucure[0].pages.length > 0 ? (
                 <PageSelection
                   idx={item.id}
                   src={item.src}
                   onClick={(e) => {
-                    canvasChangeHandler(e);
+                    canvasChangeHandler(e.target);
                   }}
                 />
-              ) : null
+              ) : (
+                <div>가져오는 중...</div>
+              )
             )}
           </PageSelectionFrame>
         </Frame>

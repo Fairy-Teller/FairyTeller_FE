@@ -6,7 +6,7 @@ import { fabric } from "fabric";
 
 const [canvasWidth, canvasHeight] = [1280, 720];
 
-const CanvasFabric = () => {
+const CanvasFabric = (props) => {
   const [fabricObjects, setFabricObjects] = useState([]);
   const [storyTEXT, setStoryTEXT] = useRecoilState(StoryState);
   const [imgURL, setImgURL] = useRecoilState(ImageState);
@@ -28,10 +28,10 @@ const CanvasFabric = () => {
   };
 
   const cinit = () => {
-    let canvas = new fabric.Canvas("c", {
+    let canvas = new fabric.Canvas(props.canvasid, {
       width: canvasWidth,
       height: canvasHeight,
-      backgroundColor: "pink",
+      backgroundColor: props.bgcolor,
       opacity: 0.5,
     });
 
@@ -79,16 +79,25 @@ const CanvasFabric = () => {
 
     canvas.add(rect1, rect3, circle, triangle);
 
-    fabric.Image.fromURL(imgURL.url, (defimg, { imgsrc }) => {
+    new fabric.Image.fromURL(props.dataurl, (defimg) => {
       if (defimg == null) {
         alert("Error: No Default Image");
       } else {
-        defimg.scale(0.75);
         canvas.add(defimg);
-        setImgURL(imgsrc); // ???
         canvas.renderAll();
       }
     });
+
+    // fabric.Image.fromURL(imgURL.url, (defimg, { imgsrc }) => {
+    //   if (defimg == null) {
+    //     alert("Error: No Default Image");
+    //   } else {
+    //     defimg.scale(0.75);
+    //     canvas.add(defimg);
+    //     setImgURL(imgsrc); // ???
+    //     canvas.renderAll();
+    //   }
+    // });
 
     const onChangDetect = (options) => {
       options.target.setCoords();
