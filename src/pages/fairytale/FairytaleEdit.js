@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { call } from "../../service/ApiService";
+import { SampleDataState, SelectedImageState, StoryState } from "../../recoil/Fairytailstate";
 import styled, { css } from "styled-components";
 import EditToolTab from "../../components/EditToolTab";
+import PageSelectionFrame from "../../components/PageSelectionFrame";
+import PageSelection from "../../components/PageSelection";
 import CanvasFabric from "../../components/CanvasFabric";
 import html2canvas from "html2canvas";
+import { useRecoilValue } from "recoil";
 
 const NULL = "NULL";
 
@@ -56,29 +60,6 @@ const Canvas = styled.canvas`
   width: 100%;
   height: 100%;
 `;
-const PageFrame = styled.div`
-  background-color: red;
-  display: flex;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 20vh;
-  padding: 10px 10% 0 5%;
-`;
-const Page = styled.div`
-  background-color: white;
-  width: 10vw;
-  height: 16vh;
-  margin-left: 5%;
-`;
-const NextPage = styled.button`
-  background-color: white;
-  width: 10vw;
-  height: 16vh;
-  margin-left: 5%;
-  border-radius: 700px;
-`;
 const TitleInputWrapper = styled.div`
   position: absolute;
   top: 50%;
@@ -113,6 +94,10 @@ const FairytaleEdit = () => {
   const [imageLink, setimageLink] = useState(NULL);
   const [title, setTitle] = useState("");
   const [newest, setNewest] = useState("");
+
+  const selectedImages = useRecoilValue(SelectedImageState);
+  const sampleDataStucure = useRecoilValue(SampleDataState);
+
   const navigate = useNavigate();
 
   const handlehowTitleInpuClick = () => {
@@ -251,8 +236,10 @@ const FairytaleEdit = () => {
   //   });
   // };
 
+  const canvasChangeHandler = () => {};
+
   return (
-    <div>
+    <div className='edit'>
       <Container>
         <Nav>
           {btnLabels.map((label) => (
@@ -264,16 +251,17 @@ const FairytaleEdit = () => {
             </Tab>
           ))}
         </Nav>
+
         <Frame>
           <div
             ref={printRef}
             style={{
               width: canvasWidth,
               height: canvasHeight,
-              marginLeft: "15%",
-              marginTop: "0.5%",
             }}>
-            <CanvasFabric />
+            {sampleDataStucure.map((item) =>
+              sampleDataStucure.length > 0 ? <CanvasFabric /> : <div>CANVVS</div>
+            )}
           </div>
 
           <div id='edit-tools'>
@@ -379,14 +367,20 @@ const FairytaleEdit = () => {
               </EditToolTab>
             )}
           </div>
-          <PageFrame>
-            <Page>1</Page>
-            <Page>2</Page>
-            <Page>3</Page>
-            <Page>4</Page>
-            <Page>5</Page>
-            <NextPage onClick={nextPage}>next</NextPage>
-          </PageFrame>
+
+          <PageSelectionFrame>
+            {selectedImages.map((item) =>
+              selectedImages.length > 0 ? (
+                <PageSelection
+                  idx={item.id}
+                  src={item.src}
+                  onClick={(e) => {
+                    canvasChangeHandler(e);
+                  }}
+                />
+              ) : null
+            )}
+          </PageSelectionFrame>
         </Frame>
       </Container>
     </div>
