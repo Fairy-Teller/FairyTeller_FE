@@ -1,10 +1,17 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { call } from '../../service/ApiService';
-import styled, { css } from 'styled-components';
-import EditToolTab from '../../components/EditToolTab';
-import CanvasFabric from '../../components/CanvasFabric';
-import html2canvas from 'html2canvas';
+
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { call } from "../../service/ApiService";
+import { SampleDataState, SelectedImageState, StoryState } from "../../recoil/Fairytailstate";
+import styled, { css } from "styled-components";
+import { fabric } from "fabric";
+import TryCanvas from "../../components/TryCanvas";
+import EditToolTab from "../../components/EditToolTab";
+import PageSelectionFrame from "../../components/PageSelectionFrame";
+import PageSelection from "../../components/PageSelection";
+import CanvasFabric from "../../components/CanvasFabric";
+import html2canvas from "html2canvas";
+import { useRecoilValue } from "recoil";
 
 const NULL = 'NULL';
 
@@ -52,32 +59,19 @@ const Frame = styled.div`
     width: 95vw;
     // height: 100vh;
 `;
+
+const CanvasFrame = styled.div`
+  ${(props) =>
+    props.bgcolor &&
+    css`
+      background-color: ${props.bgcolor};
+    `}
+  width: 100%;
+`;
 const Canvas = styled.canvas`
-    width: 100%;
-    height: 100%;
-`;
-const PageFrame = styled.div`
-    background-color: gray;
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 20vh;
-    padding: 10px 10% 0 5%;
-`;
-const Page = styled.div`
-    background-color: white;
-    width: 10vw;
-    height: 16vh;
-    margin-left: 5%;
-`;
-const NextPage = styled.button`
-    background-color: white;
-    width: 10vw;
-    height: 16vh;
-    margin-left: 5%;
-    border-radius: 700px;
+  width: 100%;
+  height: 100%;
+
 `;
 const TitleInputWrapper = styled.div`
     position: absolute;
@@ -105,15 +99,24 @@ const FairytaleEdit = () => {
 
     const printRef = useRef();
 
-    const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
-    // const [buttonClicked, setButtonClicked] = useState(false);
-    const [activeTab, setActiveTab] = useState(null);
-    const [importFile, setImportFile] = useState(null);
-    const [selectedSti, setSelectedSti] = useState(NULL);
-    const [imageLink, setimageLink] = useState(NULL);
-    const [title, setTitle] = useState('');
-    const [newest, setNewest] = useState('');
-    const navigate = useNavigate();
+
+  const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
+  // const [buttonClicked, setButtonClicked] = useState(false);
+  const [activeTab, setActiveTab] = useState(null);
+  const [activeCanvas, setActiveCanvas] = useState("1-page");
+
+  const [importFile, setImportFile] = useState(null);
+  const [selectedSti, setSelectedSti] = useState(NULL);
+  const [imageLink, setimageLink] = useState(NULL);
+  const [title, setTitle] = useState("");
+  const [newest, setNewest] = useState("");
+
+  const selectedImages = useRecoilValue(SelectedImageState);
+  const sampleDataStucure = useRecoilValue(SampleDataState);
+
+  const navigate = useNavigate();
+
+
 
     const handlehowTitleInpuClick = () => {
         setActiveTab(null);
@@ -121,12 +124,13 @@ const FairytaleEdit = () => {
 
     const [canvasWidth, canvasHeight] = [1280, 720];
 
-    useEffect(() => {
-        settingnewest();
-        if (imageLink !== NULL) {
-            fetchData();
-        }
-    }, [imageLink]);
+  useEffect(() => {
+    // settingnewest();
+    // if (imageLink !== NULL) {
+    //   fetchData();
+    // }
+  }, [imageLink]);
+
 
     const fetchData = async () => {
         try {
@@ -252,153 +256,171 @@ const FairytaleEdit = () => {
     //   });
     // };
 
-    return (
-        <div>
-            <Container>
-                <Nav>
-                    {btnLabels.map((label) => (
-                        <Tab
-                            key={label}
-                            clicked={activeTab === label} // buttonClicked && activeTab
-                            onClick={() => handleButtonClick(label)}
-                        >
-                            <h2>{label}</h2>
-                        </Tab>
-                    ))}
-                </Nav>
-                <Frame>
-                    <div
-                        ref={printRef}
-                        style={{
-                            width: canvasWidth,
-                            height: canvasHeight,
-                            marginLeft: '15%',
-                            marginTop: '0.5%',
-                        }}
-                    >
-                        <CanvasFabric />
-                    </div>
 
-                    <div id="edit-tools">
-                        {activeTab === IMAGE && (
-                            <EditToolTab title={IMAGE}>
-                                {/* <button onClick={undo}>Undo</button>
+  const canvasChangeHandler = (target) => {
+    setActiveCanvas(target.id);
+    console.log(target);
+    console.log(activeCanvas);
+  };
+
+  return (
+    <div className='edit'>
+      <Container>
+        <Nav>
+          {btnLabels.map((label) => (
+            <Tab
+              key={label}
+              clicked={activeTab === label} // buttonClicked && activeTab
+              onClick={() => handleButtonClick(label)}>
+              <h2>{label}</h2>
+            </Tab>
+          ))}
+        </Nav>
+
+        <Frame>
+          <div
+            ref={printRef}
+            style={{
+              width: canvasWidth,
+              height: canvasHeight,
+            }}>
+            {sampleDataStucure[0].pages.map((item) => {
+              const canvasId = item.id + "-page";
+
+              return activeCanvas === canvasId ? (
+                <CanvasFrame bgcolor={item.sampledata}>
+                  <TryCanvas />
+                </CanvasFrame>
+              ) : (
+                <div>해당 캔버스가 가려짐</div>
+              );
+            })}
+          </div>
+
+          <PageSelectionFrame>
+            {sampleDataStucure[0].pages.map((item) =>
+              sampleDataStucure[0].pages.length > 0 ? (
+                <PageSelection
+                  idx={item.id}
+                  src={item.src}
+                  onClick={(e) => {
+                    canvasChangeHandler(e.target);
+                  }}
+                />
+              ) : (
+                <div>가져오는 중...</div>
+              )
+            )}
+          </PageSelectionFrame>
+
+          <div id='edit-tools'>
+            {activeTab === IMAGE && (
+              <EditToolTab title={IMAGE}>
+                {/* <button onClick={undo}>Undo</button>
                   <button onClick={redo}>Redo</button> */}
-                            </EditToolTab>
-                        )}
-                        {activeTab === USERIMAGE && <EditToolTab title={USERIMAGE}></EditToolTab>}
-                        {activeTab === BG && (
-                            <EditToolTab title={BG}>
-                                <button
-                                    className="create-button"
-                                    // onClick={() => {
-                                    //   HandleRandomBg();
-                                    // }}
-                                    style={{
-                                        width: '200px',
-                                        height: '50px',
-                                        display: 'block',
-                                        backgroundColor: 'lightGray',
-                                        borderRadius: '25%',
-                                    }}
-                                >
-                                    handleRandomBg
-                                </button>
-                            </EditToolTab>
-                        )}
-                        {activeTab === TEXT && (
-                            <TitleInputWrapper style={{ border: '4px solid black' }}>
-                                <TitleInput
-                                    type="text"
-                                    value={title}
-                                    onChange={handleTitleChange}
-                                    placeholder="제목을 입력해 주세요"
-                                    style={{ width: '700px', height: '100px' }}
-                                />
-                                <button
-                                    className="create-button"
-                                    onClick={handlehowTitleInpuClick}
-                                    style={{
-                                        width: '700px',
-                                        height: '50px',
-                                        display: 'block',
-                                        backgroundColor: 'lightGray',
-                                    }}
-                                >
-                                    Submit
-                                </button>
-                            </TitleInputWrapper>
-                        )}
-                        {activeTab === FILTER && <EditToolTab title={FILTER}></EditToolTab>}
-                        {activeTab === STICKER && (
-                            <EditToolTab title={STICKER}>
-                                <ul>
-                                    {STI_LINKS.map((item) => (
-                                        <li
-                                            key={item.key}
-                                            onClick={(e) => {
-                                                handleStiSelect(e.target, e.target.className, item.link);
-                                            }}
-                                        >
-                                            <img
-                                                className={'sti' + item.key}
-                                                src={item.link}
-                                                alt={STI}
-                                                style={{ width: '200px', height: '100px' }}
-                                            />
-                                        </li>
-                                    ))}
-                                </ul>
-                                <button
-                                    className="create-button"
-                                    onClick={() => {
-                                        handleCreate();
-                                    }}
-                                    style={{
-                                        width: '200px',
-                                        height: '50px',
-                                        display: 'block',
-                                        backgroundColor: 'lightGray',
-                                        borderRadius: '25%',
-                                    }}
-                                >
-                                    Create Target
-                                </button>
-                            </EditToolTab>
-                        )}
-                        {activeTab === DOWNLOAD && (
-                            <EditToolTab title={DOWNLOAD}>
-                                <button
-                                    className="create-button"
-                                    type="button"
-                                    onClick={() => {
-                                        handleDownloadImage();
-                                    }}
-                                    style={{
-                                        width: '200px',
-                                        height: '50px',
-                                        display: 'block',
-                                        backgroundColor: 'lightGray',
-                                        borderRadius: '25%',
-                                    }}
-                                >
-                                    DownloadImage
-                                </button>
-                            </EditToolTab>
-                        )}
-                    </div>
-                    <PageFrame>
-                        <Page>1</Page>
-                        <Page>2</Page>
-                        <Page>3</Page>
-                        <Page>4</Page>
-                        <Page>5</Page>
-                        <NextPage onClick={nextPage}>next</NextPage>
-                    </PageFrame>
-                </Frame>
-            </Container>
-        </div>
-    );
+              </EditToolTab>
+            )}
+            {activeTab === USERIMAGE && <EditToolTab title={USERIMAGE}></EditToolTab>}
+            {activeTab === BG && (
+              <EditToolTab title={BG}>
+                <button
+                  className='create-button'
+                  // onClick={() => {
+                  //   HandleRandomBg();
+                  // }}
+                  style={{
+                    width: "200px",
+                    height: "50px",
+                    display: "block",
+                    backgroundColor: "lightGray",
+                    borderRadius: "25%",
+                  }}>
+                  handleRandomBg
+                </button>
+              </EditToolTab>
+            )}
+            {activeTab === TEXT && (
+              <TitleInputWrapper style={{ border: "4px solid black" }}>
+                <TitleInput
+                  type='text'
+                  value={title}
+                  onChange={handleTitleChange}
+                  placeholder='제목을 입력해 주세요'
+                  style={{ width: "700px", height: "100px" }}
+                />
+                <button
+                  className='create-button'
+                  onClick={handlehowTitleInpuClick}
+                  style={{
+                    width: "700px",
+                    height: "50px",
+                    display: "block",
+                    backgroundColor: "lightGray",
+                  }}>
+                  Submit
+                </button>
+              </TitleInputWrapper>
+            )}
+            {activeTab === FILTER && <EditToolTab title={FILTER}></EditToolTab>}
+            {activeTab === STICKER && (
+              <EditToolTab title={STICKER}>
+                <ul>
+                  {STI_LINKS.map((item) => (
+                    <li
+                      key={item.key}
+                      onClick={(e) => {
+                        handleStiSelect(e.target, e.target.className, item.link);
+                      }}>
+                      <img
+                        className={"sti" + item.key}
+                        src={item.link}
+                        alt={STI}
+                        style={{ width: "200px", height: "100px" }}
+                      />
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  className='create-button'
+                  onClick={() => {
+                    handleCreate();
+                  }}
+                  style={{
+                    width: "200px",
+                    height: "50px",
+                    display: "block",
+                    backgroundColor: "lightGray",
+                    borderRadius: "25%",
+                  }}>
+                  Create Target
+                </button>
+              </EditToolTab>
+            )}
+            {activeTab === DOWNLOAD && (
+              <EditToolTab title={DOWNLOAD}>
+                <button
+                  className='create-button'
+                  type='button'
+                  onClick={() => {
+                    handleDownloadImage();
+                  }}
+                  style={{
+                    width: "200px",
+                    height: "50px",
+                    display: "block",
+                    backgroundColor: "lightGray",
+                    borderRadius: "25%",
+                  }}>
+                  DownloadImage
+                </button>
+              </EditToolTab>
+            )}
+          </div>
+        </Frame>
+      </Container>
+    </div>
+  );
+
 };
 
 export default FairytaleEdit;

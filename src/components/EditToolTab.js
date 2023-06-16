@@ -1,10 +1,10 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 const Title = styled.h1`
   color: white;
 `;
 const Div = styled.div`
-  width: 22.5vw;
+  width: calc(95vw - 1280px);
   display: flex;
   flex-direction: column;
   position: absolute;

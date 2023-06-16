@@ -196,6 +196,7 @@ const CanvasFabric = () => {
             setImgURL('');
         });
         canvas.renderAll();
+
     };
 
     return (
