@@ -12,10 +12,10 @@ const Button = styled.button`
   font-size: 6rem;
 `;
 
-function Home() {
+const Home = () => {
   return (
-    <div>
-      <Container className={"home"}>
+    <div className={"home"}>
+      <Container>
         <CenteredWrap>
           <Link to='/login'>
             <Button>Login</Button>
@@ -24,6 +24,6 @@ function Home() {
       </Container>
     </div>
   );
-}
+};
 
 export default Home;
