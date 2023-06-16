@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { call } from "../../service/ApiService";
@@ -12,52 +13,53 @@ import CanvasFabric from "../../components/CanvasFabric";
 import html2canvas from "html2canvas";
 import { useRecoilValue } from "recoil";
 
-const NULL = "NULL";
+const NULL = 'NULL';
 
 const [IMAGE, USERIMAGE, BG, TEXT, FILTER, STICKER, DOWNLOAD] = [
-  "AI삽화",
-  "유저이미지",
-  "배경",
-  "텍스트",
-  "채도",
-  "스티커",
-  "다운로드",
+    'AI삽화',
+    '유저이미지',
+    '배경',
+    '제목',
+    '채도',
+    '스티커',
+    '다운로드',
 ];
-const [AI, USER, STI] = ["AI", "USER", "STI"];
-const SRC_LINK = "/images/img-default.png";
+const [AI, USER, STI] = ['AI', 'USER', 'STI'];
+const SRC_LINK = '/images/img-default.png';
 const STI_LINKS = [
-  { key: 1, link: "/images/st1.png" },
-  { key: 2, link: "/images/st2.png" },
-  { key: 3, link: "/images/st3.png" },
+    { key: 1, link: '/images/st1.png' },
+    { key: 2, link: '/images/st2.png' },
+    { key: 3, link: '/images/st3.png' },
 ];
 
 const Container = styled.div`
-  display: flex;
-  position: relative;
+    display: flex;
+    position: relative;
 `;
 const Nav = styled.nav`
-  width: 5vw;
-  display: flex;
-  flex-direction: column;
+    width: 5vw;
+    display: flex;
+    flex-direction: column;
 `;
 const Tab = styled.button`
-  width: 100%;
-  margin-top: 4px;
-  height: 9%;
-  top: 216px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-  ${({ clicked }) =>
-    clicked &&
-    css`
-      background-color: black;
-      color: white;
-    `}
+    width: 100%;
+    margin-top: 4px;
+    height: 9%;
+    top: 216px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    ${({ clicked }) =>
+        clicked &&
+        css`
+            background-color: black;
+            color: white;
+        `}
 `;
 const Frame = styled.div`
-  position: relative;
-  width: 95vw;
-  // height: 100vh;
+    position: relative;
+    width: 95vw;
+    // height: 100vh;
 `;
+
 const CanvasFrame = styled.div`
   ${(props) =>
     props.bgcolor &&
@@ -69,32 +71,34 @@ const CanvasFrame = styled.div`
 const Canvas = styled.canvas`
   width: 100%;
   height: 100%;
+
 `;
 const TitleInputWrapper = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 `;
 const TitleInput = styled.input`
-  width: 150px;
-  height: 30px;
+    width: 150px;
+    height: 30px;
 `;
 
 const classNameCleaner = (str) => {
-  let arr = document.querySelectorAll("." + str);
-  for (let i = 0; i < arr.length; i++) {
-    arr[i].classList.remove(str);
-  }
+    let arr = document.querySelectorAll('.' + str);
+    for (let i = 0; i < arr.length; i++) {
+        arr[i].classList.remove(str);
+    }
 };
 
 // const [fabricObjects, setFabricObjects] = useRecoilState(fabricObjectsState);
 
 const FairytaleEdit = () => {
-  const btnLabels = [IMAGE, USERIMAGE, BG, TEXT, FILTER, STICKER, DOWNLOAD];
-  const imgLabels = [AI, USER, STI];
+    const btnLabels = [IMAGE, USERIMAGE, BG, TEXT, FILTER, STICKER, DOWNLOAD];
+    const imgLabels = [AI, USER, STI];
 
-  const printRef = useRef();
+    const printRef = useRef();
+
 
   const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
   // const [buttonClicked, setButtonClicked] = useState(false);
@@ -112,11 +116,13 @@ const FairytaleEdit = () => {
 
   const navigate = useNavigate();
 
-  const handlehowTitleInpuClick = () => {
-    setActiveTab(null);
-  };
 
-  const [canvasWidth, canvasHeight] = [1280, 720];
+
+    const handlehowTitleInpuClick = () => {
+        setActiveTab(null);
+    };
+
+    const [canvasWidth, canvasHeight] = [1280, 720];
 
   useEffect(() => {
     // settingnewest();
@@ -125,128 +131,131 @@ const FairytaleEdit = () => {
     // }
   }, [imageLink]);
 
-  const fetchData = async () => {
-    try {
-      console.log(imageLink);
-      await call("/book/create/final", "POST", {
-        bookId: "172",
-        title: title,
-        thumbnailUrl: imageLink,
-      });
-      window.location.href = "/f-export";
-    } catch (error) {
-      console.log("Error fetching data:", error);
-    }
-  };
 
-  const settingnewest = async () => {
-    try {
-      const data = await call("/book/my-newest", "GET", null);
-      await setNewest(data.bookId);
-      console.log("성공!", newest);
-    } catch (error) {
-      console.log("Error fetching data:", error);
-    }
-  };
+    const fetchData = async () => {
+        try {
+            console.log('넘버!!', newest);
+            await call('/book/create/final', 'POST', {
+                bookId: newest,
+                title: title,
+                thumbnailUrl: imageLink,
+            });
+            console.log(imageLink);
+            await navigate('/f-export');
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
+    };
+    console.log('넘버!!', newest);
+    const settingnewest = async () => {
+        try {
+            const data = await call('/book/my-newest', 'GET', null);
+            await setNewest(data.bookId);
+            console.log('성공!', newest);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
+    };
 
-  const handleButtonClick = (label) => {
-    // setButtonClicked(!buttonClicked);
-    setActiveTab(label === activeTab ? null : label);
-    // if (label === BG) {
-    //   // setActiveTab(null);
-    // } else {
-    setShowButtonFunctiontion(!showButtonFunction);
-    // }
-  };
+    const handleButtonClick = (label) => {
+        // setButtonClicked(!buttonClicked);
+        setActiveTab(label === activeTab ? null : label);
+        // if (label === BG) {
+        //   // setActiveTab(null);
+        // } else {
+        setShowButtonFunctiontion(!showButtonFunction);
+        // }
+    };
 
-  const handleDownloadImage = async () => {
-    const element = printRef.current;
-    const canvas = await html2canvas(element, {
-      backgroundColor: "none",
-      logging: true,
-      useCORS: true,
-    });
+    const handleDownloadImage = async () => {
+        const element = printRef.current;
+        const canvas = await html2canvas(element, {
+            backgroundColor: 'none',
+            logging: true,
+            useCORS: true,
+        });
 
-    const data = canvas.toDataURL("image/jpg");
-    setimageLink(data);
-  };
+        const data = await canvas.toDataURL('image/jpg');
+        await setimageLink(data);
+    };
 
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value);
-  };
+    const handleTitleChange = (event) => {
+        setTitle(event.target.value);
+    };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setImportFile(file);
-  };
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setImportFile(file);
+    };
 
-  const [tarIdx, setTarIdx] = useState(1);
-  const [targets, setTargets] = useState([{ key: 0, class: "target0", src: SRC_LINK, label: AI }]); // DEFAULT: parsed AI illustration
+    const [tarIdx, setTarIdx] = useState(1);
+    const [targets, setTargets] = useState([{ key: 0, class: 'target0', src: SRC_LINK, label: AI }]); // DEFAULT: parsed AI illustration
 
-  const handleCreate = () => {
-    setTarIdx((prev) => prev + 1);
-    setTargets(
-      selectedSti !== NULL
-        ? [...targets, { key: tarIdx, class: `target${tarIdx}`, src: selectedSti, label: STI }]
-        : importFile !== NULL
-        ? [
-            ...targets,
-            {
-              key: tarIdx,
-              class: `target${tarIdx}`,
-              src: URL.createObjectURL(importFile),
-              label: USERIMAGE,
-            },
-          ]
-        : [...targets, { key: tarIdx, class: `target${tarIdx}`, src: SRC_LINK, label: AI }]
-    );
-    setSelectedSti(NULL);
-    classNameCleaner("selected");
-    setImportFile(null);
-  };
+    const handleCreate = () => {
+        setTarIdx((prev) => prev + 1);
+        setTargets(
+            selectedSti !== NULL
+                ? [...targets, { key: tarIdx, class: `target${tarIdx}`, src: selectedSti, label: STI }]
+                : importFile !== NULL
+                ? [
+                      ...targets,
+                      {
+                          key: tarIdx,
+                          class: `target${tarIdx}`,
+                          src: URL.createObjectURL(importFile),
+                          label: USERIMAGE,
+                      },
+                  ]
+                : [...targets, { key: tarIdx, class: `target${tarIdx}`, src: SRC_LINK, label: AI }]
+        );
+        setSelectedSti(NULL);
+        classNameCleaner('selected');
+        setImportFile(null);
+    };
 
-  const handleDelete = (clicked) => {
-    const updated_targets = [...targets].filter((item) => item.class !== clicked);
-    setTargets(updated_targets);
-  };
+    const handleDelete = (clicked) => {
+        const updated_targets = [...targets].filter((item) => item.class !== clicked);
+        setTargets(updated_targets);
+    };
 
-  const handleStiSelect = (ele, elename, src) => {
-    if (ele.classList.contains("selected")) {
-      setSelectedSti((prev) => {
-        return NULL;
-      });
-      classNameCleaner("selected");
-    } else {
-      classNameCleaner("selected");
-      ele.classList.add("selected");
-      setSelectedSti((prev) => {
-        return src;
-      });
-    }
-  };
+    const handleStiSelect = (ele, elename, src) => {
+        if (ele.classList.contains('selected')) {
+            setSelectedSti((prev) => {
+                return NULL;
+            });
+            classNameCleaner('selected');
+        } else {
+            classNameCleaner('selected');
+            ele.classList.add('selected');
+            setSelectedSti((prev) => {
+                return src;
+            });
+        }
+    };
 
-  const nextPage = async () => {
-    try {
-      await handleDownloadImage();
-    } finally {
-      window.location.href = "/f-export";
-    }
-  };
+    const nextPage = async () => {
+        try {
+            await handleDownloadImage();
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-  // const HandleRandomBg = () => {
-  //   useEffect(() => {
-  //     const letters = "0123456789ABCDEF";
-  //     let result = "#";
-  //     for (let i = 0; i < 6; i++) {
-  //       result += letters[Math.floor(Math.random() * 16)];
-  //     }
-  //     setBgColor(result);
-  //     const buttonFunctionDiv = document.querySelector("#c");
-  //     if (buttonFunctionDiv) {
-  //       buttonFunctionDiv.style.background = result;
-  //     }
-  //   });
-  // };
+    // const HandleRandomBg = () => {
+    //   useEffect(() => {
+    //     const letters = "0123456789ABCDEF";
+    //     let result = "#";
+    //     for (let i = 0; i < 6; i++) {
+    //       result += letters[Math.floor(Math.random() * 16)];
+    //     }
+    //     setBgColor(result);
+    //     const buttonFunctionDiv = document.querySelector("#c");
+    //     if (buttonFunctionDiv) {
+    //       buttonFunctionDiv.style.background = result;
+    //     }
+    //   });
+    // };
+
 
   const canvasChangeHandler = (target) => {
     setActiveCanvas(target.id);
@@ -411,6 +420,7 @@ const FairytaleEdit = () => {
       </Container>
     </div>
   );
+
 };
 
 export default FairytaleEdit;
