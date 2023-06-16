@@ -1,17 +1,16 @@
-
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { call } from "../../service/ApiService";
-import { SampleDataState, SelectedImageState, StoryState } from "../../recoil/Fairytailstate";
-import styled, { css } from "styled-components";
-import { fabric } from "fabric";
-import TryCanvas from "../../components/TryCanvas";
-import EditToolTab from "../../components/EditToolTab";
-import PageSelectionFrame from "../../components/PageSelectionFrame";
-import PageSelection from "../../components/PageSelection";
-import CanvasFabric from "../../components/CanvasFabric";
-import html2canvas from "html2canvas";
-import { useRecoilValue } from "recoil";
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { call } from '../../service/ApiService';
+import { SampleDataState, SelectedImageState, StoryState } from '../../recoil/Fairytailstate';
+import styled, { css } from 'styled-components';
+import { fabric } from 'fabric';
+import TryCanvas from '../../components/TryCanvas';
+import EditToolTab from '../../components/EditToolTab';
+import PageSelectionFrame from '../../components/PageSelectionFrame';
+import PageSelection from '../../components/PageSelection';
+import CanvasFabric from '../../components/CanvasFabric';
+import html2canvas from 'html2canvas';
+import { useRecoilValue } from 'recoil';
 
 const NULL = 'NULL';
 
@@ -61,17 +60,17 @@ const Frame = styled.div`
 `;
 
 const CanvasFrame = styled.div`
-  ${(props) =>
-    props.bgcolor &&
-    css`
-      background-color: ${props.bgcolor};
-    `}
-  width: 100%;
+    ${(props) =>
+        props.bgcolor &&
+        css`
+            background-color: ${props.bgcolor};
+        `}
+    width: 100%;
+    position: absolute;
 `;
 const Canvas = styled.canvas`
-  width: 100%;
-  height: 100%;
-
+    width: 100%;
+    height: 100%;
 `;
 const TitleInputWrapper = styled.div`
     position: absolute;
@@ -99,38 +98,53 @@ const FairytaleEdit = () => {
 
     const printRef = useRef();
 
+    const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
+    // const [buttonClicked, setButtonClicked] = useState(false);
+    const [activeTab, setActiveTab] = useState(null);
+    const [activeCanvas, setActiveCanvas] = useState('1-page');
 
-  const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
-  // const [buttonClicked, setButtonClicked] = useState(false);
-  const [activeTab, setActiveTab] = useState(null);
-  const [activeCanvas, setActiveCanvas] = useState("1-page");
+    const [importFile, setImportFile] = useState(null);
+    const [selectedSti, setSelectedSti] = useState(NULL);
+    const [imageLink, setimageLink] = useState(NULL);
+    const [title, setTitle] = useState('');
+    const [newest, setNewest] = useState('');
+    const [canvasVisibility, setCanvasVisibility] = useState({
+        1: true,
+        2: false,
+        3: false,
+        4: false,
+        5: false,
+    });
 
-  const [importFile, setImportFile] = useState(null);
-  const [selectedSti, setSelectedSti] = useState(NULL);
-  const [imageLink, setimageLink] = useState(NULL);
-  const [title, setTitle] = useState("");
-  const [newest, setNewest] = useState("");
+    const selectedImages = useRecoilValue(SelectedImageState);
+    const sampleDataStucure = useRecoilValue(SampleDataState);
 
-  const selectedImages = useRecoilValue(SelectedImageState);
-  const sampleDataStucure = useRecoilValue(SampleDataState);
-
-  const navigate = useNavigate();
-
-
+    const navigate = useNavigate();
 
     const handlehowTitleInpuClick = () => {
         setActiveTab(null);
     };
 
+    const toggleCanvasVisibility = (id) => {
+        setCanvasVisibility((prevState) => {
+            const updatedVisibility = { ...prevState };
+            Object.keys(updatedVisibility).forEach((key) => {
+                updatedVisibility[key] = key == id ? true : false;
+                // key === id ? console.log('true') : console.log('false');
+                // console.log(key, '===>', updatedVisibility[key]);
+            });
+            return updatedVisibility;
+        });
+
+        console.log(id);
+        console.log(canvasVisibility);
+    };
+
     const [canvasWidth, canvasHeight] = [1280, 720];
 
-  useEffect(() => {
-    // settingnewest();
-    // if (imageLink !== NULL) {
-    //   fetchData();
-    // }
-  }, [imageLink]);
-
+    // useEffect(() => {
+    //     console.log(canvasVisibility);
+    // }, [canvasVisibility]);
 
     const fetchData = async () => {
         try {
@@ -146,7 +160,7 @@ const FairytaleEdit = () => {
             console.log('Error fetching data:', error);
         }
     };
-    console.log('넘버!!', newest);
+
     const settingnewest = async () => {
         try {
             const data = await call('/book/my-newest', 'GET', null);
@@ -256,171 +270,211 @@ const FairytaleEdit = () => {
     //   });
     // };
 
+    const canvasChangeHandler = (target) => {
+        setActiveCanvas(target.id);
+    };
 
-  const canvasChangeHandler = (target) => {
-    setActiveCanvas(target.id);
-    console.log(target);
-    console.log(activeCanvas);
-  };
+    return (
+        <div className="edit">
+            <Container>
+                <Nav>
+                    {btnLabels.map((label) => (
+                        <Tab
+                            key={label}
+                            clicked={activeTab === label} // buttonClicked && activeTab
+                            onClick={() => handleButtonClick(label)}
+                        >
+                            <h2>{label}</h2>
+                        </Tab>
+                    ))}
+                </Nav>
 
-  return (
-    <div className='edit'>
-      <Container>
-        <Nav>
-          {btnLabels.map((label) => (
-            <Tab
-              key={label}
-              clicked={activeTab === label} // buttonClicked && activeTab
-              onClick={() => handleButtonClick(label)}>
-              <h2>{label}</h2>
-            </Tab>
-          ))}
-        </Nav>
+                <Frame>
+                    <div
+                        ref={printRef}
+                        style={{
+                            width: canvasWidth,
+                            height: canvasHeight,
+                            display: canvasVisibility[1] ? 'block' : 'none',
+                        }}
+                        id="1-page"
+                    >
+                        <TryCanvas id="1" />
+                    </div>
+                    <div
+                        ref={printRef}
+                        style={{
+                            width: canvasWidth,
+                            height: canvasHeight,
+                            display: canvasVisibility[2] ? 'block' : 'none',
+                        }}
+                        id="2-page"
+                    >
+                        <TryCanvas id="2" />
+                    </div>
+                    <div
+                        ref={printRef}
+                        style={{
+                            width: canvasWidth,
+                            height: canvasHeight,
+                            display: canvasVisibility[3] ? 'block' : 'none',
+                        }}
+                        id="3-page"
+                    >
+                        <TryCanvas />
+                    </div>
+                    <div
+                        ref={printRef}
+                        style={{
+                            width: canvasWidth,
+                            height: canvasHeight,
+                            display: canvasVisibility[4] ? 'block' : 'none',
+                        }}
+                        id="4-page"
+                    >
+                        <TryCanvas />
+                    </div>
+                    <div
+                        ref={printRef}
+                        style={{
+                            width: canvasWidth,
+                            height: canvasHeight,
+                            display: canvasVisibility[5] ? 'block' : 'none',
+                        }}
+                        id="5-page"
+                    >
+                        <TryCanvas />
+                    </div>
 
-        <Frame>
-          <div
-            ref={printRef}
-            style={{
-              width: canvasWidth,
-              height: canvasHeight,
-            }}>
-            {sampleDataStucure[0].pages.map((item) => {
-              const canvasId = item.id + "-page";
+                    <PageSelectionFrame>
+                        {sampleDataStucure[0].pages.map((item) =>
+                            sampleDataStucure[0].pages.length > 0 ? (
+                                <PageSelection
+                                    idx={item.id}
+                                    src={item.src}
+                                    onClick={(e) => {
+                                        canvasChangeHandler(e.target);
+                                        toggleCanvasVisibility(item.id);
+                                    }}
+                                />
+                            ) : (
+                                <div>가져오는 중...</div>
+                            )
+                        )}
+                    </PageSelectionFrame>
 
-              return activeCanvas === canvasId ? (
-                <CanvasFrame bgcolor={item.sampledata}>
-                  <TryCanvas />
-                </CanvasFrame>
-              ) : (
-                <div>해당 캔버스가 가려짐</div>
-              );
-            })}
-          </div>
-
-          <PageSelectionFrame>
-            {sampleDataStucure[0].pages.map((item) =>
-              sampleDataStucure[0].pages.length > 0 ? (
-                <PageSelection
-                  idx={item.id}
-                  src={item.src}
-                  onClick={(e) => {
-                    canvasChangeHandler(e.target);
-                  }}
-                />
-              ) : (
-                <div>가져오는 중...</div>
-              )
-            )}
-          </PageSelectionFrame>
-
-          <div id='edit-tools'>
-            {activeTab === IMAGE && (
-              <EditToolTab title={IMAGE}>
-                {/* <button onClick={undo}>Undo</button>
+                    <div id="edit-tools">
+                        {activeTab === IMAGE && (
+                            <EditToolTab title={IMAGE}>
+                                {/* <button onClick={undo}>Undo</button>
                   <button onClick={redo}>Redo</button> */}
-              </EditToolTab>
-            )}
-            {activeTab === USERIMAGE && <EditToolTab title={USERIMAGE}></EditToolTab>}
-            {activeTab === BG && (
-              <EditToolTab title={BG}>
-                <button
-                  className='create-button'
-                  // onClick={() => {
-                  //   HandleRandomBg();
-                  // }}
-                  style={{
-                    width: "200px",
-                    height: "50px",
-                    display: "block",
-                    backgroundColor: "lightGray",
-                    borderRadius: "25%",
-                  }}>
-                  handleRandomBg
-                </button>
-              </EditToolTab>
-            )}
-            {activeTab === TEXT && (
-              <TitleInputWrapper style={{ border: "4px solid black" }}>
-                <TitleInput
-                  type='text'
-                  value={title}
-                  onChange={handleTitleChange}
-                  placeholder='제목을 입력해 주세요'
-                  style={{ width: "700px", height: "100px" }}
-                />
-                <button
-                  className='create-button'
-                  onClick={handlehowTitleInpuClick}
-                  style={{
-                    width: "700px",
-                    height: "50px",
-                    display: "block",
-                    backgroundColor: "lightGray",
-                  }}>
-                  Submit
-                </button>
-              </TitleInputWrapper>
-            )}
-            {activeTab === FILTER && <EditToolTab title={FILTER}></EditToolTab>}
-            {activeTab === STICKER && (
-              <EditToolTab title={STICKER}>
-                <ul>
-                  {STI_LINKS.map((item) => (
-                    <li
-                      key={item.key}
-                      onClick={(e) => {
-                        handleStiSelect(e.target, e.target.className, item.link);
-                      }}>
-                      <img
-                        className={"sti" + item.key}
-                        src={item.link}
-                        alt={STI}
-                        style={{ width: "200px", height: "100px" }}
-                      />
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  className='create-button'
-                  onClick={() => {
-                    handleCreate();
-                  }}
-                  style={{
-                    width: "200px",
-                    height: "50px",
-                    display: "block",
-                    backgroundColor: "lightGray",
-                    borderRadius: "25%",
-                  }}>
-                  Create Target
-                </button>
-              </EditToolTab>
-            )}
-            {activeTab === DOWNLOAD && (
-              <EditToolTab title={DOWNLOAD}>
-                <button
-                  className='create-button'
-                  type='button'
-                  onClick={() => {
-                    handleDownloadImage();
-                  }}
-                  style={{
-                    width: "200px",
-                    height: "50px",
-                    display: "block",
-                    backgroundColor: "lightGray",
-                    borderRadius: "25%",
-                  }}>
-                  DownloadImage
-                </button>
-              </EditToolTab>
-            )}
-          </div>
-        </Frame>
-      </Container>
-    </div>
-  );
-
+                            </EditToolTab>
+                        )}
+                        {activeTab === USERIMAGE && <EditToolTab title={USERIMAGE}></EditToolTab>}
+                        {activeTab === BG && (
+                            <EditToolTab title={BG}>
+                                <button
+                                    className="create-button"
+                                    // onClick={() => {
+                                    //   HandleRandomBg();
+                                    // }}
+                                    style={{
+                                        width: '200px',
+                                        height: '50px',
+                                        display: 'block',
+                                        backgroundColor: 'lightGray',
+                                        borderRadius: '25%',
+                                    }}
+                                >
+                                    handleRandomBg
+                                </button>
+                            </EditToolTab>
+                        )}
+                        {activeTab === TEXT && (
+                            <TitleInputWrapper style={{ border: '4px solid black' }}>
+                                <TitleInput
+                                    type="text"
+                                    value={title}
+                                    onChange={handleTitleChange}
+                                    placeholder="제목을 입력해 주세요"
+                                    style={{ width: '700px', height: '100px' }}
+                                />
+                                <button
+                                    className="create-button"
+                                    onClick={handlehowTitleInpuClick}
+                                    style={{
+                                        width: '700px',
+                                        height: '50px',
+                                        display: 'block',
+                                        backgroundColor: 'lightGray',
+                                    }}
+                                >
+                                    Submit
+                                </button>
+                            </TitleInputWrapper>
+                        )}
+                        {activeTab === FILTER && <EditToolTab title={FILTER}></EditToolTab>}
+                        {activeTab === STICKER && (
+                            <EditToolTab title={STICKER}>
+                                <ul>
+                                    {STI_LINKS.map((item) => (
+                                        <li
+                                            key={item.key}
+                                            onClick={(e) => {
+                                                handleStiSelect(e.target, e.target.className, item.link);
+                                            }}
+                                        >
+                                            <img
+                                                className={'sti' + item.key}
+                                                src={item.link}
+                                                alt={STI}
+                                                style={{ width: '200px', height: '100px' }}
+                                            />
+                                        </li>
+                                    ))}
+                                </ul>
+                                <button
+                                    className="create-button"
+                                    onClick={() => {
+                                        handleCreate();
+                                    }}
+                                    style={{
+                                        width: '200px',
+                                        height: '50px',
+                                        display: 'block',
+                                        backgroundColor: 'lightGray',
+                                        borderRadius: '25%',
+                                    }}
+                                >
+                                    Create Target
+                                </button>
+                            </EditToolTab>
+                        )}
+                        {activeTab === DOWNLOAD && (
+                            <EditToolTab title={DOWNLOAD}>
+                                <button
+                                    className="create-button"
+                                    type="button"
+                                    onClick={() => {
+                                        handleDownloadImage();
+                                    }}
+                                    style={{
+                                        width: '200px',
+                                        height: '50px',
+                                        display: 'block',
+                                        backgroundColor: 'lightGray',
+                                        borderRadius: '25%',
+                                    }}
+                                >
+                                    DownloadImage
+                                </button>
+                            </EditToolTab>
+                        )}
+                    </div>
+                </Frame>
+            </Container>
+        </div>
+    );
 };
 
 export default FairytaleEdit;
