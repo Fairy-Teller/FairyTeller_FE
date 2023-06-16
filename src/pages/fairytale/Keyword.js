@@ -80,16 +80,12 @@ function Keyword() {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    setCheckedValues((prev) => [
-      ...prev,
-      checkedValues[0].title,
-      checkedValues[1].title,
-      checkedValues[2].title,
-    ]);
     sendkeyword({
-      parameter1: checkedValues[0].title,
-      parameter2: checkedValues[1].title,
-      parameter3: checkedValues[2].title,
+      parameter1: checkedValues[0],
+      parameter2: checkedValues[1],
+      parameter3: checkedValues[2],
+      parameter4: checkedValues[3],
+      parameter5: checkedValues[4],
     });
   };
 
