@@ -194,3 +194,45 @@
     }
   }
 }
+
+.edit {
+  .page-selection-frame {
+    height: calc(100% - 720px);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: nowrap;
+    margin: 0;
+    padding: 0.8rem;
+    box-sizing: border-box;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: aquamarine;
+  }
+  .page-selection {
+    flex: 1;
+    margin: 0 0.2rem;
+    padding: 0 0.2rem;
+    box-sizing: border-box;
+    &:first-of-type {
+      margin-left: 0;
+    }
+    &:last-of-type {
+      margin-right: 0;
+    }
+    text-align: center;
+
+    .image-frame {
+      background-color: #fff;
+      > div {
+        background: {
+          size: cover;
+          repeat: no-repeat;
+          position: center center;
+        }
+      }
+    }
+  }
+}

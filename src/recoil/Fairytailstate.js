@@ -16,6 +16,7 @@ export const StoryState = atom({
     key: 'StoryState',
     default: { text: '' },
 });
+
 export const ImageState = atom({
     key: 'ImageState',
     default: { url: '' },
@@ -25,4 +26,69 @@ export const ImageFix = atom({
     key: 'userId',
     default: '',
     effects_UNSTABLE: [persistAtom],
+});
+
+export const SelectedImageState = atom({
+  key: "SelectedImageState",
+  default: [
+    {
+      id: 1,
+      src: "./images/sample.jpg",
+    },
+    {
+      id: 2,
+      src: "./images/sample.jpg",
+    },
+    {
+      id: 3,
+      src: "./images/sample.jpg",
+    },
+    {
+      id: 4,
+      src: "./images/sample.jpg",
+    },
+    {
+      id: 5,
+      src: "./images/sample.jpg",
+    },
+  ],
+});
+
+export const SampleDataState = atom({
+  key: "SampleDataState",
+  default: [
+    {
+      id: 1,
+      bookId: 1,
+      title: null,
+      thumbnailUrl: null,
+      pages: [
+        {
+          id: 1,
+          src: "./images/sample.jpg",
+          sampledata: "ivory",
+        },
+        {
+          id: 2,
+          src: "./images/sample.png",
+          sampledata: "orange",
+        },
+        {
+          id: 3,
+          src: "./images/img-default.png",
+          sampledata: "yellow",
+        },
+        {
+          id: 4,
+          src: "./images/sample.jpg",
+          sampledata: "green",
+        },
+        {
+          id: 5,
+          src: "./images/sample.png",
+          sampledata: "skyblue",
+        },
+      ],
+    },
+  ],
 });
