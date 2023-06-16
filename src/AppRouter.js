@@ -23,6 +23,9 @@ import FairytaleShow from './pages/fairytale/FairytaleShow';
 import Keyword from './pages/fairytale/Keyword';
 import StoryGenerated from './pages/fairytale/StoryGenerated';
 import StoryUser from './pages/fairytale/StoryUser';
+//exam
+import LoadingBarExample from './pages/fairytale/LoadingBarExample';
+
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -30,7 +33,6 @@ function AppRouter() {
     return (
 
         <BrowserRouter>
-   
             <Routes>
                 <Route path="/" element={<App />} />
                 <Route path="home" element={<Home />} />
@@ -51,6 +53,7 @@ function AppRouter() {
                 <Route path="keyword" element={<Keyword />} />
                 <Route path="story-generated" element={<StoryGenerated />} />
                 <Route path="story-user" element={<StoryUser />} />
+                <Route path="loading-test" element={<LoadingBarExample />} />
             </Routes>
        
         </BrowserRouter>
