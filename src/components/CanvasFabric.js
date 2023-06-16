@@ -22,13 +22,6 @@ const CanvasFabric = () => {
         init();
     }, []);
 
-    useEffect(() => {
-        cinit();
-        console.log('값이 변경됩니다.');
-    }, [showImage]);
-
-    console.log('리코일 showImage의 값 입니다.', showImage);
-
     // setImageFIX(contentImg)
 
     const init = async () => {
@@ -44,7 +37,44 @@ const CanvasFabric = () => {
         }
     };
 
-    const cinit = () => {
+    const getNewest = async () => {
+        try {
+            const data = await call('/book/my-newest', 'GET', null);
+            setStoryText(data.fullStory);
+            setImgURL(data.thumbnailUrl);
+            console.log(storyText);
+            console.log(imgURL.url);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
+    };
+
+    const sendText = async () => {
+        try {
+            const response = await call('/chat-gpt/summarize', 'POST', { text: storyText });
+            const imageData = response; // 응답 데이터 - Base64 문자열
+            const byteCharacters = atob(imageData); // Base64 디코딩
+            const byteArrays = new Uint8Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteArrays[i] = byteCharacters.charCodeAt(i);
+            }
+            const imageBlob = new Blob([byteArrays], { type: 'image/jpeg' });
+            const imageUrl = URL.createObjectURL(imageBlob);
+            await setContentImg(imageUrl);
+            if (showImage === '') {
+                console.log('가장처음에만 들어올 수 있는 공간입니다.');
+                setImageFIX(imageUrl);
+            }
+            cinit(imageUrl);
+
+            setImgURL(imageUrl);
+            // set(ImageState, { url: imageUrl });
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
+    };
+
+    const cinit = (props) => {
         const canvas = new fabric.Canvas('c', {
             width: canvasWidth,
             height: canvasHeight,
@@ -52,7 +82,7 @@ const CanvasFabric = () => {
             opacity: 0.5,
         });
 
-        fabric.Image.fromURL(showImage, function (img) {
+        fabric.Image.fromURL(props, function (img) {
             canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
                 scaleX: canvas.width / img.width,
                 scaleY: canvas.height / img.height,
@@ -131,42 +161,6 @@ const CanvasFabric = () => {
         });
 
         setCanvas(canvas);
-    };
-
-    const getNewest = async () => {
-        try {
-            const data = await call('/book/my-newest', 'GET', null);
-            setStoryText(data.fullStory);
-            setImgURL(data.thumbnailUrl);
-            console.log(storyText);
-            console.log(imgURL.url);
-        } catch (error) {
-            console.log('Error fetching data:', error);
-        }
-    };
-
-    const sendText = async () => {
-        try {
-            const response = await call('/chat-gpt/summarize', 'POST', { text: storyText });
-            const imageData = response; // 응답 데이터 - Base64 문자열
-            const byteCharacters = atob(imageData); // Base64 디코딩
-            const byteArrays = new Uint8Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-                byteArrays[i] = byteCharacters.charCodeAt(i);
-            }
-            const imageBlob = new Blob([byteArrays], { type: 'image/jpeg' });
-            const imageUrl = URL.createObjectURL(imageBlob);
-            await setContentImg(imageUrl);
-            if (showImage === '') {
-                console.log('가장처음에만 들어올 수 있는 공간입니다.');
-                setImageFIX(imageUrl);
-            }
-
-            setImgURL(imageUrl);
-            // set(ImageState, { url: imageUrl });
-        } catch (error) {
-            console.log('Error fetching data:', error);
-        }
     };
 
     console.log('가장 처음에 들어온 값과 계속 일관성있게 유지되야 합니다.>>>>>', showImage);
