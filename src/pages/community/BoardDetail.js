@@ -86,6 +86,7 @@ const BoardDetail = () => {
           totalPages={totalPages}
           onPageChange={handlePageChange}
           boardId={boardId}
+          isBoardOwner={board.editable}
         />
         <div style={styles.pagination}>
           {Array.from({ length: totalPages }, (_, index) => (

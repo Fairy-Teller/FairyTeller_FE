@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { call } from "../../service/ApiService";
 
-const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteComment, boardId }) => {
+const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteComment, boardId, isBoardOwner }) => {
   const [comment, setComment] = useState("");
   const [editingComment, setEditingComment] = useState(null);
   const [editedComment, setEditedComment] = useState("");
@@ -92,9 +92,11 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
             ) : (
               <>
                 <strong>{comment.author}</strong>: {comment.content}
-                {comment.editable && (
+                {(comment.editable || isBoardOwner) && (
                   <div style={styles.buttonContainer}>
+                    {comment.editable && (
                      <button onClick={() => handleEdit(comment)} style={styles.smallButton}>수정</button>
+                    )}
                     <button onClick={() => handleDelete(comment)} style={styles.smallButton}>삭제</button>
                   </div>
                 )}
