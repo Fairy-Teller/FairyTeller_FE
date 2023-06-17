@@ -216,6 +216,7 @@
         margin: 0 0.2rem;
         padding: 0 0.2rem;
         box-sizing: border-box;
+
         &:first-of-type {
             margin-left: 0;
         }
@@ -226,6 +227,7 @@
 
         .image-frame {
             background-color: #fff;
+
             > div {
                 background: {
                     size: cover;

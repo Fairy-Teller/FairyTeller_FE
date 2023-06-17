@@ -8,11 +8,10 @@ import { fabric } from 'fabric';
 
 import PageSelection from '../components/PageSelection';
 
-const [IMAGE, USERIMAGE, BG, TEXT, FILTER, STICKER, DOWNLOAD] = [
+const [IMAGE, USERIMAGE, BG, FILTER, STICKER, DOWNLOAD] = [
     'AI삽화',
     '유저이미지',
     '텍스트',
-    '제목',
     '삭제',
     '스티커',
     '다운로드',
@@ -66,7 +65,7 @@ const Tooltab = styled.div`
 `;
 
 const TryCanvas = (props) => {
-    const btnLabels = [IMAGE, USERIMAGE, BG, TEXT, FILTER, STICKER, DOWNLOAD];
+    const btnLabels = [IMAGE, USERIMAGE, BG, FILTER, STICKER, DOWNLOAD];
     const canvasRef = useRef(null);
     const fabricCanvasRef = useRef(null);
     // const [canvasStates, setCanvasStates] = useState({});
@@ -237,9 +236,11 @@ const TryCanvas = (props) => {
                     )
                 )}
             </Tooltab>
+            <Tooltab visible={activeTab === USERIMAGE}>
+                <input type="file" id="file" onChange={readImage} />
+            </Tooltab>
 
             <canvas id="canvas" key={props.canvasid + 'c'} ref={canvasRef} />
-            <input type="file" id="file" onChange={readImage} />
         </Container>
     );
 };

@@ -50,7 +50,7 @@ const FairytaleEdit = () => {
 
     const [canvasWidth, canvasHeight] = [1280, 720];
     const navigate = useNavigate();
-    const dddd = () => {
+    const saveClick = () => {
         // navigate('/start');
         saveState('save');
     };
@@ -64,7 +64,6 @@ const FairytaleEdit = () => {
                             width: canvasWidth,
                             height: canvasHeight,
                             display: canvasVisibility[1] ? 'block' : 'none',
-                            backgroundColor: 'pink',
                         }}
                     >
                         <TryCanvas props={1} />
@@ -74,7 +73,6 @@ const FairytaleEdit = () => {
                             width: canvasWidth,
                             height: canvasHeight,
                             display: canvasVisibility[2] ? 'block' : 'none',
-                            backgroundColor: 'black',
                         }}
                     >
                         <TryCanvas props={2} />
@@ -116,6 +114,10 @@ const FairytaleEdit = () => {
                                     onClick={(e) => {
                                         toggleCanvasVisibility(item.id);
                                     }}
+                                    style={{
+                                        border: '20px solid red',
+                                        
+                                    }}
                                 />
                             ) : (
                                 <div>가져오는 중...</div>
@@ -123,7 +125,7 @@ const FairytaleEdit = () => {
                         )}
                     </PageSelectionFrame>
                 </Frame>
-                <button onClick={dddd}>언마운트!</button>
+                <button onClick={saveClick}>저장하기 임시버튼! (한번만 클릭 가능)</button>
             </Container>
         </div>
     );
