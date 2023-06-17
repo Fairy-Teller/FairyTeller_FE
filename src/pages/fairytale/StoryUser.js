@@ -40,35 +40,9 @@ const StoryUser = () => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     setWrittenStory(texts);
-    // sendtext({
-    //   text: texts,
-    // });
     console.log(writtenStory);
   };
 
-  // const sendtext = useRecoilCallback(({ set }) => async (userDTO) => {
-  //   try {
-  //     const response = await call("/chat-gpt/summarize", "POST", userDTO);
-  //     await set(StoryState, { text: texts });
-
-  //     const imageData = response; // 응답 데이터 - Base64 문자열
-  //     const byteCharacters = atob(imageData); // Base64 디코딩
-  //     const byteArrays = [];
-
-  //     for (let i = 0; i < byteCharacters.length; i++) {
-  //       byteArrays.push(byteCharacters.charCodeAt(i));
-  //     }
-
-  //     const imageBlob = new Blob([new Uint8Array(byteArrays)], { type: "image/jpeg" });
-  //     const imageUrl = URL.createObjectURL(imageBlob);
-
-  //     setUrl(imageUrl);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     // navigate("/f-edit");
-  //   }
-  // });
 
   const gotoEdit = async () => {
     try {

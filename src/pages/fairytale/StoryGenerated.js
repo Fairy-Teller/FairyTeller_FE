@@ -13,12 +13,17 @@ const TextArea = styled.textarea`
     width: calc(100% - 0.25rem);
     height: 10rem;
     background-color: lightgray;
+    overflow: auto;
 `;
 const ImageContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
+`;
+const ScrollContainer = styled.div`
+    overflow: scroll;
+    height: 100vh; // 또는 적절한 높이 값
 `;
 
 const StoryGenerated = () => {
@@ -30,17 +35,17 @@ const StoryGenerated = () => {
     const [texts, setTexts] = useState('');
     const [url, setUrl] = useState('');
     const navigate = useNavigate();
-
     useEffect(() => {
         fetchData();
         console.log('???????');
-        console.log(savedStory.text['text']);
+        console.log('saveStory.text', savedStory.text['text']);
         console.log(selectedKeywords); // {keywords: Array(3)} // [{key: undefined, theme: 'ANIMAL', title: '공룡'}, {key: undefined, theme: 'PEOPLE', title: '의사'}, {key: undefined, theme: 'ANIMAL', title: '개구리'}]
     }, [selectedKeywords]);
 
     const fetchData = async () => {
         try {
             setTexts(savedStory.text['text']);
+            // console.log(savedStory)
             // setSelectedKeywords(() => {
             //   return selectedKeywords.map((item) => ({
             //     key: setDataIdx((prev) => prev + 1),
@@ -69,12 +74,15 @@ const StoryGenerated = () => {
             parameter1: selectedKeywords.keywords[0].title,
             parameter2: selectedKeywords.keywords[1].title,
             parameter3: selectedKeywords.keywords[2].title,
+            parameter3: selectedKeywords.keywords[3].title,
+            parameter3: selectedKeywords.keywords[4].title,
         });
     };
 
     const resendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
         try {
             const response = await call('/chat-gpt/question', 'POST', userDTO);
+            
             await set(StoryState, { text: response });
             await set(SelectedKeywords, { keywords: selectedKeywords.keywords });
         } catch (error) {
@@ -101,28 +109,9 @@ const StoryGenerated = () => {
         }
     };
 
-    // const sendtext = useRecoilCallback(({ set }) => async (userDTO) => {
-    //   try {
-    //     const response = await call("/chat-gpt/summarize", "POST", userDTO);
-    //     await set(StoryState, { text: texts });
-
-    //     const imageData = response; // 응답 데이터 - Base64 문자열
-    //     const byteCharacters = atob(imageData); // Base64 디코딩
-    //     const byteArrays = [];
-    //     for (let i = 0; i < byteCharacters.length; i++) {
-    //       byteArrays.push(byteCharacters.charCodeAt(i));
-    //     }
-
-    //     const imageBlob = new Blob([new Uint8Array(byteArrays)], { type: "image/jpeg" });
-    //     const imageUrl = URL.createObjectURL(imageBlob);
-    //     await set(ImageState, { url: imageUrl });
-    //   } catch (error) {
-    //     console.log("Error fetching data:", error);
-    //   }
-    // });
 
     return (
-        <div className="story story-generated">
+        <ScrollContainer className="story story-generated">
             {loading ? (
                 <Container className={'fixed narrow'}>
                     <h1>
@@ -131,11 +120,16 @@ const StoryGenerated = () => {
                     </h1>
                     <form onSubmit={onSubmitHandler}>
                         <Section className={''}>
-                            <TextArea
-                                value={texts}
-                                placeholder="만들어진 시나리오를 확인하고 수정해보아요"
-                                onChange={(e) => onChangeHandler(e)}
-                            />
+                            {savedStory.text.map((item, index) => (
+                               item['paragraph'] && (
+                                <TextArea
+                                    key={index}
+                                    value={item['paragraph']}
+                                    placeholder="만들어진 시나리오를 확인하고 수정해보아요"
+                                    onChange={(e) => onChangeHandler(e)}
+                                />
+                            )
+                            ))}
                         </Section>
                         <ButtonWrap>
                             <Link to="/keyword" onClick={resetSelectedKeywords} className="button">
@@ -169,7 +163,7 @@ const StoryGenerated = () => {
             ) : (
                 <div>되는 중...</div>
             )}
-        </div>
+        </ScrollContainer>
     );
 };
 
