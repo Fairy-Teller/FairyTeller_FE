@@ -8,9 +8,9 @@ const TextArea = styled.textarea`
 `;
 
 const ImageGenerated = () => {
-    
     return (
         <div className="story story-generated">
+            <h1> hello i'm image generated</h1>
         </div>
     );
 };

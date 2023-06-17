@@ -21,10 +21,6 @@ const ImageContainer = styled.div`
     align-items: center;
     height: 100%;
 `;
-const ScrollContainer = styled.div`
-    overflow: scroll;
-    height: 100vh; // 또는 적절한 높이 값
-`;
 
 const StoryGenerated = () => {
     const [loading, setLoading] = useState(false);
@@ -105,13 +101,14 @@ const StoryGenerated = () => {
             await call('/book/create/story', 'POST', {
                 fullStory: texts,
             });
-            await navigate('/f-edit');
+            // await navigate('/f-edit');
+            await navigate('/image-generated'); // 이미지 선택 화면으로 가기
         }
     };
 
 
     return (
-        <ScrollContainer className="story story-generated">
+        <div className="story story-generated">
             {loading ? (
                 <Container className={'fixed narrow'}>
                     <h1>
@@ -163,7 +160,7 @@ const StoryGenerated = () => {
             ) : (
                 <div>되는 중...</div>
             )}
-        </ScrollContainer>
+        </div>
     );
 };
 

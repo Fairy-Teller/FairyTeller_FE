@@ -8,6 +8,7 @@ import Row from "../../components/global/Row";
 import Section from "../../components/global/Section";
 import ButtonWrap from "../../components/common/ButtonWrap";
 import styled from "styled-components";
+import LoadingModal from '../../components/LoadingModal';
 
 // const [ANIMAL, PEOPLE, COLOR, THING, PLACE] = ["ANIMAL", "PEOPLE", "COLOR", "THING", "PLACE"];
 
@@ -30,6 +31,7 @@ const ItemInput = styled.input`
 
 function Keyword() {
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [checkedValues, setCheckedValues] = useRecoilState(SelectedKeywords);
   const [savedStory, setSavedStory] = useRecoilState(StoryState);
   const [dataIdx, setDataIdx] = useState(0);
@@ -91,18 +93,22 @@ function Keyword() {
 
   const sendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
     try {
+      setIsLoading(true); 
       const response = await call("/chat-gpt/question", "POST", userDTO);
       set(StoryState, { text: response });
       set(SelectedKeywords, { keywords: checkedValues });
+      
     } catch (error) {
       console.log(error);
     } finally {
+      setIsLoading(false);
       navigate("/story-generated");
     }
   });
 
   return (
     <div className='story keyword'>
+      {isLoading && <LoadingModal message='AI가 열심히 그림을 그리는 중입니다.' />}
       {loading ? (
         <Container className={"wide"}>
           <h1>

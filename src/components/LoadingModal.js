@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import styled from "styled-components";
 
 const Modal = styled.div`
@@ -29,9 +29,26 @@ const Div = styled.div`
   background-color: rgba(0, 0, 0, 0.5); /* 반투명한 검은색 배경 */
   top: 0;
   left: 0;
+  overflow: hidden; /* 스크롤 막기 */
+  z-index: 9999; /* 모달의 z-index 값을 높은 값으로 설정 */
 `;
 
 const LoadingModal = ({ message }) => {
+  const handleScroll = (event) => {
+    event.preventDefault();
+  };
+
+  useEffect(() => {
+    // 스크롤 이벤트 리스너 등록
+    window.addEventListener('scroll', handleScroll, { passive: false });
+
+    // 컴포넌트 언마운트 시 스크롤 이벤트 리스너 해제
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+
   return (
     <Div>
       <Modal>
