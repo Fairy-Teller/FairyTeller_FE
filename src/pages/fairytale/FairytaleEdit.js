@@ -1,113 +1,29 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { call } from '../../service/ApiService';
-import { SampleDataState, SelectedImageState, StoryState } from '../../recoil/Fairytailstate';
 import styled, { css } from 'styled-components';
-import { fabric } from 'fabric';
+
 import TryCanvas from '../../components/TryCanvas';
-import EditToolTab from '../../components/EditToolTab';
+
 import PageSelectionFrame from '../../components/PageSelectionFrame';
 import PageSelection from '../../components/PageSelection';
-import CanvasFabric from '../../components/CanvasFabric';
-import html2canvas from 'html2canvas';
-import { useRecoilValue } from 'recoil';
+
+import { SampleDataState, SaveState } from '../../recoil/Fairytailstate';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 const NULL = 'NULL';
-
-const [IMAGE, USERIMAGE, BG, TEXT, FILTER, STICKER, DOWNLOAD] = [
-    'AI삽화',
-    '유저이미지',
-    '배경',
-    '제목',
-    '채도',
-    '스티커',
-    '다운로드',
-];
-const [AI, USER, STI] = ['AI', 'USER', 'STI'];
-const SRC_LINK = '/images/img-default.png';
-const STI_LINKS = [
-    { key: 1, link: '/images/st1.png' },
-    { key: 2, link: '/images/st2.png' },
-    { key: 3, link: '/images/st3.png' },
-];
-
 const Container = styled.div`
     display: flex;
     position: relative;
 `;
-const Nav = styled.nav`
-    width: 5vw;
-    display: flex;
-    flex-direction: column;
-`;
-const Tab = styled.button`
-    width: 100%;
-    margin-top: 4px;
-    height: 9%;
-    top: 216px;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-    ${({ clicked }) =>
-        clicked &&
-        css`
-            background-color: black;
-            color: white;
-        `}
-`;
+
 const Frame = styled.div`
     position: relative;
     width: 95vw;
     // height: 100vh;
 `;
 
-const CanvasFrame = styled.div`
-    ${(props) =>
-        props.bgcolor &&
-        css`
-            background-color: ${props.bgcolor};
-        `}
-    width: 100%;
-    position: absolute;
-`;
-const Canvas = styled.canvas`
-    width: 100%;
-    height: 100%;
-`;
-const TitleInputWrapper = styled.div`
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-`;
-const TitleInput = styled.input`
-    width: 150px;
-    height: 30px;
-`;
-
-const classNameCleaner = (str) => {
-    let arr = document.querySelectorAll('.' + str);
-    for (let i = 0; i < arr.length; i++) {
-        arr[i].classList.remove(str);
-    }
-};
-
-// const [fabricObjects, setFabricObjects] = useRecoilState(fabricObjectsState);
-
 const FairytaleEdit = () => {
-    const btnLabels = [IMAGE, USERIMAGE, BG, TEXT, FILTER, STICKER, DOWNLOAD];
-    const imgLabels = [AI, USER, STI];
-
-    const printRef = useRef();
-
-    const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
-    // const [buttonClicked, setButtonClicked] = useState(false);
-    const [activeTab, setActiveTab] = useState(null);
-    const [activeCanvas, setActiveCanvas] = useState('1-page');
-
-    const [importFile, setImportFile] = useState(null);
-    const [selectedSti, setSelectedSti] = useState(NULL);
-    const [imageLink, setimageLink] = useState(NULL);
-    const [title, setTitle] = useState('');
-    const [newest, setNewest] = useState('');
     const [canvasVisibility, setCanvasVisibility] = useState({
         1: true,
         2: false,
@@ -116,22 +32,14 @@ const FairytaleEdit = () => {
         5: false,
     });
 
-    const selectedImages = useRecoilValue(SelectedImageState);
     const sampleDataStucure = useRecoilValue(SampleDataState);
-
-    const navigate = useNavigate();
-
-    const handlehowTitleInpuClick = () => {
-        setActiveTab(null);
-    };
+    const saveState = useSetRecoilState(SaveState);
 
     const toggleCanvasVisibility = (id) => {
         setCanvasVisibility((prevState) => {
             const updatedVisibility = { ...prevState };
             Object.keys(updatedVisibility).forEach((key) => {
                 updatedVisibility[key] = key == id ? true : false;
-                // key === id ? console.log('true') : console.log('false');
-                // console.log(key, '===>', updatedVisibility[key]);
             });
             return updatedVisibility;
         });
@@ -141,209 +49,62 @@ const FairytaleEdit = () => {
     };
 
     const [canvasWidth, canvasHeight] = [1280, 720];
-
-    // useEffect(() => {
-    //     console.log(canvasVisibility);
-    // }, [canvasVisibility]);
-
-    const fetchData = async () => {
-        try {
-            console.log('넘버!!', newest);
-            await call('/book/create/final', 'POST', {
-                bookId: newest,
-                title: title,
-                thumbnailUrl: imageLink,
-            });
-            console.log(imageLink);
-            await navigate('/f-export');
-        } catch (error) {
-            console.log('Error fetching data:', error);
-        }
-    };
-
-    const settingnewest = async () => {
-        try {
-            const data = await call('/book/my-newest', 'GET', null);
-            await setNewest(data.bookId);
-            console.log('성공!', newest);
-        } catch (error) {
-            console.log('Error fetching data:', error);
-        }
-    };
-
-    const handleButtonClick = (label) => {
-        // setButtonClicked(!buttonClicked);
-        setActiveTab(label === activeTab ? null : label);
-        // if (label === BG) {
-        //   // setActiveTab(null);
-        // } else {
-        setShowButtonFunctiontion(!showButtonFunction);
-        // }
-    };
-
-    const handleDownloadImage = async () => {
-        const element = printRef.current;
-        const canvas = await html2canvas(element, {
-            backgroundColor: 'none',
-            logging: true,
-            useCORS: true,
-        });
-
-        const data = await canvas.toDataURL('image/jpg');
-        await setimageLink(data);
-    };
-
-    const handleTitleChange = (event) => {
-        setTitle(event.target.value);
-    };
-
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        setImportFile(file);
-    };
-
-    const [tarIdx, setTarIdx] = useState(1);
-    const [targets, setTargets] = useState([{ key: 0, class: 'target0', src: SRC_LINK, label: AI }]); // DEFAULT: parsed AI illustration
-
-    const handleCreate = () => {
-        setTarIdx((prev) => prev + 1);
-        setTargets(
-            selectedSti !== NULL
-                ? [...targets, { key: tarIdx, class: `target${tarIdx}`, src: selectedSti, label: STI }]
-                : importFile !== NULL
-                ? [
-                      ...targets,
-                      {
-                          key: tarIdx,
-                          class: `target${tarIdx}`,
-                          src: URL.createObjectURL(importFile),
-                          label: USERIMAGE,
-                      },
-                  ]
-                : [...targets, { key: tarIdx, class: `target${tarIdx}`, src: SRC_LINK, label: AI }]
-        );
-        setSelectedSti(NULL);
-        classNameCleaner('selected');
-        setImportFile(null);
-    };
-
-    const handleDelete = (clicked) => {
-        const updated_targets = [...targets].filter((item) => item.class !== clicked);
-        setTargets(updated_targets);
-    };
-
-    const handleStiSelect = (ele, elename, src) => {
-        if (ele.classList.contains('selected')) {
-            setSelectedSti((prev) => {
-                return NULL;
-            });
-            classNameCleaner('selected');
-        } else {
-            classNameCleaner('selected');
-            ele.classList.add('selected');
-            setSelectedSti((prev) => {
-                return src;
-            });
-        }
-    };
-
-    const nextPage = async () => {
-        try {
-            await handleDownloadImage();
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    // const HandleRandomBg = () => {
-    //   useEffect(() => {
-    //     const letters = "0123456789ABCDEF";
-    //     let result = "#";
-    //     for (let i = 0; i < 6; i++) {
-    //       result += letters[Math.floor(Math.random() * 16)];
-    //     }
-    //     setBgColor(result);
-    //     const buttonFunctionDiv = document.querySelector("#c");
-    //     if (buttonFunctionDiv) {
-    //       buttonFunctionDiv.style.background = result;
-    //     }
-    //   });
-    // };
-
-    const canvasChangeHandler = (target) => {
-        setActiveCanvas(target.id);
+    const navigate = useNavigate();
+    const dddd = () => {
+        // navigate('/start');
+        saveState('save');
     };
 
     return (
         <div className="edit">
             <Container>
-                <Nav>
-                    {btnLabels.map((label) => (
-                        <Tab
-                            key={label}
-                            clicked={activeTab === label} // buttonClicked && activeTab
-                            onClick={() => handleButtonClick(label)}
-                        >
-                            <h2>{label}</h2>
-                        </Tab>
-                    ))}
-                </Nav>
-
                 <Frame>
                     <div
-                        ref={printRef}
                         style={{
                             width: canvasWidth,
                             height: canvasHeight,
                             display: canvasVisibility[1] ? 'block' : 'none',
+                            backgroundColor: 'pink',
                         }}
-                        id="1-page"
                     >
-                        <TryCanvas id="1" />
+                        <TryCanvas props={1} />
                     </div>
                     <div
-                        ref={printRef}
                         style={{
                             width: canvasWidth,
                             height: canvasHeight,
                             display: canvasVisibility[2] ? 'block' : 'none',
+                            backgroundColor: 'black',
                         }}
-                        id="2-page"
                     >
-                        <TryCanvas id="2" />
+                        <TryCanvas props={2} />
                     </div>
                     <div
-                        ref={printRef}
                         style={{
                             width: canvasWidth,
                             height: canvasHeight,
                             display: canvasVisibility[3] ? 'block' : 'none',
                         }}
-                        id="3-page"
                     >
-                        <TryCanvas />
+                        <TryCanvas props={3} />
                     </div>
                     <div
-                        ref={printRef}
                         style={{
                             width: canvasWidth,
                             height: canvasHeight,
                             display: canvasVisibility[4] ? 'block' : 'none',
                         }}
-                        id="4-page"
                     >
-                        <TryCanvas />
+                        <TryCanvas props={4} />
                     </div>
                     <div
-                        ref={printRef}
                         style={{
                             width: canvasWidth,
                             height: canvasHeight,
                             display: canvasVisibility[5] ? 'block' : 'none',
                         }}
-                        id="5-page"
                     >
-                        <TryCanvas />
+                        <TryCanvas props={5} />
                     </div>
 
                     <PageSelectionFrame>
@@ -353,7 +114,6 @@ const FairytaleEdit = () => {
                                     idx={item.id}
                                     src={item.src}
                                     onClick={(e) => {
-                                        canvasChangeHandler(e.target);
                                         toggleCanvasVisibility(item.id);
                                     }}
                                 />
@@ -362,116 +122,8 @@ const FairytaleEdit = () => {
                             )
                         )}
                     </PageSelectionFrame>
-
-                    <div id="edit-tools">
-                        {activeTab === IMAGE && (
-                            <EditToolTab title={IMAGE}>
-                                {/* <button onClick={undo}>Undo</button>
-                  <button onClick={redo}>Redo</button> */}
-                            </EditToolTab>
-                        )}
-                        {activeTab === USERIMAGE && <EditToolTab title={USERIMAGE}></EditToolTab>}
-                        {activeTab === BG && (
-                            <EditToolTab title={BG}>
-                                <button
-                                    className="create-button"
-                                    // onClick={() => {
-                                    //   HandleRandomBg();
-                                    // }}
-                                    style={{
-                                        width: '200px',
-                                        height: '50px',
-                                        display: 'block',
-                                        backgroundColor: 'lightGray',
-                                        borderRadius: '25%',
-                                    }}
-                                >
-                                    handleRandomBg
-                                </button>
-                            </EditToolTab>
-                        )}
-                        {activeTab === TEXT && (
-                            <TitleInputWrapper style={{ border: '4px solid black' }}>
-                                <TitleInput
-                                    type="text"
-                                    value={title}
-                                    onChange={handleTitleChange}
-                                    placeholder="제목을 입력해 주세요"
-                                    style={{ width: '700px', height: '100px' }}
-                                />
-                                <button
-                                    className="create-button"
-                                    onClick={handlehowTitleInpuClick}
-                                    style={{
-                                        width: '700px',
-                                        height: '50px',
-                                        display: 'block',
-                                        backgroundColor: 'lightGray',
-                                    }}
-                                >
-                                    Submit
-                                </button>
-                            </TitleInputWrapper>
-                        )}
-                        {activeTab === FILTER && <EditToolTab title={FILTER}></EditToolTab>}
-                        {activeTab === STICKER && (
-                            <EditToolTab title={STICKER}>
-                                <ul>
-                                    {STI_LINKS.map((item) => (
-                                        <li
-                                            key={item.key}
-                                            onClick={(e) => {
-                                                handleStiSelect(e.target, e.target.className, item.link);
-                                            }}
-                                        >
-                                            <img
-                                                className={'sti' + item.key}
-                                                src={item.link}
-                                                alt={STI}
-                                                style={{ width: '200px', height: '100px' }}
-                                            />
-                                        </li>
-                                    ))}
-                                </ul>
-                                <button
-                                    className="create-button"
-                                    onClick={() => {
-                                        handleCreate();
-                                    }}
-                                    style={{
-                                        width: '200px',
-                                        height: '50px',
-                                        display: 'block',
-                                        backgroundColor: 'lightGray',
-                                        borderRadius: '25%',
-                                    }}
-                                >
-                                    Create Target
-                                </button>
-                            </EditToolTab>
-                        )}
-                        {activeTab === DOWNLOAD && (
-                            <EditToolTab title={DOWNLOAD}>
-                                <button
-                                    className="create-button"
-                                    type="button"
-                                    onClick={() => {
-                                        handleDownloadImage();
-                                    }}
-                                    style={{
-                                        width: '200px',
-                                        height: '50px',
-                                        display: 'block',
-                                        backgroundColor: 'lightGray',
-                                        borderRadius: '25%',
-                                    }}
-                                >
-                                    DownloadImage
-                                </button>
-                            </EditToolTab>
-                        )}
-                    </div>
                 </Frame>
+                <button onClick={dddd}>언마운트!</button>
             </Container>
         </div>
     );
