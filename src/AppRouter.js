@@ -22,7 +22,7 @@ import FairytaleExport from './pages/fairytale/FairytaleExport';
 import FairytaleShow from './pages/fairytale/FairytaleShow';
 import Keyword from './pages/fairytale/Keyword';
 import StoryGenerated from './pages/fairytale/StoryGenerated';
-import ImageGenerated from './pages/fairytale/ImageGnerated';
+import ImageGenerated from './pages/fairytale/ImageGenerated';
 import StoryUser from './pages/fairytale/StoryUser';
 //exam
 import LoadingBarExample from './pages/fairytale/LoadingBarExample';

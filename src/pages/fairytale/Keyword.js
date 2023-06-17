@@ -95,7 +95,7 @@ function Keyword() {
     try {
       setIsLoading(true); 
       const response = await call("/chat-gpt/question", "POST", userDTO);
-      set(StoryState, { text: response });
+      set(StoryState, response);
       set(SelectedKeywords, { keywords: checkedValues });
       
     } catch (error) {
@@ -108,7 +108,7 @@ function Keyword() {
 
   return (
     <div className='story keyword'>
-      {isLoading && <LoadingModal message='AI가 열심히 그림을 그리는 중입니다.' />}
+      {isLoading && <LoadingModal message='AI가 열심히 이야기를 만드는 중입니다.' />}
       {loading ? (
         <Container className={"wide"}>
           <h1>

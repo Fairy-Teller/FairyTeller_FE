@@ -14,7 +14,7 @@ export const SelectedKeywords = atom({ key: 'SelectedKeywords', default: [] });
 
 export const StoryState = atom({
     key: 'StoryState',
-    default: { text: '' },
+    default: [],
 });
 
 export const ImageState = atom({

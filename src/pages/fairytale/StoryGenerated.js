@@ -34,13 +34,13 @@ const StoryGenerated = () => {
     useEffect(() => {
         fetchData();
         console.log('???????');
-        console.log('saveStory.text', savedStory.text['text']);
+        console.log('saveStory', savedStory);
         console.log(selectedKeywords); // {keywords: Array(3)} // [{key: undefined, theme: 'ANIMAL', title: '공룡'}, {key: undefined, theme: 'PEOPLE', title: '의사'}, {key: undefined, theme: 'ANIMAL', title: '개구리'}]
     }, [selectedKeywords]);
 
     const fetchData = async () => {
         try {
-            setTexts(savedStory.text['text']);
+            // setTexts(savedStory.text['text']);
             // console.log(savedStory)
             // setSelectedKeywords(() => {
             //   return selectedKeywords.map((item) => ({
@@ -53,13 +53,14 @@ const StoryGenerated = () => {
         }
     };
 
-    const onChangeHandler = (e) => {
-        setTexts(e.target.value);
-    };
-
+    const onChangeHandler = (e, index) => {
+        const newStory = [...savedStory];
+        newStory[index] = { ...newStory[index], paragraph: e.target.value };
+        setSavedStory(newStory);
+      };
     const onSubmitHandler = (e) => {
         e.preventDefault();
-        setSavedStory(texts);
+        // setSavedStory(texts);
         console.log(savedStory);
     };
 
@@ -78,7 +79,6 @@ const StoryGenerated = () => {
     const resendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
         try {
             const response = await call('/chat-gpt/question', 'POST', userDTO);
-            
             await set(StoryState, { text: response });
             await set(SelectedKeywords, { keywords: selectedKeywords.keywords });
         } catch (error) {
@@ -91,19 +91,16 @@ const StoryGenerated = () => {
     const resetSelectedKeywords = useResetRecoilState(SelectedKeywords);
 
     const gotoEdit = async () => {
-        try {
-            // await sendtext({
-            //   text: texts,
-            // });
-        } catch (error) {
-            console.log('Error fetching data:', error);
-        } finally {
-            await call('/book/create/story', 'POST', {
-                fullStory: texts,
-            });
-            // await navigate('/f-edit');
-            await navigate('/image-generated'); // 이미지 선택 화면으로 가기
-        }
+        // try {
+        //     // await sendtext({
+        //     //   text: texts,
+        //     // });
+        // } catch (error) {
+        //     console.log('Error fetching data:', error);
+        // } finally {
+        //     await navigate('/image-generated'); // 이미지 선택 화면으로 가기
+        // }
+        navigate('/image-generated');
     };
 
 
@@ -117,13 +114,13 @@ const StoryGenerated = () => {
                     </h1>
                     <form onSubmit={onSubmitHandler}>
                         <Section className={''}>
-                            {savedStory.text.map((item, index) => (
+                            {savedStory.map((item, index) => (
                                item['paragraph'] && (
                                 <TextArea
                                     key={index}
                                     value={item['paragraph']}
                                     placeholder="만들어진 시나리오를 확인하고 수정해보아요"
-                                    onChange={(e) => onChangeHandler(e)}
+                                    onChange={(e) => onChangeHandler(e, index)}
                                 />
                             )
                             ))}
