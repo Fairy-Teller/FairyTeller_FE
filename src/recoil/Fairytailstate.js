@@ -14,8 +14,24 @@ export const SelectedKeywords = atom({ key: 'SelectedKeywords', default: [] });
 
 export const StoryState = atom({
     key: 'StoryState',
-    default: { text: '' },
+    default: [],
 });
+export const ImageTempState = atom({
+  key: 'ImageTempState',
+  default: [],
+});
+
+export const BookState = atom({
+  key: 'BookState',
+  default: {
+              "bookId": null,
+              "author": null,
+              "title": null,
+              "thumbnailUrl": "",
+              "pages": []
+            },
+});
+
 
 export const ImageState = atom({
     key: 'ImageState',

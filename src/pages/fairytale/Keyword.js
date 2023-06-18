@@ -8,8 +8,9 @@ import Row from "../../components/global/Row";
 import Section from "../../components/global/Section";
 import ButtonWrap from "../../components/common/ButtonWrap";
 import styled from "styled-components";
+import LoadingModal from '../../components/LoadingModal';
 
-const [ANIMAL, PEOPLE] = ["ANIMAL", "PEOPLE"];
+// const [ANIMAL, PEOPLE, COLOR, THING, PLACE] = ["ANIMAL", "PEOPLE", "COLOR", "THING", "PLACE"];
 
 const Keywords = styled.ul`
   background-color: pink;
@@ -30,6 +31,7 @@ const ItemInput = styled.input`
 
 function Keyword() {
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [checkedValues, setCheckedValues] = useRecoilState(SelectedKeywords);
   const [savedStory, setSavedStory] = useRecoilState(StoryState);
   const [dataIdx, setDataIdx] = useState(0);
@@ -47,7 +49,7 @@ function Keyword() {
         return data.map((item) => ({
           key: setDataIdx((prev) => prev + 1),
           theme: item.keywordEnum,
-          title: item.title,
+          titles: item.titles,
         }));
       });
       setCheckedValues([]);
@@ -57,96 +59,86 @@ function Keyword() {
     }
   };
 
-  const handleChecked = (title) => {
-    const bool = checkedValues.some((item) => item.title === title);
-    if (bool) {
-      const updated = checkedValues.filter((item) => item.title !== title);
-      setCheckedValues(updated);
-    } else {
-      const selected = options.find((item) => item.title === title);
-      setCheckedValues([...checkedValues, selected]);
-    }
+  const handleChecked = (target) => {
+    setCheckedValues((prevValues) => {
+      let updatedValues = [...prevValues];
+
+      if (target.checked) {
+        const selected = options.find((item) => item.titles.includes(target.name));
+        if (selected && updatedValues.length < 5) {
+          updatedValues.push(target.name);
+        } else {
+          target.checked = false;
+          alert("5개까지 고를 수 있어요!");
+        }
+      } else {
+        updatedValues = updatedValues.filter((item) => item !== target.name);
+      }
+
+      console.log(updatedValues);
+      return updatedValues;
+    });
   };
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    setCheckedValues((prev) => [
-      ...prev,
-      checkedValues[0].title,
-      checkedValues[1].title,
-      checkedValues[2].title,
-    ]);
     sendkeyword({
-      parameter1: checkedValues[0].title,
-      parameter2: checkedValues[1].title,
-      parameter3: checkedValues[2].title,
+      parameter1: checkedValues[0],
+      parameter2: checkedValues[1],
+      parameter3: checkedValues[2],
+      parameter4: checkedValues[3],
+      parameter5: checkedValues[4],
     });
   };
 
   const sendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
     try {
+      setIsLoading(true); 
       const response = await call("/chat-gpt/question", "POST", userDTO);
-      await set(StoryState, { text: response });
-      await set(SelectedKeywords, { keywords: checkedValues });
+      set(StoryState, response);
+      set(SelectedKeywords, { keywords: checkedValues });
+      
     } catch (error) {
       console.log(error);
     } finally {
+      setIsLoading(false);
       navigate("/story-generated");
     }
   });
 
   return (
     <div className='story keyword'>
+      {isLoading && <LoadingModal message='AI가 열심히 이야기를 만드는 중입니다.' />}
       {loading ? (
-        <Container className={"fixed wide"}>
+        <Container className={"wide"}>
           <h1>
-            고를 수 있는 키워드<p>최대 3개</p>
+            고를 수 있는 키워드
+            <br />
+            최대 5개
           </h1>
           <form onSubmit={onSubmitHandler}>
-            <Section className={ANIMAL}>
-              <h2>{ANIMAL}</h2>
-              <Keywords>
-                <Row>
-                  {options.map((item) =>
-                    item.theme === ANIMAL ? (
-                      <KeywordItem>
+            {options.map((item, index) => (
+              <Section key={index}>
+                <h2>{item.theme}</h2>
+                <Keywords>
+                  <Row>
+                    {item.titles.map((title, subIndex) => (
+                      <KeywordItem key={subIndex}>
                         <ItemInput
-                          id={`keyword${item.key}`}
-                          name={item.title}
-                          type='checkbox'
-                          checked={item.checked}
+                          id={`keyword${title.key}`}
                           className='ItemInput'
-                          onChange={(e) => handleChecked(e.target.name)}
-                        />
-                        <ItemTitle>{item.title}</ItemTitle>
-                      </KeywordItem>
-                    ) : null
-                  )}
-                </Row>
-              </Keywords>
-            </Section>
-            <Section className={PEOPLE}>
-              <h2>{PEOPLE}</h2>
-              <Keywords>
-                <Row>
-                  {options.map((item) =>
-                    item.theme === PEOPLE ? (
-                      <KeywordItem>
-                        <ItemInput
-                          id={`keyword${item.key}`}
-                          name={item.title}
                           type='checkbox'
-                          checked={item.checked}
-                          className='ItemInput'
-                          onChange={(e) => handleChecked(e.target.name)}
+                          name={title}
+                          checked={title.checked}
+                          onChange={(e) => handleChecked(e.target)}
                         />
-                        <ItemTitle>{item.title}</ItemTitle>
+                        <ItemTitle>{title}</ItemTitle>
                       </KeywordItem>
-                    ) : null
-                  )}
-                </Row>
-              </Keywords>
-            </Section>
+                    ))}
+                  </Row>
+                </Keywords>
+              </Section>
+            ))}
             <ButtonWrap>
               <button
                 type='submit'

@@ -13,10 +13,10 @@ const Button = styled.button`
   background-color: transparent;
 `;
 
-function Start() {
+const Start = () => {
   return (
-    <div>
-      <Container className={"start"}>
+    <div className='start'>
+      <Container>
         <CenteredWrap>
           <Link to='/story-user'>
             <Button>
@@ -34,6 +34,6 @@ function Start() {
       </Container>
     </div>
   );
-}
+};
 
 export default Start;
