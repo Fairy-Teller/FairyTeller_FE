@@ -16,6 +16,10 @@ export const StoryState = atom({
     key: 'StoryState',
     default: [],
 });
+export const ImageTempState = atom({
+  key: 'ImageTempState',
+  default: [],
+});
 
 export const ImageState = atom({
     key: 'ImageState',
