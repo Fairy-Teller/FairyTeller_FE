@@ -23,33 +23,30 @@ const Text = styled.p`
     background: #FCDEDE;
     border-radius: 20px;
     width: 1509px;
-height: 161px;
-
-font-family: 'Amiri';
-font-style: normal;
-font-weight: 400;
-font-size: 25px;
-line-height: 44px;
-text-align: center;
-
-color: #000000;
+    height: 161px;
+    font-family: 'Amiri';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 25px;
+    line-height: 44px;
+    text-align: center; /* 가운데 정렬 속성 추가 */
+    color: #000000;
 `
 const Button = styled.button`
     width: 400px;
     height: 81px;
-
     background: #99F0CC;
     border-radius: 10px;
-
     font-family: 'Amiri';
     font-style: normal;
     font-weight: 400;
     font-size: 36px;
     line-height: 63px;
-    text-align: center;
-
+    text-align: center !important; /* 가운데 정렬 속성 추가 */
     color: #000000;
-`
+    justify-content: center; /* 가로 가운데 정렬 */
+    align-items: center; /* 세로 가운데 정렬 */
+`;
 const PreviewGeneratedIamge = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [imgUrl, setImgURL] = useState(null);
@@ -104,20 +101,21 @@ const PreviewGeneratedIamge = (props) => {
       </div>
 
       <ButtonWrap>
-        <Button type="submit" className="button" onClick={createImg}>
+        <Button className="button" onClick={createImg}>
                     이미지 생성하기
         </Button>
       </ButtonWrap>  
       <div>
       <Img src={savedImageTemp[props.index] && savedImageTemp[props.index]["url"]} />
       </div>
-      <Button type="submit" className="button" >
+      <ButtonWrap>  
+      <Button className="button" >
                     다시 뽑기
         </Button>
-      <Button type="submit" className="button" >
+      <Button className="button" >
                   삽화 선택
       </Button>
-      
+      </ButtonWrap>  
     </Div>
   );
 };
