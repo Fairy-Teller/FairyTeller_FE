@@ -50,6 +50,5 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
-    },
-    "proxy": "https://fairyteller-dev.s3.ap-northeast-2.amazonaws.com"
+    }
 }

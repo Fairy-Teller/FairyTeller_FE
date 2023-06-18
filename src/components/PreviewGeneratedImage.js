@@ -84,7 +84,7 @@ const PreviewGeneratedIamge = (props) => {
     try {
         setIsLoading(true);
         console.log("이미지 요청")
-        const imageData = await call('/chat-gpt/summarize', 'POST', { text: savedStory[props.index]["paragraph"] });
+        const imageData = await call('/chat-gpt/textToImage', 'POST', { text: savedStory[props.index]["paragraph"] });
         const byteCharacters = atob(imageData); // Base64 디코딩
         const byteArrays = new Uint8Array(byteCharacters.length);
         for (let i = 0; i < byteCharacters.length; i++) {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 
-import { atomFamily, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { atomFamily, useRecoilState, useRecoilValue, useSetRecoilState, useResetRecoilState } from 'recoil';
 import { SelectStickers, SaveState, Canvasexport } from '../recoil/Fairytailstate';
 
 import styled, { css } from 'styled-components';
@@ -75,6 +75,7 @@ const TryCanvas = (props) => {
     const saveState = useRecoilValue(SaveState);
     const setCanvasExport = useSetRecoilState(Canvasexport);
     const showCanvasExport = useRecoilValue(Canvasexport);
+    const resetCanvasexport = useResetRecoilState(Canvasexport);
 
     console.log('saveState', saveState);
 
@@ -106,6 +107,7 @@ const TryCanvas = (props) => {
     useEffect(() => {
         const initializedCanvas = initCanvas();
         setCanvas(initializedCanvas);
+        resetCanvasexport();
     }, []);
     useEffect(() => {
         if (saveState == 'save') {
@@ -169,7 +171,7 @@ const TryCanvas = (props) => {
     // 스티커 투입(현재 cros에러)
     const selectStickersShow = (item) => {
         fabric.Image.fromURL(
-            item,
+            item + '?timestamp=' + new Date().getTime(),
             function (img) {
                 // img.crossOrigin = `Anonymous`;
                 // img.setAttribute('crossOrigin', '');
@@ -188,6 +190,7 @@ const TryCanvas = (props) => {
             { crossOrigin: 'anonymous' }
         );
     };
+    console.log(showCanvasExport);
 
     // 이미지 저장하기
     const saveAsImage = (format) => {
@@ -201,19 +204,16 @@ const TryCanvas = (props) => {
             });
             const link = document.createElement('a');
 
-            //link.download = `${props.props}image.${format}`;
+            link.download = `${props.props}image.${format}`;
             // link를 디비로 보내야 합니다.
-
-            setCanvasExport((prev) => ['ssss']);
-            // console.log(showCanvasExport);
-            // setCanvasExport('sssss');
-            console.log(showCanvasExport);
 
             link.href = dataURL;
 
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+
+            setCanvasExport((prev) => [...prev, { id: props.props, img: link.href }]);
         } else {
             console.log('없나?');
         }

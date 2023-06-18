@@ -17,21 +17,20 @@ export const StoryState = atom({
     default: [],
 });
 export const ImageTempState = atom({
-  key: 'ImageTempState',
-  default: [],
+    key: 'ImageTempState',
+    default: [],
 });
 
 export const BookState = atom({
-  key: 'BookState',
-  default: {
-              "bookId": null,
-              "author": null,
-              "title": null,
-              "thumbnailUrl": "",
-              "pages": []
-            },
+    key: 'BookState',
+    default: {
+        bookId: null,
+        author: null,
+        title: null,
+        thumbnailUrl: '',
+        pages: [],
+    },
 });
-
 
 export const ImageState = atom({
     key: 'ImageState',
@@ -156,4 +155,4 @@ export const SaveState = atom({
     default: 'none',
 });
 
-export const Canvasexport = atom({ key: 'Canvasexport', default: [] });
+export const Canvasexport = atom({ key: 'Canvasexport', default: [], effects_UNSTABLE: [persistAtom] });
