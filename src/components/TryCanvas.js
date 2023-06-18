@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 
-import { atomFamily, useRecoilState, useRecoilValue } from 'recoil';
-import { SelectStickers, SaveState } from '../recoil/Fairytailstate';
+import { atomFamily, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { SelectStickers, SaveState, Canvasexport } from '../recoil/Fairytailstate';
 
 import styled, { css } from 'styled-components';
 import { fabric } from 'fabric';
@@ -73,6 +73,8 @@ const TryCanvas = (props) => {
     const [activeTab, setActiveTab] = useState(null);
     const selectStickers = useRecoilValue(SelectStickers);
     const saveState = useRecoilValue(SaveState);
+    const setCanvasExport = useSetRecoilState(Canvasexport);
+    const showCanvasExport = useRecoilValue(Canvasexport);
 
     console.log('saveState', saveState);
 
@@ -122,7 +124,7 @@ const TryCanvas = (props) => {
         canvas.index = 0;
         canvas.stateaction = true;
 
-        var text = new fabric.Textbox('시나리오 넣을 부분', {
+        var text = new fabric.Textbox(props.props + '번 시나리오 넣을 부분', {
             selectable: true,
         });
         canvas.add(text);
@@ -199,7 +201,13 @@ const TryCanvas = (props) => {
             });
             const link = document.createElement('a');
 
-            link.download = `${props.props}image.${format}`;
+            //link.download = `${props.props}image.${format}`;
+            // link를 디비로 보내야 합니다.
+
+            setCanvasExport((prev) => ['ssss']);
+            // console.log(showCanvasExport);
+            // setCanvasExport('sssss');
+            console.log(showCanvasExport);
 
             link.href = dataURL;
 

@@ -139,3 +139,5 @@ export const SaveState = atom({
     key: 'SaveState',
     default: 'none',
 });
+
+export const Canvasexport = atom({ key: 'Canvasexport', default: [] });

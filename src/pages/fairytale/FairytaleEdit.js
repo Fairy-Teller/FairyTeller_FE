@@ -4,12 +4,13 @@ import { call } from '../../service/ApiService';
 import styled, { css } from 'styled-components';
 
 import TryCanvas from '../../components/TryCanvas';
+import TitleModal from './TitleModal';
 
 import PageSelectionFrame from '../../components/PageSelectionFrame';
 import PageSelection from '../../components/PageSelection';
 
 import { SampleDataState, SaveState } from '../../recoil/Fairytailstate';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState, useResetRecoilState } from 'recoil';
 
 const NULL = 'NULL';
 const Container = styled.div`
@@ -23,6 +24,16 @@ const Frame = styled.div`
     // height: 100vh;
 `;
 
+const Savebutton = styled.button`
+    width: 362px;
+    height: 83px;
+    border-radius: 10px;
+    background: #80f06e;
+    margin-top: 28px;
+    margin-right: 38px;
+    font-size: 30px;
+`;
+
 const FairytaleEdit = () => {
     const [canvasVisibility, setCanvasVisibility] = useState({
         1: true,
@@ -31,9 +42,10 @@ const FairytaleEdit = () => {
         4: false,
         5: false,
     });
+    const [saveAll, setSaveall] = useState(false);
 
     const sampleDataStucure = useRecoilValue(SampleDataState);
-    const saveState = useSetRecoilState(SaveState);
+    const saveState = useResetRecoilState(SaveState);
 
     const toggleCanvasVisibility = (id) => {
         setCanvasVisibility((prevState) => {
@@ -49,10 +61,9 @@ const FairytaleEdit = () => {
     };
 
     const [canvasWidth, canvasHeight] = [1280, 720];
-    const navigate = useNavigate();
+
     const saveClick = () => {
-        // navigate('/start');
-        saveState('save');
+        setSaveall(true);
     };
 
     return (
@@ -116,7 +127,6 @@ const FairytaleEdit = () => {
                                     }}
                                     style={{
                                         border: '20px solid red',
-                                        
                                     }}
                                 />
                             ) : (
@@ -125,7 +135,9 @@ const FairytaleEdit = () => {
                         )}
                     </PageSelectionFrame>
                 </Frame>
-                <button onClick={saveClick}>저장하기 임시버튼! (한번만 클릭 가능)</button>
+
+                {saveAll && <TitleModal />}
+                <Savebutton onClick={saveClick}>동화 완성하기</Savebutton>
             </Container>
         </div>
     );
