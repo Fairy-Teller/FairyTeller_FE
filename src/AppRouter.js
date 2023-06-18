@@ -22,6 +22,7 @@ import FairytaleExport from './pages/fairytale/FairytaleExport';
 import FairytaleShow from './pages/fairytale/FairytaleShow';
 import Keyword from './pages/fairytale/Keyword';
 import StoryGenerated from './pages/fairytale/StoryGenerated';
+import ImageGenerated from './pages/fairytale/ImageGenerated';
 import StoryUser from './pages/fairytale/StoryUser';
 //exam
 import LoadingBarExample from './pages/fairytale/LoadingBarExample';
@@ -52,6 +53,7 @@ function AppRouter() {
                 <Route path="f-show" element={<FairytaleShow />} />
                 <Route path="keyword" element={<Keyword />} />
                 <Route path="story-generated" element={<StoryGenerated />} />
+                <Route path="image-generated" element={<ImageGenerated />} />
                 <Route path="story-user" element={<StoryUser />} />
                 <Route path="loading-test" element={<LoadingBarExample />} />
             </Routes>

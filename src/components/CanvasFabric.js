@@ -51,7 +51,7 @@ const CanvasFabric = () => {
 
     const sendText = async () => {
         try {
-            const response = await call('/chat-gpt/summarize', 'POST', { text: storyText });
+            const response = await call('/chat-gpt/textToImage', 'POST', { text: storyText });
             const imageData = response; // 응답 데이터 - Base64 문자열
             const byteCharacters = atob(imageData); // Base64 디코딩
             const byteArrays = new Uint8Array(byteCharacters.length);
@@ -196,7 +196,6 @@ const CanvasFabric = () => {
             setImgURL('');
         });
         canvas.renderAll();
-
     };
 
     return (
