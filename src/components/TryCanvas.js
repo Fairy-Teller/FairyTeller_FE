@@ -70,14 +70,12 @@ const TryCanvas = (props) => {
     const fabricCanvasRef = useRef(null);
     // const [canvasStates, setCanvasStates] = useState({});
 
-    const [activeTab, setActiveTab] = useState(null);
-    const selectStickers = useRecoilValue(SelectStickers);
-    const saveState = useRecoilValue(SaveState);
-    const setCanvasExport = useSetRecoilState(Canvasexport);
-    const showCanvasExport = useRecoilValue(Canvasexport);
-    const resetCanvasexport = useResetRecoilState(Canvasexport);
-
-    console.log('saveState', saveState);
+    const [activeTab, setActiveTab] = useState(null); // 수정탭 출력 여부를 위한 state
+    const selectStickers = useRecoilValue(SelectStickers); // 선택한 스티커의 정보 state
+    const saveState = useRecoilValue(SaveState); // 캔버스 저장 버튼 useEffect에 쓰기 위함 state
+    const setCanvasExport = useSetRecoilState(Canvasexport); // 캔버스 내보내기 state
+    const showCanvasExport = useRecoilValue(Canvasexport); // console.log 용 state
+    const resetCanvasexport = useResetRecoilState(Canvasexport); // 첫 랜더링 될 때, 이전 저장된 이미지 state삭제
 
     const [savedCanvasState, setSavedCanvasState] = useRecoilState(canvasState(props.canvasid));
     const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
@@ -139,7 +137,6 @@ const TryCanvas = (props) => {
             selectable: true,
         });
         canvas.add(text);
-        console.log('sdfsd');
     };
 
     // 삭제
@@ -168,7 +165,7 @@ const TryCanvas = (props) => {
         reader.readAsDataURL(file);
     };
 
-    // 스티커 투입(현재 cros에러)
+    // 스티커 투입
     const selectStickersShow = (item) => {
         fabric.Image.fromURL(
             item + '?timestamp=' + new Date().getTime(),
@@ -190,7 +187,6 @@ const TryCanvas = (props) => {
             { crossOrigin: 'anonymous' }
         );
     };
-    console.log(showCanvasExport);
 
     // 이미지 저장하기
     const saveAsImage = (format) => {
@@ -204,7 +200,7 @@ const TryCanvas = (props) => {
             });
             const link = document.createElement('a');
 
-            link.download = `${props.props}image.${format}`;
+            // link.download = `${props.props}image.${format}`;
             // link를 디비로 보내야 합니다.
 
             link.href = dataURL;
