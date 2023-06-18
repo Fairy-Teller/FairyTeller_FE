@@ -1,0 +1,16 @@
+version: 0.0
+os: linux
+
+files:
+  - source: /
+    destination: /home/ubuntu/fe
+    overwrite: yes
+permissions:
+  - object: /home/ubuntu/fe/
+    owner: ubuntu
+    group: ubuntu
+hooks:
+  AfterInstall:
+    - location: scripts/deploy.sh
+      timeout: 1000
+      runas: ubuntu

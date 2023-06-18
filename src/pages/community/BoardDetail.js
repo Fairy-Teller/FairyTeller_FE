@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { call } from "../../service/ApiService";
 import CommentSection from "./CommentSection";
@@ -11,11 +11,7 @@ const BoardDetail = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await call(`/board/${boardId}`, "GET", null);
       const boardData = response.data[0];
@@ -26,7 +22,11 @@ const BoardDetail = () => {
     } catch (error) {
       console.log("Error fetching data:", error);
     }
-  };
+  }, [boardId]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleCommentSubmit = async (comment) => {
     try {
@@ -55,6 +55,7 @@ const BoardDetail = () => {
     try {
       const pageSize = 10;
       const response = await call(`/board/${boardId}/comment?page=${page}&size=${pageSize}`, "GET", null);
+
       setComments(response.data);
       setCurrentPage(response.currentPage);
       setTotalPages(response.totalPages);
@@ -62,7 +63,7 @@ const BoardDetail = () => {
       console.log("Error fetching comments:", error);
     }
   };
-  
+
   if (!board) {
     return <div>Loading...</div>;
   }
@@ -73,7 +74,11 @@ const BoardDetail = () => {
       <div style={styles.center}>
         <p style={styles.author}>Author: {board.nickname}</p>
         <div style={styles.thumbnailContainer}>
-          <img src={board.thumbnailUrl} alt="Thumbnail" style={styles.thumbnail} />
+          <img
+            src={board.thumbnailUrl}
+            alt="Thumbnail"
+            style={styles.thumbnail}
+          />
         </div>
         <p style={styles.content}>{board.content}</p>
         {/* {board.audioUrl !== null && <MusicBar audioUrl={board.audioUrl} />} */}
@@ -92,7 +97,11 @@ const BoardDetail = () => {
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index}
-              style={currentPage === index ? styles.activePageButton : styles.pageButton}
+              style={
+                currentPage === index
+                  ? styles.activePageButton
+                  : styles.pageButton
+              }
               onClick={() => handlePageChange(index)}
             >
               {index + 1}
@@ -159,4 +168,3 @@ const styles = {
 };
 
 export default BoardDetail;
-

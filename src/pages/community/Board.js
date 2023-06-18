@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { call } from "../../service/ApiService";
 import { Link } from "react-router-dom";
 
@@ -7,11 +7,7 @@ const Board = () => {
   const [books, setBooks] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
 
-  useEffect(() => {
-    fetchData();
-  }, [currentPage]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await call(`/board?page=${currentPage}&size=8`, "GET", null);
       if (response && response.data) {
@@ -21,7 +17,11 @@ const Board = () => {
     } catch (error) {
       console.log("Error fetching data:", error);
     }
-  };
+  }, [currentPage]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData, currentPage]);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -55,7 +55,11 @@ const Board = () => {
           }}
         >
           {books.map((book) => (
-            <Link to={`/board/${book.boardId}`} key={book.boardId} style={{ textDecoration: "none" }}>
+            <Link
+              to={`/board/${book.boardId}`}
+              key={book.boardId}
+              style={{ textDecoration: "none" }}
+            >
               <div
                 style={{
                   display: "flex",
@@ -69,7 +73,9 @@ const Board = () => {
                   alt={book.title}
                   style={{ width: "100%", height: "auto", objectFit: "cover" }}
                 />
-                <h6 style={{ fontSize: "18px", marginTop: "10px" }}>{truncateTitle(book.title)}</h6>
+                <h6 style={{ fontSize: "18px", marginTop: "10px" }}>
+                  {truncateTitle(book.title)}
+                </h6>
               </div>
             </Link>
           ))}

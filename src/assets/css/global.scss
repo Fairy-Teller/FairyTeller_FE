@@ -1,31 +1,35 @@
-@charset "utf-8";
 @import "mixins";
 
 /* layout */
+body {
+  width: 100%;
+  background-color: #fff;
+}
+
 #root > div {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   background-color: #fff;
   width: 100%;
-  height: 100vh;
-  min-height: 100vh;
   margin-left: auto;
   margin-right: auto;
   padding: 0;
 }
 
-body {
-  width: 100%;
-  max-width: 1024px;
-  background-color: #fff;
-}
-
 .container {
   display: flex;
   flex-direction: column;
+  &.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  &.wide {
+    padding: 0 12%;
+  }
+  &.narrow {
+    padding: 0 20%;
+  }
 }
 
 .section {
@@ -42,10 +46,26 @@ body {
   box-sizing: content-box;
   position: relative;
   display: flex;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
   background-color: #fff;
+  &.col {
+    flex-direction: column;
+  }
+}
+
+.centered-wrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.center-item {
+  flex: 1;
+  display: inline-flex;
+  border-radius: 50%;
 }
 
 .logo {
@@ -57,7 +77,15 @@ body {
   }
 }
 
-/* reset */
+.yellow-bar {
+  position: absolute;
+  width: 100vw;
+  height: 4vh;
+  left: 0px;
+  top: 0px;
+  background-color: #ffb800;
+}
+
 * {
   box-sizing: content-box;
 }
@@ -217,8 +245,8 @@ input,
 textarea,
 select,
 button {
-  -webkit-appearance: none;
-  appearance: none;
+  // -webkit-appearance: none;
+  // appearance: none;
   border-radius: 0;
   border: 0;
 }

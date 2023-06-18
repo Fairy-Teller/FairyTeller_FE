@@ -1,0 +1,183 @@
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from 'recoil';
+import { SelectedKeywords, StoryState, ImageState, ImageFix, BookState } from '../../recoil/Fairytailstate';
+
+import { call } from '../../service/ApiService';
+import Container from '../../components/global/Container';
+import Section from '../../components/global/Section';
+import ButtonWrap from '../../components/common/ButtonWrap';
+import styled from 'styled-components';
+
+const TextArea = styled.textarea`
+    width: calc(100% - 0.25rem);
+    height: 10rem;
+    background-color: lightgray;
+    overflow: auto;
+`;
+const ImageContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+`;
+
+const StoryGenerated = () => {
+    const [loading, setLoading] = useState(false);
+    const selectedKeywords = useRecoilValue(SelectedKeywords);
+    const showImage = useRecoilValue(ImageFix);
+    const [savedStory, setSavedStory] = useRecoilState(StoryState);
+    const [savedBook, setSavedBook] = useRecoilState(BookState);
+    // const [dataIdx, setDataIdx] = useState(0);
+    // const [texts, setTexts] = useState('');
+    const [url, setUrl] = useState('');
+    const navigate = useNavigate();
+    useEffect(() => {
+        fetchData();
+        console.log('saveStory', savedStory);
+        console.log(selectedKeywords); // {keywords: Array(3)} // [{key: undefined, theme: 'ANIMAL', title: '공룡'}, {key: undefined, theme: 'PEOPLE', title: '의사'}, {key: undefined, theme: 'ANIMAL', title: '개구리'}]
+    }, [selectedKeywords]);
+
+    const fetchData = async () => {
+        try {
+            // setTexts(savedStory.text['text']);
+            // console.log(savedStory)
+            // setSelectedKeywords(() => {
+            //   return selectedKeywords.map((item) => ({
+            //     key: setDataIdx((prev) => prev + 1),
+            //   }));
+            // });
+            setLoading(true);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
+    };
+
+    const onChangeHandler = (e, index) => {
+        const newStory = [...savedStory];
+        newStory[index] = { ...newStory[index], paragraph: e.target.value };
+        setSavedStory(newStory);
+      };
+    const onSubmitHandler = (e) => {
+        e.preventDefault();
+        // setSavedStory(texts);
+        console.log(savedStory);
+    };
+
+    const regenerateHandler = (e) => {
+        e.preventDefault();
+
+        resendkeyword({
+            parameter1: selectedKeywords.keywords[0].title,
+            parameter2: selectedKeywords.keywords[1].title,
+            parameter3: selectedKeywords.keywords[2].title,
+            parameter3: selectedKeywords.keywords[3].title,
+            parameter3: selectedKeywords.keywords[4].title,
+        });
+    };
+
+    const resendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
+        try {
+            const response = await call('/chat-gpt/question', 'POST', userDTO);
+            await set(StoryState, { text: response });
+            await set(SelectedKeywords, { keywords: selectedKeywords.keywords });
+        } catch (error) {
+            console.log(error);
+        } finally {
+            navigate('/story-generated');
+        }
+    });
+
+    const resetSelectedKeywords = useResetRecoilState(SelectedKeywords);
+
+    const gotoEdit = async () => {
+        try {
+            const bookDTO = savedStory.map((text, index) => ({
+                pageNo: index + 1,
+                fullStory: text["paragraph"]
+              }));
+
+            console.log('bookDTO',bookDTO)
+            await createBook({pages : bookDTO});
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        } finally {
+            await navigate('/image-generated'); // 이미지 선택 화면으로 가기
+        }
+    };
+    const createBook = useRecoilCallback(({ set }) => async (bookDTO) => {
+        try {
+            const response = await call('/book/create/story', 'POST', bookDTO);
+            console.log(response)
+            const pages = savedStory.map((text, index) => ({
+                pageNo: index + 1,
+                fullStory: text["paragraph"],
+                imageUrl: null,
+                imageBase64 : null,
+                audioUrl: null
+              }));
+            await set(BookState, { bookId: response["bookId"], pages : pages });
+        } catch (error) {
+            console.log(error);
+        }
+    });
+    
+
+    return (
+        <div className="story story-generated">
+            {loading ? (
+                <Container className={'fixed narrow'}>
+                    <h1>
+                        만들어진 시나리오를 확인하고 <br />
+                        수정해보아요
+                    </h1>
+                    <form onSubmit={onSubmitHandler}>
+                        <Section className={''}>
+                            {savedStory.map((item, index) => (
+                               item['paragraph'] && (
+                                <TextArea
+                                    key={index}
+                                    value={item['paragraph']}
+                                    placeholder="만들어진 시나리오를 확인하고 수정해보아요"
+                                    onChange={(e) => onChangeHandler(e, index)}
+                                />
+                            )
+                            ))}
+                        </Section>
+                        <ButtonWrap>
+                            <Link to="/keyword" onClick={resetSelectedKeywords} className="button">
+                                키워드 다시 고르기
+                            </Link>
+
+                            <button type="submit" className="button" onClick={gotoEdit}>
+                                동화 만들러 가기
+                            </button>
+                        </ButtonWrap>
+                    </form>
+                    {/* <Link
+            to='/keyword'
+            onClick={resetSelectedKeywords}
+            className='button'
+          /> */}
+                    <form onSubmit={regenerateHandler}>
+                        <ButtonWrap>
+                            <button type="submit" className="button">
+                                이야기 다시 만들기
+                            </button>
+                        </ButtonWrap>
+                    </form>
+
+                    {url && (
+                        <ImageContainer>
+                            <img src={url} alt="AI-generated" />
+                        </ImageContainer>
+                    )}
+                </Container>
+            ) : (
+                <div>되는 중...</div>
+            )}
+        </div>
+    );
+};
+
+export default StoryGenerated;

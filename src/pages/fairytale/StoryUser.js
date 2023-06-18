@@ -1,0 +1,101 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
+import { SelectedKeywords, StoryState, ImageState, ImageFix } from "../../recoil/Fairytailstate";
+import { call } from "../../service/ApiService";
+import Container from "../../components/global/Container";
+import Section from "../../components/global/Section";
+import ButtonWrap from "../../components/common/ButtonWrap";
+import styled from "styled-components";
+
+const TextArea = styled.textarea`
+  width: calc(100% - 0.25rem);
+  height: 10rem;
+`;
+const ImageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+
+const StoryUser = () => {
+  const [loading, setLoading] = useState(false);
+  const [writtenStory, setWrittenStory] = useRecoilState(StoryState);
+  const [texts, setTexts] = useState("");
+  const [url, setUrl] = useState("");
+  const resetCounter = useResetRecoilState(ImageFix);
+  const navigate = useNavigate();
+  const showImage = useRecoilValue(ImageFix);
+
+  useEffect(() => {
+    setLoading(true);
+    resetCounter();
+  }, []);
+
+  const onChangeHandler = (e) => {
+    setTexts(e.target.value);
+  };
+
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    setWrittenStory(texts);
+    console.log(writtenStory);
+  };
+
+
+  const gotoEdit = async () => {
+    try {
+      const savedStorys = await call("/book/create/story", "POST", {
+        fullStory: texts,
+      });
+      console.log(savedStorys);
+      navigate("/f-edit");
+    } catch (error) {
+      console.log("Error fetching data:", error);
+    }
+  };
+
+  return (
+    <div className='story story-user'>
+      {loading ? (
+        <Container className={"fixed narrow"}>
+          <h1>
+            내가 생각한 이야기를 <br />
+            작성해보아요
+          </h1>
+          <form onSubmit={onSubmitHandler}>
+            <Section className={""}>
+              <TextArea
+                value={texts}
+                placeholder='동화책에 넣을 첫번째 문단을 작성해보아요'
+                onChange={(e) => onChangeHandler(e)}
+              />
+            </Section>
+            <ButtonWrap>
+              <button
+                type='submit'
+                className='button'
+                onClick={gotoEdit}>
+                동화책 만들러 가기
+              </button>
+            </ButtonWrap>
+          </form>
+
+          {url && (
+            <ImageContainer>
+              <img
+                src={url}
+                alt='AI-generated'
+              />
+            </ImageContainer>
+          )}
+        </Container>
+      ) : (
+        <div>되는 중...</div>
+      )}
+    </div>
+  );
+};
+
+export default StoryUser;
