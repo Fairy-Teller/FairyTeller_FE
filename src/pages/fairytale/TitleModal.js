@@ -84,7 +84,7 @@ const bookData = {
 // 그 다음엔 네비게이트로 f-export를 실행합니다.
 // 722
 
-const TitleModal = ({ message }) => {
+const TitleModal = (bookid) => {
     const navigate = useNavigate();
     const saveState = useSetRecoilState(SaveState);
     const canvasExport = useRecoilValue(Canvasexport);
@@ -105,7 +105,7 @@ const TitleModal = ({ message }) => {
 
     useEffect(() => {
         saveState('save');
-        bookData.bookId = 733; //프랍으로 넘겨받은 북아이디를 넣을 예정
+        bookData.bookId = bookid.props; //프랍으로 넘겨받은 북아이디를 넣을 예정
 
         if (canvasExport.length !== 0) {
             canvasExport.forEach((canvas, index) => {

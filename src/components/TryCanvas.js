@@ -2,11 +2,13 @@ import React, { useEffect, useState, useRef } from 'react';
 
 import { atomFamily, useRecoilState, useRecoilValue, useSetRecoilState, useResetRecoilState } from 'recoil';
 import { SelectStickers, SaveState, Canvasexport } from '../recoil/Fairytailstate';
+import { call } from '../service/ApiService';
 
 import styled, { css } from 'styled-components';
 import { fabric } from 'fabric';
 
 import PageSelection from '../components/PageSelection';
+import { async } from 'q';
 
 const [IMAGE, USERIMAGE, BG, FILTER, STICKER, DOWNLOAD] = [
     'AI삽화',
@@ -79,9 +81,19 @@ const TryCanvas = (props) => {
 
     const [savedCanvasState, setSavedCanvasState] = useRecoilState(canvasState(props.canvasid));
     const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
+    const [showImage, setShowImage] = useState(props.BookId);
 
     const [canvas, setCanvas] = useState();
+    const bookInfo = useRef(null);
     const [showEditToolTab, setShowEditToolTab] = useState(false); // Add new state variable
+    useEffect(() => {
+        getNewest();
+    }, []);
+    useEffect(() => {
+        if (saveState == 'save') {
+            saveAsImage('jpeg');
+        }
+    }, [saveState]);
 
     const handleButtonClick = (label) => {
         setActiveTab(label === activeTab ? null : label);
@@ -102,19 +114,22 @@ const TryCanvas = (props) => {
         }
     };
 
-    useEffect(() => {
-        const initializedCanvas = initCanvas();
-        setCanvas(initializedCanvas);
-        resetCanvasexport();
-    }, []);
-    useEffect(() => {
-        if (saveState == 'save') {
-            saveAsImage('jpeg');
+    const getNewest = async () => {
+        try {
+            const data = await call('/book/my-newest', 'GET', null);
+            setShowImage(data);
+
+            const initializedCanvas = initCanvas(data);
+            setCanvas(initializedCanvas);
+            resetCanvasexport();
+        } catch (error) {
+            console.log('Error fetching data:', error);
         }
-    }, [saveState]);
+    };
 
     // 캔버스 세팅
-    const initCanvas = () => {
+    const initCanvas = (data) => {
+        console.log('data', data);
         const canvas = new fabric.Canvas(canvasRef.current, {
             height: 500,
             width: 1280,
@@ -124,8 +139,28 @@ const TryCanvas = (props) => {
         canvas.index = 0;
         canvas.stateaction = true;
 
-        var text = new fabric.Textbox(props.props + '번 시나리오 넣을 부분', {
+        fabric.Image.fromURL(
+            'https://s3.ap-northeast-2.amazonaws.com/' +
+                data.pages[props.props - 1].originalImageUrl +
+                '?timestamp=' +
+                new Date().getTime(),
+            (image) => {
+                canvas.setBackgroundImage(image, canvas.renderAll.bind(canvas), {
+                    scaleX: canvas.width / image.width,
+                    scaleY: canvas.height / image.height,
+                });
+            },
+            { crossOrigin: 'anonymous' }
+        );
+
+        var text = new fabric.Textbox(data.pages[props.props - 1].fullStory, {
             selectable: true,
+            left: canvas.width / 2,
+            top: canvas.height - 100,
+            originX: 'center',
+            originY: 'center',
+            textAlign: 'center',
+            width: 1280,
         });
         canvas.add(text);
         return canvas;

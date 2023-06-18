@@ -43,8 +43,10 @@ const FairytaleEdit = () => {
         5: false,
     });
     const [saveAll, setSaveall] = useState(false);
+    const [showImage, setShowImage] = useState([]);
 
     const sampleDataStucure = useRecoilValue(SampleDataState);
+    const setSampleDataState = useSetRecoilState(SampleDataState);
     const saveState = useResetRecoilState(SaveState);
 
     const toggleCanvasVisibility = (id) => {
@@ -57,86 +59,64 @@ const FairytaleEdit = () => {
         });
 
         console.log(id);
-        console.log(canvasVisibility);
+    };
+    useEffect(() => {
+        getNewest();
+    }, []);
+
+    const getNewest = async () => {
+        try {
+            const data = await call('/book/my-newest', 'GET', null);
+            await setShowImage(data);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
     };
 
     const [canvasWidth, canvasHeight] = [1280, 720];
-
+    console.log(canvasVisibility);
     const saveClick = () => {
         setSaveall(true);
     };
+    console.log(showImage);
 
     return (
         <div className="edit">
             <Container>
                 <Frame>
-                    <div
-                        style={{
-                            width: canvasWidth,
-                            height: canvasHeight,
-                            display: canvasVisibility[1] ? 'block' : 'none',
-                        }}
-                    >
-                        <TryCanvas props={1} />
-                    </div>
-                    <div
-                        style={{
-                            width: canvasWidth,
-                            height: canvasHeight,
-                            display: canvasVisibility[2] ? 'block' : 'none',
-                        }}
-                    >
-                        <TryCanvas props={2} />
-                    </div>
-                    <div
-                        style={{
-                            width: canvasWidth,
-                            height: canvasHeight,
-                            display: canvasVisibility[3] ? 'block' : 'none',
-                        }}
-                    >
-                        <TryCanvas props={3} />
-                    </div>
-                    <div
-                        style={{
-                            width: canvasWidth,
-                            height: canvasHeight,
-                            display: canvasVisibility[4] ? 'block' : 'none',
-                        }}
-                    >
-                        <TryCanvas props={4} />
-                    </div>
-                    <div
-                        style={{
-                            width: canvasWidth,
-                            height: canvasHeight,
-                            display: canvasVisibility[5] ? 'block' : 'none',
-                        }}
-                    >
-                        <TryCanvas props={5} />
-                    </div>
+                    {Object.keys(canvasVisibility).map((key) => (
+                        <div
+                            key={key}
+                            style={{
+                                width: canvasWidth,
+                                height: canvasHeight,
+                                display: canvasVisibility[key] ? 'block' : 'none',
+                            }}
+                        >
+                            <TryCanvas props={Number(key)} BookInfo={showImage} />
+                        </div>
+                    ))}
 
                     <PageSelectionFrame>
-                        {sampleDataStucure[0].pages.map((item) =>
-                            sampleDataStucure[0].pages.length > 0 ? (
+                        {showImage.pages && showImage.pages.length > 0 ? (
+                            showImage.pages.map((page, index) => (
                                 <PageSelection
-                                    idx={item.id}
-                                    src={item.src}
-                                    onClick={(e) => {
-                                        toggleCanvasVisibility(item.id);
-                                    }}
+                                    key={index}
+                                    idx={page.pageNo}
+                                    src={'https://s3.ap-northeast-2.amazonaws.com/' + page.originalImageUrl}
+                                    onClick={() => toggleCanvasVisibility(page.pageNo)}
                                     style={{
                                         border: '20px solid red',
                                     }}
                                 />
-                            ) : (
-                                <div>가져오는 중...</div>
-                            )
+                            ))
+                        ) : (
+                            <div>가져오는 중...</div>
                         )}
                     </PageSelectionFrame>
                 </Frame>
 
-                {saveAll && <TitleModal />}
+                {saveAll && <TitleModal props={showImage.bookId} />}
                 <Savebutton onClick={saveClick}>동화 완성하기</Savebutton>
             </Container>
         </div>
