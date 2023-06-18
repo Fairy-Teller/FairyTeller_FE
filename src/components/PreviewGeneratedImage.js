@@ -18,6 +18,9 @@ const Img = styled.img`
 `;
 
 const Text = styled.p`
+    display: flex;
+    text-align: center; /* 가운데 정렬 속성 추가 */
+    align-items: center; /* 세로 가운데 정렬 */
     width: 1416px;
     height: 185px;
     background: #FCDEDE;
@@ -29,7 +32,6 @@ const Text = styled.p`
     font-weight: 400;
     font-size: 25px;
     line-height: 44px;
-    text-align: center; /* 가운데 정렬 속성 추가 */
     color: #000000;
 `
 const Button = styled.button`
