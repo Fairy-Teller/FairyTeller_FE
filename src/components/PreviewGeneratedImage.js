@@ -69,8 +69,7 @@ const PreviewGeneratedIamge = (props) => {
   const [savedStory, setSavedStory]  = useRecoilState(StoryState);
   const [savedImageTemp, setSavedImageTemp] = useRecoilState(ImageTempState);
   const [savedBook, setSavedBook] = useRecoilState(BookState);
-  
-    console.log("렌더링");
+  const [isSaveImage, setIsSaveImage] = useState(false);
 
     useEffect(()=>{
         console.log(savedStory)
@@ -100,8 +99,6 @@ const PreviewGeneratedIamge = (props) => {
         setSavedBook({...savedBook, pages: newPage});
 
         onChangeHandler(imageUrl, props.index)
-        console.log(savedBook)
-        console.log(savedImageTemp)
         
     } catch (error) {
         console.log('Error fetching data:', error);
@@ -112,12 +109,23 @@ const PreviewGeneratedIamge = (props) => {
     const saveImg = async () => {
         try {
             // 이미지 저장하기
-            
-            
+            const bookDTO =  {
+                "bookId": savedBook["bookId"],
+                "pages": [{
+                    "pageNo": savedBook["pages"][props.index]["pageNo"],
+                    "originalImageUrl" : savedBook["pages"][props.index]["imageBase64"]
+                    }
+                ]
+            }
+            const imageData = await call('/book/create/image', 'POST', bookDTO);
+            console.log(imageData);
+            alert("이미지 등록 성공!");
+            setIsSaveImage(true);
         } catch (error) {
             console.log('Error fetching data:', error);
         }
     };
+   
 
     const onChangeHandler = (imgUrl, index) => {
         const newImage = [...savedImageTemp];
@@ -132,10 +140,11 @@ const PreviewGeneratedIamge = (props) => {
         <Text>{savedStory[props.index]["paragraph"]}</Text>
       </div>
 
-      <ButtonWrap>
-        <Button className="button" onClick={createImg}>
+      <ButtonWrap>{!isSaveImage && <Button className="button" onClick={createImg}>
                     이미지 생성하기
         </Button>
+        }
+       
       </ButtonWrap>  
       <P>{props.index + 1}번째 페이지</P>
       <div>
@@ -145,9 +154,13 @@ const PreviewGeneratedIamge = (props) => {
       <Button className="button" >
                     다시 뽑기
         </Button>
-      <Button className="button" onClick={saveImg} >
+      {isSaveImage &&<Button className="button" style={{backgroundColor:"gray"}}>
+                  삽화 선택 완료
+      </Button> }
+      {!isSaveImage && <Button className="button" onClick={saveImg} >
                   삽화 선택
-      </Button>
+      </Button>}  
+      
       </ButtonWrap>  
     </Div>
   );
