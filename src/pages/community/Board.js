@@ -13,9 +13,9 @@ const Board = () => {
 
   const fetchData = async () => {
     try {
-      const response = await call(`/board/paged?page=${currentPage}&size=8&sort=boardId,desc`, "GET", null);
-      if (response && response.content) {
-        setBooks(response.content);
+      const response = await call(`/board?page=${currentPage}&size=8`, "GET", null);
+      if (response && response.data) {
+        setBooks(response.data);
         setTotalPages(response.totalPages);
       }
     } catch (error) {
