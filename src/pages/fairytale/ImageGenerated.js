@@ -5,6 +5,7 @@ import ButtonWrap from '../../components/common/ButtonWrap';
 import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from 'recoil';
 import { SelectedKeywords, StoryState, ImageState, ImageFix } from '../../recoil/Fairytailstate';
 import PreviewGeneratedIamge from '../../components/PreviewGeneratedImage';
+import PreviewAllGeneratedIamge from '../../components/PreviewAllGeneratedImage';
 
 import styled from "styled-components";
 
@@ -61,8 +62,9 @@ const IamgeGenerated = () => {
             <PreviewGeneratedIamge index={index}/>
         )
         ))}
-        {page < 4 && (<Button onClick={onClickHandlerAfter}> 다음 </Button>)}
-      
+        {page == 5 && (<PreviewAllGeneratedIamge/>)}
+        {page < 5 && (<Button onClick={onClickHandlerAfter}> 다음 </Button>)}
+        
     </Div>
   );
 }

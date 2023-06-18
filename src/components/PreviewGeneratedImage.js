@@ -112,7 +112,7 @@ const PreviewGeneratedIamge = (props) => {
     const saveImg = async () => {
         try {
             // 이미지 저장하기
-
+            
             
         } catch (error) {
             console.log('Error fetching data:', error);
