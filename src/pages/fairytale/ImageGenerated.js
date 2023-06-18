@@ -16,6 +16,22 @@ const Div = styled.div`
   align-items: center;
 `;
 
+const Button = styled.button`
+    width: 100px;
+    height: 81px;
+    background: #99F0CC;
+    border-radius: 10px;
+    font-family: 'Amiri';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 63px;
+    text-align: center !important; /* 가운데 정렬 속성 추가 */
+    color: #000000;
+    justify-content: center; /* 가로 가운데 정렬 */
+    align-items: center; /* 세로 가운데 정렬 */
+`;
+
 const IamgeGenerated = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [imgUrl, setImgURL] = useState(null);
@@ -39,14 +55,13 @@ const IamgeGenerated = () => {
 
   return (
     <Div>
-        <h1>{page}</h1>
-        {0 < page && (<button onClick={onClickHandlerBefore}> 이전 </button>)}
+        {0 < page && (<Button onClick={onClickHandlerBefore}> 이전 </Button>)}
         {savedStory.map((item, index) => (
            item['paragraph'] && page == index && (
             <PreviewGeneratedIamge index={index}/>
         )
         ))}
-        {page < 5 && (<button onClick={onClickHandlerAfter}> 다음 </button>)}
+        {page < 4 && (<Button onClick={onClickHandlerAfter}> 다음 </Button>)}
       
     </Div>
   );

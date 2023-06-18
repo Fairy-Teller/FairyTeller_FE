@@ -21,6 +21,18 @@ export const ImageTempState = atom({
   default: [],
 });
 
+export const BookState = atom({
+  key: 'BookState',
+  default: {
+              "bookId": null,
+              "author": null,
+              "title": null,
+              "thumbnailUrl": "",
+              "pages": []
+            },
+});
+
+
 export const ImageState = atom({
     key: 'ImageState',
     default: { url: '' },

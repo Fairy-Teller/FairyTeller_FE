@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from 'recoil';
-import { SelectedKeywords, StoryState, ImageState, ImageFix } from '../../recoil/Fairytailstate';
+import { SelectedKeywords, StoryState, ImageState, ImageFix, BookState } from '../../recoil/Fairytailstate';
 
 import { call } from '../../service/ApiService';
 import Container from '../../components/global/Container';
@@ -27,13 +27,13 @@ const StoryGenerated = () => {
     const selectedKeywords = useRecoilValue(SelectedKeywords);
     const showImage = useRecoilValue(ImageFix);
     const [savedStory, setSavedStory] = useRecoilState(StoryState);
-    const [dataIdx, setDataIdx] = useState(0);
-    const [texts, setTexts] = useState('');
+    const [savedBook, setSavedBook] = useRecoilState(BookState);
+    // const [dataIdx, setDataIdx] = useState(0);
+    // const [texts, setTexts] = useState('');
     const [url, setUrl] = useState('');
     const navigate = useNavigate();
     useEffect(() => {
         fetchData();
-        console.log('???????');
         console.log('saveStory', savedStory);
         console.log(selectedKeywords); // {keywords: Array(3)} // [{key: undefined, theme: 'ANIMAL', title: '공룡'}, {key: undefined, theme: 'PEOPLE', title: '의사'}, {key: undefined, theme: 'ANIMAL', title: '개구리'}]
     }, [selectedKeywords]);
@@ -91,18 +91,37 @@ const StoryGenerated = () => {
     const resetSelectedKeywords = useResetRecoilState(SelectedKeywords);
 
     const gotoEdit = async () => {
-        // try {
-        //     // await sendtext({
-        //     //   text: texts,
-        //     // });
-        // } catch (error) {
-        //     console.log('Error fetching data:', error);
-        // } finally {
-        //     await navigate('/image-generated'); // 이미지 선택 화면으로 가기
-        // }
-        navigate('/image-generated');
-    };
+        try {
+            const bookDTO = savedStory.map((text, index) => ({
+                pageNo: index + 1,
+                fullStory: text["paragraph"]
+              }));
 
+            console.log('bookDTO',bookDTO)
+            await createBook({pages : bookDTO});
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        } finally {
+            await navigate('/image-generated'); // 이미지 선택 화면으로 가기
+        }
+    };
+    const createBook = useRecoilCallback(({ set }) => async (bookDTO) => {
+        try {
+            const response = await call('/book/create/story', 'POST', bookDTO);
+            console.log(response)
+            const pages = savedStory.map((text, index) => ({
+                pageNo: index + 1,
+                fullStory: text["paragraph"],
+                imageUrl: null,
+                imageBase64 : null,
+                audioUrl: null
+              }));
+            await set(BookState, { bookId: response["bookId"], pages : pages });
+        } catch (error) {
+            console.log(error);
+        }
+    });
+    
 
     return (
         <div className="story story-generated">
