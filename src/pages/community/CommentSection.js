@@ -91,7 +91,7 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
               </>
             ) : (
               <>
-                <strong>{comment.author}</strong>: {comment.content}
+                <strong>{comment.nickname}</strong>: {comment.content}
                 {(comment.editable || isBoardOwner) && (
                   <div style={styles.buttonContainer}>
                     {comment.editable && (
