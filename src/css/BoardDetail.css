@@ -3,6 +3,19 @@
     flex-direction: column;
     align-items: center;
   }
+
+  .bar {
+    width: 100vw;
+    height: 99px;
+    text-align: left;
+    background: #FCDEDE;
+    font-family: 'Amiri';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 88px;
+    color: #000000;
+  }
   
   .row {
     display: flex;
@@ -18,13 +31,15 @@
   .title {
     font-size: 24px;
     font-weight: bold;
+    margin-top: 10px;
     margin-bottom: 10px;
   }
   
   .author {
     font-size: 16px;
     color: #666;
-    margin-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 30px;
   }
   
   .thumbnailContainer {
@@ -63,13 +78,23 @@
     color: #fff;
     cursor: pointer;
   }
+
+  .deleteButtonContainer {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: 20px;
+    margin-left: auto;
+  }
+  
   
   .deleteButton {
     padding: 5px 10px;
     border: none;
-    background: red;
-    color: #fff;
+    background: #FCDEDE;
+    color: #333;
     cursor: pointer;
-    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
   }
   

@@ -94,13 +94,16 @@ const BoardDetail = () => {
     <div>
     <div className="bar">FairyTeller</div>
     <div className="container">
-      <div className="container">
+      <div className="deleteButtonContainer">
         {board.editable && (
           <button className="deleteButton" onClick={handleDeleteBoard}>
             Delete
           </button>
         )}
+      </div>
+      <div className="container">
         <h2 className="title">{board.title}</h2>
+        
         <div className="center">
           <p className="author">Author: {board.nickname}</p>
           <div className="thumbnailContainer">
