@@ -64,7 +64,7 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
       </form>
       <ul>
         {comments.map((comment) => (
-          <li key={comment.commentId} style={styles.comment}>
+          <li key={comment.commentId} className={`comment ${editingComment === comment ? "editing" : ""}`}>
             {editingComment === comment ? (
               <>
                 <input
@@ -72,20 +72,20 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
                   value={editedComment}
                   onChange={(e) => setEditedComment(e.target.value)}
                 />
-                <div style={styles.buttonContainer}>
-                  <button onClick={() => handleUpdate(comment)} style={styles.smallButton}>저장</button>
-                  <button onClick={() => handleCancelEdit()} style={styles.smallButton}>취소</button>
+                <div className="buttonContainer">
+                  <button onClick={() => handleUpdate(comment)} className="smallButton">저장</button>
+                  <button onClick={() => handleCancelEdit()} className="smallButton">취소</button>
                 </div>
               </>
             ) : (
               <>
                 <strong>{comment.nickname}</strong>: {comment.content}
                 {(comment.editable || isBoardOwner) && (
-                  <div style={styles.buttonContainer}>
+                  <div className="buttonContainer">
                     {comment.editable && (
-                     <button onClick={() => handleEdit(comment)} style={styles.smallButton}>수정</button>
+                      <button onClick={() => handleEdit(comment)} className="smallButton">수정</button>
                     )}
-                    <button onClick={() => handleDelete(comment)} style={styles.smallButton}>삭제</button>
+                    <button onClick={() => handleDelete(comment)} className="smallButton">삭제</button>
                   </div>
                 )}
               </>
@@ -96,17 +96,5 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
     </div>
   );
 };
-const styles = {
-  comment: {
-    marginBottom: "10px",
-  },
-  buttonContainer: {
-    display: "inline-block",
-    marginLeft: "10px",
-  },
-  smallButton: {
-    marginRight: "5px",
-    marginBottom: "5px",
-  }
-};
+
 export default CommentSection;

@@ -1,0 +1,14 @@
+.comment {
+    margin-bottom: 10px;
+  }
+  
+  .buttonContainer {
+    display: inline-block;
+    margin-left: 10px;
+  }
+  
+  .smallButton {
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+  
