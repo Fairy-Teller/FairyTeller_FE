@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Container from '../../components/global/Container';
 import { call } from '../../service/ApiService';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import html2canvas from 'html2canvas';
+import FairytaleShow from './FairytaleShow';
 
 const FairytaleTitle = styled.div`
     font-weight: 400;
-    font-size: 96px;
-    line-height: 162px;
-    text-align: left;
-    color: #ffffff;
-    padding-left: 5%;
+    font-size: 45px;
+
+    text-align: center;
 `;
 
 const ButtonFrame = styled.div`
@@ -24,7 +21,7 @@ const ButtonFrame = styled.div`
 const Button = styled(Link)`
     width: 15%;
     height: 104px;
-    background-color: white;
+    background-color: #99f0cc;
     font-size: 150%;
     border-radius: 51.5px;
     margin-right: 1%;
@@ -34,12 +31,31 @@ const Button = styled(Link)`
     text-decoration: none;
 `;
 
+const Bar = styled.div`
+    width: 100hw;
+    height: 99px;
+    text-align: left;
+    background: #fcdede;
+
+    font-family: 'Amiri';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 88px;
+
+    color: #000000;
+`;
+
 const BookCover = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     width: 100vw;
     height: 100vh;
     background-size: cover;
-    background-color: black;
 `;
+const Container = styled.div``;
 
 function FairytaleExport() {
     const [thumbnailUrl, setThumbnailUrl] = useState('');
@@ -106,17 +122,16 @@ function FairytaleExport() {
     };
 
     return (
-        <Container className="">
-            <BookCover style={{ backgroundImage: `url(${thumbnailUrl})` }}>
+        <Container>
+            <Bar>FairyTeller</Bar>
+            <BookCover>
+                <img src="/images/loding_4.png" style={{ marginTop: '2%' }} />
+                <FairytaleTitle>{Title}</FairytaleTitle>
+                <FairytaleShow props={BookId}></FairytaleShow>
                 <div style={{ position: 'absolute', bottom: '0px', width: '100%' }}>
-                    <FairytaleTitle>{Title}</FairytaleTitle>
                     <ButtonFrame>
                         <Button onClick={gotoBoard}>게시판 전시하기</Button>
                         <Button to={thumbnailUrl}>파일 저장하기</Button>
-
-                        <Button to="/f-show" state={BookId}>
-                            동화보기
-                        </Button>
                     </ButtonFrame>
                 </div>
             </BookCover>
