@@ -16,16 +16,6 @@ const BoardDetail = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
 
-  const handleLike = async () => {
-    try {
-      await call(`/board/${boardId}/like`, "POST", null);
-      setIsLiked((prevIsLiked) => !prevIsLiked);
-    } catch (error) {
-      console.log("Error liking the board:", error);
-    }
-  };
-  
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -58,6 +48,15 @@ const BoardDetail = () => {
       fetchDataComments(currentPage);
     } catch (error) {
       console.log("Error deleting comment:", error);
+    }
+  };
+
+  const handleLike = async () => {
+    try {
+      await call(`/board/${boardId}/like`, "POST", null);
+      setIsLiked((prevIsLiked) => !prevIsLiked);
+    } catch (error) {
+      console.log("Error liking the board:", error);
     }
   };
 
