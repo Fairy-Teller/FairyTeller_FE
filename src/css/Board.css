@@ -1,3 +1,15 @@
+.bar {
+    width: 100vw;
+    height: 99px;
+    text-align: left;
+    background: #FCDEDE;
+    font-family: 'Amiri';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 88px;
+    color: #000000;
+  }
 .board-container {
     margin-top: 8%;
   }

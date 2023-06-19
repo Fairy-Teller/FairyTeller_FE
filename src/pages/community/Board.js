@@ -40,6 +40,8 @@ const Board = () => {
   }, [books]);
 
   return (
+    <div>
+        <div className="bar">FairyTeller</div>
     <div className="board-container">
       <h4 className="board-title">게시판</h4>
       {books.length > 0 ? (
@@ -69,6 +71,7 @@ const Board = () => {
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 };
