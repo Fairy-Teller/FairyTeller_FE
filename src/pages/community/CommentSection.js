@@ -55,7 +55,6 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
     <div className="commentSection">
       <h3>댓글</h3>
       <form className="commentForm" onSubmit={handleSubmit}>
-        
         <input
           className="commentInput"
           type="text"
@@ -64,7 +63,9 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
           onChange={handleChange}
           placeholder="댓글을 입력하세요..."
         />
-        <button className="commentSubmitButton" type="submit" style={{ marginLeft: "10px" }}>등록</button>
+        <button className="commentSubmitButton" type="submit" style={{ marginLeft: "10px" }}>
+          등록
+        </button>
       </form>
       <ul className="commentList">
         {comments.map((comment) => (
@@ -83,7 +84,7 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
               </>
             ) : (
               <>
-                <strong>{comment.nickname}</strong>: {comment.content}
+                <strong>{comment.nickname}</strong> {comment.content}
                 {(comment.editable || isBoardOwner) && (
                   <div className="buttonContainer">
                     {comment.editable && (
