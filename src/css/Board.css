@@ -59,9 +59,9 @@
     text-align: center;
     background-color: #FFFFFF;
     box-shadow: 0px 2px 5px rgba(3, 3, 3, 0.1);
-    padding: 20px;
+    padding: 5px;
   }
-  
+
   .book__title {
     font-size: 16px;
     font-weight: bold;
@@ -71,6 +71,7 @@
   .book__author {
     font-size: 14px;
     color: #999999;
+    margin-bottom: 30px;
   }
   
   .book:hover .book__cover {
@@ -85,3 +86,17 @@
     transform: rotateY(190deg);
   }
   
+  .bar {
+    margin-top: 20px; /* 글자를 더 올리기 위한 상단 여백 조정 */
+    /* 기타 스타일 속성 */
+  }
+
+  .book__content img {
+    margin-top: 30px; /* 여기의 값을 조정하세요 */
+  }
+  
+
+  .pagination {
+    color: #99F0CC; /* 페이지네이션 색상 변경 */
+    /* 기타 스타일 속성 */
+  }

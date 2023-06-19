@@ -42,8 +42,8 @@ const Board = () => {
   return (
     <div>
               <div className="bar">FairyTeller</div>
-    <div style={{ marginTop: '8%' }}>
-      <h4 style={{ textAlign: 'center', marginBottom: '20px' }}>게시판</h4>
+    <div style={{ marginTop: '5%' }}>
+    <h4 style={{ textAlign: 'center', marginBottom: '5%', fontSize: '30px' }}>우리들의 도서관</h4>
       {books.length > 0 ? (
         <div className="book-container">
           {books.map((book) => (
@@ -54,6 +54,7 @@ const Board = () => {
                     <div className="book__content">
                       <img src={book.thumbnailUrl} alt={book.title} className="book__image" />
                       <h6 className="book__title">{truncateTitle(book.title)}</h6>
+                      <h6 className="book__author">{truncateTitle(book.nickname)}</h6>
                     </div>
                   </div>
                 </div>
@@ -66,7 +67,7 @@ const Board = () => {
       )}
       {/* 페이지네이션 컴포넌트 */}
       {totalPages > 0 && (
-        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+        <div style={{ textAlign: 'center', marginTop: '60px'}}>
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index}
@@ -76,7 +77,7 @@ const Board = () => {
                 padding: '5px 10px',
                 border: 'none',
                 borderRadius: '5px',
-                backgroundColor: currentPage === index ? 'lightblue' : 'white',
+                backgroundColor: currentPage === index ? '#99F0CC' : 'white',
                 cursor: 'pointer',
               }}
             >
