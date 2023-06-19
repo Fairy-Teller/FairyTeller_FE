@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { call } from "../../service/ApiService";
 import CommentSection from "./CommentSection";
+import MusicBar from "./MusicBar";
 
 const BoardDetail = () => {
   const { boardId } = useParams();
@@ -36,6 +37,15 @@ const BoardDetail = () => {
     }
   };
 
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await call(`/board/${boardId}/comment/${commentId}`, "DELETE", null);
+      fetchDataComments(currentPage);
+    } catch (error) {
+      console.log("Error deleting comment:", error);
+    }
+  };
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
     fetchDataComments(page);
@@ -44,11 +54,8 @@ const BoardDetail = () => {
   const fetchDataComments = async (page) => {
     try {
       const pageSize = 10;
-      const response = await call(
-        `/board/${boardId}/comments?page=${page}&size=${pageSize}`,
-        "GET",
-        null
-      );
+      const response = await call(`/board/${boardId}/comment?page=${page}&size=${pageSize}`, "GET", null);
+
       setComments(response.data);
       setCurrentPage(response.currentPage);
       setTotalPages(response.totalPages);
@@ -74,13 +81,17 @@ const BoardDetail = () => {
           />
         </div>
         <p style={styles.content}>{board.content}</p>
+        {/* {board.audioUrl !== null && <MusicBar audioUrl={board.audioUrl} />} */}
         <CommentSection
           comments={comments}
           setComments={setComments}
           onCommentSubmit={handleCommentSubmit}
+          onDeleteComment={handleDeleteComment}
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={handlePageChange}
+          boardId={boardId}
+          isBoardOwner={board.editable}
         />
         <div style={styles.pagination}>
           {Array.from({ length: totalPages }, (_, index) => (
@@ -101,7 +112,6 @@ const BoardDetail = () => {
     </div>
   );
 };
-// ...이전 코드 생략...
 
 const styles = {
   container: {
