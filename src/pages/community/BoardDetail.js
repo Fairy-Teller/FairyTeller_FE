@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { call } from "../../service/ApiService";
 import CommentSection from "./CommentSection";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
+
 
 const BoardDetail = () => {
   const { boardId } = useParams();
@@ -10,6 +14,11 @@ const BoardDetail = () => {
   const [comments, setComments] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [isLiked, setIsLiked] = useState(false);
+
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+  };
 
   useEffect(() => {
     fetchData();
@@ -78,11 +87,11 @@ const BoardDetail = () => {
 
   return (
     <div style={styles.container}>
-        {board.editable && (
-          <button style={styles.deleteButton} onClick={handleDeleteBoard}>
-            Delete
-          </button>
-        )}
+      {board.editable && (
+        <button style={styles.deleteButton} onClick={handleDeleteBoard}>
+          Delete
+        </button>
+      )}
       <h2 style={styles.title}>{board.title}</h2>
       <div style={styles.center}>
         <p style={styles.author}>Author: {board.nickname}</p>
@@ -90,7 +99,9 @@ const BoardDetail = () => {
           <img src={board.thumbnailUrl} alt="Thumbnail" style={styles.thumbnail} />
         </div>
         <p style={styles.content}>{board.content}</p>
-        {/* {board.audioUrl !== null && <MusicBar audioUrl={board.audioUrl} />} */}
+        <button onClick={handleLike}>
+          {isLiked ? <FontAwesomeIcon icon={solidHeart} /> : <FontAwesomeIcon icon={regularHeart} />}
+        </button>
         <CommentSection
           comments={comments}
           setComments={setComments}
@@ -102,7 +113,7 @@ const BoardDetail = () => {
           boardId={boardId}
           isBoardOwner={board.editable}
         />
-                <div style={styles.pagination}>
+        <div style={styles.pagination}>
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index}
@@ -117,67 +128,65 @@ const BoardDetail = () => {
     </div>
   );
 };
-
-const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  center: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  title: {
-    fontSize: "24px",
-    fontWeight: "bold",
-    marginBottom: "10px",
-  },
-  author: {
-    fontSize: "16px",
-    color: "#666",
-    marginBottom: "5px",
-  },
-  thumbnailContainer: {
-    display: "flex",
-    justifyContent: "center",
-    marginBottom: "20px",
-  },
-  thumbnail: {
-    maxWidth: "100%",
-    maxHeight: "400px",
-  },
-  content: {
-    fontSize: "18px",
-    lineHeight: "1.4",
-  },
-  pagination: {
-    marginTop: "20px",
-  },
-  pageButton: {
-    marginLeft: "5px",
-    padding: "5px 10px",
-    border: "none",
-    background: "#eee",
-    cursor: "pointer",
-  },
-  activePageButton: {
-    marginLeft: "5px",
-    padding: "5px 10px",
-    border: "none",
-    background: "blue",
-    color: "#fff",
-    cursor: "pointer",
-  },
-  deleteButton: {
-    padding: "5px 10px",
-    border: "none",
-    background: "red",
-    color: "#fff",
-    cursor: "pointer",
-    marginTop: "10px",
-  },
-};
-
-export default BoardDetail;
+  const styles = {
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    center: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    title: {
+      fontSize: "24px",
+      fontWeight: "bold",
+      marginBottom: "10px",
+    },
+    author: {
+      fontSize: "16px",
+      color: "#666",
+      marginBottom: "5px",
+    },
+    thumbnailContainer: {
+      display: "flex",
+      justifyContent: "center",
+      marginBottom: "20px",
+    },
+    thumbnail: {
+      maxWidth: "100%",
+      maxHeight: "400px",
+    },
+    content: {
+      fontSize: "18px",
+      lineHeight: "1.4",
+    },
+    pagination: {
+      marginTop: "20px",
+    },
+    pageButton: {
+      marginLeft: "5px",
+      padding: "5px 10px",
+      border: "none",
+      background: "#eee",
+      cursor: "pointer",
+    },
+    activePageButton: {
+      marginLeft: "5px",
+      padding: "5px 10px",
+      border: "none",
+      background: "blue",
+      color: "#fff",
+      cursor: "pointer",
+    },
+    deleteButton: {
+      padding: "5px 10px",
+      border: "none",
+      background: "red",
+      color: "#fff",
+      cursor: "pointer",
+      marginTop: "10px",
+    },
+  };
+  export default BoardDetail;
