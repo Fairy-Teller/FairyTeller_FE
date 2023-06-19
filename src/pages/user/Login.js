@@ -3,6 +3,8 @@ import { Container, Grid, TextField, Typography, Button } from "@mui/material";
 import { signin, socialLogin } from "../../service/UserService";
 import { Link } from "react-router-dom";
 
+import "../../css/login.css";
+
 const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -22,83 +24,63 @@ const Login = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs" style={{ marginTop: "8%" }}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography component="h1" variant="h5">
-            로그인
-          </Typography>
-        </Grid>
-      </Grid>
-      <form noValidate onSubmit={handleSubmit}>
-        {" "}
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              variant="outlined"
-              required
-              fullWidth
+    <div id="background">
+      <div id="container" style={{ marginTop: "8%" }}>
+        <h1>로그인</h1>
+        <form noValidate onSubmit={handleSubmit}>
+          <div class="textContainer">
+            <label htmlFor="userid">아이디</label>
+            <input
+              class="textField"
+              type="text"
               id="userid"
-              label="아이디"
               name="userid"
               autoComplete="userid"
             />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              variant="outlined"
-              required
-              fullWidth
-              id="password"
-              label="패스워드"
+          </div>
+          <div class="textContainer">
+            <label htmlFor="password">패스워드</label>
+            <input
+              class="textField"
               type="password"
+              id="password"
               name="password"
               autoComplete="current-password"
             />
-          </Grid>
-          <Grid item xs={12}>
-            <Button type="submit" fullWidth variant="contained" color="primary">
-              로그인
-            </Button>
-          </Grid>
-          <Grid item xs={12}>
-            <Button
+          </div>
+          <div>
+            <button type="submit">로그인</button>
+          </div>
+          <div>
+            <button
               onClick={() => handleSocialLogin("kakao")}
-              fullWidth
-              variant="contained"
               style={{ backgroundColor: "#FEE501" }}
             >
               카카오로 로그인하기
-            </Button>
-          </Grid>
-          <Grid item xs={12}>
-            <Button
+            </button>
+          </div>
+          <div>
+            <button
               onClick={() => handleSocialLogin("naver")}
-              fullWidth
-              variant="contained"
               style={{ backgroundColor: "#50CA7E" }}
             >
               네이버로 로그인하기
-            </Button>
-          </Grid>
-          <Grid item xs={12}>
-            <Button
+            </button>
+          </div>
+          <div>
+            <button
               onClick={() => handleSocialLogin("google")}
-              fullWidth
-              variant="contained"
               style={{ backgroundColor: "#EA4335" }}
             >
               구글로 로그인하기
-            </Button>
-          </Grid>
-          <Grid item>
-            <Link to="/signup" variant="body2">
-              계정이 없습니까? 여기서 가입하세요
-            </Link>
-          </Grid>
-        </Grid>
-      </form>
-    </Container>
+            </button>
+          </div>
+          <div class="linkContainer">
+            <Link to="/signup">계정이 없습니까? 여기서 가입하세요</Link>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 };
 
