@@ -11,9 +11,15 @@ import styled from 'styled-components';
 
 const TextArea = styled.textarea`
     width: calc(100% - 0.25rem);
-    height: 10rem;
-    background-color: lightgray;
+    height: 13rem;
+    background-color: #efd3d3;
     overflow: auto;
+    resize: none;
+    font-size: 1.8em;
+    border-radius: 1em;
+    padding: 0.2em;
+    font-family: emoji;
+    text-align: center;
 `;
 const ImageContainer = styled.div`
     display: flex;
@@ -21,6 +27,40 @@ const ImageContainer = styled.div`
     align-items: center;
     height: 100%;
 `;
+
+const Bar = styled.div`
+    width: 100hw;
+    height: 99px;
+    text-align: left;
+    background: #FCDEDE;
+    font-family: 'Amiri';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 88px;
+    color: #000000;
+`;
+
+const BookCover = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100vw;
+    height: 100vh;
+    background-size: cover;
+`;
+
+const FairytaleTitle = styled.div`
+    font-weight: 400;
+    font-size: 45px;
+    text-align: center;
+`;
+
+const FormDiv= styled.div`
+    width:80%;
+    margin : auto;
+`; 
 
 const StoryGenerated = () => {
     const [loading, setLoading] = useState(false);
@@ -124,27 +164,30 @@ const StoryGenerated = () => {
     
 
     return (
-        <div className="story story-generated">
+        <div className="tmp_story tmp_story-generated"> 
             {loading ? (
-                <Container className={'fixed narrow'}>
-                    <h1>
-                        만들어진 시나리오를 확인하고 <br />
-                        수정해보아요
-                    </h1>
+                <Container>
+                    <Bar>FairyTeller</Bar>
+                    <BookCover>
+                    <img src="/images/loding_1.png" style={{ marginTop: '2%' }} />
+                        <FairytaleTitle>AI가 만든 동화를 수정할 수 있어요!</FairytaleTitle>                        
+                    <FormDiv>
                     <form onSubmit={onSubmitHandler}>
                         <Section className={''}>
                             {savedStory.map((item, index) => (
                                item['paragraph'] && (
+                                <div style={{margin:'1em'}}>
                                 <TextArea
                                     key={index}
                                     value={item['paragraph']}
                                     placeholder="만들어진 시나리오를 확인하고 수정해보아요"
                                     onChange={(e) => onChangeHandler(e, index)}
-                                />
+                                />                                    
+                                </div>
                             )
-                            ))}
+                            ))}                                
                         </Section>
-                        <ButtonWrap>
+                        <ButtonWrap className="button-wrap">
                             <Link to="/keyword" onClick={resetSelectedKeywords} className="button">
                                 키워드 다시 고르기
                             </Link>
@@ -160,18 +203,19 @@ const StoryGenerated = () => {
             className='button'
           /> */}
                     <form onSubmit={regenerateHandler}>
-                        <ButtonWrap>
+                        <ButtonWrap className="button-wrap">
                             <button type="submit" className="button">
                                 이야기 다시 만들기
                             </button>
                         </ButtonWrap>
                     </form>
-
+                    </FormDiv>
                     {url && (
                         <ImageContainer>
                             <img src={url} alt="AI-generated" />
                         </ImageContainer>
                     )}
+                </BookCover>
                 </Container>
             ) : (
                 <div>되는 중...</div>
