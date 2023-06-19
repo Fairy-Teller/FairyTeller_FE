@@ -91,8 +91,9 @@ const BoardDetail = () => {
   }
 
   return (
+    <div>
+    <div className="bar">FairyTeller</div>
     <div className="container">
-      {/* <Bar>FairyTeller</Bar> */}
       <div className="container">
         {board.editable && (
           <button className="deleteButton" onClick={handleDeleteBoard}>
@@ -144,6 +145,7 @@ const BoardDetail = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
   
