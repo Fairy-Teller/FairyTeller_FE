@@ -1,16 +1,21 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { call } from "../../service/ApiService";
 import CommentSection from "./CommentSection";
 
 const BoardDetail = () => {
   const { boardId } = useParams();
+  const navigate = useNavigate();
   const [board, setBoard] = useState(null);
   const [comments, setComments] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
-  const fetchData = useCallback(async () => {
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
     try {
       const response = await call(`/board/${boardId}`, "GET", null);
       const boardData = response.data[0];
@@ -21,16 +26,12 @@ const BoardDetail = () => {
     } catch (error) {
       console.log("Error fetching data:", error);
     }
-  }, [boardId]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  };
 
   const handleCommentSubmit = async (comment) => {
     try {
       await call(`/board/${boardId}/comment`, "POST", comment);
-      fetchDataComments(currentPage); // 새로운 댓글이 추가된 후 전체 댓글 목록을 다시 가져옴
+      fetchDataComments(currentPage);
     } catch (error) {
       console.log("Error submitting comment:", error);
     }
@@ -54,12 +55,20 @@ const BoardDetail = () => {
     try {
       const pageSize = 10;
       const response = await call(`/board/${boardId}/comment?page=${page}&size=${pageSize}`, "GET", null);
-
       setComments(response.data);
       setCurrentPage(response.currentPage);
       setTotalPages(response.totalPages);
     } catch (error) {
       console.log("Error fetching comments:", error);
+    }
+  };
+
+  const handleDeleteBoard = async () => {
+    try {
+      await call(`/board/${boardId}`, "DELETE", null);
+      navigate("/board"); // 삭제 후 게시판 목록 페이지로 이동
+    } catch (error) {
+      console.log("Error deleting board:", error);
     }
   };
 
@@ -69,15 +78,16 @@ const BoardDetail = () => {
 
   return (
     <div style={styles.container}>
+        {board.editable && (
+          <button style={styles.deleteButton} onClick={handleDeleteBoard}>
+            Delete
+          </button>
+        )}
       <h2 style={styles.title}>{board.title}</h2>
       <div style={styles.center}>
         <p style={styles.author}>Author: {board.nickname}</p>
         <div style={styles.thumbnailContainer}>
-          <img
-            src={board.thumbnailUrl}
-            alt="Thumbnail"
-            style={styles.thumbnail}
-          />
+          <img src={board.thumbnailUrl} alt="Thumbnail" style={styles.thumbnail} />
         </div>
         <p style={styles.content}>{board.content}</p>
         {/* {board.audioUrl !== null && <MusicBar audioUrl={board.audioUrl} />} */}
@@ -92,15 +102,11 @@ const BoardDetail = () => {
           boardId={boardId}
           isBoardOwner={board.editable}
         />
-        <div style={styles.pagination}>
+                <div style={styles.pagination}>
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index}
-              style={
-                currentPage === index
-                  ? styles.activePageButton
-                  : styles.pageButton
-              }
+              style={currentPage === index ? styles.activePageButton : styles.pageButton}
               onClick={() => handlePageChange(index)}
             >
               {index + 1}
@@ -163,6 +169,14 @@ const styles = {
     background: "blue",
     color: "#fff",
     cursor: "pointer",
+  },
+  deleteButton: {
+    padding: "5px 10px",
+    border: "none",
+    background: "red",
+    color: "#fff",
+    cursor: "pointer",
+    marginTop: "10px",
   },
 };
 
