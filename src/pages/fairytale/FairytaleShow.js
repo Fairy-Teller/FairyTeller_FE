@@ -28,7 +28,7 @@ const FairyPage = styled.div`
 `;
 
 const Arrow = styled.button`
-    ${props =>
+    ${(props) =>
         props.disabled &&
         css`
             opacity: 0.5;
@@ -68,13 +68,13 @@ function FairytaleShow(bookid) {
 
     const handlePrevPage = () => {
         if (currentPage > 0) {
-            setCurrentPage(prevPage => prevPage - 1);
+            setCurrentPage((prevPage) => prevPage - 1);
         }
     };
 
     const handleNextPage = () => {
         if (currentPage < bookInfo.length - 1) {
-            setCurrentPage(prevPage => prevPage + 1);
+            setCurrentPage((prevPage) => prevPage + 1);
         }
     };
 
@@ -88,11 +88,7 @@ function FairytaleShow(bookid) {
                         <audio ref={audioRef} src={audioInfo[currentPage]} controls></audio>
                     </AudioContainer>
                     <FairyPage>
-                        <Arrow
-                            className="prevButton"
-                            disabled={currentPage === 0}
-                            onClick={handlePrevPage}
-                        >
+                        <Arrow className="prevButton" disabled={currentPage === 0} onClick={handlePrevPage}>
                             <img src="/images/prev.png" />
                         </Arrow>
                         <img src={bookInfo[currentPage]} />

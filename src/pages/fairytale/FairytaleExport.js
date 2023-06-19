@@ -3,6 +3,8 @@ import { call } from '../../service/ApiService';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import FairytaleShow from './FairytaleShow';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 const FairytaleTitle = styled.div`
     font-weight: 400;
@@ -18,7 +20,7 @@ const ButtonFrame = styled.div`
     margin-bottom: 10px;
 `;
 
-const Button = styled(Link)`
+const Button = styled.button`
     width: 15%;
     height: 104px;
     background-color: #99f0cc;
@@ -61,6 +63,7 @@ function FairytaleExport() {
     const [thumbnailUrl, setThumbnailUrl] = useState('');
     const [BookId, setBookId] = useState('');
     const [Title, setTitle] = useState('');
+    const [Image, setImage] = useState([]);
 
     useEffect(() => {
         fetchData();
@@ -82,11 +85,14 @@ function FairytaleExport() {
     const fetchData = async () => {
         try {
             const data = await call('/book/my-newest', 'GET', null);
-            setThumbnailUrl('https://s3.ap-northeast-2.amazonaws.com/' + data.thumbnailUrl);
             await setBookId(data.bookId);
             setTitle(data.title);
-            console.log('확인해보자!', BookId);
-            console.log(thumbnailUrl);
+
+            const imgearr = [];
+            for (let i = 0; i < data.pages.length; i++) {
+                imgearr[i] = `https://s3.ap-northeast-2.amazonaws.com/${data.pages[i].finalImageUrl}`;
+            }
+            setImage(imgearr);
 
             // await call('/book/create/story', 'POST', {
             //     fullStory: 'ha ha ha ha ha ha ha',
@@ -106,18 +112,19 @@ function FairytaleExport() {
         }
     };
     const exportPDF = async () => {
-        const data = { thumbnailUrl };
-        const link = document.createElement('a');
+        for (var i = 0; i < Image.length; i++) {
+            (function (index) {
+                var link = document.createElement('a');
+                link.href = Image[index];
+                link.download = Title + '.png';
+                link.style.display = 'none';
+                document.body.appendChild(link);
 
-        if (typeof link.download === 'string') {
-            link.href = data;
-            link.download = 'image.jpg';
-
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } else {
-            window.open(data);
+                setTimeout(function () {
+                    link.click();
+                    document.body.removeChild(link);
+                }, index * 1000);
+            })(i);
         }
     };
 
@@ -131,7 +138,7 @@ function FairytaleExport() {
                 <div style={{ position: 'absolute', bottom: '0px', width: '100%' }}>
                     <ButtonFrame>
                         <Button onClick={gotoBoard}>게시판 전시하기</Button>
-                        <Button to={thumbnailUrl}>파일 저장하기</Button>
+                        <Button onClick={exportPDF}>파일 저장하기</Button>
                     </ButtonFrame>
                 </div>
             </BookCover>
