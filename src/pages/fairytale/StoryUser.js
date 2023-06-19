@@ -17,7 +17,7 @@ const TextArea = styled.textarea`
     resize: none;
     font-size: 1.8em;
     border-radius: 1em;
-    padding: 0.2em;
+    padding: 0.7em;
     font-family: emoji;
     text-align: center;
 `;
@@ -40,12 +40,20 @@ const Bar = styled.div`
     line-height: 88px;
     color: #000000;
 `;
-
+const Button = styled.button`
+  width: auto;
+  height: auto;
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: 24px;
+  word-break: keep-all;
+  background-color: #EA6262;
+  padding : 20px;
+`
 const BookCover = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-
     width: 100vw;
     height: 100vh;
     background-size: cover;
@@ -56,10 +64,17 @@ const FairytaleTitle = styled.div`
     font-size: 45px;
     text-align: center;
 `;
+const ButtonDiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    background-size: cover;
+    padding-bottom : 80px;
+`
 
 const FormDiv= styled.div`
     width:80%;
-    margin : auto;
 `; 
 
 const StoryGenerated = () => {
@@ -72,7 +87,11 @@ const StoryGenerated = () => {
     // const [texts, setTexts] = useState('');
     const [url, setUrl] = useState('');
     const navigate = useNavigate();
-    // useEffect();
+
+    useEffect(()=>{
+      setSavedStory([{paragraph:""},{paragraph:""},{paragraph:""},{paragraph:""},{paragraph:""}]);
+      console.log(savedStory)
+    },[]);
 
     const onChangeHandler = (e, index) => {
         const newStory = [...savedStory];
@@ -131,23 +150,23 @@ const StoryGenerated = () => {
                 <form onSubmit={onSubmitHandler}>
                     <Section className={''}>
                         {savedStory.map((item, index) => (
-                            item['paragraph'] && (
+                            (
                             <div style={{margin:'1em'}}>
                             <TextArea
                                 key={index}
                                 value={item['paragraph']}
-                                placeholder="만들어진 시나리오를 확인하고 수정해보아요"
+                                placeholder="재미있는 이야기를 작성해볼까요?"
                                 onChange={(e) => onChangeHandler(e, index)}
                             />                                    
                             </div>
                         )
                         ))}                                
                     </Section>
-                    <ButtonWrap className="button-wrap">
-                        <button type="submit" className="button" onClick={gotoEdit}>
+                    <ButtonDiv>
+                        <Button type="submit" onClick={gotoEdit}>
                             동화 만들러 가기
-                        </button>
-                    </ButtonWrap>
+                        </Button>
+                    </ButtonDiv>
                 </form>
                 </FormDiv>
             </BookCover>
