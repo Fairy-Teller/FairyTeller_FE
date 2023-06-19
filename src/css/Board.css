@@ -1,0 +1,50 @@
+.board-container {
+    margin-top: 8%;
+  }
+  
+  .board-title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .books-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* One row with 4 columns */
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    max-height: calc(100vh - 200px);
+    grid-auto-flow: dense;
+  }
+  
+  .book-link {
+    text-decoration: none;
+  }
+  
+  .book-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .book-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  
+  .book-title {
+    font-size: 18px;
+    margin-top: 10px;
+  }
+  
+  .no-books {
+    text-align: center;
+  }
+  
+  .pagination {
+    text-align: center;
+  }
+  
