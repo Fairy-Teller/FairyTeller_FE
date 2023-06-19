@@ -90,7 +90,7 @@ function FairytaleExport() {
 
             const imgearr = [];
             for (let i = 0; i < data.pages.length; i++) {
-                imgearr[i] = `https://s3.ap-northeast-2.amazonaws.com/${data.pages[i].finalImageUrl}`;
+                imgearr[i] = data.pages[i].finalImageUrl;
             }
             setImage(imgearr);
 

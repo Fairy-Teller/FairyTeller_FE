@@ -56,8 +56,8 @@ function FairytaleShow(bookid) {
             const imgearr = [];
             const audioarr = [];
             for (let i = 0; i < bookinfos.pages.length; i++) {
-                imgearr[i] = `https://s3.ap-northeast-2.amazonaws.com/${bookinfos.pages[i].finalImageUrl}`;
-                audioarr[i] = `https://s3.ap-northeast-2.amazonaws.com/${bookinfos.pages[i].audioUrl}`;
+                imgearr[i] = bookinfos.pages[i].finalImageUrl;
+                audioarr[i] = bookinfos.pages[i].audioUrl;
             }
             setBookInfo(imgearr);
             setAudioInfo(audioarr);

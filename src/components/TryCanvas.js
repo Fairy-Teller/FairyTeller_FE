@@ -140,7 +140,7 @@ const TryCanvas = (props) => {
         canvas.stateaction = true;
 
         fabric.Image.fromURL(
-            'https://s3.ap-northeast-2.amazonaws.com/' +
+            
                 data.pages[props.props - 1].originalImageUrl +
                 '?timestamp=' +
                 new Date().getTime(),
