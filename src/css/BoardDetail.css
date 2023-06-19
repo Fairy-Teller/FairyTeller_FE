@@ -1,0 +1,75 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .row {
+    display: flex;
+    align-items: center;
+  }
+  
+  .center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .author {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 5px;
+  }
+  
+  .thumbnailContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .thumbnail {
+    max-width: 100%;
+    max-height: 400px;
+  }
+  
+  .content {
+    font-size: 18px;
+    line-height: 1.4;
+  }
+  
+  .pagination {
+    margin-top: 20px;
+  }
+  
+  .pageButton {
+    margin-left: 5px;
+    padding: 5px 10px;
+    border: none;
+    background: #eee;
+    cursor: pointer;
+  }
+  
+  .activePageButton {
+    margin-left: 5px;
+    padding: 5px 10px;
+    border: none;
+    background: blue;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .deleteButton {
+    padding: 5px 10px;
+    border: none;
+    background: red;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  

@@ -5,7 +5,7 @@ import CommentSection from "./CommentSection";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
-
+import '../../css/BoardDetail.css';
 
 const BoardDetail = () => {
   const { boardId } = useParams();
@@ -92,122 +92,62 @@ const BoardDetail = () => {
   }
 
   return (
-    <div style={styles.container}>
-      {board.editable && (
-        <button style={styles.deleteButton} onClick={handleDeleteBoard}>
-          Delete
-        </button>
-      )}
-      <h2 style={styles.title}>{board.title}</h2>
-      <div style={styles.center}>
-        <p style={styles.author}>Author: {board.nickname}</p>
-        <div style={styles.thumbnailContainer}>
-          <img src={board.thumbnailUrl} alt="Thumbnail" style={styles.thumbnail} />
-        </div>
-        <p style={styles.content}>{board.content}</p>
-        <button
-          onClick={handleLike}
-          style={{ backgroundColor: "transparent", border: "none" }}
-        >
-          {isLiked ? (
-            <FontAwesomeIcon icon={solidHeart} size="2x" style={{ color: "red" }} />
-          ) : (
-            <FontAwesomeIcon icon={regularHeart} size="2x" style={{ color: "red" }} />
-          )}
-    <span style={{ marginLeft: "5px", fontSize: "16px" }}>
-      {isLiked ? "동화가 마음에 들었어요!" : "동화가 마음에 드시나요?"}
-    </span>
-  </button>
-  <CommentSection
-    comments={comments}
-    setComments={setComments}
-    onCommentSubmit={handleCommentSubmit}
-    onDeleteComment={handleDeleteComment}
-    currentPage={currentPage}
-    totalPages={totalPages}
-    onPageChange={handlePageChange}
-    boardId={boardId}
-    isBoardOwner={board.editable}
-  />
-
-        <div style={styles.pagination}>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index}
-              style={currentPage === index ? styles.activePageButton : styles.pageButton}
-              onClick={() => handlePageChange(index)}
-            >
-              {index + 1}
-            </button>
-          ))}
+    <div className="container">
+      {/* <Bar>FairyTeller</Bar> */}
+      <div className="container">
+        {board.editable && (
+          <button className="deleteButton" onClick={handleDeleteBoard}>
+            Delete
+          </button>
+        )}
+        <h2 className="title">{board.title}</h2>
+        <div className="center">
+          <p className="author">Author: {board.nickname}</p>
+          <div className="thumbnailContainer">
+            <img src={board.thumbnailUrl} alt="Thumbnail" className="thumbnail" />
+          </div>
+          <p className="content">{board.content}</p>
+          <button
+            onClick={handleLike}
+            style={{ backgroundColor: "transparent", border: "none" }}
+          >
+            {isLiked ? (
+              <FontAwesomeIcon icon={solidHeart} size="2x" style={{ color: "red" }} />
+            ) : (
+              <FontAwesomeIcon icon={regularHeart} size="2x" style={{ color: "red" }} />
+            )}
+            <span style={{ marginLeft: "5px", fontSize: "16px" }}>
+              {isLiked ? "동화가 마음에 들었어요!" : "동화가 마음에 드시나요?"}
+            </span>
+          </button>
+          <CommentSection
+            comments={comments}
+            setComments={setComments}
+            onCommentSubmit={handleCommentSubmit}
+            onDeleteComment={handleDeleteComment}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            boardId={boardId}
+            isBoardOwner={board.editable}
+          />
+  
+          <div className="pagination">
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index}
+                className={currentPage === index ? "activePageButton" : "pageButton"}
+                onClick={() => handlePageChange(index)}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
   );
+  
 };
-  const styles = {
-    container: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    },
-    row: {
-      display: "flex",
-      alignItems: "center",
-    },
-    center: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    },
-    title: {
-      fontSize: "24px",
-      fontWeight: "bold",
-      marginBottom: "10px",
-    },
-    author: {
-      fontSize: "16px",
-      color: "#666",
-      marginBottom: "5px",
-    },
-    thumbnailContainer: {
-      display: "flex",
-      justifyContent: "center",
-      marginBottom: "20px",
-    },
-    thumbnail: {
-      maxWidth: "100%",
-      maxHeight: "400px",
-    },
-    content: {
-      fontSize: "18px",
-      lineHeight: "1.4",
-    },
-    pagination: {
-      marginTop: "20px",
-    },
-    pageButton: {
-      marginLeft: "5px",
-      padding: "5px 10px",
-      border: "none",
-      background: "#eee",
-      cursor: "pointer",
-    },
-    activePageButton: {
-      marginLeft: "5px",
-      padding: "5px 10px",
-      border: "none",
-      background: "blue",
-      color: "#fff",
-      cursor: "pointer",
-    },
-    deleteButton: {
-      padding: "5px 10px",
-      border: "none",
-      background: "red",
-      color: "#fff",
-      cursor: "pointer",
-      marginTop: "10px",
-    },
-  };
+
   export default BoardDetail;
