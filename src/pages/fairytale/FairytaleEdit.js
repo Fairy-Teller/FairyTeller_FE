@@ -78,7 +78,7 @@ const FairytaleEdit = () => {
     const saveClick = () => {
         setSaveall(true);
     };
-    console.log(showImage);
+    console.log('>>>', showImage);
 
     return (
         <div className="edit">
@@ -103,7 +103,7 @@ const FairytaleEdit = () => {
                                 <PageSelection
                                     key={index}
                                     idx={page.pageNo}
-                                    src={'https://s3.ap-northeast-2.amazonaws.com/' + page.originalImageUrl}
+                                    src={page.originalImageUrl}
                                     onClick={() => toggleCanvasVisibility(page.pageNo)}
                                     style={{
                                         border: '20px solid red',
