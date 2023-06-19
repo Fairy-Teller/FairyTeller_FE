@@ -1,14 +1,78 @@
 .comment {
-    margin-bottom: 10px;
-  }
-  
-  .buttonContainer {
-    display: inline-block;
-    margin-left: 10px;
-  }
-  
-  .smallButton {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px auto;  /* Changing margin to "auto" will center the div */
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  box-shadow: 0px 0px 10px #eee;
+  width: 80%;  /* 너비를 90%로 조정합니다. */
+  max-width: 1000px;
+}
+
+
+.smallButton {
     margin-right: 5px;
     margin-bottom: 5px;
-  }
-  
+}
+
+.commentSection {
+  width: 80%;
+}
+
+.commentForm {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.commentInput {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.commentSubmitButton {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #FCDEDE;
+  color: #333;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.commentSubmitButton:hover {
+  background-color: #FFC0C0;
+}
+
+.commentList {
+  list-style-type: none;
+  padding: 0;
+}
+
+
+.commentContent {
+  flex: 1;
+  margin-left: 10px;
+}
+
+.commentActionButtons {
+  display: flex;
+  align-items: center;
+}
+
+.commentActionButton {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  background: #FCDEDE;
+  color: #333;
+  cursor: pointer;
+}
+
+.commentItem {
+  max-width: 400px; /* 원하는 폭으로 조정하세요 */
+}

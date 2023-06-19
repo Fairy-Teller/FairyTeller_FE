@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { call } from "../../service/ApiService";
+import '../../css/CommentSection.css';
 const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteComment, boardId, isBoardOwner }) => {
   const [comment, setComment] = useState("");
   const [editingComment, setEditingComment] = useState(null);
@@ -51,20 +52,23 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
     onDeleteComment(comment.commentId);
   };
   return (
-    <div>
+    <div className="commentSection">
       <h3>댓글</h3>
-      <form onSubmit={handleSubmit}>
+      <form className="commentForm" onSubmit={handleSubmit}>
+        
         <input
+          className="commentInput"
           type="text"
+          style={{ flex: 1, width: "100%", height: "30px", fontSize: "15px" }}
           value={comment}
           onChange={handleChange}
           placeholder="댓글을 입력하세요..."
         />
-        <button type="submit">등록</button>
+        <button className="commentSubmitButton" type="submit" style={{ marginLeft: "10px" }}>등록</button>
       </form>
-      <ul>
+      <ul className="commentList">
         {comments.map((comment) => (
-          <li key={comment.commentId} className={`comment ${editingComment === comment ? "editing" : ""}`}>
+          <li key={comment.commentId} className={`commentItem ${editingComment === comment ? "editing" : ""}`}>
             {editingComment === comment ? (
               <>
                 <input
@@ -95,6 +99,7 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
       </ul>
     </div>
   );
+  
 };
 
 export default CommentSection;
