@@ -16,9 +16,15 @@ const BoardDetail = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
 
-  const handleLike = () => {
-    setIsLiked(!isLiked);
+  const handleLike = async () => {
+    try {
+      await call(`/board/${boardId}/like`, "POST", null);
+      setIsLiked((prevIsLiked) => !prevIsLiked);
+    } catch (error) {
+      console.log("Error liking the board:", error);
+    }
   };
+  
 
   useEffect(() => {
     fetchData();
@@ -99,20 +105,31 @@ const BoardDetail = () => {
           <img src={board.thumbnailUrl} alt="Thumbnail" style={styles.thumbnail} />
         </div>
         <p style={styles.content}>{board.content}</p>
-        <button onClick={handleLike}>
-          {isLiked ? <FontAwesomeIcon icon={solidHeart} /> : <FontAwesomeIcon icon={regularHeart} />}
-        </button>
-        <CommentSection
-          comments={comments}
-          setComments={setComments}
-          onCommentSubmit={handleCommentSubmit}
-          onDeleteComment={handleDeleteComment}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-          boardId={boardId}
-          isBoardOwner={board.editable}
-        />
+        <button
+          onClick={handleLike}
+          style={{ backgroundColor: "transparent", border: "none" }}
+        >
+          {isLiked ? (
+            <FontAwesomeIcon icon={solidHeart} size="2x" style={{ color: "red" }} />
+          ) : (
+            <FontAwesomeIcon icon={regularHeart} size="2x" style={{ color: "red" }} />
+          )}
+    <span style={{ marginLeft: "5px", fontSize: "16px" }}>
+      {isLiked ? "동화가 마음에 들었어요!" : "동화가 마음에 드시나요?"}
+    </span>
+  </button>
+  <CommentSection
+    comments={comments}
+    setComments={setComments}
+    onCommentSubmit={handleCommentSubmit}
+    onDeleteComment={handleDeleteComment}
+    currentPage={currentPage}
+    totalPages={totalPages}
+    onPageChange={handlePageChange}
+    boardId={boardId}
+    isBoardOwner={board.editable}
+  />
+
         <div style={styles.pagination}>
           {Array.from({ length: totalPages }, (_, index) => (
             <button
@@ -132,6 +149,10 @@ const BoardDetail = () => {
     container: {
       display: "flex",
       flexDirection: "column",
+      alignItems: "center",
+    },
+    row: {
+      display: "flex",
       alignItems: "center",
     },
     center: {
