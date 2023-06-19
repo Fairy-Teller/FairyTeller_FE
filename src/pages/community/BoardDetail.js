@@ -96,38 +96,39 @@ const BoardDetail = () => {
 
   return (
     <div>
-    <div className="bar">FairyTeller</div>
-    <div className="container">
-      <div className="deleteButtonContainer">
-        {board.editable && (
-          <button className="deleteButton" onClick={handleDeleteBoard}>
-            Delete
-          </button>
-        )}
-      </div>
-      <div className="container">
-        <h2 className="title">{board.title}</h2>
-        
-        <div className="center">
-          <p className="author">Author: {board.nickname}</p>
-          <div className="thumbnailContainer">
-          <FairytaleShow props={board.bookId} />
+      <div className="bar">FairyTeller</div>
+      <div>
+        <div className="deleteButtonContainer">
+          {board.editable && (
+            <button className="deleteButton" onClick={handleDeleteBoard}>
+              Delete
+            </button>
+          )}
+        </div>
+        <div>
+          <h2 className="title center">{board.title}</h2>
+          <div className="author center">Author: {board.nickname}</div>
+          <div>
+            <FairytaleShow props={board.bookId} />
           </div>
-          <p className="content">{board.content}</p>
-          <button
-            onClick={handleLike}
-            style={{ backgroundColor: "transparent", border: "none" }}
-          >
-            {isLiked ? (
-              <FontAwesomeIcon icon={solidHeart} size="2x" style={{ color: "red" }} />
-            ) : (
-              <FontAwesomeIcon icon={regularHeart} size="2x" style={{ color: "red" }} />
-            )}
-            <span style={{ marginLeft: "5px", fontSize: "16px" }}>
-              {isLiked ? "동화가 마음에 들었어요!" : "동화가 마음에 드시나요?"}
-            </span>
-          </button>
-          <CommentSection
+          <div className="action-section">
+          <div className="like-button">
+            <button class="like-btn"
+              onClick={handleLike}
+              style={{ backgroundColor: "transparent", border: "none" }}
+            >
+              {isLiked ? (
+                <FontAwesomeIcon icon={solidHeart}  class="fa-heart" style={{ color: "red" }} />
+              ) : (
+                <FontAwesomeIcon icon={regularHeart}  class="fa-heart" style={{ color: "red" }} />
+              )}
+              <span style={{ marginLeft: "5px"}}>
+                {isLiked ? "동화가 마음에 들었어요!" : "동화가 마음에 드시나요?"}
+              </span>
+            </button>
+          </div>
+          <div class="comment-section">
+                      <CommentSection
             comments={comments}
             setComments={setComments}
             onCommentSubmit={handleCommentSubmit}
@@ -138,7 +139,9 @@ const BoardDetail = () => {
             boardId={boardId}
             isBoardOwner={board.editable}
           />
-  
+          </div>
+          </div>
+
           <div className="pagination">
             {Array.from({ length: totalPages }, (_, index) => (
               <button
@@ -153,8 +156,8 @@ const BoardDetail = () => {
         </div>
       </div>
     </div>
-    </div>
   );
+  
 };
 
   export default BoardDetail;
