@@ -32,6 +32,20 @@ const Savebutton = styled.button`
     margin-top: 28px;
     margin-right: 38px;
     font-size: 30px;
+    float: right;
+`;
+
+const Bar = styled.div`
+    width: 100hw;
+    height: 99px;
+    text-align: left;
+    background: #fcdede;
+    font-family: 'Amiri';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 88px;
+    color: #000000;
 `;
 
 const FairytaleEdit = () => {
@@ -62,6 +76,12 @@ const FairytaleEdit = () => {
     };
     useEffect(() => {
         getNewest();
+        document.body.style.overflow = 'hidden';
+
+        return () => {
+            // 컴포넌트가 언마운트될 때 스크롤 가능하게 되돌림
+            document.body.style.overflow = 'auto';
+        };
     }, []);
 
     const getNewest = async () => {
@@ -82,15 +102,17 @@ const FairytaleEdit = () => {
 
     return (
         <div className="edit">
-            <Container>
+            <Bar>FairyTeller</Bar>
+
+            <div>
                 <Frame>
+                    <Savebutton onClick={saveClick}>동화 완성하기</Savebutton>
                     {Object.keys(canvasVisibility).map((key) => (
                         <div
                             key={key}
                             style={{
-                                width: canvasWidth,
-                                height: canvasHeight,
                                 display: canvasVisibility[key] ? 'block' : 'none',
+                                textAlign: 'center',
                             }}
                         >
                             <TryCanvas props={Number(key)} BookInfo={showImage} />
@@ -117,8 +139,7 @@ const FairytaleEdit = () => {
                 </Frame>
 
                 {saveAll && <TitleModal props={showImage.bookId} />}
-                <Savebutton onClick={saveClick}>동화 완성하기</Savebutton>
-            </Container>
+            </div>
         </div>
     );
 };

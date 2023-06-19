@@ -43,15 +43,16 @@ const Tab = styled.button`
     height: 9%;
     top: 216px;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
     ${({ clicked }) =>
         clicked &&
         css`
-            background-color: black;
+            background-color: #ed9696;
             color: white;
         `}
 `;
 const Tooltab = styled.div`
-    width: calc(95vw - 1280px);
+    width: 15%;
     display: flex;
     flex-direction: column;
     top: 0;
@@ -140,10 +141,7 @@ const TryCanvas = (props) => {
         canvas.stateaction = true;
 
         fabric.Image.fromURL(
-            
-                data.pages[props.props - 1].originalImageUrl +
-                '?timestamp=' +
-                new Date().getTime(),
+            data.pages[props.props - 1].originalImageUrl + '?timestamp=' + new Date().getTime(),
             (image) => {
                 canvas.setBackgroundImage(image, canvas.renderAll.bind(canvas), {
                     scaleX: canvas.width / image.width,
