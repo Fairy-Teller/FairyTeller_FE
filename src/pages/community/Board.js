@@ -42,8 +42,8 @@ const Board = () => {
   return (
     <div>
               <div className="bar">FairyTeller</div>
-    <div style={{ marginTop: '8%' }}>
-      <h4 style={{ textAlign: 'center', marginBottom: '20px' }}>게시판</h4>
+    <div style={{ marginTop: '5%' }}>
+    <h4 style={{ textAlign: 'center', marginBottom: '5%', fontSize: '30px' }}>우리들의 도서관</h4>
       {books.length > 0 ? (
         <div className="book-container">
           {books.map((book) => (
@@ -66,7 +66,7 @@ const Board = () => {
       )}
       {/* 페이지네이션 컴포넌트 */}
       {totalPages > 0 && (
-        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+        <div style={{ textAlign: 'center', marginTop: '60px'}}>
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index}

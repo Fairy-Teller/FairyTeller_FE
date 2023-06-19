@@ -85,3 +85,7 @@
     transform: rotateY(190deg);
   }
   
+  .bar {
+    margin-top: 20px; /* 글자를 더 올리기 위한 상단 여백 조정 */
+    /* 기타 스타일 속성 */
+  }
