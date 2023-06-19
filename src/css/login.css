@@ -24,6 +24,11 @@ h1 {
   margin-bottom: 20px;
 }
 
+.textContainer {
+  width: 80%;
+  margin: 0 auto; /* Center the element */
+}
+
 .textContainer > label {
   text-align: left;
   display: block;
@@ -66,4 +71,20 @@ a:hover {
 
 .linkContainer {
   margin-top: 10px;
+}
+
+#container {
+  opacity: 0;
+  animation: containerFadeIn 1s ease-in forwards;
+}
+
+@keyframes containerFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
