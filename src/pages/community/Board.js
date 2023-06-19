@@ -54,6 +54,7 @@ const Board = () => {
                     <div className="book__content">
                       <img src={book.thumbnailUrl} alt={book.title} className="book__image" />
                       <h6 className="book__title">{truncateTitle(book.title)}</h6>
+                      <h6 className="book__author">{truncateTitle(book.nickname)}</h6>
                     </div>
                   </div>
                 </div>
@@ -76,7 +77,7 @@ const Board = () => {
                 padding: '5px 10px',
                 border: 'none',
                 borderRadius: '5px',
-                backgroundColor: currentPage === index ? 'lightblue' : 'white',
+                backgroundColor: currentPage === index ? '#99F0CC' : 'white',
                 cursor: 'pointer',
               }}
             >
