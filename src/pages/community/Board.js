@@ -41,30 +41,44 @@ const Board = () => {
 
   return (
     <div>
-        <div className="bar">FairyTeller</div>
-    <div className="board-container">
-      <h4 className="board-title">게시판</h4>
+              <div className="bar">FairyTeller</div>
+    <div style={{ marginTop: '8%' }}>
+      <h4 style={{ textAlign: 'center', marginBottom: '20px' }}>게시판</h4>
       {books.length > 0 ? (
-        <div className="books-grid">
+        <div className="book-container">
           {books.map((book) => (
-            <Link to={`/board/${book.boardId}`} key={book.boardId} className="book-link">
-              <div className="book-item">
-                <img src={book.thumbnailUrl} alt={book.title} className="book-image" />
-                <h6 className="book-title">{truncateTitle(book.title)}</h6>
+            <Link to={`/board/${book.boardId}`} key={book.boardId} style={{ textDecoration: 'none' }}>
+              <div className="book">
+                <div className="book__cover">
+                  <div className="book__page book__page--front">
+                    <div className="book__content">
+                      <img src={book.thumbnailUrl} alt={book.title} className="book__image" />
+                      <h6 className="book__title">{truncateTitle(book.title)}</h6>
+                    </div>
+                  </div>
+                </div>
               </div>
             </Link>
           ))}
         </div>
       ) : (
-        <p className="no-books">게시물이 없습니다.</p>
+        <p style={{ textAlign: 'center' }}>게시물이 없습니다.</p>
       )}
+      {/* 페이지네이션 컴포넌트 */}
       {totalPages > 0 && (
-        <div className="pagination">
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index}
               onClick={() => handlePageChange(index)}
-              className={`page-button ${currentPage === index ? 'active-page' : ''}`}
+              style={{
+                margin: '5px',
+                padding: '5px 10px',
+                border: 'none',
+                borderRadius: '5px',
+                backgroundColor: currentPage === index ? 'lightblue' : 'white',
+                cursor: 'pointer',
+              }}
             >
               {index + 1}
             </button>
@@ -74,6 +88,6 @@ const Board = () => {
     </div>
     </div>
   );
-};
-
+            }
+  
 export default Board;

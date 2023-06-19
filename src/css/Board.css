@@ -1,62 +1,87 @@
-.bar {
-    width: 100vw;
-    height: 99px;
-    text-align: left;
-    background: #FCDEDE;
-    font-family: 'Amiri';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 50px;
-    line-height: 88px;
-    color: #000000;
-  }
-.board-container {
-    margin-top: 8%;
-  }
-  
-  .board-title {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .books-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* One row with 4 columns */
-    gap: 20px;
+.book-container {
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    overflow: auto;
+    gap: 20px;
     max-height: calc(100vh - 200px);
-    grid-auto-flow: dense;
+    overflow: auto;
   }
   
-  .book-link {
-    text-decoration: none;
+  .book {
+    position: relative;
+    width: 200px;
+    height: 300px;
+    perspective: 800px;
+    cursor: pointer;
   }
   
-  .book-item {
+  .book__cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transform: rotateY(0deg);
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .book__page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+  }
+  
+  .book__page--front {
+    background-color: #F5F5F5;
+    transform: rotateY(0deg);
+  }
+  
+  .book__page--back {
+    background-color: #F5F5F5;
+    transform: rotateY(180deg);
+  }
+  
+  .book__content {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 10px;
+    bottom: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-  }
-  
-  .book-image {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-  }
-  
-  .book-title {
-    font-size: 18px;
-    margin-top: 10px;
-  }
-  
-  .no-books {
     text-align: center;
+    background-color: #FFFFFF;
+    box-shadow: 0px 2px 5px rgba(3, 3, 3, 0.1);
+    padding: 20px;
   }
   
-  .pagination {
-    text-align: center;
+  .book__title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .book__author {
+    font-size: 14px;
+    color: #999999;
+  }
+  
+  .book:hover .book__cover {
+    transform: rotateY(-10deg);
+  }
+  
+  .book:hover .book__page--front {
+    transform: rotateY(10deg);
+  }
+  
+  .book:hover .book__page--back {
+    transform: rotateY(190deg);
   }
   
