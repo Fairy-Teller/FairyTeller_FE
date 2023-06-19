@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 import '../../css/BoardDetail.css';
+import FairytaleShow from '../fairytale/FairytaleShow';
+
 
 const BoardDetail = () => {
   const { boardId } = useParams();
@@ -60,6 +62,7 @@ const BoardDetail = () => {
     }
   };
 
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
     fetchDataComments(page);
@@ -76,6 +79,7 @@ const BoardDetail = () => {
       console.log("Error fetching comments:", error);
     }
   };
+
 
   const handleDeleteBoard = async () => {
     try {
@@ -107,7 +111,7 @@ const BoardDetail = () => {
         <div className="center">
           <p className="author">Author: {board.nickname}</p>
           <div className="thumbnailContainer">
-            <img src={board.thumbnailUrl} alt="Thumbnail" className="thumbnail" />
+          <FairytaleShow props={board.bookId} />
           </div>
           <p className="content">{board.content}</p>
           <button
@@ -151,7 +155,6 @@ const BoardDetail = () => {
     </div>
     </div>
   );
-  
 };
 
   export default BoardDetail;

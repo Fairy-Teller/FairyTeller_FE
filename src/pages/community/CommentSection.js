@@ -1,23 +1,18 @@
 import React, { useState } from "react";
 import { call } from "../../service/ApiService";
-
 const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteComment, boardId, isBoardOwner }) => {
   const [comment, setComment] = useState("");
   const [editingComment, setEditingComment] = useState(null);
   const [editedComment, setEditedComment] = useState("");
-
   const handleChange = (e) => {
     setComment(e.target.value);
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (comment.trim() !== "") {
       const newComment = {
         content: comment,
       };
-
       try {
         const response = await onCommentSubmit(newComment);
         const savedComment = response?.data?.[0];
@@ -31,12 +26,10 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
     }
     setComment(""); // 댓글 입력칸 비우기
   };
-
   const handleEdit = (comment) => {
     setEditingComment(comment);
     setEditedComment(comment.content);
   };
-
   const handleUpdate = async (comment) => {
     try {
       await call(`/board/${boardId}/comment/${comment.commentId}`, "PUT", { content: editedComment });
@@ -44,24 +37,19 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
         c.commentId === comment.commentId ? { ...c, content: editedComment } : c
       );
       setComments(updatedComments);
-
       setEditingComment(null);
       setEditedComment("");
     } catch (error) {
       console.log("Error updating comment:", error);
     }
   };
-
   const handleCancelEdit = () => {
     setEditingComment(null);
     setEditedComment("");
   };
-
   const handleDelete = (comment) => {
     onDeleteComment(comment.commentId);
   };
-
-
   return (
     <div>
       <h3>댓글</h3>
@@ -121,6 +109,4 @@ const styles = {
     marginBottom: "5px",
   }
 };
-
-
 export default CommentSection;
