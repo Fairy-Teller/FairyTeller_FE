@@ -67,24 +67,18 @@ const Board = () => {
       )}
       {/* 페이지네이션 컴포넌트 */}
       {totalPages > 0 && (
-        <div style={{ textAlign: 'center', marginTop: '60px'}}>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index}
-              onClick={() => handlePageChange(index)}
-              style={{
-                margin: '5px',
-                padding: '5px 10px',
-                border: 'none',
-                borderRadius: '5px',
-                backgroundColor: currentPage === index ? '#99F0CC' : 'white',
-                cursor: 'pointer',
-              }}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
+<div style={{ marginTop: '60px', display: 'flex', justifyContent: 'center' }}>
+  {Array.from({ length: totalPages }, (_, index) => (
+    <button
+      key={index}
+      onClick={() => handlePageChange(index)}
+      className="board-page-button"
+      style={{ backgroundColor: currentPage === index ? '#99F0CC' : 'white' }}
+    >
+      {index + 1}
+    </button>
+  ))}
+</div>
       )}
     </div>
     </div>
