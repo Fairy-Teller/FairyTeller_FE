@@ -30,6 +30,7 @@ const BoardDetail = () => {
       setComments(boardData.comments);
       setCurrentPage(response.currentPage);
       setTotalPages(response.totalPages);
+      setIsLiked(boardData.liked);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
