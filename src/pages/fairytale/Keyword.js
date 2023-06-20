@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilCallback, useResetRecoilState } from "recoil";
-import { SelectedKeywords, StoryState, Canvasexport } from "../../recoil/Fairytailstate";
+import { useRecoilState, useRecoilCallback } from "recoil";
+import { SelectedKeywordsState, StoryState } from "../../recoil/Fairytailstate";
 import { call } from "../../service/ApiService";
+import styled from "styled-components";
 import Container from "../../components/global/Container";
 import Row from "../../components/global/Row";
 import Section from "../../components/global/Section";
 import ButtonWrap from "../../components/common/ButtonWrap";
-import styled from "styled-components";
 import LoadingModal from "../../components/LoadingModal";
 
 const Keywords = styled.ul`
@@ -64,10 +64,9 @@ const SectionKeyword = styled.div`
 `;
 
 function Keyword() {
-  const [loading, setLoading] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [keywords, setKeywords] = useRecoilState(SelectedKeywords);
-  const [savedStory, setSavedStory] = useRecoilState(StoryState);
+  const [keywords, setKeywords] = useRecoilState(SelectedKeywordsState);
   const [dataIdx, setDataIdx] = useState(0);
   const [input, setInput] = useState("");
   const [options, setOptions] = useState([{}]);
@@ -88,7 +87,7 @@ function Keyword() {
         }));
       });
       setKeywords([]);
-      setLoading(true);
+      setLoaded(true);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
@@ -165,7 +164,7 @@ function Keyword() {
   return (
     <div className='story keyword'>
       {isLoading && <LoadingModal message='AI가 열심히 이야기를 만드는 중입니다.' />}
-      {loading ? (
+      {loaded ? (
         <Container>
           <Bar>FairyTeller</Bar>
           <BookCover>
