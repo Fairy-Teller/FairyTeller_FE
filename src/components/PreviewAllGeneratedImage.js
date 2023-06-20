@@ -1,74 +1,112 @@
-import React, { useState, useEffect } from 'react';
-import { call } from '../service/ApiService';
-import ButtonWrap from './common/ButtonWrap';
-import { Link, useNavigate } from 'react-router-dom';
-import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from 'recoil';
-import { StoryState, ImageTempState, BookState } from '../recoil/Fairytailstate';
+import React, { useState, useEffect } from "react";
+import { call } from "../service/ApiService";
+import { Link, useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { ImageTempState } from "../recoil/Fairytailstate";
 import styled from "styled-components";
-import LoadingModal from './LoadingModal';
+
 const Div = styled.div`
-//   color: white;
-`; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+`;
 
 const Text = styled.p`
-    display: flex;
-    text-align: center; /* 가운데 정렬 속성 추가 */
-    align-items: center; /* 세로 가운데 정렬 */
-    width: 1416px;
-    height: 185px;
-    border-radius: 20px;
-    width: 1509px;
-    height: 161px;
-    font-family: 'Amiri';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 25px;
-    line-height: 44px;
-    color: #000000;
-`
-const Button = styled.button`
-    width: 400px;
-    height: 81px;
-    background: #99F0CC;
-    border-radius: 10px;
-    font-family: 'Amiri';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 36px;
-    line-height: 63px;
-    text-align: center !important; /* 가운데 정렬 속성 추가 */
-    color: #000000;
-    justify-content: center; /* 가로 가운데 정렬 */
-    align-items: center; /* 세로 가운데 정렬 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 110px;
+  font-family: "Amiri";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 25px;
+  color: #000000;
+  margin-bottom: 20px;
+  text-align: center;
 `;
+
+const ImageContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 30px;
+  width: 1000px; /* Sum of Image widths and gaps (350 * 3 + 30 * 2) */
+`;
+
+const Image = styled.img`
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  margin-bottom: 30px;
+
+  &:nth-child(4),
+  &:nth-child(5) {
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
+const ButtonWrap = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+const Button = styled.button`
+  width: 200px;
+  height: 40px;
+  background: #99f0cc;
+  border-radius: 10px;
+  font-family: "Amiri";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  text-align: center;
+  color: #000000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+
+  &:hover {
+    background-color: #87dab3;
+  }
+`;
+
 const PreviewAllGeneratedIamge = () => {
   const [savedImageTemp, setSavedImageTemp] = useRecoilState(ImageTempState);
   const navigate = useNavigate();
-  useEffect(()=>{
-    console.log('savedImageTemp', savedImageTemp);
-  }, [])
-
+  useEffect(() => {
+    console.log("savedImageTemp", savedImageTemp);
+  }, []);
 
   const gotoEdit = () => {
-    navigate('/f-edit'); // 이미지 선택 화면으로 가기
+    navigate("/f-edit");
   };
 
   return (
     <Div>
-      <div>
-        <Text>AI가 만들어준 그림을 확인해보아요!</Text>
-      </div>
-      <div>
+      <Text>AI가 만들어준 그림을 확인해보아요!</Text>
+      <ImageContainer>
         {savedImageTemp.map((item, index) => (
-            <img src={item["url"]}/>
-        )
-        )}
-      </div>
-      <ButtonWrap>  
-      <Button className="button" onClick={gotoEdit}>
-                  동화책 꾸미기
-      </Button>
-      </ButtonWrap>  
+          <Image
+            key={index}
+            src={item["url"]}
+            alt={`Generated Image ${index + 1}`}
+          />
+        ))}
+      </ImageContainer>
+      <ButtonWrap>
+        <Button onClick={gotoEdit}>동화책 꾸미기</Button>
+      </ButtonWrap>
     </Div>
   );
 };

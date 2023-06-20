@@ -21,12 +21,52 @@ const KeywordItem = styled.li`
     padding: 0.625rem;
 `;
 const ItemTitle = styled.p`
-    font-size: 14px;
+    font-size: 1px;
 `;
 const ItemInput = styled.input`
     width: 2rem;
     height: 2rem;
     border-radius: 50%;
+`;
+
+const Bar = styled.div`
+    width: 100hw;
+    height: 60px;
+    text-align: left;
+    background: #FCDEDE;
+    font-family: 'Amiri';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 60px;
+    color: #000000;
+`;
+
+const BookCover = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100vw;
+    height: 100vh;
+    background-size: cover;
+`;
+
+const FairytaleTitle = styled.div`
+    font-weight: 400;
+    font-size: 45px;
+    text-align: center;
+`;
+const FormKeyword = styled.div`
+    width:80%;
+    margin : auto;
+`; 
+
+const SectionKeyword = styled.div`
+    border: 0.3em solid #edaeae;
+    padding: 0 2em 2em 2em;
+    margin: 1em;
+    border-radius: 1em;
 `;
 
 function Keyword() {
@@ -111,41 +151,50 @@ function Keyword() {
         <div className="story keyword">
             {isLoading && <LoadingModal message="AI가 열심히 이야기를 만드는 중입니다." />}
             {loading ? (
-                <Container className={'wide'}>
-                    <h1>
-                        고를 수 있는 키워드
-                        <br />
-                        최대 5개
-                    </h1>
-                    <form onSubmit={onSubmitHandler}>
-                        {options.map((item, index) => (
-                            <Section key={index}>
-                                <h2>{item.theme}</h2>
-                                <Keywords>
-                                    <Row>
-                                        {item.titles.map((title, subIndex) => (
-                                            <KeywordItem key={subIndex}>
-                                                <ItemInput
-                                                    id={`keyword${title.key}`}
-                                                    className="ItemInput"
-                                                    type="checkbox"
-                                                    name={title}
-                                                    checked={title.checked}
-                                                    onChange={(e) => handleChecked(e.target)}
-                                                />
-                                                <ItemTitle>{title}</ItemTitle>
-                                            </KeywordItem>
-                                        ))}
-                                    </Row>
-                                </Keywords>
-                            </Section>
-                        ))}
-                        <ButtonWrap>
-                            <button type="submit" className="button">
-                                이야기 만들러 가기
-                            </button>
-                        </ButtonWrap>
-                    </form>
+                <Container>
+                    <Bar>FairyTeller</Bar>
+                    <BookCover>
+                    <img src="/images/loding_1.png" style={{ marginTop: '2%' }} />
+                        <FairytaleTitle>단어 5개를 선택해요!</FairytaleTitle>
+                        <FormKeyword>
+                            <form onSubmit={onSubmitHandler}>
+                                {options.map((item, index) => (
+                                    <SectionKeyword>
+                                    <Section key={index}>
+                                        <h2 style={{paddingBottom:'0.1em'}}>{item.theme} 분류</h2>
+                                        <Keywords>
+                                            <Row>
+                                                {item.titles.map((title, subIndex) => (
+                                                    <KeywordItem key={subIndex}>
+                                                        <div  style={{ width: '100%', height: '100%' }}>
+                                                            <img src={`./images/keywords/${title}.png`}style={{ width: '100%', height: '100%', objectFit: 'contain' }}/>
+                                                            <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>                                              
+                                                                <ItemInput
+                                                                    id={`keyword${title.key}`}
+                                                                    className="ItemInput"
+                                                                    type="checkbox"
+                                                                    name={title}
+                                                                    checked={title.checked}
+                                                                    onChange={(e) => handleChecked(e.target)}
+                                                                />
+                                                                <ItemTitle>{title}</ItemTitle>
+                                                            </div>  
+                                                        </div>                                                
+                                                    </KeywordItem>
+                                                ))}
+                                            </Row>
+                                        </Keywords>
+                                    </Section>
+                                    </SectionKeyword>
+                                ))}
+                                <ButtonWrap>
+                                    <button type="submit" className="button">
+                                        이야기 만들러 가기
+                                    </button>
+                                </ButtonWrap>
+                            </form>
+                            </FormKeyword>
+                    </BookCover>
                 </Container>
             ) : (
                 <div>되는 중...</div>
