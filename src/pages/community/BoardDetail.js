@@ -44,14 +44,14 @@ const BoardDetail = () => {
     }
   };
 
-  const handleDeleteComment = async (commentId) => {
-    try {
-      await call(`/board/${boardId}/comment/${commentId}`, "DELETE", null);
-      fetchDataComments(currentPage);
-    } catch (error) {
-      console.log("Error deleting comment:", error);
-    }
-  };
+    const handleCommentSubmit = async (comment) => {
+        try {
+            await call(`/board/${boardId}/comment`, 'POST', comment);
+            fetchDataComments(currentPage); // 새로운 댓글이 추가된 후 전체 댓글 목록을 다시 가져옴
+        } catch (error) {
+            console.log('Error submitting comment:', error);
+        }
+    };
 
   const handleLike = async () => {
     try {
