@@ -1,0 +1,47 @@
+.header-wrap {
+  width: 100%;
+  max-width: 100%;
+  background-color: #fcdede;
+}
+
+.header {
+  width: 100%;
+  max-width: 1600px;
+  height: 3.2rem;
+  padding: 0;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.4s;
+  h1 {
+    padding: 0;
+    margin: 0;
+    font : {
+      style: normal;
+      family: "Amiri";
+      size: 2.2rem;
+      weight: 700;
+    }
+    text-align: left;
+    color: #000000;
+    transition: all 0.4s;
+  }
+
+  &:hover {
+    height: 4.4rem;
+    h1 {
+      font-size: 2.4rem;
+      line-height: 60px;
+    }
+  }
+}
+
+.logo {
+  display: inline-block;
+  a {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+  }
+}

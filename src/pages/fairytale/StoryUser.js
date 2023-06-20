@@ -8,8 +8,9 @@ import {
   ImageFix,
   BookState,
 } from "../../recoil/Fairytailstate";
-
 import { call } from "../../service/ApiService";
+import Header from "../../components/global/Header";
+import ProgressBar from "../../components/global/ProgressBar";
 import Container from "../../components/global/Container";
 import Section from "../../components/global/Section";
 import styled from "styled-components";
@@ -25,19 +26,6 @@ const TextArea = styled.textarea`
   padding: 0.7em;
   font-family: emoji;
   text-align: center;
-`;
-
-const Bar = styled.div`
-  width: 100hw;
-  height: 99px;
-  text-align: left;
-  background: #fcdede;
-  font-family: "Amiri";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 50px;
-  line-height: 88px;
-  color: #000000;
 `;
 const Button = styled.button`
   width: auto;
@@ -131,13 +119,8 @@ const StoryGenerated = () => {
   return (
     <div className='write tmp_story-generated'>
       <Container>
-        <Bar>FairyTeller</Bar>
+        <Header mode={"default"} />
         <BookCover>
-          <img
-            src='/images/loding_1.png'
-            style={{ marginTop: "2%" }}
-            alt='loading bar'
-          />
           <FairytaleTitle>동화를 직접 써볼 수 있어요!</FairytaleTitle>
           <FormWrap>
             <form onSubmit={onSubmitHandler}>

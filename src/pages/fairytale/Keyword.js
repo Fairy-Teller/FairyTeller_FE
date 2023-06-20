@@ -4,6 +4,8 @@ import { useRecoilState, useRecoilCallback } from "recoil";
 import { SelectedKeywordsState, StoryState } from "../../recoil/Fairytailstate";
 import { call } from "../../service/ApiService";
 import styled from "styled-components";
+import Header from "../../components/global/Header";
+import ProgressBar from "../../components/global/ProgressBar";
 import Container from "../../components/global/Container";
 import Row from "../../components/global/Row";
 import Section from "../../components/global/Section";
@@ -23,20 +25,6 @@ const ItemInput = styled.input`
   height: 2rem;
   border-radius: 50%;
 `;
-
-const Bar = styled.div`
-  width: 100hw;
-  height: 60px;
-  text-align: left;
-  background: #fcdede;
-  font-family: "Amiri";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 40px;
-  line-height: 60px;
-  color: #000000;
-`;
-
 const BookCover = styled.div`
   display: flex;
   flex-direction: column;
@@ -45,7 +33,6 @@ const BookCover = styled.div`
   // height: 100vh;
   background-size: cover;
 `;
-
 const FairytaleTitle = styled.div`
   font-weight: 400;
   font-size: 45px;
@@ -55,7 +42,6 @@ const FormKeyword = styled.div`
   width: 80%;
   margin: auto;
 `;
-
 const SectionKeyword = styled.div`
   border: 0.3em solid #edaeae;
   padding: 0 2em 2em 2em;
@@ -166,13 +152,8 @@ function Keyword() {
       {isLoading && <LoadingModal message='AI가 열심히 이야기를 만드는 중입니다.' />}
       {loaded ? (
         <Container>
-          <Bar>FairyTeller</Bar>
+          <Header mode={"default"} />
           <BookCover>
-            <img
-              src='/images/loding_1.png'
-              style={{ margin: "2rem 0" }}
-              alt='bookcover'
-            />
             <FairytaleTitle>단어를 3개부터 5개까지 선택해보아요!</FairytaleTitle>
             <Row className='current'>
               {keywords

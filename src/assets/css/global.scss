@@ -74,24 +74,6 @@ body {
   border-radius: 50%;
 }
 
-.logo {
-  display: inline-block;
-  a {
-    display: inline-block;
-    width: 100%;
-    height: 100%;
-  }
-}
-
-.yellow-bar {
-  position: absolute;
-  width: 100vw;
-  height: 4vh;
-  left: 0px;
-  top: 0px;
-  background-color: #ffb800;
-}
-
 * {
   box-sizing: content-box;
 }

@@ -10,6 +10,8 @@ import {
 } from "../../recoil/Fairytailstate";
 import { call } from "../../service/ApiService";
 import styled from "styled-components";
+import Header from "../../components/global/Header";
+import ProgressBar from "../../components/global/ProgressBar";
 import Container from "../../components/global/Container";
 import Section from "../../components/global/Section";
 import ButtonWrap from "../../components/common/ButtonWrap";
@@ -28,23 +30,10 @@ const TextArea = styled.textarea`
   font-family: emoji;
   text-align: center;
 `;
-const Bar = styled.div`
-  width: 100hw;
-  height: 60px;
-  text-align: left;
-  background: #fcdede;
-  font-family: "Amiri";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 40px;
-  line-height: 60px;
-  color: #000000;
-`;
 const BookCover = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
   width: 100vw;
   height: 100vh;
   background-size: cover;
@@ -149,13 +138,8 @@ const StoryGenerated = () => {
       {isLoading && <LoadingModal message='AI가 열심히 이야기를 만드는 중입니다.' />}
       {loaded ? (
         <Container>
-          <Bar>FairyTeller</Bar>
+          <Header mode={"default"} />
           <BookCover>
-            <img
-              src='/images/loding_1.png'
-              style={{ marginTop: "2%" }}
-              alt='loading bar'
-            />
             <FairytaleTitle>AI가 만든 동화를 수정할 수 있어요!</FairytaleTitle>
             <FormWrap>
               <form onSubmit={onSubmitHandler}>
