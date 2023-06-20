@@ -107,7 +107,9 @@ function UpdateUser() {
               )}
             </div>
             <div>
-              <button type="submit">정보 수정</button>
+              <button class="submit" type="submit">
+                정보 수정
+              </button>
             </div>
           </form>
         </div>
