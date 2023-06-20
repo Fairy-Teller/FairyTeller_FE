@@ -1,0 +1,156 @@
+  .bar {
+    margin-top: 0;
+    width: 100vw;
+    height: 60px;
+    text-align: left;
+    background: #FCDEDE;
+    font-family: 'Amiri';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 60px;
+    color: #000000;
+  }
+  
+  .center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .author {
+    font-size: 24px;
+    color: #666;
+    margin-top: 20px;
+    margin-bottom: 40px;
+  }
+
+  .deleteButtonContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+  
+  .deleteButton {
+    padding: 10px 20px;
+    border: none;
+    background: #99F0CC;
+    color: #333;
+    cursor: pointer;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 20px;
+  }
+  
+.boardContent {
+  margin-top: 20px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.author {
+  font-size: 16px;
+  color: #666;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pageButton {
+  margin-left: 5px;
+  padding: 5px 10px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+}
+.activePageButton {
+  margin-left: 5px;
+  padding: 5px 10px;
+  border: none;
+  background: #99F0CC;
+  color: #D9D9D9;
+  cursor: pointer;
+}
+
+.action-section {
+  width: 60%;
+  padding: 15px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 5px;
+  background-color: #ffffff;
+  margin-top: 20px; /* Add top margin */
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.like-button {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  margin-bottom: 15px;
+}
+
+.like-btn {
+  background-color: transparent;
+  border: none;
+  align-items: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.like-btn .fa-heart, .like-btn span {
+  display: inline-block;
+}
+
+.like-btn span {
+  display: inline-block;
+}
+
+.like-btn .fa-heart {
+  margin-right: 5px;
+  color: red;
+  font-size: 16px; 
+  width: 30px;
+  height: 30px;
+  position: relative;
+}
+
+.like-btn span {
+  position: relative;
+  top: -10px; /* 조정하고 싶은 값으로 변경 */
+}
+
+.like-btn:hover {
+  opacity: 0.7;
+}
+
+.board-page-button {
+  width: 5px;
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  color: #333333;;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}

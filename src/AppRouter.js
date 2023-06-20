@@ -22,8 +22,11 @@ import FairytaleExport from "./pages/fairytale/FairytaleExport";
 import FairytaleShow from "./pages/fairytale/FairytaleShow";
 import Keyword from "./pages/fairytale/Keyword";
 import StoryGenerated from "./pages/fairytale/StoryGenerated";
+import ImageGenerated from "./pages/fairytale/ImageGenerated";
 import StoryUser from "./pages/fairytale/StoryUser";
 import ParentRecord from "./pages/fairytale/ParentRecord";
+//exam
+import LoadingBarExample from "./pages/fairytale/LoadingBarExample";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -49,8 +52,10 @@ function AppRouter() {
         <Route path="f-show" element={<FairytaleShow />} />
         <Route path="keyword" element={<Keyword />} />
         <Route path="story-generated" element={<StoryGenerated />} />
+        <Route path="image-generated" element={<ImageGenerated />} />
         <Route path="story-user" element={<StoryUser />} />
         <Route path="parent-record" element={<ParentRecord />} />
+        <Route path="loading-test" element={<LoadingBarExample />} />
       </Routes>
     </BrowserRouter>
   );

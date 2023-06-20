@@ -1,166 +1,206 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilCallback } from "recoil";
-import { SelectedKeywords, StoryState } from "../../recoil/Fairytailstate";
-import { call } from "../../service/ApiService";
-import Container from "../../components/global/Container";
-import Row from "../../components/global/Row";
-import Section from "../../components/global/Section";
-import ButtonWrap from "../../components/common/ButtonWrap";
-import styled from "styled-components";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useRecoilCallback, useResetRecoilState } from 'recoil';
+import { SelectedKeywords, StoryState, Canvasexport } from '../../recoil/Fairytailstate';
+import { call } from '../../service/ApiService';
+import Container from '../../components/global/Container';
+import Row from '../../components/global/Row';
+import Section from '../../components/global/Section';
+import ButtonWrap from '../../components/common/ButtonWrap';
+import styled from 'styled-components';
+import LoadingModal from '../../components/LoadingModal';
 
-const [ANIMAL, PEOPLE] = ["ANIMAL", "PEOPLE"];
+// const [ANIMAL, PEOPLE, COLOR, THING, PLACE] = ["ANIMAL", "PEOPLE", "COLOR", "THING", "PLACE"];
 
 const Keywords = styled.ul`
-  background-color: pink;
+    background-color: pink;
 `;
 const KeywordItem = styled.li`
-  list-style: none;
-  flex: 1 0 auto;
-  padding: 0.625rem;
+    list-style: none;
+    flex: 1 0 auto;
+    padding: 0.625rem;
 `;
 const ItemTitle = styled.p`
-  font-size: 14px;
+    font-size: 14px;
 `;
 const ItemInput = styled.input`
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+`;
+
+const Bar = styled.div`
+    width: 100hw;
+    height: 99px;
+    text-align: left;
+    background: #FCDEDE;
+    font-family: 'Amiri';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 88px;
+    color: #000000;
+`;
+
+const BookCover = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100vw;
+    height: 100vh;
+    background-size: cover;
+`;
+
+const FairytaleTitle = styled.div`
+    font-weight: 400;
+    font-size: 45px;
+    text-align: center;
+`;
+const FormKeyword = styled.div`
+    width:80%;
+    margin : auto;
+`; 
+
+const SectionKeyword = styled.div`
+    border: 0.3em solid #edaeae;
+    padding: 0 2em 2em 2em;
+    margin: 1em;
+    border-radius: 1em;
 `;
 
 function Keyword() {
-  const [loading, setLoading] = useState(false);
-  const [checkedValues, setCheckedValues] = useRecoilState(SelectedKeywords);
-  const [savedStory, setSavedStory] = useRecoilState(StoryState);
-  const [dataIdx, setDataIdx] = useState(0);
-  const [options, setOptions] = useState([{}]);
-  const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [checkedValues, setCheckedValues] = useRecoilState(SelectedKeywords);
+    const [savedStory, setSavedStory] = useRecoilState(StoryState);
+    const resetCanvasexport = useResetRecoilState(Canvasexport);
+    const [dataIdx, setDataIdx] = useState(0);
+    const [options, setOptions] = useState([{}]);
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+    useEffect(() => {
+        fetchData();
+        resetCanvasexport();
+    }, []);
 
-  const fetchData = async () => {
-    try {
-      const data = await call("/keyword", "GET", null);
-      setOptions(() => {
-        return data.map((item) => ({
-          key: setDataIdx((prev) => prev + 1),
-          theme: item.keywordEnum,
-          title: item.title,
-        }));
-      });
-      setCheckedValues([]);
-      setLoading(true);
-    } catch (error) {
-      console.log("Error fetching data:", error);
-    }
-  };
+    const fetchData = async () => {
+        try {
+            const data = await call('/keyword', 'GET', null);
+            setOptions(() => {
+                return data.map((item) => ({
+                    key: setDataIdx((prev) => prev + 1),
+                    theme: item.keywordEnum,
+                    titles: item.titles,
+                }));
+            });
+            setCheckedValues([]);
+            setLoading(true);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
+    };
 
-  const handleChecked = (title) => {
-    const bool = checkedValues.some((item) => item.title === title);
-    if (bool) {
-      const updated = checkedValues.filter((item) => item.title !== title);
-      setCheckedValues(updated);
-    } else {
-      const selected = options.find((item) => item.title === title);
-      setCheckedValues([...checkedValues, selected]);
-    }
-  };
+    const handleChecked = (target) => {
+        setCheckedValues((prevValues) => {
+            let updatedValues = [...prevValues];
 
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
-    setCheckedValues((prev) => [
-      ...prev,
-      checkedValues[0].title,
-      checkedValues[1].title,
-      checkedValues[2].title,
-    ]);
-    sendkeyword({
-      parameter1: checkedValues[0].title,
-      parameter2: checkedValues[1].title,
-      parameter3: checkedValues[2].title,
+            if (target.checked) {
+                const selected = options.find((item) => item.titles.includes(target.name));
+                if (selected && updatedValues.length < 5) {
+                    updatedValues.push(target.name);
+                } else {
+                    target.checked = false;
+                    alert('5개까지 고를 수 있어요!');
+                }
+            } else {
+                updatedValues = updatedValues.filter((item) => item !== target.name);
+            }
+
+            console.log(updatedValues);
+            return updatedValues;
+        });
+    };
+
+    const onSubmitHandler = (e) => {
+        e.preventDefault();
+        sendkeyword({
+            parameter1: checkedValues[0],
+            parameter2: checkedValues[1],
+            parameter3: checkedValues[2],
+            parameter4: checkedValues[3],
+            parameter5: checkedValues[4],
+        });
+    };
+
+    const sendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
+        try {
+            setIsLoading(true);
+            const response = await call('/chat-gpt/question', 'POST', userDTO);
+            set(StoryState, response);
+            set(SelectedKeywords, { keywords: checkedValues });
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false);
+            navigate('/story-generated');
+        }
     });
-  };
 
-  const sendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
-    try {
-      const response = await call("/chat-gpt/question", "POST", userDTO);
-      await set(StoryState, { text: response });
-      await set(SelectedKeywords, { keywords: checkedValues });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      navigate("/story-generated");
-    }
-  });
-
-  return (
-    <div className='story keyword'>
-      {loading ? (
-        <Container className={"fixed wide"}>
-          <h1>
-            고를 수 있는 키워드<p>최대 3개</p>
-          </h1>
-          <form onSubmit={onSubmitHandler}>
-            <Section className={ANIMAL}>
-              <h2>{ANIMAL}</h2>
-              <Keywords>
-                <Row>
-                  {options.map((item) =>
-                    item.theme === ANIMAL ? (
-                      <KeywordItem>
-                        <ItemInput
-                          id={`keyword${item.key}`}
-                          name={item.title}
-                          type='checkbox'
-                          checked={item.checked}
-                          className='ItemInput'
-                          onChange={(e) => handleChecked(e.target.name)}
-                        />
-                        <ItemTitle>{item.title}</ItemTitle>
-                      </KeywordItem>
-                    ) : null
-                  )}
-                </Row>
-              </Keywords>
-            </Section>
-            <Section className={PEOPLE}>
-              <h2>{PEOPLE}</h2>
-              <Keywords>
-                <Row>
-                  {options.map((item) =>
-                    item.theme === PEOPLE ? (
-                      <KeywordItem>
-                        <ItemInput
-                          id={`keyword${item.key}`}
-                          name={item.title}
-                          type='checkbox'
-                          checked={item.checked}
-                          className='ItemInput'
-                          onChange={(e) => handleChecked(e.target.name)}
-                        />
-                        <ItemTitle>{item.title}</ItemTitle>
-                      </KeywordItem>
-                    ) : null
-                  )}
-                </Row>
-              </Keywords>
-            </Section>
-            <ButtonWrap>
-              <button
-                type='submit'
-                className='button'>
-                이야기 만들러 가기
-              </button>
-            </ButtonWrap>
-          </form>
-        </Container>
-      ) : (
-        <div>되는 중...</div>
-      )}
-    </div>
-  );
+    return (
+        <div className="story keyword">
+            {isLoading && <LoadingModal message="AI가 열심히 이야기를 만드는 중입니다." />}
+            {loading ? (
+                <Container>
+                    <Bar>FairyTeller</Bar>
+                    <BookCover>
+                    <img src="/images/loding_1.png" style={{ marginTop: '2%' }} />
+                        <FairytaleTitle>단어 5개를 선택해요!</FairytaleTitle>
+                        <FormKeyword>
+                            <form onSubmit={onSubmitHandler}>
+                                {options.map((item, index) => (
+                                    <SectionKeyword>
+                                    <Section key={index}>
+                                        <h2 style={{paddingBottom:'0.1em'}}>{item.theme} 분류</h2>
+                                        <Keywords>
+                                            <Row>
+                                                {item.titles.map((title, subIndex) => (
+                                                    <KeywordItem key={subIndex}>
+                                                        <div  style={{ width: '100%', height: '100%' }}>
+                                                            <img src={`./images/keywords/${title}.png`}style={{ width: '100%', height: '100%', objectFit: 'contain' }}/>
+                                                            <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>                                              
+                                                                <ItemInput
+                                                                    id={`keyword${title.key}`}
+                                                                    className="ItemInput"
+                                                                    type="checkbox"
+                                                                    name={title}
+                                                                    checked={title.checked}
+                                                                    onChange={(e) => handleChecked(e.target)}
+                                                                />
+                                                                <ItemTitle>{title}</ItemTitle>
+                                                            </div>  
+                                                        </div>                                                
+                                                    </KeywordItem>
+                                                ))}
+                                            </Row>
+                                        </Keywords>
+                                    </Section>
+                                    </SectionKeyword>
+                                ))}
+                                <ButtonWrap>
+                                    <button type="submit" className="button">
+                                        이야기 만들러 가기
+                                    </button>
+                                </ButtonWrap>
+                            </form>
+                            </FormKeyword>
+                    </BookCover>
+                </Container>
+            ) : (
+                <div>되는 중...</div>
+            )}
+        </div>
+    );
 }
 
 export default Keyword;

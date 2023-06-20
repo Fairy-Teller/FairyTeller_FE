@@ -3,113 +3,107 @@ import styled, { css, keyframes } from 'styled-components';
 import { useLocation } from 'react-router-dom';
 import { call } from '../../service/ApiService';
 
-function FairytaleShow() {
-  const [isContentUp, setIsContentUp] = useState(false);
-  const [thumbnailUrl, setThumbnailUrl] = useState('');
-  const [Audio, setAudio] = useState('');
-  const audioRef = useRef(null);
-
-  const location = useLocation();
-  const propValue = location.state;
-  const CardContainer = styled.div`
+const CenteredContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    position: relative;
-  `;
+`;
 
-  const BackgroundImage = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url(${thumbnailUrl});
-    background-size: cover;
-    background-position: center;
-    filter: blur(8px);
-  `;
+const CardContainer = styled.img`
+    width: 1250px;
+    height: 720px;
+    margin-left: 2%;
+    margin-right: 2%;
+    src: '/images/prev.png';
+`;
 
-  const contentAnimation = keyframes`
-    from {
-      opacity: 0;
-      transform: translateY(1%);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  `;
-
-  const Content = styled.img`
-    max-width: 100%;
-    max-height: 100%;
-    position: relative;
-    z-index: 1;
-    border: 2px solid black;
-    opacity: ${(props) => (props.isContentUp ? 1 : 0)};
-    transform: translateY(${(props) => (props.isContentUp ? '0' : '100%')});
-    animation: ${(props) =>
-      props.isContentUp
-        ? css`
-            ${contentAnimation} 3.0s ease forwards;
-          `
-        : 'none'};
-  `;
-
-  const AudioContainer = styled.div`
-    position: absolute;
+const AudioContainer = styled.div`
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
     text-align: center;
     padding: 20px;
-  `;
+`;
 
-  useEffect(() => {
-    showBook();
+const FairyPage = styled.div`
+    display: flex;
+`;
 
-    const handleKeyPress = (event) => {
-      if (event.code === 'Space' && !isContentUp) {
-        setIsContentUp(true);
-        audioRef.current.play();
-      } else if (event.code === 'Space' && isContentUp) {
-        event.preventDefault();
-      }
+const Arrow = styled.button`
+    ${(props) =>
+        props.disabled &&
+        css`
+            opacity: 0.5;
+            pointer-events: none;
+        `}
+`;
+
+function FairytaleShow(bookid) {
+    const [Audio, setAudio] = useState('');
+    const audioRef = useRef(null);
+    const [bookInfo, setBookInfo] = useState([]);
+    const [audioInfo, setAudioInfo] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
+
+    useEffect(() => {
+        if (bookid.props !== '') {
+            console.log('>>>>', bookid.props);
+            showBook(bookid.props);
+        }
+    }, [bookid]);
+
+    const showBook = async (props) => {
+        try {
+            const bookinfos = await call('/book/getBookById', 'POST', { bookId: props });
+            const imgearr = [];
+            const audioarr = [];
+            for (let i = 0; i < bookinfos.pages.length; i++) {
+                imgearr[i] = bookinfos.pages[i].finalImageUrl;
+                audioarr[i] = bookinfos.pages[i].audioUrl;
+            }
+            setBookInfo(imgearr);
+            setAudioInfo(audioarr);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
+    const handlePrevPage = () => {
+        if (currentPage > 0) {
+            setCurrentPage((prevPage) => prevPage - 1);
+        }
     };
-  }, [isContentUp]);
 
-  const showBook = async () => {
-    try {
-      const image = await call('/book/getBookById', 'POST', { bookId: propValue });
-      setThumbnailUrl('https://s3.ap-northeast-2.amazonaws.com/' + image.thumbnailUrl);
-      setAudio('https://s3.ap-northeast-2.amazonaws.com/' + image.audioUrl);
-    } catch (error) {
-      console.log('Error fetching data:', error);
-    }
-  };
+    const handleNextPage = () => {
+        if (currentPage < bookInfo.length - 1) {
+            setCurrentPage((prevPage) => prevPage + 1);
+        }
+    };
 
-  console.log(propValue); // Use propValue to fetch fairy tale information
+    console.log(audioInfo[currentPage]);
 
-  return (
-    <CardContainer>
-      <BackgroundImage />
-      <Content className="phoneImage" src={thumbnailUrl} isContentUp={isContentUp} />
-      <AudioContainer>
-        <audio ref={audioRef} controls>
-          <source src={Audio} type="audio/mpeg" />
-        </audio>
-      </AudioContainer>
-    </CardContainer>
-  );
+    return (
+        <CenteredContainer>
+            {bookInfo.length > 0 && (
+                <div>
+                    <AudioContainer>
+                        <audio ref={audioRef} src={audioInfo[currentPage]} controls></audio>
+                    </AudioContainer>
+                    <FairyPage>
+                        <Arrow className="prevButton" disabled={currentPage === 0} onClick={handlePrevPage}>
+                            <img src="/images/prev.png" />
+                        </Arrow>
+                        <img src={bookInfo[currentPage]} style={{margin:"0 10px 0 10px"}} />
+                        <Arrow
+                            className="nextButton"
+                            disabled={currentPage === bookInfo.length - 1}
+                            onClick={handleNextPage}
+                        >
+                            <img src="/images/next.png" />
+                        </Arrow>
+                    </FairyPage>
+                </div>
+            )}
+        </CenteredContainer>
+    );
 }
 
 export default FairytaleShow;

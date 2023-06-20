@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import Container from '../../components/global/Container';
 import { call } from '../../service/ApiService';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import FairytaleShow from './FairytaleShow';
 import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 const FairytaleTitle = styled.div`
     font-weight: 400;
-    font-size: 96px;
-    line-height: 162px;
-    text-align: left;
-    color: #ffffff;
-    padding-left: 5%;
+    font-size: 45px;
+
+    text-align: center;
 `;
 
 const ButtonFrame = styled.div`
@@ -21,10 +20,10 @@ const ButtonFrame = styled.div`
     margin-bottom: 10px;
 `;
 
-const Button = styled(Link)`
+const Button = styled.button`
     width: 15%;
     height: 104px;
-    background-color: white;
+    background-color: #99f0cc;
     font-size: 150%;
     border-radius: 51.5px;
     margin-right: 1%;
@@ -34,17 +33,37 @@ const Button = styled(Link)`
     text-decoration: none;
 `;
 
+const Bar = styled.div`
+    width: 100hw;
+    height: 99px;
+    text-align: left;
+    background: #fcdede;
+
+    font-family: 'Amiri';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 88px;
+
+    color: #000000;
+`;
+
 const BookCover = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     width: 100vw;
     height: 100vh;
     background-size: cover;
-    background-color: black;
 `;
+const Container = styled.div``;
 
 function FairytaleExport() {
     const [thumbnailUrl, setThumbnailUrl] = useState('');
     const [BookId, setBookId] = useState('');
     const [Title, setTitle] = useState('');
+    const [Image, setImage] = useState([]);
 
     useEffect(() => {
         fetchData();
@@ -66,11 +85,14 @@ function FairytaleExport() {
     const fetchData = async () => {
         try {
             const data = await call('/book/my-newest', 'GET', null);
-            setThumbnailUrl('https://s3.ap-northeast-2.amazonaws.com/' + data.thumbnailUrl);
             await setBookId(data.bookId);
             setTitle(data.title);
-            console.log('확인해보자!', BookId);
-            console.log(thumbnailUrl);
+
+            const imgearr = [];
+            for (let i = 0; i < data.pages.length; i++) {
+                imgearr[i] = data.pages[i].finalImageUrl;
+            }
+            setImage(imgearr);
 
             // await call('/book/create/story', 'POST', {
             //     fullStory: 'ha ha ha ha ha ha ha',
@@ -90,33 +112,33 @@ function FairytaleExport() {
         }
     };
     const exportPDF = async () => {
-        const data = { thumbnailUrl };
-        const link = document.createElement('a');
+        for (var i = 0; i < Image.length; i++) {
+            (function (index) {
+                var link = document.createElement('a');
+                link.href = Image[index];
+                link.download = Title + '.png';
+                link.style.display = 'none';
+                document.body.appendChild(link);
 
-        if (typeof link.download === 'string') {
-            link.href = data;
-            link.download = 'image.jpg';
-
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } else {
-            window.open(data);
+                setTimeout(function () {
+                    link.click();
+                    document.body.removeChild(link);
+                }, index * 1000);
+            })(i);
         }
     };
 
     return (
-        <Container className="">
-            <BookCover style={{ backgroundImage: `url(${thumbnailUrl})` }}>
+        <Container>
+            <Bar>FairyTeller</Bar>
+            <BookCover>
+                <img src="/images/loding_4.png" style={{ marginTop: '2%' }} />
+                <FairytaleTitle>{Title}</FairytaleTitle>
+                <FairytaleShow props={BookId}></FairytaleShow>
                 <div style={{ position: 'absolute', bottom: '0px', width: '100%' }}>
-                    <FairytaleTitle>{Title}</FairytaleTitle>
                     <ButtonFrame>
                         <Button onClick={gotoBoard}>게시판 전시하기</Button>
-                        <Button to={thumbnailUrl}>파일 저장하기</Button>
-
-                        <Button to="/f-show" state={BookId}>
-                            동화보기
-                        </Button>
+                        <Button onClick={exportPDF}>파일 저장하기</Button>
                     </ButtonFrame>
                 </div>
             </BookCover>

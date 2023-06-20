@@ -1,0 +1,71 @@
+/* login.css */
+
+#background {
+  background-image: url("/public/images/background2.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#container {
+  width: 600px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  align-items: center;
+}
+
+h1 {
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+
+.signup-input-container {
+  margin-bottom: 20px;
+}
+
+.signup-input-container label {
+  text-align: left;
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.signup-input-container > input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.signup-input-container button {
+  background-color: #70a5e3;
+  width: auto; /* Set width to auto to make the button smaller */
+  padding: 5px 10px; /* Adjust padding as desired */
+  border-radius: 5px;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  float: right; /* Align the button to the right */
+  transition: background-color 0.3s ease;
+}
+
+.signup-input-container p {
+  margin-top: 5px;
+  text-align: left;
+}
+
+.signup-input-container button:hover {
+  opacity: 0.8;
+}
+
+.linkContainer {
+  margin-top: 20px;
+  text-align: center;
+}
