@@ -1,3 +1,16 @@
+.bar {
+  width: 100vw;
+  height: 60px;
+  text-align: left;
+  background: #FCDEDE;
+  font-family: 'Amiri';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 60px;
+  color: #000000;
+}
+
 .book-container {
     display: flex;
     flex-wrap: wrap;
