@@ -113,7 +113,7 @@ export const SelectStickers = atom({
     default: [
         {
             id: 1,
-            src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQshoMsYa1hFvjaMAwebiP2l99ssM_XWVrp7g&usqp=CAU',
+            src: 'https://fairyteller-dev.s3.ap-northeast-2.amazonaws.com/stickers/01.png',
         },
         {
             id: 2,

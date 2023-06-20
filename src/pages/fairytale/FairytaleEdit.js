@@ -20,7 +20,7 @@ const Container = styled.div`
 
 const Frame = styled.div`
     position: relative;
-    width: 95vw;
+    // width: 95vw;
     // height: 100vh;
 `;
 
@@ -32,6 +32,20 @@ const Savebutton = styled.button`
     margin-top: 28px;
     margin-right: 38px;
     font-size: 30px;
+    float: right;
+`;
+
+const Bar = styled.div`
+    width: 100hw;
+    height: 60px;
+    text-align: left;
+    background: #fcdede;
+    font-family: 'Amiri';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 60px;
+    color: #000000;
 `;
 
 const FairytaleEdit = () => {
@@ -44,12 +58,14 @@ const FairytaleEdit = () => {
     });
     const [saveAll, setSaveall] = useState(false);
     const [showImage, setShowImage] = useState([]);
+    const [activeTab, setActiveTab] = useState(null);
 
     const sampleDataStucure = useRecoilValue(SampleDataState);
     const setSampleDataState = useSetRecoilState(SampleDataState);
     const saveState = useResetRecoilState(SaveState);
 
     const toggleCanvasVisibility = (id) => {
+        setActiveTab(id);
         setCanvasVisibility((prevState) => {
             const updatedVisibility = { ...prevState };
             Object.keys(updatedVisibility).forEach((key) => {
@@ -62,6 +78,12 @@ const FairytaleEdit = () => {
     };
     useEffect(() => {
         getNewest();
+        document.body.style.overflow = 'hidden';
+
+        return () => {
+            // 컴포넌트가 언마운트될 때 스크롤 가능하게 되돌림
+            document.body.style.overflow = 'auto';
+        };
     }, []);
 
     const getNewest = async () => {
@@ -82,15 +104,29 @@ const FairytaleEdit = () => {
 
     return (
         <div className="edit">
-            <Container>
+            <Bar>FairyTeller</Bar>
+            <div
+                style={{
+                    position: 'absolute',
+                    width: '100%',
+
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+            >
+                <img src="/images/loding_4.png" style={{ marginTop: '2%' }} />
+            </div>
+
+            <div>
                 <Frame>
+                    <Savebutton onClick={saveClick}>동화 완성하기</Savebutton>
                     {Object.keys(canvasVisibility).map((key) => (
                         <div
                             key={key}
                             style={{
-                                width: canvasWidth,
-                                height: canvasHeight,
                                 display: canvasVisibility[key] ? 'block' : 'none',
+                                textAlign: 'center',
                             }}
                         >
                             <TryCanvas props={Number(key)} BookInfo={showImage} />
@@ -105,9 +141,6 @@ const FairytaleEdit = () => {
                                     idx={page.pageNo}
                                     src={page.originalImageUrl}
                                     onClick={() => toggleCanvasVisibility(page.pageNo)}
-                                    style={{
-                                        border: '20px solid red',
-                                    }}
                                 />
                             ))
                         ) : (
@@ -117,8 +150,7 @@ const FairytaleEdit = () => {
                 </Frame>
 
                 {saveAll && <TitleModal props={showImage.bookId} />}
-                <Savebutton onClick={saveClick}>동화 완성하기</Savebutton>
-            </Container>
+            </div>
         </div>
     );
 };
