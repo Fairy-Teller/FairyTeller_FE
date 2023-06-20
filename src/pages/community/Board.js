@@ -1,4 +1,5 @@
 import '../../css/Board.css';
+import '../../css/HeaderExample.css';
 import React, { useState, useEffect, useCallback } from 'react';
 import { call } from '../../service/ApiService';
 import { Link } from 'react-router-dom';
@@ -41,7 +42,12 @@ const Board = () => {
 
   return (
     <div>
-      <div className="bar">FairyTeller</div>
+      <div className="board-bar">
+      <Link to="/home" className="title-link">
+    <div className="title">FairyTeller</div>
+  </Link>
+      <div className="username">윤땡땡</div>
+      </div>
       <div style={{ marginTop: '1%' }}>
         <h4 style={{ textAlign: 'center', marginBottom: '2%', fontSize: '20px' }}>우리들의 도서관</h4>
         <div className="book-container">

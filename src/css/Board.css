@@ -96,7 +96,7 @@
     transform: rotateY(190deg);
   }
   
-  .bar {
+  .board-bar {
     margin-top: 20px; /* 글자를 더 올리기 위한 상단 여백 조정 */
     /* 기타 스타일 속성 */
   }
@@ -129,19 +129,6 @@
     transition: background-color 0.3s ease;
   }
   
-  .bar {
-    margin-top: 0;
-    width: 100vw;
-    height: 60px;
-    text-align: left;
-    background: #FCDEDE;
-    font-family: 'Amiri';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 40px;
-    line-height: 60px;
-    color: #000000;
-  }
 
   .book__image {
     width: 100%;
