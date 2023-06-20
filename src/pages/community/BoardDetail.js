@@ -111,8 +111,8 @@ const BoardDetail = () => {
           )}
         </div>
         <div>
-          <h2 className="title center" style={{ fontSize: '28px' }}>{board.title}</h2>
-          <div className="author center" style={{ fontSize: '23px'}}>Author: {board.nickname}</div>
+        <h2 className="title center" style={{ fontSize: '25px' }}>{board.title}</h2>
+          <div className="author center" style={{ fontSize: '20px'}}>Author: {board.nickname}</div>
           <div>
             <FairytaleShow props={board.bookId} />
           </div>

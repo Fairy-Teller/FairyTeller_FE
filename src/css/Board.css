@@ -62,6 +62,14 @@
     background-color: #FFFFFF;
     box-shadow: 0px 2px 5px rgba(3, 3, 3, 0.1);
     padding: 5px;
+    height: 250px;
+  }
+
+  .book__image {
+    width: 100%;
+    height: auto;
+    max-height: 200px; /* 원하는 높이 값으로 조정 */
+    object-fit: contain;
   }
 
   .book__title {
@@ -92,11 +100,6 @@
     margin-top: 20px; /* 글자를 더 올리기 위한 상단 여백 조정 */
     /* 기타 스타일 속성 */
   }
-
-  .book__content img {
-    margin-top: 30px; /* 여기의 값을 조정하세요 */
-  }
-  
 
   .pagination {
     display: flex;
