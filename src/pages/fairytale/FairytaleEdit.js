@@ -20,7 +20,7 @@ const Container = styled.div`
 
 const Frame = styled.div`
     position: relative;
-    width: 95vw;
+    // width: 95vw;
     // height: 100vh;
 `;
 
@@ -37,14 +37,14 @@ const Savebutton = styled.button`
 
 const Bar = styled.div`
     width: 100hw;
-    height: 99px;
+    height: 60px;
     text-align: left;
     background: #fcdede;
     font-family: 'Amiri';
     font-style: normal;
     font-weight: 700;
-    font-size: 50px;
-    line-height: 88px;
+    font-size: 40px;
+    line-height: 60px;
     color: #000000;
 `;
 
@@ -58,12 +58,14 @@ const FairytaleEdit = () => {
     });
     const [saveAll, setSaveall] = useState(false);
     const [showImage, setShowImage] = useState([]);
+    const [activeTab, setActiveTab] = useState(null);
 
     const sampleDataStucure = useRecoilValue(SampleDataState);
     const setSampleDataState = useSetRecoilState(SampleDataState);
     const saveState = useResetRecoilState(SaveState);
 
     const toggleCanvasVisibility = (id) => {
+        setActiveTab(id);
         setCanvasVisibility((prevState) => {
             const updatedVisibility = { ...prevState };
             Object.keys(updatedVisibility).forEach((key) => {
@@ -103,6 +105,18 @@ const FairytaleEdit = () => {
     return (
         <div className="edit">
             <Bar>FairyTeller</Bar>
+            <div
+                style={{
+                    position: 'absolute',
+                    width: '100%',
+
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+            >
+                <img src="/images/loding_4.png" style={{ marginTop: '2%' }} />
+            </div>
 
             <div>
                 <Frame>
@@ -127,9 +141,6 @@ const FairytaleEdit = () => {
                                     idx={page.pageNo}
                                     src={page.originalImageUrl}
                                     onClick={() => toggleCanvasVisibility(page.pageNo)}
-                                    style={{
-                                        border: '20px solid red',
-                                    }}
                                 />
                             ))
                         ) : (

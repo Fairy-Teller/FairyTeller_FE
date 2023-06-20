@@ -6,7 +6,7 @@ const Image = styled.div`
         css`
             background-image: url(${props.src});
         `}
-    min-height: 260px;
+    min-height: 160px;
     background-color: rgba(217, 217, 217, 0.4);
 `;
 

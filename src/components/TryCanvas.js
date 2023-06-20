@@ -8,30 +8,23 @@ import styled, { css } from 'styled-components';
 import { fabric } from 'fabric';
 
 import PageSelection from '../components/PageSelection';
-import { async } from 'q';
 
-const [IMAGE, USERIMAGE, BG, FILTER, STICKER, DOWNLOAD] = [
-    'AI삽화',
-    '유저이미지',
-    '텍스트',
-    '삭제',
-    '스티커',
-    '다운로드',
-];
+const [IMAGE, USERIMAGE, TEXT, DELETE, STICKER] = ['AI삽화', '유저\n이미지', '텍스트', '삭제', '스티커'];
 const [AI, USER, STI] = ['AI', 'USER', 'STI'];
 
 const canvasState = atomFamily({
     key: 'canvasState',
     default: null,
 });
-const Container = styled.div`
+const CanvasFrame = styled.div`
     display: flex;
 
     height: 100vh;
 `;
 
 const Nav = styled.nav`
-    width: 5vw;
+    width: 6vw;
+    height: 74.5%;
 
     height: 100vh;
     flex-direction: column;
@@ -52,23 +45,32 @@ const Tab = styled.button`
         `}
 `;
 const Tooltab = styled.div`
-    width: 15%;
-    display: flex;
+    width: 10%;
+    height: 74.5%;
+
     flex-direction: column;
+
     top: 0;
     right: 0;
     bottom: 0;
     overflow: auto;
-    background-color: rgba(217, 217, 217, 0.4);
+
     ${({ visible }) =>
         !visible &&
         css`
             display: none;
         `}
 `;
+const InputBox = styled.input`
+    width: 244px;
+    height: 91px;
+
+    background: #80f06e;
+    border-radius: 10px;
+`;
 
 const TryCanvas = (props) => {
-    const btnLabels = [IMAGE, USERIMAGE, BG, FILTER, STICKER, DOWNLOAD];
+    const btnLabels = [IMAGE, USERIMAGE, TEXT, DELETE, STICKER];
     const canvasRef = useRef(null);
     const fabricCanvasRef = useRef(null);
     // const [canvasStates, setCanvasStates] = useState({});
@@ -99,19 +101,16 @@ const TryCanvas = (props) => {
     const handleButtonClick = (label) => {
         setActiveTab(label === activeTab ? null : label);
         setShowButtonFunctiontion(!showButtonFunction);
-        if (label === BG) {
+        if (label === TEXT) {
             addTextBox();
         }
-        if (label === FILTER) {
+        if (label === DELETE) {
             deleteObject();
         }
         if (label === STICKER) {
             setShowEditToolTab(true);
         } else {
             setShowEditToolTab(false);
-        }
-        if (label === DOWNLOAD) {
-            saveAsImage('jpeg');
         }
     };
 
@@ -132,7 +131,7 @@ const TryCanvas = (props) => {
     const initCanvas = (data) => {
         console.log('data', data);
         const canvas = new fabric.Canvas(canvasRef.current, {
-            height: 500,
+            height: 420,
             width: 1280,
             backgroundColor: '#D9D9D9',
         });
@@ -249,7 +248,7 @@ const TryCanvas = (props) => {
     };
 
     return (
-        <Container>
+        <CanvasFrame>
             <Nav>
                 {btnLabels.map((label) => (
                     <Tab key={label} clicked={activeTab === label} onClick={() => handleButtonClick(label)}>
@@ -257,7 +256,13 @@ const TryCanvas = (props) => {
                     </Tab>
                 ))}
             </Nav>
-
+            {!activeTab && <Tooltab visible></Tooltab>}
+            <Tooltab visible={activeTab === IMAGE}></Tooltab>
+            <Tooltab visible={activeTab === USERIMAGE}>
+                <input type="file" onChange={readImage} />
+            </Tooltab>
+            <Tooltab visible={activeTab === TEXT}></Tooltab>
+            <Tooltab visible={activeTab === DELETE}></Tooltab>
             <Tooltab visible={activeTab === STICKER}>
                 {selectStickers.map((item) =>
                     selectStickers.length > 0 ? (
@@ -273,12 +278,14 @@ const TryCanvas = (props) => {
                     )
                 )}
             </Tooltab>
-            <Tooltab visible={activeTab === USERIMAGE}>
-                <input type="file" id="file" onChange={readImage} />
-            </Tooltab>
 
-            <canvas id="canvas" key={props.canvasid + 'c'} ref={canvasRef} />
-        </Container>
+            <canvas
+                id="canvas"
+                key={props.canvasid + 'c'}
+                ref={canvasRef}
+                style={{ border: '10px outset rgba(252, 222, 222, 1)', margin: '13% 1% 1% 3%' }}
+            />
+        </CanvasFrame>
     );
 };
 
