@@ -71,7 +71,9 @@ const IamgeGenerated = () => {
   return (
     <Div>
       <Header mode={"default"} />
-      <BookCover></BookCover>
+      <BookCover>
+        <ProgressBar step={1} />
+      </BookCover>
       <ContentContainer>
         {0 < page && <Button onClick={onClickHandlerBefore}> 이전 </Button>}
         {savedStory.map(

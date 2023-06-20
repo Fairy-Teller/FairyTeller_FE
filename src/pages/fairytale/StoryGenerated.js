@@ -140,6 +140,7 @@ const StoryGenerated = () => {
         <Container>
           <Header mode={"default"} />
           <BookCover>
+            <ProgressBar step={1} />
             <FairytaleTitle>AI가 만든 동화를 수정할 수 있어요!</FairytaleTitle>
             <FormWrap>
               <form onSubmit={onSubmitHandler}>

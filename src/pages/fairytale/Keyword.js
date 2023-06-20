@@ -154,6 +154,7 @@ function Keyword() {
         <Container>
           <Header mode={"default"} />
           <BookCover>
+            <ProgressBar step={1} />
             <FairytaleTitle>단어를 3개부터 5개까지 선택해보아요!</FairytaleTitle>
             <Row className='current'>
               {keywords
