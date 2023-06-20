@@ -1,35 +1,15 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { sendAudioData } from "../../service/FairytaleService";
+import RecordButton from "../../components/RecordButton";
 
 const ParentRecord = () => {
-  const [isRecording, setIsRecording] = useState({});
   const [recordings, setRecordings] = useState([]);
-  const mediaRecorder = useRef({});
 
-  const handleStartRecording = async (pageNumber) => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder.current[pageNumber] = new MediaRecorder(stream);
-
-    const audioChunks = [];
-    mediaRecorder.current[pageNumber].ondataavailable = (event) => {
-      audioChunks.push(event.data);
-    };
-
-    mediaRecorder.current[pageNumber].onstop = () => {
-      const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-      setRecordings((prevRecordings) => [
-        ...prevRecordings,
-        { no: pageNumber, audio: audioBlob },
-      ]);
-    };
-
-    mediaRecorder.current[pageNumber].start();
-    setIsRecording((prevState) => ({ ...prevState, [pageNumber]: true }));
-  };
-
-  const handleStopRecording = (pageNumber) => {
-    mediaRecorder.current[pageNumber].stop();
-    setIsRecording((prevState) => ({ ...prevState, [pageNumber]: false }));
+  const handleRecordingComplete = (pageNumber, audioBlob) => {
+    setRecordings((prevRecordings) => [
+      ...prevRecordings,
+      { no: pageNumber, audio: audioBlob },
+    ]);
   };
 
   const convertBlobToBase64 = (blob) => {
@@ -53,7 +33,7 @@ const ParentRecord = () => {
           },
         ],
       };
-      sendAudioData(payload); // Make sure sendAudioData sends a POST request with Content-Type set to 'application/json'
+      sendAudioData(payload);
     } catch (error) {
       console.error("Error converting audio blob to base64", error);
     }
@@ -62,21 +42,11 @@ const ParentRecord = () => {
   return (
     <div>
       {[1, 2, 3, 4, 5].map((pageNumber) => (
-        <div key={pageNumber}>
-          {!isRecording[pageNumber] && (
-            <button onClick={() => handleStartRecording(pageNumber)}>
-              녹음시작 {pageNumber}
-            </button>
-          )}
-          {isRecording[pageNumber] && (
-            <div>
-              <div>녹음중입니다... {pageNumber}</div>
-              <button onClick={() => handleStopRecording(pageNumber)}>
-                녹음종료
-              </button>
-            </div>
-          )}
-        </div>
+        <RecordButton
+          key={pageNumber}
+          pageNumber={pageNumber}
+          onRecordingComplete={handleRecordingComplete}
+        />
       ))}
 
       {recordings.map((recording, index) => (
