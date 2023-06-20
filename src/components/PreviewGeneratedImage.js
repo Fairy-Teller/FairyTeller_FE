@@ -22,8 +22,8 @@ const Div = styled.div`
 `;
 
 const Img = styled.img`
-  width: 800px;
-  height: 500px;
+  width: 600px;
+  height: 300px;
   background: #d9d9d9;
   border-radius: 20px;
   margin-top: 20px; // Optional: add some margin at the top for some spacing
@@ -34,14 +34,13 @@ const Text = styled.p`
   text-align: center; // Center text horizontally
   align-items: center; // Center text vertically
   width: 800px;
-  height: 150px; // Increased the height here
+  height: 100px; // Increased the height here
   background: #fcdede;
   border-radius: 20px;
   font-family: "Amiri";
   font-style: normal;
   font-weight: 400;
-  font-size: 25px;
-  line-height: 60px;
+  font-size: 20px;
   color: #000000;
   margin: 10px;
   padding: 0 10px;

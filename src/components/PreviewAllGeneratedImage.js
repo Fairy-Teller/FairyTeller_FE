@@ -17,7 +17,7 @@ const Text = styled.p`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 120px;
+  height: 110px;
   font-family: "Amiri";
   font-style: normal;
   font-weight: 400;
