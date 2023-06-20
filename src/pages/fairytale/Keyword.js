@@ -18,8 +18,6 @@ const KeywordItem = styled.li`
   flex: 1 0 auto;
   padding: 0.625rem;
 `;
-const ItemTitle = styled.p`
-`;
 const ItemInput = styled.input`
   width: 2rem;
   height: 2rem;
@@ -27,25 +25,24 @@ const ItemInput = styled.input`
 `;
 
 const Bar = styled.div`
-    width: 100hw;
-    height: 60px;
-    text-align: left;
-    background: #FCDEDE;
-    font-family: 'Amiri';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 40px;
-    line-height: 60px;
-    color: #000000;
+  width: 100hw;
+  height: 60px;
+  text-align: left;
+  background: #fcdede;
+  font-family: "Amiri";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 60px;
+  color: #000000;
 `;
 
 const BookCover = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
   width: 100vw;
-  height: 100vh;
+  // height: 100vh;
   background-size: cover;
 `;
 
@@ -140,35 +137,16 @@ function Keyword() {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    if (keywords.length === 5) {
-      sendkeyword({
-        parameter1: keywords[0],
-        parameter2: keywords[1],
-        parameter3: keywords[2],
-        parameter4: keywords[3],
-        parameter5: keywords[4],
-      });
-    } else if (keywords.length === 4) {
-      sendkeyword({
-        parameter1: keywords[0],
-        parameter2: keywords[1],
-        parameter3: keywords[2],
-        parameter4: keywords[3],
-        parameter5: "",
-      });
-    } else if (keywords.length === 3) {
-      sendkeyword({
-        parameter1: keywords[0],
-        parameter2: keywords[1],
-        parameter3: keywords[2],
-        parameter4: "",
-        parameter5: "",
-      });
-    } else {
-      alert("단어는 3개 이상 선택해주세요!");
-    }
+    keywords.length < 3
+      ? alert("단어는 3개 이상 선택해주세요!")
+      : sendkeyword({
+          parameter1: keywords[0],
+          parameter2: keywords[1],
+          parameter3: keywords[2],
+          parameter4: keywords[3] == null || undefined ? "" : keywords[3],
+          parameter5: keywords[4] == null || undefined ? "" : keywords[4],
+        });
     console.log(keywords);
-    navigate("/story-generated");
   };
 
   const sendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
@@ -176,11 +154,11 @@ function Keyword() {
       setIsLoading(true);
       const response = await call("/chat-gpt/question", "POST", userDTO);
       set(StoryState, response);
-      set(SelectedKeywords, { keywords: keywords });
     } catch (error) {
       console.log(error);
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
+      navigate("/story-generated");
     }
   });
 
@@ -198,9 +176,11 @@ function Keyword() {
             />
             <FairytaleTitle>단어를 3개부터 5개까지 선택해보아요!</FairytaleTitle>
             <Row className='current'>
-              {keywords.map((item) => {
-                return <div key={item}>{item}</div>;
-              })}
+              {keywords
+                ? keywords.map((item) => {
+                    return <div key={item}>{item}</div>;
+                  })
+                : null}
             </Row>
             <FormKeyword>
               <form onSubmit={onSubmitHandler}>
@@ -242,7 +222,7 @@ function Keyword() {
                                     checked={title.checked}
                                     onChange={(e) => handleChecked(e.target)}
                                   />
-                                  <ItemTitle>{title}</ItemTitle>
+                                  <div>{title}</div>
                                 </div>
                               </div>
                             </KeywordItem>
