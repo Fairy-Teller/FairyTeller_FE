@@ -44,6 +44,7 @@ h1 {
 }
 
 .signup-input-container button {
+  background-color: #70a5e3;
   width: auto; /* Set width to auto to make the button smaller */
   padding: 5px 10px; /* Adjust padding as desired */
   border-radius: 5px;
@@ -52,6 +53,7 @@ h1 {
   font-weight: bold;
   cursor: pointer;
   float: right; /* Align the button to the right */
+  transition: background-color 0.3s ease;
 }
 
 .signup-input-container p {

@@ -30,6 +30,7 @@ const BoardDetail = () => {
       setComments(boardData.comments);
       setCurrentPage(response.currentPage);
       setTotalPages(response.totalPages);
+      setIsLiked(boardData.liked);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
@@ -106,8 +107,8 @@ const BoardDetail = () => {
           )}
         </div>
         <div>
-          <h2 className="title center" style={{ fontSize: '28px' }}>{board.title}</h2>
-          <div className="author center" style={{ fontSize: '23px'}}>Author: {board.nickname}</div>
+        <h2 className="title center" style={{ fontSize: '25px' }}>{board.title}</h2>
+          <div className="author center" style={{ fontSize: '20px'}}>Author: {board.nickname}</div>
           <div>
             <FairytaleShow props={board.bookId} />
           </div>
@@ -144,7 +145,7 @@ const BoardDetail = () => {
 
           <div className="pagination">
             {Array.from({ length: totalPages }, (_, index) => (
-              <button
+              <button 
                 key={index}
                 className={currentPage === index ? "activePageButton" : "pageButton"}
                 onClick={() => handlePageChange(index)}

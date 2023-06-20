@@ -91,7 +91,7 @@ function FairytaleShow(bookid) {
                         <Arrow className="prevButton" disabled={currentPage === 0} onClick={handlePrevPage}>
                             <img src="/images/prev.png" />
                         </Arrow>
-                        <img src={bookInfo[currentPage]} />
+                        <img src={bookInfo[currentPage]} style={{margin:"0 10px 0 10px"}} />
                         <Arrow
                             className="nextButton"
                             disabled={currentPage === bookInfo.length - 1}

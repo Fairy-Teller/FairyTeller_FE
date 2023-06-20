@@ -9,7 +9,7 @@ const Div = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 10px;
 `;
 
 const Text = styled.p`
@@ -17,12 +17,11 @@ const Text = styled.p`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 120px;
+  height: 110px;
   font-family: "Amiri";
   font-style: normal;
   font-weight: 400;
-  font-size: 50px;
-  line-height: 44px;
+  font-size: 25px;
   color: #000000;
   margin-bottom: 20px;
   text-align: center;
@@ -34,12 +33,12 @@ const ImageContainer = styled.div`
   justify-content: center;
   gap: 30px;
   margin-bottom: 30px;
-  width: 1800px; /* Sum of Image widths and gaps (350 * 3 + 30 * 2) */
+  width: 1000px; /* Sum of Image widths and gaps (350 * 3 + 30 * 2) */
 `;
 
 const Image = styled.img`
-  width: 500px;
-  height: 350px;
+  width: 300px;
+  height: 200px;
   object-fit: cover;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -64,15 +63,14 @@ const ButtonWrap = styled.div`
 `;
 
 const Button = styled.button`
-  width: 400px;
-  height: 81px;
+  width: 200px;
+  height: 40px;
   background: #99f0cc;
   border-radius: 10px;
   font-family: "Amiri";
   font-style: normal;
   font-weight: 400;
-  font-size: 36px;
-  line-height: 63px;
+  font-size: 18px;
   text-align: center;
   color: #000000;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

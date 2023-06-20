@@ -1,13 +1,14 @@
   .bar {
+    margin-top: 0;
     width: 100vw;
-    height: 99px;
+    height: 60px;
     text-align: left;
     background: #FCDEDE;
     font-family: 'Amiri';
     font-style: normal;
     font-weight: 700;
-    font-size: 50px;
-    line-height: 88px;
+    font-size: 40px;
+    line-height: 60px;
     color: #000000;
   }
   
@@ -20,7 +21,7 @@
   .title {
     font-size: 24px;
     font-weight: bold;
-    margin-top: 10px;
+    margin-top: 2px;
     margin-bottom: 10px;
   }
   
@@ -34,7 +35,7 @@
   .deleteButtonContainer {
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    margin-top: 10px;
   }
   
   .deleteButton {
@@ -55,15 +56,15 @@
 .title {
   font-size: 24px;
   font-weight: bold;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .author {
   font-size: 16px;
   color: #666;
   margin-top: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 0px;
 }
 
 .pagination {
@@ -104,7 +105,7 @@
   display: flex;
   align-items: center;
   justify-content: start;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .like-btn {
@@ -138,8 +139,18 @@
   top: -10px; /* 조정하고 싶은 값으로 변경 */
 }
 
-
-
 .like-btn:hover {
   opacity: 0.7;
+}
+
+.board-page-button {
+  width: 5px;
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  color: #333333;;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
 }

@@ -118,6 +118,7 @@ const TitleModal = (bookid) => {
 
     const onChangeHandler = (e) => {
         // title 적용하는 부분
+        // 한글자씩 밀림 
         setTitle(e.target.value);
         bookData.title = titles;
     };
