@@ -17,6 +17,7 @@
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   text-align: center;
+  align-items: center;
 }
 
 h1 {
@@ -24,7 +25,11 @@ h1 {
   margin-bottom: 20px;
 }
 
-.signup-input-container > label {
+.signup-input-container {
+  margin-bottom: 20px;
+}
+
+.signup-input-container label {
   text-align: left;
   display: block;
   margin-bottom: 10px;
@@ -34,22 +39,26 @@ h1 {
 .signup-input-container > input {
   width: 100%;
   padding: 12px;
-  margin-bottom: 20px;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
 
 .signup-input-container button {
-  width: 120px;
   background-color: #70a5e3;
-  margin-top: 10px;
-  padding: 10px 20px;
-  border: none;
+  width: auto; /* Set width to auto to make the button smaller */
+  padding: 5px 10px; /* Adjust padding as desired */
   border-radius: 5px;
-  color: #fff;
+  border: none;
+  color: white;
+  font-weight: bold;
   cursor: pointer;
-  font-size: 1rem;
+  float: right; /* Align the button to the right */
   transition: background-color 0.3s ease;
+}
+
+.signup-input-container p {
+  margin-top: 5px;
+  text-align: left;
 }
 
 .signup-input-container button:hover {

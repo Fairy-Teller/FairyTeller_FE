@@ -19,7 +19,7 @@
   text-align: center;
 }
 
-h1 {
+#container h1 {
   font-size: 30px;
   margin-bottom: 20px;
 }
@@ -43,7 +43,7 @@ h1 {
   border: 1px solid #ccc;
 }
 
-button {
+.signup-input-container button {
   width: 300px;
   background-color: #70a5e3;
   margin-top: 10px;
@@ -56,16 +56,16 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
+.signup-input-container button:hover {
   opacity: 0.8;
 }
 
-a {
+.linkContainer a {
   text-decoration: none;
   color: #000;
 }
 
-a:hover {
+.linkContainer a:hover {
   text-decoration: underline;
 }
 

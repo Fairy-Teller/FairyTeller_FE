@@ -146,7 +146,9 @@ function SignUp() {
             )}
           </div>
           <div>
-            <button type="submit">계정 생성</button>
+            <button class="submit" type="submit">
+              계정 생성
+            </button>
           </div>
         </form>
 
