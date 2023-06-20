@@ -44,14 +44,19 @@ const BoardDetail = () => {
     }
   };
 
-  const handleDeleteComment = async (commentId) => {
-    try {
-      await call(`/board/${boardId}/comment/${commentId}`, "DELETE", null);
-      fetchDataComments(currentPage);
-    } catch (error) {
-      console.log("Error deleting comment:", error);
-    }
-  };
+
+  const handleDeleteComment = async (comment) => {};
+
+
+//   const handleDeleteComment = async (commentId) => {
+//     try {
+//       await call(`/board/${boardId}/comment/${commentId}`, "DELETE", null);
+//       fetchDataComments(currentPage);
+//     } catch (error) {
+//       console.log("Error deleting comment:", error);
+//     }
+//   };
+
 
   const handleLike = async () => {
     try {
