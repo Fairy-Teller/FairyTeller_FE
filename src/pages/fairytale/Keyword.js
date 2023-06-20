@@ -21,7 +21,7 @@ const KeywordItem = styled.li`
     padding: 0.625rem;
 `;
 const ItemTitle = styled.p`
-    font-size: 14px;
+    font-size: 1px;
 `;
 const ItemInput = styled.input`
     width: 2rem;
@@ -31,14 +31,14 @@ const ItemInput = styled.input`
 
 const Bar = styled.div`
     width: 100hw;
-    height: 99px;
+    height: 60px;
     text-align: left;
     background: #FCDEDE;
     font-family: 'Amiri';
     font-style: normal;
     font-weight: 700;
-    font-size: 50px;
-    line-height: 88px;
+    font-size: 40px;
+    line-height: 60px;
     color: #000000;
 `;
 
@@ -168,7 +168,7 @@ function Keyword() {
                                                     <KeywordItem key={subIndex}>
                                                         <div  style={{ width: '100%', height: '100%' }}>
                                                             <img src={`./images/keywords/${title}.png`}style={{ width: '100%', height: '100%', objectFit: 'contain' }}/>
-                                                            <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>                                              
+                                                            <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>                                              
                                                                 <ItemInput
                                                                     id={`keyword${title.key}`}
                                                                     className="ItemInput"
