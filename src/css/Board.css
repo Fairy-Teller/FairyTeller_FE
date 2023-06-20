@@ -1,20 +1,15 @@
 .book-container {
-  display: flex;
+  display: grid;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 20px;
   max-height: calc(100vh - 200px);
   overflow: auto;
+  grid-template-columns: repeat(4, 1fr); /* 한 행에 4개의 열 생성 */
+  height: auto;
 }
 
-.book-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 한 행에 4개의 열 생성 */
-  gap: 20px; /* 책 사이의 간격을 40px로 설정 */
-  max-height: calc(100vh - 200px);
-  overflow: auto;
-}
 
 .book {
   position: relative;
@@ -54,7 +49,7 @@
   }
   
   .book__content {
-    position: absolute;
+    position: relative;
     top: 2px;
     left: 2px;
     right: 10px;
@@ -106,7 +101,6 @@
   .pagination {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
   }
 
     
@@ -144,4 +138,10 @@
     font-size: 40px;
     line-height: 60px;
     color: #000000;
+  }
+
+  .book__image {
+    width: 100%;
+    height: auto;
+    max-height: 200px; /* 원하는 높이 값으로 조정 */
   }

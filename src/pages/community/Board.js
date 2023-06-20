@@ -43,10 +43,10 @@ const Board = () => {
     <div>
       <div className="bar">FairyTeller</div>
       <div style={{ marginTop: '1%' }}>
-        <h4 style={{ textAlign: 'center', marginBottom: '2%', fontSize: '30px' }}>우리들의 도서관</h4>
-        {books.length > 0 ? (
-          <div className="book-container">
-            {books.map((book) => (
+        <h4 style={{ textAlign: 'center', marginBottom: '2%', fontSize: '20px' }}>우리들의 도서관</h4>
+        <div className="book-container">
+          {books.length > 0 ? (
+            books.map((book) => (
               <Link to={`/board/${book.boardId}`} key={book.boardId} style={{ textDecoration: 'none' }}>
                 <div className="book">
                   <div className="book__cover">
@@ -60,14 +60,14 @@ const Board = () => {
                   </div>
                 </div>
               </Link>
-            ))}
-          </div>
-        ) : (
-          <p style={{ textAlign: 'center' }}>게시물이 없습니다.</p>
-        )}
+            ))
+          ) : (
+            <p style={{ textAlign: 'center' }}>게시물이 없습니다.</p>
+          )}
+        </div>
         {/* 페이지네이션 컴포넌트 */}
         {totalPages > 0 && (
-          <div style={{ marginTop: '60px', display: 'flex', justifyContent: 'center' }}>
+          <div className="pagination">
             {Array.from({ length: totalPages }, (_, index) => (
               <button
                 key={index}
@@ -83,6 +83,7 @@ const Board = () => {
       </div>
     </div>
   );
+  
   
             }
   
