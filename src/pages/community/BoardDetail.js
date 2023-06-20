@@ -144,7 +144,7 @@ const BoardDetail = () => {
 
           <div className="pagination">
             {Array.from({ length: totalPages }, (_, index) => (
-              <button
+              <button 
                 key={index}
                 className={currentPage === index ? "activePageButton" : "pageButton"}
                 onClick={() => handlePageChange(index)}
