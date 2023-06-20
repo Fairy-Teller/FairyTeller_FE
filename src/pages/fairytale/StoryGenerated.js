@@ -2,51 +2,44 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
 import {
-  SelectedKeywords,
+  SelectedKeywordsState,
   StoryState,
   ImageState,
   ImageFix,
   BookState,
 } from "../../recoil/Fairytailstate";
-
 import { call } from "../../service/ApiService";
+import styled from "styled-components";
 import Container from "../../components/global/Container";
 import Section from "../../components/global/Section";
 import ButtonWrap from "../../components/common/ButtonWrap";
-import styled from "styled-components";
+import LoadingModal from "../../components/LoadingModal";
 
 const TextArea = styled.textarea`
-  width: calc(100% - 0.25rem);
-  height: 13rem;
+  width: calc(100% - 8rem);
+  min-height: 16rem;
   background-color: #efd3d3;
   overflow: auto;
   resize: none;
-  font-size: 1.8em;
-  border-radius: 1em;
-  padding: 0.2em;
+  font-size: 2rem;
+  border-radius: 2rem;
+  box-sizing: content-box;
+  padding: 2rem 4rem;
   font-family: emoji;
   text-align: center;
 `;
-const ImageContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-`;
-
 const Bar = styled.div`
-    width: 100hw;
-    height: 60px;
-    text-align: left;
-    background: #FCDEDE;
-    font-family: 'Amiri';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 40px;
-    line-height: 60px;
-    color: #000000;
+  width: 100hw;
+  height: 60px;
+  text-align: left;
+  background: #fcdede;
+  font-family: "Amiri";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 60px;
+  color: #000000;
 `;
-
 const BookCover = styled.div`
   display: flex;
   flex-direction: column;
@@ -56,44 +49,32 @@ const BookCover = styled.div`
   height: 100vh;
   background-size: cover;
 `;
-
 const FairytaleTitle = styled.div`
   font-weight: 400;
   font-size: 45px;
   text-align: center;
 `;
-
-const FormDiv = styled.div`
+const FormWrap = styled.div`
   width: 80%;
   margin: auto;
 `;
 
 const StoryGenerated = () => {
-  const [loading, setLoading] = useState(false);
-  const selectedKeywords = useRecoilValue(SelectedKeywords);
-  const showImage = useRecoilValue(ImageFix);
+  const [loaded, setLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const keywords = useRecoilValue(SelectedKeywordsState);
   const [savedStory, setSavedStory] = useRecoilState(StoryState);
-  const [savedBook, setSavedBook] = useRecoilState(BookState);
-  // const [dataIdx, setDataIdx] = useState(0);
-  // const [texts, setTexts] = useState('');
-  const [url, setUrl] = useState("");
+  // const showImage = useRecoilValue(ImageFix);
+  // const [savedBook, setSavedBook] = useRecoilState(BookState);
   const navigate = useNavigate();
+
   useEffect(() => {
     fetchData();
-    console.log("saveStory", savedStory);
-    console.log(selectedKeywords);
-  }, [selectedKeywords]);
+  }, [keywords]);
 
   const fetchData = async () => {
     try {
-      // setTexts(savedStory.text['text']);
-      // console.log(savedStory)
-      // setSelectedKeywords(() => {
-      //   return selectedKeywords.map((item) => ({
-      //     key: setDataIdx((prev) => prev + 1),
-      //   }));
-      // });
-      setLoading(true);
+      setLoaded(true);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
@@ -104,91 +85,87 @@ const StoryGenerated = () => {
     newStory[index] = { ...newStory[index], paragraph: e.target.value };
     setSavedStory(newStory);
   };
-  const onSubmitHandler = (e) => {
+
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
-    // setSavedStory(texts);
-    console.log(savedStory);
+    try {
+      const bookDTO = savedStory.map((item, index) => ({
+        pageNo: index + 1,
+        fullStory: item["paragraph"],
+      }));
+      await createBook({ pages: bookDTO });
+    } catch (error) {
+      console.log("Error fetching data:", error);
+    } finally {
+      navigate("/image-generated");
+    }
   };
 
   const regenerateHandler = (e) => {
     e.preventDefault();
 
     resendkeyword({
-      parameter1: selectedKeywords.keywords[0].title,
-      parameter2: selectedKeywords.keywords[1].title,
-      parameter3: selectedKeywords.keywords[2].title,
-      parameter4: selectedKeywords.keywords[3].title,
-      parameter5: selectedKeywords.keywords[4].title,
+      parameter1: keywords[0],
+      parameter2: keywords[1],
+      parameter3: keywords[2],
+      parameter4: keywords[3] == null || undefined ? "" : keywords[3],
+      parameter5: keywords[4] == null || undefined ? "" : keywords[4],
     });
   };
 
   const resendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
     try {
+      setIsLoading(true);
       const response = await call("/chat-gpt/question", "POST", userDTO);
-      set(StoryState, { text: response });
-      set(SelectedKeywords, { keywords: selectedKeywords.keywords });
+      set(StoryState, response);
     } catch (error) {
       console.log(error);
     } finally {
-      navigate("/story-generated");
+      setIsLoading(false);
     }
   });
 
-  const resetSelectedKeywords = useResetRecoilState(SelectedKeywords);
-
-  const gotoEdit = async () => {
-    try {
-      const bookDTO = savedStory.map((text, index) => ({
-        pageNo: index + 1,
-        fullStory: text["paragraph"],
-      }));
-
-      console.log("bookDTO", bookDTO);
-      await createBook({ pages: bookDTO });
-    } catch (error) {
-      console.log("Error fetching data:", error);
-    } finally {
-      await navigate("/image-generated"); // 이미지 선택 화면으로 가기
-    }
-  };
+  const resetSelectedKeywords = useResetRecoilState(SelectedKeywordsState);
 
   const createBook = useRecoilCallback(({ set }) => async (bookDTO) => {
     try {
       const response = await call("/book/create/story", "POST", bookDTO);
       console.log(response);
-      const pages = savedStory.map((text, index) => ({
+      const pages = savedStory.map((item, index) => ({
         pageNo: index + 1,
-        fullStory: text["paragraph"],
+        fullStory: item["paragraph"],
         imageUrl: null,
         imageBase64: null,
         audioUrl: null,
       }));
-      await set(BookState, { bookId: response["bookId"], pages: pages });
+      set(BookState, { bookId: response["bookId"], pages: pages });
     } catch (error) {
       console.log(error);
     }
   });
 
   return (
-    <div className='tmp_story tmp_story-generated'>
-      {loading ? (
+    <div className='write tmp_story-generated'>
+      {isLoading && <LoadingModal message='AI가 열심히 이야기를 만드는 중입니다.' />}
+      {loaded ? (
         <Container>
           <Bar>FairyTeller</Bar>
           <BookCover>
             <img
               src='/images/loding_1.png'
               style={{ marginTop: "2%" }}
+              alt='loading bar'
             />
             <FairytaleTitle>AI가 만든 동화를 수정할 수 있어요!</FairytaleTitle>
-            <FormDiv>
+            <FormWrap>
               <form onSubmit={onSubmitHandler}>
-                <Section className={""}>
+                <Section>
                   {savedStory.map(
                     (item, index) =>
-                      item["paragraph"] && (
-                        <div style={{ margin: "1em" }}>
+                      item && (
+                        <div style={{ margin: "1.2rem 0" }}>
                           <TextArea
-                            key={index}
+                            key={"paragraph" + index}
                             value={item["paragraph"]}
                             placeholder='만들어진 시나리오를 확인하고 수정해보아요'
                             onChange={(e) => onChangeHandler(e, index)}
@@ -207,17 +184,11 @@ const StoryGenerated = () => {
 
                   <button
                     type='submit'
-                    className='button'
-                    onClick={gotoEdit}>
+                    className='button'>
                     동화 만들러 가기
                   </button>
                 </ButtonWrap>
               </form>
-              {/* <Link
-            to='/keyword'
-            onClick={resetSelectedKeywords}
-            className='button'
-          /> */}
               <form onSubmit={regenerateHandler}>
                 <ButtonWrap className='button-wrap'>
                   <button
@@ -227,15 +198,7 @@ const StoryGenerated = () => {
                   </button>
                 </ButtonWrap>
               </form>
-            </FormDiv>
-            {url && (
-              <ImageContainer>
-                <img
-                  src={url}
-                  alt='AI-generated'
-                />
-              </ImageContainer>
-            )}
+            </FormWrap>
           </BookCover>
         </Container>
       ) : (

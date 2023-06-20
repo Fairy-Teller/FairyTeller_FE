@@ -10,7 +10,7 @@ const { persistAtom } = recoilPersist();
 //   default: "default",
 // });
 
-export const SelectedKeywords = atom({ key: "SelectedKeywords", default: [] });
+export const SelectedKeywordsState = atom({ key: "SelectedKeywordsState", default: [] });
 
 export const StoryState = atom({
   key: "StoryState",

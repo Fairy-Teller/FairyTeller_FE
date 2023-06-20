@@ -2,21 +2,10 @@ import React, { useState, useEffect } from "react";
 import LoadingModal from "../../components/LoadingModal";
 import { call } from "../../service/ApiService";
 import ButtonWrap from "../../components/common/ButtonWrap";
-import {
-  useRecoilState,
-  useResetRecoilState,
-  useRecoilValue,
-  useRecoilCallback,
-} from "recoil";
-import {
-  SelectedKeywords,
-  StoryState,
-  ImageState,
-  ImageFix,
-} from "../../recoil/Fairytailstate";
+import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
+import { SelectedKeywords, StoryState, ImageState, ImageFix } from "../../recoil/Fairytailstate";
 import PreviewGeneratedIamge from "../../components/PreviewGeneratedImage";
 import PreviewAllGeneratedIamge from "../../components/PreviewAllGeneratedImage";
-
 import styled from "styled-components";
 
 const Bar = styled.div`
@@ -96,12 +85,14 @@ const IamgeGenerated = () => {
   useEffect(() => {
     console.log("saveStory", savedStory);
   }, []);
+
   const onClickHandlerBefore = () => {
     if (0 < page) {
       setPage(page - 1);
     }
     console.log(page);
   };
+
   const onClickHandlerAfter = () => {
     setPage(page + 1);
     console.log(page);
@@ -112,7 +103,7 @@ const IamgeGenerated = () => {
       <Bar>FairyTeller</Bar>
       <BookCover>
         <img
-          src="/images/loding_2.png"
+          src='/images/loding_2.png'
           style={{ marginTop: "2%", maxWidth: "100%", maxHeight: "100%" }}
         />
       </BookCover>
@@ -120,8 +111,7 @@ const IamgeGenerated = () => {
         {0 < page && <Button onClick={onClickHandlerBefore}> 이전 </Button>}
         {savedStory.map(
           (item, index) =>
-            item["paragraph"] &&
-            page == index && <PreviewGeneratedIamge index={index} />
+            item["paragraph"] && page == index && <PreviewGeneratedIamge index={index} />
         )}
         {page == 5 && <PreviewAllGeneratedIamge />}
         {page < 5 && <Button onClick={onClickHandlerAfter}> 다음 </Button>}
