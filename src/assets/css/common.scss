@@ -63,17 +63,17 @@
 //   }
 // }
 
-  .start{
-    .container{
-      background-image: url("../../../public/images/tmp_background.jpg");
-      background-size: cover;
-      background-position: center;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+.start {
+  .container {
+    background-image: url("../../../public/images/tmp_background.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
+}
 
 .story {
   .container {
@@ -124,8 +124,9 @@
     }
   }
   &.keyword {
+    position: relative;
     .container {
-      //background-color: $bgc3;
+      // background-color: $bgc3;
     }
     ul {
       li {
@@ -251,8 +252,6 @@
     }
   }
 }
-
-
 
 ///----------------------------------
 .tmp_story {
