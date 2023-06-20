@@ -42,143 +42,57 @@
         }
     }
 }
-/*김윤설이 손 덴 부분*/
 
-
-// .start {
-//   a {
-//     width: 24rem;
-//     height: 24rem;
-//     padding: 2rem;
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     border-radius: 50%;
-//     transition: all 0.4s;
-//     background-color: $thc1;
-//     &:hover {
-//       width: 28rem;
-//       height: 28rem;
-//       background-color: $thc3;
-//     }
-//   }
-// }
-
-  .start{
-    .container{
-      background-image: url("../../../public/images/tmp_background.jpg");
-      background-size: cover;
-      background-position: center;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+.start {
+    a {
+        width: 24rem;
+        height: 24rem;
+        padding: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        transition: all 0.4s;
+        background-color: $thc1;
+        &:hover {
+            width: 28rem;
+            height: 28rem;
+            background-color: $thc3;
+        }
     }
-  }
+}
 
 .story {
-  .container {
-    // padding-top: 4%;
-  }
-  h1 {
-    margin: 0 0 2rem 0;
-    color: #fff;
-    font-family: "Amiri";
-    font-weight: 600;
-    font-size: 4rem;
-  }
-  h2 {
-    margin: 0 0 1.2rem 0;
-    color: $txt2;
-    font-family: "Amiri";
-    font-weight: 600;
-    font-size: 2.8rem;
-  }
-  section {
-    padding: 2rem;
-    box-sizing: border-box;
-    border-radius: 2rem;
-    & + section {
-      margin-top: 1.2rem;
-    }
-  }
-  textarea {
-    width: 100%;
-    padding: 2rem;
-    box-sizing: border-box;
-    background-color: transparent;
-  }
-  .button-wrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .button {
-      padding: 1.2rem 2rem;
-      margin-top: 2rem;
-      color: #fff;
-      text-align: center;
-      font-family: "Amiri";
-      font-weight: 600;
-      font-size: 2rem;
-      border-radius: 8rem;
-      transition: all 0.4s;
-    }
-  }
-  &.keyword {
     .container {
-      //background-color: $bgc3;
-// 78 =======
-// .start {
-//     a {
-//         width: 24rem;
-//         height: 24rem;
-//         padding: 2rem;
-//         display: flex;
-//         justify-content: center;
-//         align-items: center;
-//         border-radius: 50%;
-//         transition: all 0.4s;
-//         background-color: $thc1;
-//         &:hover {
-//             width: 28rem;
-//             height: 28rem;
-//             background-color: $thc3;
-//         }
-//     }
-// }
-
-// .story {
-//     .container {
-//         padding-top: 4%;
-//     }
-//     h1 {
-//         margin: 0 0 2rem 0;
-//         color: #fff;
-//         font-family: 'Amiri';
-//         font-weight: 600;
-//         font-size: 4rem;
-//     }
-//     h2 {
-//         margin: 0 0 1.2rem 0;
-//         color: $txt2;
-//         font-family: 'Amiri';
-//         font-weight: 600;
-//         font-size: 2.8rem;
-//     }
-//     section {
-//         padding: 2rem;
-//         box-sizing: border-box;
-//         border-radius: 2rem;
-//         & + section {
-//             margin-top: 1.2rem;
-//         }
-//     }
-//     textarea {
-//         width: 100%;
-//         padding: 2rem;
-//         box-sizing: border-box;
-//         background-color: transparent;
-// >>>>>>> 78-feature-canvas-css
+        padding-top: 4%;
+    }
+    h1 {
+        margin: 0 0 2rem 0;
+        color: #fff;
+        font-family: 'Amiri';
+        font-weight: 600;
+        font-size: 4rem;
+    }
+    h2 {
+        margin: 0 0 1.2rem 0;
+        color: $txt2;
+        font-family: 'Amiri';
+        font-weight: 600;
+        font-size: 2.8rem;
+    }
+    section {
+        padding: 2rem;
+        box-sizing: border-box;
+        border-radius: 2rem;
+        & + section {
+            margin-top: 1.2rem;
+        }
+    }
+    textarea {
+        width: 100%;
+        padding: 2rem;
+        box-sizing: border-box;
+        background-color: transparent;
     }
     .button-wrap {
         display: flex;
@@ -196,29 +110,9 @@
             transition: all 0.4s;
         }
     }
-
-    .button {
-      background-color: $thc1;
-      &:hover {
-        background-color: $thc3;
-      }
-    }
-  }
-  &-generated {
-    .container {
-      //background-color: $thc3;
-    }
-    form:first-of-type {
-      .button-wrap {
-        margin-top: 4rem;
-        position: relative;
-        a {
-          left: 0;
-
-// 78     &.keyword {
-// 78       .container {
-// 78           background-color: $bgc3;
-
+    &.keyword {
+        .container {
+            background-color: $bgc3;
         }
         ul {
             li {
@@ -315,8 +209,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-
-        background-color: rgba(121, 115, 115, 1);
+        background-color: aquamarine;
     }
     .page-selection {
         flex: 1;
@@ -344,70 +237,4 @@
             }
         }
     }
-}
-
-
-
-///----------------------------------
-.tmp_story {
-  .container {
-  }
-  section {
-    padding: 2rem;
-    box-sizing: border-box;
-    border-radius: 2rem;
-    & + section {
-      margin-top: 1.2rem;
-    }
-  }
-  .button-wrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .button {
-      padding: 1.2rem 2rem;
-      margin-top: 2rem;
-      color: #fff;
-      text-align: center;
-      font-family: "Amiri";
-      font-weight: 600;
-      font-size: 2rem;
-      border-radius: 8rem;
-      transition: all 0.4s;
-    }
-  }
-  &-generated {
-    .container {
-    }
-    form:first-of-type {
-      .button-wrap {
-        margin-top: 4rem;
-        position: relative;
-        a {
-          left: 0;
-        }
-        button[type="submit"] {
-          right: 0;
-        }
-      }
-    }
-    form:last-of-type {
-      height: 0;
-      .button-wrap {
-        margin: -0.2rem;
-        position: relative;
-        button[type="submit"] {
-          position: absolute;
-          left: 40%;
-        }
-      }
-    }
-    .button {
-      position: absolute;
-      background-color: $thc1;
-      &:hover {
-        background-color: $bgc3;
-      }
-    }
-  }
 }
