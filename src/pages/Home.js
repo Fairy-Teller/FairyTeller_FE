@@ -1,27 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Container from "../components/global/Container";
-import CenteredWrap from "../components/global/CenteredWrap";
-import { styled } from "styled-components";
-
-const Button = styled.button`
-  color: #fff;
-  font-family: "Amiri";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 6rem;
-`;
+import "../css/home.css";
 
 const Home = () => {
+  const [showMain, setShowMain] = useState(false);
+
+  useEffect(() => {
+    setShowMain(true);
+  }, []);
+
   return (
-    <div className={"home"}>
-      <Container>
-        <CenteredWrap>
-          <Link to='/login'>
-            <Button>Login</Button>
-          </Link>
-        </CenteredWrap>
-      </Container>
+    <div id="main-background" className={showMain ? "show" : ""}>
+      <div id="main-logo">
+        <h1>fairyTeller</h1>
+        <h3>AI를 활용한 나만의 동화 만들기</h3>
+      </div>
+      <div id="main-button">
+        <Link to="/login">
+          <button>동화 만들기</button>
+        </Link>
+      </div>
     </div>
   );
 };
