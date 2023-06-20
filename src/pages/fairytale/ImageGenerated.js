@@ -21,27 +21,27 @@ import styled from "styled-components";
 
 const Bar = styled.div`
   width: 100%;
-  height: 99px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start; /* Align items to the left */
+  height: 60px;
   background: #fcdede;
   font-family: "Amiri";
   font-style: normal;
   font-weight: 700;
-  font-size: 50px;
-  line-height: 88px;
+  font-size: 40px;
+  line-height: 60px;
   color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Align items to the left */
 `;
 
 const BookCover = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  width: 100vw;
-  height: 100vh;
+  width: 15vw;
+  height: 5vw;
   background-size: cover;
+  margin-top: 10px;
 `;
 
 const ContentContainer = styled.div`
@@ -62,17 +62,15 @@ const Div = styled.div`
 
 const Button = styled.button`
   width: 100px;
-  height: 81px;
+  height: 50px;
   background: #99f0cc;
   border-radius: 10px;
   font-family: "Amiri";
   font-style: normal;
   font-weight: 400;
-  font-size: 36px;
-  line-height: 63px;
+  font-size: 18px;
   text-align: center;
   color: #000000;
-  margin: 0 20px;
 `;
 
 const PreviewImageContainer = styled.div`
@@ -86,7 +84,7 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 10px;
 `;
 
 const IamgeGenerated = () => {
@@ -112,7 +110,12 @@ const IamgeGenerated = () => {
   return (
     <Div>
       <Bar>FairyTeller</Bar>
-      <img src="/images/loding_2.png" style={{ marginTop: "2%" }} />
+      <BookCover>
+        <img
+          src="/images/loding_2.png"
+          style={{ marginTop: "2%", maxWidth: "100%", maxHeight: "100%" }}
+        />
+      </BookCover>
       <ContentContainer>
         {0 < page && <Button onClick={onClickHandlerBefore}> 이전 </Button>}
         {savedStory.map(

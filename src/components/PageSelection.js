@@ -8,7 +8,6 @@ const Image = styled.div`
         `}
     min-height: 160px;
     background-color: rgba(217, 217, 217, 0.4);
-
 `;
 
 const PageSelection = (props) => {

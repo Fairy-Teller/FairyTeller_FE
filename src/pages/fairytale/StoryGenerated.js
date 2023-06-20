@@ -35,16 +35,16 @@ const ImageContainer = styled.div`
 `;
 
 const Bar = styled.div`
-  width: 100hw;
-  height: 99px;
-  text-align: left;
-  background: #fcdede;
-  font-family: "Amiri";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 50px;
-  line-height: 88px;
-  color: #000000;
+    width: 100hw;
+    height: 60px;
+    text-align: left;
+    background: #FCDEDE;
+    font-family: 'Amiri';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 60px;
+    color: #000000;
 `;
 
 const BookCover = styled.div`

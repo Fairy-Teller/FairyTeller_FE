@@ -49,10 +49,13 @@ const Login = () => {
             />
           </div>
           <div>
-            <button type="submit">로그인</button>
+            <button class="submit" type="submit">
+              로그인
+            </button>
           </div>
           <div>
             <button
+              class="submit"
               onClick={() => handleSocialLogin("kakao")}
               style={{ backgroundColor: "#FEE501" }}
             >
@@ -61,6 +64,7 @@ const Login = () => {
           </div>
           <div>
             <button
+              class="submit"
               onClick={() => handleSocialLogin("naver")}
               style={{ backgroundColor: "#50CA7E" }}
             >
@@ -69,6 +73,7 @@ const Login = () => {
           </div>
           <div>
             <button
+              class="submit"
               onClick={() => handleSocialLogin("google")}
               style={{ backgroundColor: "#EA4335" }}
             >
