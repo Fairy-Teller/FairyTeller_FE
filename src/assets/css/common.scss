@@ -64,15 +64,17 @@
 // }
 
   .start{
-    .container{
-      background-image: url("../../../public/images/tmp_background.jpg");
-      background-size: cover;
-      background-position: center;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    background-image: url("../../../public/images/tmp_background.jpg");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    a{
+      color: #fff;
+      text-decoration-line: none;
     }
+    a:hover{ text-decoration:none !important }
   }
 
 .story {
@@ -130,7 +132,7 @@
     ul {
       li {
         width: 6rem;
-        height: 8rem;
+        height: 6rem;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -143,12 +145,12 @@
           color: $txt1;
           font-family: "Amiri";
           font-weight: 400;
-          font-size: 1.6rem;
+          font-size: 1.3rem;
         }
         &:hover {
           background-color: $thc3;
           p {
-            color: #fff;
+            color: #2e75d1;
           }
         }
       }
