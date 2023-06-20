@@ -41,48 +41,49 @@ const Board = () => {
 
   return (
     <div>
-              <div className="bar">FairyTeller</div>
-    <div style={{ marginTop: '5%' }}>
-    <h4 style={{ textAlign: 'center', marginBottom: '5%', fontSize: '30px' }}>우리들의 도서관</h4>
-      {books.length > 0 ? (
-        <div className="book-container">
-          {books.map((book) => (
-            <Link to={`/board/${book.boardId}`} key={book.boardId} style={{ textDecoration: 'none' }}>
-              <div className="book">
-                <div className="book__cover">
-                  <div className="book__page book__page--front">
-                    <div className="book__content">
-                      <img src={book.thumbnailUrl} alt={book.title} className="book__image" />
-                      <h6 className="book__title">{truncateTitle(book.title)}</h6>
-                      <h6 className="book__author">{truncateTitle(book.nickname)}</h6>
+      <div className="bar">FairyTeller</div>
+      <div style={{ marginTop: '1%' }}>
+        <h4 style={{ textAlign: 'center', marginBottom: '2%', fontSize: '30px' }}>우리들의 도서관</h4>
+        {books.length > 0 ? (
+          <div className="book-container">
+            {books.map((book) => (
+              <Link to={`/board/${book.boardId}`} key={book.boardId} style={{ textDecoration: 'none' }}>
+                <div className="book">
+                  <div className="book__cover">
+                    <div className="book__page book__page--front">
+                      <div className="book__content">
+                        <img src={book.thumbnailUrl} alt={book.title} className="book__image" />
+                        <h6 className="book__title">{truncateTitle(book.title)}</h6>
+                        <h6 className="book__author">{truncateTitle(book.nickname)}</h6>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <p style={{ textAlign: 'center' }}>게시물이 없습니다.</p>
-      )}
-      {/* 페이지네이션 컴포넌트 */}
-      {totalPages > 0 && (
-<div style={{ marginTop: '60px', display: 'flex', justifyContent: 'center' }}>
-  {Array.from({ length: totalPages }, (_, index) => (
-    <button
-      key={index}
-      onClick={() => handlePageChange(index)}
-      className="board-page-button"
-      style={{ backgroundColor: currentPage === index ? '#99F0CC' : 'white' }}
-    >
-      {index + 1}
-    </button>
-  ))}
-</div>
-      )}
-    </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p style={{ textAlign: 'center' }}>게시물이 없습니다.</p>
+        )}
+        {/* 페이지네이션 컴포넌트 */}
+        {totalPages > 0 && (
+          <div style={{ marginTop: '60px', display: 'flex', justifyContent: 'center' }}>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index}
+                onClick={() => handlePageChange(index)}
+                className="board-page-button"
+                style={{ backgroundColor: currentPage === index ? '#99F0CC' : 'white' }}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
+  
             }
   
 export default Board;

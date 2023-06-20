@@ -78,8 +78,8 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
                   onChange={(e) => setEditedComment(e.target.value)}
                 />
                 <div className="buttonContainer">
-                  <button onClick={() => handleUpdate(comment)} className="smallButton">저장</button>
-                  <button onClick={() => handleCancelEdit()} className="smallButton">취소</button>
+                  <button onClick={() => handleUpdate(comment)} className="saveButton">저장</button>
+                  <button onClick={() => handleCancelEdit()} className="cancelButton">취소</button>
                 </div>
               </>
             ) : (
@@ -88,9 +88,9 @@ const CommentSection = ({ comments, setComments, onCommentSubmit, onDeleteCommen
                 {(comment.editable || isBoardOwner) && (
                   <div className="buttonContainer">
                     {comment.editable && (
-                      <button onClick={() => handleEdit(comment)} className="smallButton">수정</button>
+                      <button onClick={() => handleEdit(comment)} className="saveButton">수정</button>
                     )}
-                    <button onClick={() => handleDelete(comment)} className="smallButton">삭제</button>
+                    <button onClick={() => handleDelete(comment)} className="cancelButton">삭제</button>
                   </div>
                 )}
               </>
