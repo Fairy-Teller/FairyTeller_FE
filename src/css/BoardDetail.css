@@ -21,7 +21,7 @@
   .title {
     font-size: 24px;
     font-weight: bold;
-    margin-top: 10px;
+    margin-top: 2px;
     margin-bottom: 10px;
   }
   
@@ -35,7 +35,7 @@
   .deleteButtonContainer {
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    margin-top: 10px;
   }
   
   .deleteButton {
@@ -56,15 +56,15 @@
 .title {
   font-size: 24px;
   font-weight: bold;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .author {
   font-size: 16px;
   color: #666;
   margin-top: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 0px;
 }
 
 .pagination {
@@ -105,7 +105,7 @@
   display: flex;
   align-items: center;
   justify-content: start;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .like-btn {
