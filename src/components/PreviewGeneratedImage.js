@@ -22,8 +22,8 @@ const Div = styled.div`
 `;
 
 const Img = styled.img`
-  width: 1416px;
-  height: 650px;
+  width: 600px;
+  height: 300px;
   background: #d9d9d9;
   border-radius: 20px;
   margin-top: 20px; // Optional: add some margin at the top for some spacing
@@ -33,49 +33,42 @@ const Text = styled.p`
   display: flex;
   text-align: center; // Center text horizontally
   align-items: center; // Center text vertically
-  width: 1509px;
-  height: 280px; // Increased the height here
+  width: 800px;
+  height: 100px; // Increased the height here
   background: #fcdede;
   border-radius: 20px;
   font-family: "Amiri";
   font-style: normal;
   font-weight: 400;
-  font-size: 48px;
-  line-height: 60px;
+  font-size: 20px;
   color: #000000;
-  margin: 20px; // Optional: add some margin at the bottom for some spacing
-  padding: 0 30px;
+  margin: 10px;
+  padding: 0 10px;
 `;
 
 const P = styled.p`
   display: flex;
   text-align: center; /* 가운데 정렬 속성 추가 */
   align-items: center; /* 세로 가운데 정렬 */
-  width: 1416px;
-  height: 185px;
-  border-radius: 20px;
-  width: 300px;
-  height: 161px;
   font-weight: 600;
-  font-size: 50px;
-  line-height: 44px;
+  font-size: 20px;
   color: #000000;
+  margin-top: 20px;
 `;
 const Button = styled.button`
-  width: 400px;
-  height: 81px;
+  width: 200px;
+  height: 40px;
   background: #99f0cc;
   border-radius: 10px;
   font-family: "Amiri";
   font-style: normal;
   font-weight: 400;
-  font-size: 36px;
-  line-height: 63px;
+  font-size: 18px;
   text-align: center !important; /* 가운데 정렬 속성 추가 */
   color: #000000;
   justify-content: center; /* 가로 가운데 정렬 */
   align-items: center; /* 세로 가운데 정렬 */
-  margin-right: 20px; /* Add margin to the right of each button */
+  margin-right: 10px; /* Add margin to the right of each button */
 `;
 
 const PreviewGeneratedIamge = (props) => {

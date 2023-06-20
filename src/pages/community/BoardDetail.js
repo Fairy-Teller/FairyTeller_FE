@@ -36,13 +36,27 @@ const BoardDetail = () => {
   };
 
   const handleCommentSubmit = async (comment) => {
-      try {
-          await call(`/board/${boardId}/comment`, 'POST', comment);
-          fetchDataComments(currentPage); // 새로운 댓글이 추가된 후 전체 댓글 목록을 다시 가져옴
-      } catch (error) {
-          console.log('Error submitting comment:', error);
-      }
+    try {
+      await call(`/board/${boardId}/comment`, "POST", comment);
+      fetchDataComments(currentPage);
+    } catch (error) {
+      console.log("Error submitting comment:", error);
+    }
   };
+
+
+  const handleDeleteComment = async (comment) => {};
+
+
+//   const handleDeleteComment = async (commentId) => {
+//     try {
+//       await call(`/board/${boardId}/comment/${commentId}`, "DELETE", null);
+//       fetchDataComments(currentPage);
+//     } catch (error) {
+//       console.log("Error deleting comment:", error);
+//     }
+//   };
+
 
   const handleLike = async () => {
     try {
@@ -76,15 +90,6 @@ const BoardDetail = () => {
     try {
       await call(`/board/${boardId}`, "DELETE", null);
       navigate("/board"); // 삭제 후 게시판 목록 페이지로 이동
-    } catch (error) {
-      console.log("Error deleting board:", error);
-    }
-  };
-
-  /*임시 방편*/
-  const handleDeleteComment = async () => {
-    try {
-        console.log("임시방편")
     } catch (error) {
       console.log("Error deleting board:", error);
     }
@@ -144,7 +149,7 @@ const BoardDetail = () => {
 
           <div className="pagination">
             {Array.from({ length: totalPages }, (_, index) => (
-              <button
+              <button 
                 key={index}
                 className={currentPage === index ? "activePageButton" : "pageButton"}
                 onClick={() => handlePageChange(index)}
