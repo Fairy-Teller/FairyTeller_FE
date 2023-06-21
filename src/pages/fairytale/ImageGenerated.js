@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import LoadingModal from "../../components/LoadingModal";
-import { call } from "../../service/ApiService";
-import ButtonWrap from "../../components/common/ButtonWrap";
 import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
-import { SelectedKeywords, StoryState, ImageState, ImageFix } from "../../recoil/Fairytailstate";
-import PreviewGeneratedIamge from "../../components/PreviewGeneratedImage";
-import PreviewAllGeneratedIamge from "../../components/PreviewAllGeneratedImage";
+import { SavedBoolState, AllSavedBoolState, StoryState } from "../../recoil/Fairytailstate";
+import { call } from "../../service/ApiService";
 import styled from "styled-components";
+// import LoadingModal from "../../components/LoadingModal";
+// import ButtonWrap from "../../components/common/ButtonWrap";
+import Control from "../../components/Control";
+import PreviewGeneratedImage from "../../components/PreviewGeneratedImage";
+import PreviewAllGeneratedImage from "../../components/PreviewAllGeneratedImage";
 
 const Bar = styled.div`
   width: 100%;
@@ -22,7 +23,6 @@ const Bar = styled.div`
   align-items: center;
   justify-content: flex-start; /* Align items to the left */
 `;
-
 const BookCover = styled.div`
   display: flex;
   flex-direction: column;
@@ -32,70 +32,47 @@ const BookCover = styled.div`
   background-size: cover;
   margin-top: 10px;
 `;
-
 const ContentContainer = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  flex-grow: 1;
 `;
-
 const Div = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
-  flex-direction: column; /* Added to stack elements vertically */
+  flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Align items at the top */
+  justify-content: flex-start;
 `;
 
-const Button = styled.button`
-  width: 100px;
-  height: 50px;
-  background: #99f0cc;
-  border-radius: 10px;
-  font-family: "Amiri";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 18px;
-  text-align: center;
-  color: #000000;
-`;
-
-const PreviewImageContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 10px;
-`;
+const [PREV, NEXT, DONE] = ["prev", "next", "done"];
+const ALLTRUE = [true, true, true, true, true];
 
 const IamgeGenerated = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [imgUrl, setImgURL] = useState(null);
-  const [savedStory, setSavedStory] = useRecoilState(StoryState);
+  const savedStory = useRecoilValue(StoryState);
+  const isSaveImage = useRecoilValue(SavedBoolState);
   const [page, setPage] = useState(0);
+  const [allSelectDone, setAllSelectDone] = useRecoilState(AllSavedBoolState);
 
   useEffect(() => {
-    console.log("saveStory", savedStory);
-  }, []);
+    console.log("isSaveImage", isSaveImage);
 
-  const onClickHandlerBefore = () => {
-    if (0 < page) {
-      setPage(page - 1);
+    if (isSaveImage.every((item, index) => item === ALLTRUE[index])) {
+      setAllSelectDone(!allSelectDone);
+      console.log(allSelectDone);
     }
-    console.log(page);
-  };
+  }, [isSaveImage]);
 
-  const onClickHandlerAfter = () => {
-    setPage(page + 1);
-    console.log(page);
+  const handleControl = (mode) => {
+    if (mode === PREV) {
+      if (0 < page) {
+        setPage(page - 1);
+      }
+    }
+    if (mode === NEXT) {
+      setPage(page + 1);
+    }
   };
 
   return (
@@ -105,16 +82,35 @@ const IamgeGenerated = () => {
         <img
           src='/images/loding_2.png'
           style={{ marginTop: "2%", maxWidth: "100%", maxHeight: "100%" }}
+          alt='loding'
         />
       </BookCover>
       <ContentContainer>
-        {0 < page && <Button onClick={onClickHandlerBefore}> 이전 </Button>}
-        {savedStory.map(
-          (item, index) =>
-            item["paragraph"] && page == index && <PreviewGeneratedIamge index={index} />
+        {page > 0 ? (
+          <Control
+            mode={PREV}
+            onControl={handleControl}
+          />
+        ) : (
+          <div style={{ marginLeft: "10rem" }}></div>
         )}
-        {page == 5 && <PreviewAllGeneratedIamge />}
-        {page < 5 && <Button onClick={onClickHandlerAfter}> 다음 </Button>}
+        {savedStory.map(
+          (item, index) => item && page === index && <PreviewGeneratedImage index={index} />
+        )}
+        {page < 4 && !allSelectDone ? (
+          <Control
+            mode={NEXT}
+            onControl={handleControl}
+          />
+        ) : page === 4 && !allSelectDone ? (
+          <div style={{ marginRight: "10rem" }}></div>
+        ) : page === 4 && allSelectDone ? (
+          <Control
+            mode={NEXT}
+            onControl={handleControl}
+          />
+        ) : null}
+        {page === 5 && <PreviewAllGeneratedImage />}
       </ContentContainer>
     </Div>
   );

@@ -32,6 +32,10 @@ const MoveImg = styled.img`
   margin: 0 0 2rem 0;
 `;
 
+const Message = styled.p`
+  color: black;
+`;
+
 const LoadingModal = ({ message }) => {
   useEffect(() => {
     document.body.classList.add("noscroll");
@@ -48,7 +52,7 @@ const LoadingModal = ({ message }) => {
           src='giphy.gif'
           alt='로딩 모달 이미지'
         />
-        <p>{message}</p>
+        <Message>{message}</Message>
       </Modal>
     </ModalWrap>
   );

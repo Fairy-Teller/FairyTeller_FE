@@ -10,11 +10,16 @@ const { persistAtom } = recoilPersist();
 //   default: "default",
 // });
 
-export const SelectedKeywordsState = atom({ key: "SelectedKeywordsState", default: [] });
+export const SelectedKeywordsState = atom({
+  key: "SelectedKeywordsState",
+  default: [],
+  effects_UNSTABLE: [persistAtom],
+});
 
 export const StoryState = atom({
   key: "StoryState",
   default: [],
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const ImageTempState = atom({
@@ -36,12 +41,6 @@ export const BookState = atom({
 export const ImageState = atom({
   key: "ImageState",
   default: { url: "" },
-});
-
-export const ImageFix = atom({
-  key: "userId",
-  default: "",
-  effects_UNSTABLE: [persistAtom],
 });
 
 export const SelectedImageState = atom({
@@ -160,4 +159,24 @@ export const Canvasexport = atom({
   key: "Canvasexport",
   default: [],
   effects_UNSTABLE: [persistAtom],
+});
+
+export const SavedBoolState = atom({
+  key: "SavedBoolState",
+  default: [false, false, false, false, false],
+});
+
+export const AllSavedBoolState = atom({
+  key: "AllSavedBoolState",
+  default: false,
+});
+
+export const GeneratedBoolState = atom({
+  key: "GeneratedBoolState",
+  default: [false, false, false, false, false],
+});
+
+export const GeneratedCountState = atom({
+  key: "GeneratedCountState",
+  default: [3, 3, 3, 3, 3],
 });
