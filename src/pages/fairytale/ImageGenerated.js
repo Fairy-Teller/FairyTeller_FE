@@ -26,11 +26,16 @@ import ContentCover from "../../components/global/ContentCover";
 import ContentTitle from "../../components/global/ContentTitle";
 import InnerCover from "../../components/global/InnerCover";
 
+import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
+import { SavedBoolState, AllSavedBoolState, StoryState } from "../../recoil/Fairytailstate";
+// import LoadingModal from "../../components/LoadingModal";
+// import ButtonWrap from "../../components/common/ButtonWrap";
+import Control from "../../components/Control";
+
 const ContentContainer = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  flex-grow: 1;
 `;
 const Div = styled.div`
   width: 100vw;
@@ -53,51 +58,71 @@ const Button = styled.button`
   color: #000000;
 `;
 
+const [PREV, NEXT, DONE] = ["prev", "next", "done"];
+const ALLTRUE = [true, true, true, true, true];
+
 const IamgeGenerated = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [imgUrl, setImgURL] = useState(null);
-  const [savedStory, setSavedStory] = useRecoilState(StoryState);
+  const savedStory = useRecoilValue(StoryState);
+  const isSaveImage = useRecoilValue(SavedBoolState);
   const [page, setPage] = useState(0);
+  const [allSelectDone, setAllSelectDone] = useRecoilState(AllSavedBoolState);
 
   useEffect(() => {
-    console.log("saveStory", savedStory);
-  }, []);
+    console.log("isSaveImage", isSaveImage);
 
-  const onClickHandlerBefore = () => {
-    if (0 < page) {
-      setPage(page - 1);
+    if (isSaveImage.every((item, index) => item === ALLTRUE[index])) {
+      setAllSelectDone(!allSelectDone);
+      console.log(allSelectDone);
     }
-    console.log(page);
-  };
+  }, [isSaveImage]);
 
-  const onClickHandlerAfter = () => {
-    setPage(page + 1);
-    console.log(page);
+  const handleControl = (mode) => {
+    if (mode === PREV) {
+      if (0 < page) {
+        setPage(page - 1);
+      }
+    }
+    if (mode === NEXT) {
+      setPage(page + 1);
+    }
   };
 
 
   return (
-    <Container>
-      <Header mode={"default"} />
-      <ContentCover>
-        <ProgressBar step={2} />
-        <ContentTitle>제목와야하는자리</ContentTitle>
-          <InnerCover>
-          {0 < page && 
-            <Button onClick={onClickHandlerBefore}> 
-              이전 
-            </Button>
-          }
-            {savedStory.map(
-              (item, index) =>
-                item["paragraph"] &&
-                page == index && <PreviewGeneratedIamge index={index} />
-            )}
-            {page == 5 && <PreviewAllGeneratedIamge />}
-            {page < 5 && <Button onClick={onClickHandlerAfter}> 다음 </Button>}
-          </InnerCover>
-      </ContentCover>
-    </Container>
+      <Container>
+        <Header mode={"default"} />
+          <ContentCover>
+            <ProgressBar step={2} />
+              <ContentTitle>제목와야하는자리</ContentTitle>
+                <InnerCover>
+                  {page > 0 ? (
+                    <Control
+                      mode={PREV}
+                      onControl={handleControl}
+                    />
+                  ) : (
+                    <div style={{ marginLeft: "10rem" }}></div>
+                  )}
+                  {savedStory.map(
+                    (item, index) => item && page === index && <PreviewGeneratedImage index={index} />
+                  )}
+                  {page < 4 && !allSelectDone ? (
+                    <Control
+                      mode={NEXT}
+                      onControl={handleControl}
+                    />
+                  ) : page === 4 && !allSelectDone ? (
+                    <div style={{ marginRight: "10rem" }}></div>
+                  ) : page === 4 && allSelectDone ? (
+                    <Control
+                      mode={NEXT}
+                      onControl={handleControl}
+                    />
+                  ) : null}
+                  {page === 5 && <PreviewAllGeneratedImage />}
+                </InnerCover>
+            </ContentCover>
+          </Container>
   );
 };
 

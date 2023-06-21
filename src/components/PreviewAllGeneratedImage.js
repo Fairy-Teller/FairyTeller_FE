@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { call } from "../service/ApiService";
 import { Link, useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { ImageTempState } from "../recoil/Fairytailstate";
 import styled from "styled-components";
 
@@ -11,7 +11,6 @@ const Div = styled.div`
   align-items: center;
   padding: 10px;
 `;
-
 const Text = styled.p`
   display: flex;
   justify-content: center;
@@ -26,7 +25,6 @@ const Text = styled.p`
   margin-bottom: 20px;
   text-align: center;
 `;
-
 const ImageContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -35,7 +33,6 @@ const ImageContainer = styled.div`
   margin-bottom: 30px;
   width: 1000px; /* Sum of Image widths and gaps (350 * 3 + 30 * 2) */
 `;
-
 const Image = styled.img`
   width: 300px;
   height: 200px;
@@ -55,13 +52,11 @@ const Image = styled.img`
     transform: scale(1.1);
   }
 `;
-
 const ButtonWrap = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 20px;
 `;
-
 const Button = styled.button`
   width: 200px;
   height: 40px;
@@ -82,13 +77,14 @@ const Button = styled.button`
 `;
 
 const PreviewAllGeneratedIamge = () => {
-  const [savedImageTemp, setSavedImageTemp] = useRecoilState(ImageTempState);
+  const savedImageTemp = useRecoilValue(ImageTempState);
   const navigate = useNavigate();
+
   useEffect(() => {
     console.log("savedImageTemp", savedImageTemp);
   }, []);
 
-  const gotoEdit = () => {
+  const goEdit = () => {
     navigate("/f-edit");
   };
 
@@ -104,7 +100,7 @@ const PreviewAllGeneratedIamge = () => {
         ))}
       </ImageContainer>
       <ButtonWrap>
-        <Button onClick={gotoEdit}>동화책 꾸미기</Button>
+        <Button onClick={goEdit}>동화책 꾸미기</Button>
       </ButtonWrap>
     </Div>
   );
