@@ -1,11 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Book = ({ book, truncateTitle }) => {
+const Book = ({ book, truncateTitle, linkPath, idProperty }) => {
+  const title = truncateTitle ? truncateTitle(book.title) : book.title;
+  const author = truncateTitle ? truncateTitle(book.nickname) : book.nickname;
+
+  const id = book[idProperty];
+
   return (
     <Link
-      to={`/board/${book.boardId}`}
-      key={book.boardId}
+      to={`/${linkPath}/${id}`} // Use linkPath prop to set the URL
+      key={id}
       style={{ textDecoration: "none" }}
     >
       <div className="book">
@@ -17,8 +22,8 @@ const Book = ({ book, truncateTitle }) => {
                 alt={book.title}
                 className="book__image"
               />
-              <h6 className="book__title">{truncateTitle(book.title)}</h6>
-              <h6 className="book__author">{truncateTitle(book.nickname)}</h6>
+              <h6 className="book__title">{title}</h6>
+              <h6 className="book__author">{author}</h6>
             </div>
           </div>
         </div>

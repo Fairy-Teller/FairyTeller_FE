@@ -61,6 +61,8 @@ const Board = () => {
               books.map((book) => (
                 <Book
                   book={book}
+                  linkPath="board"
+                  idProperty="boardId" // Use the 'boardId' property
                   truncateTitle={truncateTitle}
                   key={book.boardId}
                 />
