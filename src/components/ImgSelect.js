@@ -21,22 +21,13 @@ const ImgSelect = (props) => {
     props.onSave();
   };
 
-  if (props.disabled) {
-    return (
-      <Button
-        type='button'
-        disabled>
-        이미지 선택 완료
-      </Button>
-    );
-  } else
-    return (
-      <Button
-        type='button'
-        onClick={onClickHandler}>
-        이 이미지 선택하기
-      </Button>
-    );
+  return (
+    <Button
+      type='button'
+      onClick={onClickHandler}>
+      이 이미지 선택하기
+    </Button>
+  );
 };
 
 export default ImgSelect;

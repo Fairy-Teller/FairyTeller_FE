@@ -83,13 +83,13 @@ body {
   }
 }
 
-.yellow-bar {
-  position: absolute;
-  width: 100vw;
-  height: 4vh;
-  left: 0px;
-  top: 0px;
-  background-color: #ffb800;
+button {
+  &:disabled {
+    background-color: $bgc1;
+    &:hover {
+      cursor: default;
+    }
+  }
 }
 
 * {

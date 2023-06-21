@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
+import { GeneratedBoolState, GeneratedCountState } from "../recoil/Fairytailstate";
 import styled from "styled-components";
 
 const Button = styled.button`
@@ -17,23 +19,35 @@ const Button = styled.button`
 `;
 
 const ImgGenerate = (props) => {
-  const [isFirstCreated, setIsFirstCreated] = useState([false, false, false, false, false]);
+  const [isFirstCreated, setIsFirstCreated] = useRecoilState(GeneratedBoolState);
+  const [imgCount, setImgCount] = useRecoilState(GeneratedCountState);
 
   useEffect(() => {
-    console.log(isFirstCreated);
-  }, []);
+    if (imgCount[props.index] === 0) {
+      document.querySelector(`button[name=idx${props.index}]`).disabled = true;
+    }
+  }, [imgCount]);
 
-  const onClickHandler = () => {
+  const onClickHandler = (e) => {
     props.onCreate();
+
+    const newImgCount = [...imgCount];
+    --newImgCount[props.index];
+    setImgCount(newImgCount);
+
+    console.log(e.target.name, imgCount);
   };
 
   if (isFirstCreated[props.index]) {
     return (
       <Button
         type='button'
-        onClick={onClickHandler}
+        name={"idx" + props.index}
+        onClick={(e) => {
+          onClickHandler(e);
+        }}
         style={{ marginRight: "2rem" }}>
-        다시 뽑기
+        다시 뽑기 {imgCount[props.index]}
       </Button>
     );
   }
@@ -41,16 +55,16 @@ const ImgGenerate = (props) => {
     return (
       <Button
         type='button'
-        onClick={() => {
-          onClickHandler();
-          setIsFirstCreated(!isFirstCreated[props.index]);
+        onClick={(e) => {
+          onClickHandler(e);
 
           const newIsFirstCreated = [...isFirstCreated];
           newIsFirstCreated[props.index] = true;
           setIsFirstCreated(newIsFirstCreated);
 
           console.log(props.index, isFirstCreated);
-        }}>
+        }}
+        style={{ marginRight: "2rem" }}>
         이미지 생성하기
       </Button>
     );

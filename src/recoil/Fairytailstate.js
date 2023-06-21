@@ -43,12 +43,6 @@ export const ImageState = atom({
   default: { url: "" },
 });
 
-export const ImageFix = atom({
-  key: "userId",
-  default: "",
-  effects_UNSTABLE: [persistAtom],
-});
-
 export const SelectedImageState = atom({
   key: "SelectedImageState",
   default: [
@@ -165,4 +159,24 @@ export const Canvasexport = atom({
   key: "Canvasexport",
   default: [],
   effects_UNSTABLE: [persistAtom],
+});
+
+export const SavedBoolState = atom({
+  key: "SavedBoolState",
+  default: [false, false, false, false, false],
+});
+
+export const AllSavedBoolState = atom({
+  key: "AllSavedBoolState",
+  default: false,
+});
+
+export const GeneratedBoolState = atom({
+  key: "GeneratedBoolState",
+  default: [false, false, false, false, false],
+});
+
+export const GeneratedCountState = atom({
+  key: "GeneratedCountState",
+  default: [3, 3, 3, 3, 3],
 });

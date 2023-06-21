@@ -2,12 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import "../assets/css/control.scss";
 
-const [PREV, NEXT] = ["prev", "next"];
+const [PREV, NEXT, DONE] = ["prev", "next", "done"];
 
 const Button = styled.button`
   width: 8rem;
   height: 3.2rem;
-  margin: 12rem 0 0;
+  margin: 2rem 0 0;
   font-family: "Amiri";
   font-style: normal;
   font-weight: 400;
@@ -41,6 +41,13 @@ const Control = (props) => {
         다음
       </Button>
     );
+  } else if (props.mode === DONE) {
+    <Button
+      type='button'
+      onClick={onClickHandler}
+      style={{ marginLeft: "2rem" }}>
+      확인하러 가기
+    </Button>;
   } else {
     return <div>Loading...</div>;
   }

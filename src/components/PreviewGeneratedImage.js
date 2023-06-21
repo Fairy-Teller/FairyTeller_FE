@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
-import { StoryState, ImageTempState, BookState } from "../recoil/Fairytailstate";
+import { useRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
+import { SavedBoolState, StoryState, ImageTempState, BookState } from "../recoil/Fairytailstate";
 import { call } from "../service/ApiService";
 import styled from "styled-components";
 import LoadingModal from "./LoadingModal";
@@ -62,16 +62,8 @@ const PreviewGeneratedIamge = (props) => {
   const savedStory = useRecoilValue(StoryState);
   const [savedImageTemp, setSavedImageTemp] = useRecoilState(ImageTempState);
   const [savedBook, setSavedBook] = useRecoilState(BookState);
-  const [imgUrl, setImgURL] = useState(null);
-  const [isSaveImage, setIsSaveImage] = useState([false, false, false, false, false]);
-
-  useEffect(() => {
-    // console.log(savedStory);
-    // console.log(savedImageTemp);
-    // console.log(props.index);
-    // console.log(savedBook);
-    // console.log(savedStory[props.index]["paragraph"]);
-  }, []);
+  // const [imgUrl, setImgURL] = useState(null);
+  const [isSaveImage, setIsSaveImage] = useRecoilState(SavedBoolState);
 
   const createImg = async () => {
     try {
@@ -108,15 +100,15 @@ const PreviewGeneratedIamge = (props) => {
     }
   };
 
-  const onChangeHandler = (imgUrl, index) => {
+  const onChangeHandler = (targetUrl, index) => {
     const newImage = [...savedImageTemp];
-    newImage[index] = { ...newImage[index], url: imgUrl };
+    newImage[index] = { ...newImage[index], url: targetUrl };
     setSavedImageTemp(newImage);
   };
 
   const saveImg = async () => {
     try {
-      alert("saved");
+      alert(`${props.index + 1}번째 페이지에 대한 이미지가 저장되었습니다!`);
 
       const bookDTO = {
         bookId: savedBook["bookId"],
@@ -135,6 +127,8 @@ const PreviewGeneratedIamge = (props) => {
       setIsSaveImage(newIsSaveImage);
     } catch (error) {
       console.log("Error fetching data:", error);
+    } finally {
+      console.log("isSaveImage", isSaveImage);
     }
   };
 
@@ -150,12 +144,7 @@ const PreviewGeneratedIamge = (props) => {
         <Img src={savedImageTemp[props.index] && savedImageTemp[props.index]["url"]} />
       </ImageWrap>
 
-      {isSaveImage[props.index] && (
-        <ButtonWrap>
-          <ImgSelect disabled={true} />
-        </ButtonWrap>
-      )}
-      {!isSaveImage[props.index] && (
+      {!isSaveImage[props.index] ? (
         <ButtonWrap>
           <ImgGenerate
             onCreate={createImg}
@@ -163,6 +152,8 @@ const PreviewGeneratedIamge = (props) => {
           />
           <ImgSelect onSave={saveImg} />
         </ButtonWrap>
+      ) : (
+        <button disabled>선택 완료!</button>
       )}
     </Div>
   );
