@@ -1,35 +1,17 @@
 import React, { useState, useEffect } from "react";
-import {
-  useRecoilState,
-  useResetRecoilState,
-  useRecoilValue,
-  useRecoilCallback,
-} from "recoil";
-import {
-  SelectedKeywords,
-  StoryState,
-  ImageState,
-  ImageFix,
-} from "../../recoil/Fairytailstate";
-import { call } from "../../service/ApiService";
+import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
+import { SavedBoolState, AllSavedBoolState, StoryState } from "../../recoil/Fairytailstate";
 import styled from "styled-components";
 import Header from "../../components/global/Header";
 import ProgressBar from "../../components/global/ProgressBar";
-import LoadingModal from "../../components/LoadingModal";
-import ButtonWrap from "../../components/common/ButtonWrap";
-import PreviewGeneratedIamge from "../../components/PreviewGeneratedImage";
-import PreviewAllGeneratedIamge from "../../components/PreviewAllGeneratedImage";
-import DirectionButton from "../../components/global/DirectionButton";
-
+// import LoadingModal from "../../components/LoadingModal";
+// import ButtonWrap from "../../components/common/ButtonWrap";
+import PreviewGeneratedImage from "../../components/PreviewGeneratedImage";
+import PreviewAllGeneratedImage from "../../components/PreviewAllGeneratedImage";
 import Container from "../../components/global/Container";
 import ContentCover from "../../components/global/ContentCover";
 import ContentTitle from "../../components/global/ContentTitle";
 import InnerCover from "../../components/global/InnerCover";
-
-import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
-import { SavedBoolState, AllSavedBoolState, StoryState } from "../../recoil/Fairytailstate";
-// import LoadingModal from "../../components/LoadingModal";
-// import ButtonWrap from "../../components/common/ButtonWrap";
 import Control from "../../components/Control";
 
 const ContentContainer = styled.div`
@@ -87,42 +69,43 @@ const IamgeGenerated = () => {
     }
   };
 
-
   return (
-      <Container>
-        <Header mode={"default"} />
-          <ContentCover>
-            <ProgressBar step={2} />
-              <ContentTitle>제목와야하는자리</ContentTitle>
-                <InnerCover>
-                  {page > 0 ? (
-                    <Control
-                      mode={PREV}
-                      onControl={handleControl}
-                    />
-                  ) : (
-                    <div style={{ marginLeft: "10rem" }}></div>
-                  )}
-                  {savedStory.map(
-                    (item, index) => item && page === index && <PreviewGeneratedImage index={index} />
-                  )}
-                  {page < 4 && !allSelectDone ? (
-                    <Control
-                      mode={NEXT}
-                      onControl={handleControl}
-                    />
-                  ) : page === 4 && !allSelectDone ? (
-                    <div style={{ marginRight: "10rem" }}></div>
-                  ) : page === 4 && allSelectDone ? (
-                    <Control
-                      mode={NEXT}
-                      onControl={handleControl}
-                    />
-                  ) : null}
-                  {page === 5 && <PreviewAllGeneratedImage />}
-                </InnerCover>
-            </ContentCover>
-          </Container>
+    <Container>
+      <Header mode={"default"} />
+      <ContentCover>
+        <ProgressBar step={2} />
+        <ContentTitle>
+          AI가 동화책의 {page + 1}번째 페이지에 들어가는 이미지를 그려줘요!
+        </ContentTitle>
+        <InnerCover className={"row"}>
+          {page > 0 ? (
+            <Control
+              mode={PREV}
+              onControl={handleControl}
+            />
+          ) : (
+            <div style={{ marginLeft: "10rem" }}></div>
+          )}
+          {savedStory.map(
+            (item, index) => item && page === index && <PreviewGeneratedImage index={index} />
+          )}
+          {page < 4 && !allSelectDone ? (
+            <Control
+              mode={NEXT}
+              onControl={handleControl}
+            />
+          ) : page === 4 && !allSelectDone ? (
+            <div style={{ marginRight: "10rem" }}></div>
+          ) : page === 4 && allSelectDone ? (
+            <Control
+              mode={NEXT}
+              onControl={handleControl}
+            />
+          ) : null}
+          {page === 5 && <PreviewAllGeneratedImage />}
+        </InnerCover>
+      </ContentCover>
+    </Container>
   );
 };
 

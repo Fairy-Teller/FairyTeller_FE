@@ -139,7 +139,6 @@ const PreviewGeneratedIamge = (props) => {
         <Text>{savedStory[props.index]["paragraph"]}</Text>
       </div>
 
-      <P>동화책의 {props.index + 1}번째 페이지에 들어가는 이미지입니다.</P>
       <ImageWrap>
         <Img src={savedImageTemp[props.index] && savedImageTemp[props.index]["url"]} />
       </ImageWrap>
