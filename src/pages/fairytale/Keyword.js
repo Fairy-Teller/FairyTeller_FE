@@ -11,6 +11,7 @@ import Row from "../../components/global/Row";
 import Section from "../../components/global/Section";
 import ButtonWrap from "../../components/common/ButtonWrap";
 import LoadingModal from "../../components/LoadingModal";
+
 import ContentCover from "../../components/global/ContentCover";
 import ContentTitle from "../../components/global/ContentTitle";
 import InnerCover from "../../components/global/InnerCover";
@@ -23,16 +24,13 @@ const KeywordItem = styled.li`
   flex: 1 0 auto;
   padding: 0.625rem;
 `;
+
 const ItemInput = styled.input`
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
 `;
 
-const FormKeyword = styled.div`
-  width: 80%;
-  margin: auto;
-`;
 const SectionKeyword = styled.div`
   border: 0.3em solid #edaeae;
   padding: 0 2em 2em 2em;
@@ -151,6 +149,7 @@ function Keyword() {
           <ContentCover>
             <ProgressBar step={1} />
             <ContentTitle>단어를 3개부터 5개까지 선택해보아요!</ContentTitle>
+            <InnerCover>            
             <Row className="current">
               {keywords
                 ? keywords.map((item) => {
@@ -158,7 +157,6 @@ function Keyword() {
                   })
                 : null}
             </Row>
-            <InnerCover>
               <form onSubmit={onSubmitHandler}>
                 <Section>
                   <p>맘에 드는 단어가 없다면, 직접 넣어보아요</p>
