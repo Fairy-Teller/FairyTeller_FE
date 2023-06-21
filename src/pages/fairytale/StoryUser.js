@@ -8,36 +8,29 @@ import {
   ImageFix,
   BookState,
 } from "../../recoil/Fairytailstate";
-
 import { call } from "../../service/ApiService";
+import Header from "../../components/global/Header";
+import ProgressBar from "../../components/global/ProgressBar";
 import Container from "../../components/global/Container";
 import Section from "../../components/global/Section";
 import styled from "styled-components";
 
+import ContentCover from "../../components/global/ContentCover";
+import ContentTitle from "../../components/global/ContentTitle";
+import InnerCover from "../../components/global/InnerCover";
+
+
 const TextArea = styled.textarea`
   width: calc(100% - 0.25rem);
-  height: 13rem;
+  height: 4rem;
   background-color: #efd3d3;
   overflow: auto;
   resize: none;
-  font-size: 1.8em;
+  font-size: 1.3em;
   border-radius: 1em;
   padding: 0.7em;
   font-family: emoji;
   text-align: center;
-`;
-
-const Bar = styled.div`
-  width: 100hw;
-  height: 99px;
-  text-align: left;
-  background: #fcdede;
-  font-family: "Amiri";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 50px;
-  line-height: 88px;
-  color: #000000;
 `;
 const Button = styled.button`
   width: auto;
@@ -49,19 +42,6 @@ const Button = styled.button`
   background-color: #ea6262;
   padding: 20px;
 `;
-const BookCover = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  background-size: cover;
-`;
-const FairytaleTitle = styled.div`
-  font-weight: 400;
-  font-size: 45px;
-  text-align: center;
-`;
 const ButtonDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -69,9 +49,6 @@ const ButtonDiv = styled.div`
   width: 100%;
   background-size: cover;
   padding-bottom: 80px;
-`;
-const FormWrap = styled.div`
-  width: 80%;
 `;
 
 const StoryGenerated = () => {
@@ -131,15 +108,11 @@ const StoryGenerated = () => {
   return (
     <div className='write tmp_story-generated'>
       <Container>
-        <Bar>FairyTeller</Bar>
-        <BookCover>
-          <img
-            src='/images/loding_1.png'
-            style={{ marginTop: "2%" }}
-            alt='loading bar'
-          />
-          <FairytaleTitle>동화를 직접 써볼 수 있어요!</FairytaleTitle>
-          <FormWrap>
+        <Header mode={"default"} />
+        <ContentCover>
+          <ProgressBar step={1} />
+          <ContentTitle>동화를 직접 써볼 수 있어요!</ContentTitle>     
+          <InnerCover>
             <form onSubmit={onSubmitHandler}>
               <Section>
                 {savedStory.map((item, index) => (
@@ -157,8 +130,8 @@ const StoryGenerated = () => {
                 <Button type='submit'>동화 만들러 가기</Button>
               </ButtonDiv>
             </form>
-          </FormWrap>
-        </BookCover>
+          </InnerCover>
+        </ContentCover>
       </Container>
     </div>
   );

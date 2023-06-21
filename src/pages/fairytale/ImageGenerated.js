@@ -1,37 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
-import { SavedBoolState, AllSavedBoolState, StoryState } from "../../recoil/Fairytailstate";
+import {
+  useRecoilState,
+  useResetRecoilState,
+  useRecoilValue,
+  useRecoilCallback,
+} from "recoil";
+import {
+  SelectedKeywords,
+  StoryState,
+  ImageState,
+  ImageFix,
+} from "../../recoil/Fairytailstate";
 import { call } from "../../service/ApiService";
 import styled from "styled-components";
+import Header from "../../components/global/Header";
+import ProgressBar from "../../components/global/ProgressBar";
+import LoadingModal from "../../components/LoadingModal";
+import ButtonWrap from "../../components/common/ButtonWrap";
+import PreviewGeneratedIamge from "../../components/PreviewGeneratedImage";
+import PreviewAllGeneratedIamge from "../../components/PreviewAllGeneratedImage";
+import DirectionButton from "../../components/global/DirectionButton";
+
+import Container from "../../components/global/Container";
+import ContentCover from "../../components/global/ContentCover";
+import ContentTitle from "../../components/global/ContentTitle";
+import InnerCover from "../../components/global/InnerCover";
+
+import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
+import { SavedBoolState, AllSavedBoolState, StoryState } from "../../recoil/Fairytailstate";
 // import LoadingModal from "../../components/LoadingModal";
 // import ButtonWrap from "../../components/common/ButtonWrap";
 import Control from "../../components/Control";
-import PreviewGeneratedImage from "../../components/PreviewGeneratedImage";
-import PreviewAllGeneratedImage from "../../components/PreviewAllGeneratedImage";
 
-const Bar = styled.div`
-  width: 100%;
-  height: 60px;
-  background: #fcdede;
-  font-family: "Amiri";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 40px;
-  line-height: 60px;
-  color: #000000;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start; /* Align items to the left */
-`;
-const BookCover = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 15vw;
-  height: 5vw;
-  background-size: cover;
-  margin-top: 10px;
-`;
 const ContentContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -41,9 +41,21 @@ const Div = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Added to stack elements vertically */
   align-items: center;
-  justify-content: flex-start;
+  justify-content: flex-start; /* Align items at the top */
+`;
+const Button = styled.button`
+  width: 100px;
+  height: 50px;
+  background: #99f0cc;
+  border-radius: 10px;
+  font-family: "Amiri";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  text-align: center;
+  color: #000000;
 `;
 
 const [PREV, NEXT, DONE] = ["prev", "next", "done"];
@@ -75,44 +87,42 @@ const IamgeGenerated = () => {
     }
   };
 
+
   return (
-    <Div>
-      <Bar>FairyTeller</Bar>
-      <BookCover>
-        <img
-          src='/images/loding_2.png'
-          style={{ marginTop: "2%", maxWidth: "100%", maxHeight: "100%" }}
-          alt='loding'
-        />
-      </BookCover>
-      <ContentContainer>
-        {page > 0 ? (
-          <Control
-            mode={PREV}
-            onControl={handleControl}
-          />
-        ) : (
-          <div style={{ marginLeft: "10rem" }}></div>
-        )}
-        {savedStory.map(
-          (item, index) => item && page === index && <PreviewGeneratedImage index={index} />
-        )}
-        {page < 4 && !allSelectDone ? (
-          <Control
-            mode={NEXT}
-            onControl={handleControl}
-          />
-        ) : page === 4 && !allSelectDone ? (
-          <div style={{ marginRight: "10rem" }}></div>
-        ) : page === 4 && allSelectDone ? (
-          <Control
-            mode={NEXT}
-            onControl={handleControl}
-          />
-        ) : null}
-        {page === 5 && <PreviewAllGeneratedImage />}
-      </ContentContainer>
-    </Div>
+      <Container>
+        <Header mode={"default"} />
+          <ContentCover>
+            <ProgressBar step={2} />
+              <ContentTitle>제목와야하는자리</ContentTitle>
+                <InnerCover>
+                  {page > 0 ? (
+                    <Control
+                      mode={PREV}
+                      onControl={handleControl}
+                    />
+                  ) : (
+                    <div style={{ marginLeft: "10rem" }}></div>
+                  )}
+                  {savedStory.map(
+                    (item, index) => item && page === index && <PreviewGeneratedImage index={index} />
+                  )}
+                  {page < 4 && !allSelectDone ? (
+                    <Control
+                      mode={NEXT}
+                      onControl={handleControl}
+                    />
+                  ) : page === 4 && !allSelectDone ? (
+                    <div style={{ marginRight: "10rem" }}></div>
+                  ) : page === 4 && allSelectDone ? (
+                    <Control
+                      mode={NEXT}
+                      onControl={handleControl}
+                    />
+                  ) : null}
+                  {page === 5 && <PreviewAllGeneratedImage />}
+                </InnerCover>
+            </ContentCover>
+          </Container>
   );
 };
 

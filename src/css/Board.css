@@ -10,141 +10,53 @@
   height: auto;
 }
 
+.bar {
+  margin-top: 20px; /* 글자를 더 올리기 위한 상단 여백 조정 */
+  /* 기타 스타일 속성 */
+}
 
-.book {
-  position: relative;
-  height: 280px;
-  perspective: 800px;
+.pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.pagination-button {
+  margin: 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #99f0cc;
   cursor: pointer;
 }
-  
-  .book__cover {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transform: rotateY(0deg);
-    transition: transform 0.5s ease-in-out;
-  }
-  
-  .book__page {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-  }
-  
-  .book__page--front {
-    background-color: #F5F5F5;
-    transform: rotateY(0deg);
-  }
-  
-  .book__page--back {
-    background-color: #F5F5F5;
-    transform: rotateY(180deg);
-  }
-  
-  .book__content {
-    position: relative;
-    top: 2px;
-    left: 2px;
-    right: 10px;
-    bottom: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    text-align: center;
-    background-color: #FFFFFF;
-    box-shadow: 0px 2px 5px rgba(3, 3, 3, 0.1);
-    padding: 5px;
-    height: 250px;
-  }
 
-  .book__image {
-    width: 100%;
-    height: auto;
-    max-height: 200px; /* 원하는 높이 값으로 조정 */
-    object-fit: contain;
-  }
+.board-page-button {
+  width: 5px;
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  color: #333333;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
 
-  .book__title {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .book__author {
-    font-size: 14px;
-    color: #999999;
-    margin-bottom: 30px;
-  }
-  
-  .book:hover .book__cover {
-    transform: rotateY(-10deg);
-  }
-  
-  .book:hover .book__page--front {
-    transform: rotateY(10deg);
-  }
-  
-  .book:hover .book__page--back {
-    transform: rotateY(190deg);
-  }
-  
-  .bar {
-    margin-top: 20px; /* 글자를 더 올리기 위한 상단 여백 조정 */
-    /* 기타 스타일 속성 */
-  }
+.bar {
+  margin-top: 0;
+  width: 100vw;
+  height: 60px;
+  text-align: left;
+  background: #fcdede;
+  font-family: "Amiri";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 60px;
+  color: #000000;
+}
 
-  .pagination {
-    display: flex;
-    justify-content: center;
-  }
-
-    
-  .pagination-button {
-    margin: 5px;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #99F0CC;
-    cursor: pointer;
-  }
-
-  
-  .board-page-button {
-    width: 5px;
-    margin-top: 10px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    color: #333333;;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-  }
-  
-  .bar {
-    margin-top: 0;
-    width: 100vw;
-    height: 60px;
-    text-align: left;
-    background: #FCDEDE;
-    font-family: 'Amiri';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 40px;
-    line-height: 60px;
-    color: #000000;
-  }
-
-  .book__image {
-    width: 100%;
-    height: auto;
-    max-height: 200px; /* 원하는 높이 값으로 조정 */
-  }
+.book__image {
+  width: 100%;
+  height: auto;
+  max-height: 200px; /* 원하는 높이 값으로 조정 */
+}

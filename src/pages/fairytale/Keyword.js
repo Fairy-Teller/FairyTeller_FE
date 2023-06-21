@@ -4,11 +4,17 @@ import { useRecoilState, useRecoilCallback } from "recoil";
 import { SelectedKeywordsState, StoryState } from "../../recoil/Fairytailstate";
 import { call } from "../../service/ApiService";
 import styled from "styled-components";
+import Header from "../../components/global/Header";
+import ProgressBar from "../../components/global/ProgressBar";
 import Container from "../../components/global/Container";
 import Row from "../../components/global/Row";
 import Section from "../../components/global/Section";
 import ButtonWrap from "../../components/common/ButtonWrap";
 import LoadingModal from "../../components/LoadingModal";
+
+import ContentCover from "../../components/global/ContentCover";
+import ContentTitle from "../../components/global/ContentTitle";
+import InnerCover from "../../components/global/InnerCover";
 
 const Keywords = styled.ul`
   background-color: pink;
@@ -24,38 +30,15 @@ const ItemInput = styled.input`
   border-radius: 50%;
 `;
 
-const Bar = styled.div`
-  width: 100hw;
-  height: 60px;
-  text-align: left;
-  background: #fcdede;
-  font-family: "Amiri";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 40px;
-  line-height: 60px;
-  color: #000000;
-`;
-
-const BookCover = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100vw;
-  // height: 100vh;
-  background-size: cover;
-`;
-
-const FairytaleTitle = styled.div`
-  font-weight: 400;
-  font-size: 45px;
-  text-align: center;
-`;
+// const FairytaleTitle = styled.div`
+//   font-weight: 400;
+//   font-size: 45px;
+//   text-align: center;
+// `;
 const FormKeyword = styled.div`
   width: 80%;
   margin: auto;
 `;
-
 const SectionKeyword = styled.div`
   border: 0.3em solid #edaeae;
   padding: 0 2em 2em 2em;
@@ -118,7 +101,9 @@ function Keyword() {
       let updatedValues = [...prev];
 
       if (target.checked) {
-        const selected = options.find((item) => item.titles.includes(target.name));
+        const selected = options.find((item) =>
+          item.titles.includes(target.name)
+        );
         if (selected && updatedValues.length < 5) {
           updatedValues.push(target.name);
         } else {
@@ -162,40 +147,36 @@ function Keyword() {
   });
 
   return (
-    <div className='story keyword'>
-      {isLoading && <LoadingModal message='AI가 열심히 이야기를 만드는 중입니다.' />}
+    <div className="story keyword">
+      {isLoading && (
+        <LoadingModal message="AI가 열심히 이야기를 만드는 중입니다." />
+      )}
       {loaded ? (
         <Container>
-          <Bar>FairyTeller</Bar>
-          <BookCover>
-            <img
-              src='/images/loding_1.png'
-              style={{ margin: "2rem 0" }}
-              alt='bookcover'
-            />
-            <FairytaleTitle>단어를 3개부터 5개까지 선택해보아요!</FairytaleTitle>
-            <Row className='current'>
+          <Header mode={"default"} />
+          <ContentCover>
+            <ProgressBar step={1} />
+            <ContentTitle>단어를 3개부터 5개까지 선택해보아요!</ContentTitle>
+            <InnerCover>
+            <Row className="current">
               {keywords
                 ? keywords.map((item) => {
                     return <div key={item}>{item}</div>;
                   })
                 : null}
             </Row>
-            <FormKeyword>
               <form onSubmit={onSubmitHandler}>
                 <Section>
                   <p>맘에 드는 단어가 없다면, 직접 넣어보아요</p>
                   <div>
                     <input
-                      id='keyword-inputed'
-                      type='text'
-                      name='keyword-inputed'
-                      placeholder='단어를 직접 넣어보아요'
+                      id="keyword-inputed"
+                      type="text"
+                      name="keyword-inputed"
+                      placeholder="단어를 직접 넣어보아요"
                       onChange={(e) => setInput(e.target.value)}
                     />
-                    <button
-                      type='button'
-                      onClick={handleInputed}>
+                    <button type="button" onClick={handleInputed}>
                       내가 쓴 단어 넣기
                     </button>
                   </div>
@@ -203,7 +184,9 @@ function Keyword() {
                 {options.map((item, index) => (
                   <SectionKeyword>
                     <Section key={index}>
-                      <h2 style={{ paddingBottom: "1rem" }}>{item.theme} 분류</h2>
+                      <h2 style={{ paddingBottom: "1rem" }}>
+                        {item.theme} 분류
+                      </h2>
                       <Keywords>
                         <Row>
                           {item.titles.map((title, subIndex) => (
@@ -211,12 +194,22 @@ function Keyword() {
                               <div style={{ width: "100%", height: "100%" }}>
                                 <img
                                   src={`./images/keywords/${title}.png`}
-                                  style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                                  style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "contain",
+                                  }}
                                 />
-                                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "10px",
+                                  }}
+                                >
                                   <ItemInput
                                     id={`keyword${title.key}`}
-                                    type='checkbox'
+                                    type="checkbox"
                                     name={title}
                                     checked={title.checked}
                                     onChange={(e) => handleChecked(e.target)}
@@ -232,15 +225,13 @@ function Keyword() {
                   </SectionKeyword>
                 ))}
                 <ButtonWrap>
-                  <button
-                    type='submit'
-                    className='button'>
+                  <button type="submit" className="button">
                     이야기 만들러 가기
                   </button>
                 </ButtonWrap>
               </form>
-            </FormKeyword>
-          </BookCover>
+            </InnerCover>
+          </ContentCover>
         </Container>
       ) : (
         <div>되는 중...</div>
