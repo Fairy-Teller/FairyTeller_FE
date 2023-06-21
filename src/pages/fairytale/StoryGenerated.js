@@ -25,7 +25,7 @@ import InnerCover from "../../components/global/InnerCover";
 const TextArea = styled.textarea`
   width: calc(100% - 8rem);
   min-height: 4rem;
-  background-color: #efd3d3;
+  background-color: #F2C166;
   overflow: auto;
   resize: none;
   font-size: 1.3rem;
