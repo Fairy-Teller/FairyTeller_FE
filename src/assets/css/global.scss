@@ -1,12 +1,5 @@
 @import "mixins";
 
-@font-face {
-  font-family: "KyoboHand";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/KyoboHand.woff")
-    format("woff");
-  font-weight: normal;
-  font-style: normal;
-}
 /* layout */
 body {
   width: 100%;
@@ -94,12 +87,60 @@ body {
   }
 }
 
+/* item */
 button {
   &:disabled {
     background-color: $bgc1;
     &:hover {
       cursor: default;
     }
+  }
+}
+
+/* animation */
+.an1 {
+  opacity: 0;
+  animation: loadFadeIn 1s ease-in forwards;
+}
+
+@keyframes loadFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.an2 {
+  opacity: 0;
+  animation: loadFadeInUp 0.8s ease-in-out forwards;
+}
+
+@keyframes loadFadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(2.4rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.an3 {
+  opacity: 0;
+  animation: loadFadeInDown 0.8s ease-in forwards;
+}
+
+@keyframes loadFadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-2.4rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

@@ -162,12 +162,13 @@ const Keyword = () => {
   return (
     <div className='story keyword'>
       {isLoading && <LoadingModal message='AI가 열심히 이야기를 만드는 중입니다.' />}
-      {loaded ? (
-        <Container>
-          <Header mode={"default"} />
-          <ContentCover>
-            <ProgressBar step={1} />
-            <ContentTitle>단어를 3개부터 5개까지 선택해보아요!</ContentTitle>
+
+      <Container className={"an1"}>
+        <Header mode={"default"} />
+        <ContentCover>
+          <ProgressBar step={1} />
+          <ContentTitle>단어를 3개부터 5개까지 선택해보아요!</ContentTitle>
+          {loaded ? (
             <InnerCover>
               <Row className='current'>
                 {keywords
@@ -236,11 +237,11 @@ const Keyword = () => {
                 </ButtonWrap>
               </form>
             </InnerCover>
-          </ContentCover>
-        </Container>
-      ) : (
-        <div>되는 중...</div>
-      )}
+          ) : (
+            <div>되는 중...</div>
+          )}
+        </ContentCover>
+      </Container>
     </div>
   );
 };

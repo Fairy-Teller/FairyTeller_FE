@@ -29,7 +29,7 @@ const Start = () => {
   return (
     <Container>
       <Header mode={"default"} />
-      <div className='start'>
+      <div className='start an1'>
         <CenteredWrap>
           <Button>
             <Link to='/story-user'>스스로 동화 이야기 만들기</Link>
