@@ -11,7 +11,6 @@ import Row from "../../components/global/Row";
 import Section from "../../components/global/Section";
 import ButtonWrap from "../../components/common/ButtonWrap";
 import LoadingModal from "../../components/LoadingModal";
-
 import ContentCover from "../../components/global/ContentCover";
 import ContentTitle from "../../components/global/ContentTitle";
 import InnerCover from "../../components/global/InnerCover";
@@ -30,11 +29,6 @@ const ItemInput = styled.input`
   border-radius: 50%;
 `;
 
-// const FairytaleTitle = styled.div`
-//   font-weight: 400;
-//   font-size: 45px;
-//   text-align: center;
-// `;
 const FormKeyword = styled.div`
   width: 80%;
   margin: auto;

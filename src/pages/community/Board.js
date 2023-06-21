@@ -1,7 +1,14 @@
-import '../../css/Board.css';
-import React, { useState, useEffect, useCallback } from 'react';
-import { call } from '../../service/ApiService';
-import { Link } from 'react-router-dom';
+import "../../css/Board.css";
+import React, { useState, useEffect, useCallback } from "react";
+import { call } from "../../service/ApiService";
+
+import Container from "../../components/global/Container";
+import Header from "../../components/global/Header";
+import ContentCover from "../../components/global/ContentCover";
+import ContentTitle from "../../components/global/ContentTitle";
+import InnerCover from "../../components/global/InnerCover";
+import BookContainer from "../../components/global/BookContainer";
+import Book from "../../components/global/Book";
 
 const Board = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -10,13 +17,17 @@ const Board = () => {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await call(`/board?page=${currentPage}&size=8`, 'GET', null);
+      const response = await call(
+        `/board?page=${currentPage}&size=8`,
+        "GET",
+        null
+      );
       if (response && response.data) {
         setBooks(response.data);
         setTotalPages(response.totalPages);
       }
     } catch (error) {
-      console.log('Error fetching data:', error);
+      console.log("Error fetching data:", error);
     }
   }, [currentPage]);
 
@@ -30,61 +41,56 @@ const Board = () => {
 
   const truncateTitle = (title) => {
     if (title.length > 10) {
-      return title.substring(0, 10) + '...';
+      return title.substring(0, 10) + "...";
     }
     return title;
   };
 
   useEffect(() => {
-    console.log('Books:', books);
+    console.log("Books:", books);
   }, [books]);
 
   return (
-    <div>
-      <div className="bar">FairyTeller</div>
-      <div style={{ marginTop: '1%' }}>
-        <h4 style={{ textAlign: 'center', marginBottom: '2%', fontSize: '20px' }}>우리들의 도서관</h4>
-        <div className="book-container">
-          {books.length > 0 ? (
-            books.map((book) => (
-              <Link to={`/board/${book.boardId}`} key={book.boardId} style={{ textDecoration: 'none' }}>
-                <div className="book">
-                  <div className="book__cover">
-                    <div className="book__page book__page--front">
-                      <div className="book__content">
-                        <img src={book.thumbnailUrl} alt={book.title} className="book__image" />
-                        <h6 className="book__title">{truncateTitle(book.title)}</h6>
-                        <h6 className="book__author">{truncateTitle(book.nickname)}</h6>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))
-          ) : (
-            <p style={{ textAlign: 'center' }}>게시물이 없습니다.</p>
+    <Container>
+      <Header mode={"default"} />
+      <ContentCover>
+        <ContentTitle>우리들의 도서관</ContentTitle>
+        <InnerCover>
+          <BookContainer>
+            {books.length > 0 ? (
+              books.map((book) => (
+                <Book
+                  book={book}
+                  truncateTitle={truncateTitle}
+                  key={book.boardId}
+                />
+              ))
+            ) : (
+              <p style={{ textAlign: "center" }}>게시물이 없습니다.</p>
+            )}
+          </BookContainer>
+          {/* 페이지네이션 컴포넌트 */}
+          {totalPages > 0 && (
+            <div className="pagination">
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => handlePageChange(index)}
+                  className="board-page-button"
+                  style={{
+                    backgroundColor:
+                      currentPage === index ? "#99F0CC" : "white",
+                  }}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </div>
           )}
-        </div>
-        {/* 페이지네이션 컴포넌트 */}
-        {totalPages > 0 && (
-          <div className="pagination">
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index}
-                onClick={() => handlePageChange(index)}
-                className="board-page-button"
-                style={{ backgroundColor: currentPage === index ? '#99F0CC' : 'white' }}
-              >
-                {index + 1}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
+        </InnerCover>
+      </ContentCover>
+    </Container>
   );
-  
-  
-            }
-  
+};
+
 export default Board;
