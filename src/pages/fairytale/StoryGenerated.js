@@ -17,35 +17,23 @@ import Section from "../../components/global/Section";
 import ButtonWrap from "../../components/common/ButtonWrap";
 import LoadingModal from "../../components/LoadingModal";
 
+import ContentCover from "../../components/global/ContentCover";
+import ContentTitle from "../../components/global/ContentTitle";
+import InnerCover from "../../components/global/InnerCover";
+
+
 const TextArea = styled.textarea`
   width: calc(100% - 8rem);
-  min-height: 16rem;
+  min-height: 4rem;
   background-color: #efd3d3;
   overflow: auto;
   resize: none;
-  font-size: 2rem;
+  font-size: 1.3rem;
   border-radius: 2rem;
   box-sizing: content-box;
   padding: 2rem 4rem;
   font-family: emoji;
   text-align: center;
-`;
-const BookCover = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  background-size: cover;
-`;
-const FairytaleTitle = styled.div`
-  font-weight: 400;
-  font-size: 45px;
-  text-align: center;
-`;
-const FormWrap = styled.div`
-  width: 80%;
-  margin: auto;
 `;
 
 const StoryGenerated = () => {
@@ -139,10 +127,10 @@ const StoryGenerated = () => {
       {loaded ? (
         <Container>
           <Header mode={"default"} />
-          <BookCover>
+            <ContentCover> 
             <ProgressBar step={1} />
-            <FairytaleTitle>AI가 만든 동화를 수정할 수 있어요!</FairytaleTitle>
-            <FormWrap>
+            <ContentTitle>AI가 만든 동화를 수정할 수 있어요!</ContentTitle>     
+            <InnerCover>      
               <form onSubmit={onSubmitHandler}>
                 <Section>
                   {savedStory.map(
@@ -183,8 +171,8 @@ const StoryGenerated = () => {
                   </button>
                 </ButtonWrap>
               </form>
-            </FormWrap>
-          </BookCover>
+            </InnerCover>
+            </ContentCover>
         </Container>
       ) : (
         <div>되는 중...</div>

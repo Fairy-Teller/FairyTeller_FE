@@ -21,15 +21,11 @@ import PreviewGeneratedIamge from "../../components/PreviewGeneratedImage";
 import PreviewAllGeneratedIamge from "../../components/PreviewAllGeneratedImage";
 import DirectionButton from "../../components/global/DirectionButton";
 
-const BookCover = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 15vw;
-  height: 5vw;
-  background-size: cover;
-  margin-top: 10px;
-`;
+import Container from "../../components/global/Container";
+import ContentCover from "../../components/global/ContentCover";
+import ContentTitle from "../../components/global/ContentTitle";
+import InnerCover from "../../components/global/InnerCover";
+
 const ContentContainer = styled.div`
   display: flex;
   align-items: center;
@@ -79,31 +75,29 @@ const IamgeGenerated = () => {
     console.log(page);
   };
 
+
   return (
-    <Div>
+    <Container>
       <Header mode={"default"} />
-      <BookCover>
-        <ProgressBar step={1} />
-      </BookCover>
-      <ContentContainer>
-        {0 < page && (
-          <DirectionButton
-            className="left-button"
-            onClick={onClickHandlerBefore}
-          >
-            {" "}
-            이전{" "}
-          </DirectionButton>
-        )}
-        {savedStory.map(
-          (item, index) =>
-            item["paragraph"] &&
-            page == index && <PreviewGeneratedIamge index={index} />
-        )}
-        {page == 5 && <PreviewAllGeneratedIamge />}
-        {page < 5 && <Button onClick={onClickHandlerAfter}> 다음 </Button>}
-      </ContentContainer>
-    </Div>
+      <ContentCover>
+        <ProgressBar step={2} />
+        <ContentTitle>제목와야하는자리</ContentTitle>
+          <InnerCover>
+          {0 < page && 
+            <Button onClick={onClickHandlerBefore}> 
+              이전 
+            </Button>
+          }
+            {savedStory.map(
+              (item, index) =>
+                item["paragraph"] &&
+                page == index && <PreviewGeneratedIamge index={index} />
+            )}
+            {page == 5 && <PreviewAllGeneratedIamge />}
+            {page < 5 && <Button onClick={onClickHandlerAfter}> 다음 </Button>}
+          </InnerCover>
+      </ContentCover>
+    </Container>
   );
 };
 

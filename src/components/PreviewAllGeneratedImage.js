@@ -94,7 +94,6 @@ const PreviewAllGeneratedIamge = () => {
 
   return (
     <Div>
-      <Text>AI가 만들어준 그림을 확인해보아요!</Text>
       <ImageContainer>
         {savedImageTemp.map((item, index) => (
           <Image
