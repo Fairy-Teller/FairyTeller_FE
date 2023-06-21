@@ -1,0 +1,32 @@
+@import "mixins";
+
+button {
+  width: 8rem;
+  height: 3.2rem;
+  margin: 12rem 0 0;
+  font-family: "Amiri";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.2rem;
+  text-align: center;
+  color: #000000;
+  background-color: #99f0cc;
+  border-radius: 0.8rem;
+
+  width: auto;
+  height: auto;
+  padding: 0.25rem 0.5rem;
+  margin: 0 auto;
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  word-break: keep-all;
+  padding: 0.25rem 0.5rem;
+
+  &:disabled {
+    background-color: $bgc1;
+    &:hover {
+      cursor: default;
+    }
+  }
+}

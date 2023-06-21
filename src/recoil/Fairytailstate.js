@@ -10,11 +10,16 @@ const { persistAtom } = recoilPersist();
 //   default: "default",
 // });
 
-export const SelectedKeywordsState = atom({ key: "SelectedKeywordsState", default: [] });
+export const SelectedKeywordsState = atom({
+  key: "SelectedKeywordsState",
+  default: [],
+  effects_UNSTABLE: [persistAtom],
+});
 
 export const StoryState = atom({
   key: "StoryState",
   default: [],
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const ImageTempState = atom({
