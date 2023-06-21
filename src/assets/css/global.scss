@@ -1,8 +1,9 @@
 @import "mixins";
 
 @font-face {
-  font-family: 'KyoboHand';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/KyoboHand.woff') format('woff');
+  font-family: "KyoboHand";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/KyoboHand.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
 }
@@ -12,7 +13,8 @@ body {
   background-color: #fff;
   font-family: "KyoboHand";
   &.noscroll {
-    width: 100vw;
+    width: 100%;
+    max-width: 100vw;
     height: 100vh;
     overflow: hidden;
   }
@@ -21,9 +23,8 @@ body {
 #root > div {
   width: 100%;
   max-width: 100%;
-  padding: 0;
-  margin-left: auto;
-  margin-right: auto;
+  padding: 0 0 8rem;
+  margin: 0 auto 0;
   background-color: #fff;
 }
 
@@ -64,6 +65,9 @@ body {
   background-color: #fff;
   &.col {
     flex-direction: column;
+  }
+  &.wrap {
+    flex-wrap: wrap;
   }
 }
 

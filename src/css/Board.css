@@ -43,7 +43,8 @@
 
 .bar {
   margin-top: 0;
-  width: 100vw;
+  width: 100%;
+  max-width: 100vw;
   height: 60px;
   text-align: left;
   background: #fcdede;
