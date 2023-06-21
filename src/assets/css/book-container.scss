@@ -1,0 +1,11 @@
+.book-container {
+  display: grid;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  max-height: calc(100vh - 200px);
+  overflow: auto;
+  grid-template-columns: repeat(4, 1fr); /* 한 행에 4개의 열 생성 */
+  height: auto;
+}

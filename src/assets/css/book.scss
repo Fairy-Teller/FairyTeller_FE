@@ -1,0 +1,84 @@
+.book {
+  position: relative;
+  height: 280px;
+  perspective: 800px;
+  cursor: pointer;
+}
+
+.book__cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+  transition: transform 0.5s ease-in-out;
+}
+
+.book__page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.book__page--front {
+  background-color: #f5f5f5;
+  transform: rotateY(0deg);
+}
+
+.book__page--back {
+  background-color: #f5f5f5;
+  transform: rotateY(180deg);
+}
+
+.book__content {
+  position: relative;
+  top: 2px;
+  left: 2px;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  background-color: #ffffff;
+  box-shadow: 0px 2px 5px rgba(3, 3, 3, 0.1);
+  padding: 5px;
+  height: 250px;
+}
+
+.book__image {
+  width: 100%;
+  height: auto;
+  max-height: 200px; /* 원하는 높이 값으로 조정 */
+  object-fit: contain;
+}
+
+.book__title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.book__author {
+  font-size: 14px;
+  color: #999999;
+  margin-bottom: 30px;
+}
+
+.book:hover .book__cover {
+  transform: rotateY(-10deg);
+}
+
+.book:hover .book__page--front {
+  transform: rotateY(10deg);
+}
+
+.book:hover .book__page--back {
+  transform: rotateY(190deg);
+}
