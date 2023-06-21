@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
-import { SelectedKeywords, StoryState, ImageState, ImageFix } from "../../recoil/Fairytailstate";
+import {
+  useRecoilState,
+  useResetRecoilState,
+  useRecoilValue,
+  useRecoilCallback,
+} from "recoil";
+import {
+  SelectedKeywords,
+  StoryState,
+  ImageState,
+  ImageFix,
+} from "../../recoil/Fairytailstate";
 import { call } from "../../service/ApiService";
 import styled from "styled-components";
 import Header from "../../components/global/Header";
@@ -9,6 +19,7 @@ import LoadingModal from "../../components/LoadingModal";
 import ButtonWrap from "../../components/common/ButtonWrap";
 import PreviewGeneratedIamge from "../../components/PreviewGeneratedImage";
 import PreviewAllGeneratedIamge from "../../components/PreviewAllGeneratedImage";
+import DirectionButton from "../../components/global/DirectionButton";
 
 const BookCover = styled.div`
   display: flex;
@@ -75,10 +86,19 @@ const IamgeGenerated = () => {
         <ProgressBar step={1} />
       </BookCover>
       <ContentContainer>
-        {0 < page && <Button onClick={onClickHandlerBefore}> 이전 </Button>}
+        {0 < page && (
+          <DirectionButton
+            className="left-button"
+            onClick={onClickHandlerBefore}
+          >
+            {" "}
+            이전{" "}
+          </DirectionButton>
+        )}
         {savedStory.map(
           (item, index) =>
-            item["paragraph"] && page == index && <PreviewGeneratedIamge index={index} />
+            item["paragraph"] &&
+            page == index && <PreviewGeneratedIamge index={index} />
         )}
         {page == 5 && <PreviewAllGeneratedIamge />}
         {page < 5 && <Button onClick={onClickHandlerAfter}> 다음 </Button>}
