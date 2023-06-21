@@ -39,30 +39,43 @@ const Arrow = styled.button`
         `}
 `;
 
+const VoiceButton = styled.button`
+    width: 15%;
+    height: 59px;
+    left: 528px;
+    top: 200px;
+    border-radius: 16px;
+
+    background: rgba(252, 222, 222, 1);
+`;
+
+const Voicechange = styled.button`
+    width: 15%;
+    height: 59px;
+    left: 528px;
+    top: 200px;
+    border-radius: 16px;
+
+    background: rgba(239, 153, 153, 1);
+`;
+
 function FairytaleShow(bookid) {
     const audioRef = useRef(null);
     const [bookInfo, setBookInfo] = useState([]);
     const [audioInfo, setAudioInfo] = useState([]);
+    const [bookStory, setBookStory] = useState(null);
     const [userAudioInfo, setUserAudioInfo] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [recordingInProgress, setRecordingInProgress] = useState(false);
     const [recordedAudioBlob, setRecordedAudioBlob] = useState(null);
-    const [check, setCheck] = useState('tts');
+    const [check, setCheck] = useState('user');
 
     useEffect(() => {
         if (bookid.props !== '') {
-            console.log('>>>>', bookid.props);
             showBook(bookid.props);
         }
     }, [bookid]);
-    useEffect(() => {
-        if (bookid.props !== '') {
-            console.log('>>>>', bookid.props);
-            showBook(bookid.props);
-        }
-    }, [check]);
-    console.log('check', check);
 
     const showBook = async (props) => {
         try {
@@ -72,15 +85,18 @@ function FairytaleShow(bookid) {
             const imgearr = [];
             const audioarr = [];
             const userAudioarr = [];
+            const story = [];
             for (let i = 0; i < bookinfos.pages.length; i++) {
                 imgearr[i] = bookinfos.pages[i].finalImageUrl;
                 audioarr[i] = bookinfos.pages[i].audioUrl;
                 userAudioarr[i] = bookinfos.pages[i].userAudioUrl;
+                story[i] = bookinfos.pages[i].fullStory;
             }
             setBookInfo(imgearr);
             setAudioInfo(audioarr);
             setUserAudioInfo(userAudioarr);
-            console.log('??????');
+            setBookStory(story);
+            console.log('story', story);
         } catch (error) {
             console.log('Error fetching data:', error);
         }
@@ -116,13 +132,8 @@ function FairytaleShow(bookid) {
             audioRef.current.addEventListener('loadeddata', handleLoadedData);
         }
     };
-    const convertBlobToBase64 = (blob) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-        });
+    const handleToggleAudio = () => {
+        setCheck((prevCheck) => (prevCheck == 'tts' ? 'user' : 'tts'));
     };
 
     useEffect(() => {
@@ -133,35 +144,36 @@ function FairytaleShow(bookid) {
             }
         };
     }, []);
-    console.log('currentPage', userAudioInfo[currentPage]);
+
     return (
         <CenteredContainer>
             {bookInfo.length > 0 && (
                 <div>
                     <AudioContainer>
-                        {check == 'tts' || check == 'user' ? (
-                            <audio
-                                ref={audioRef}
-                                src={check == 'tts' ? audioInfo[currentPage] : userAudioInfo[currentPage]}
-                                controls
-                                preload="auto"
-                            />
-                        ) : (
-                            <></>
+                        {!userAudioInfo[currentPage] && (
+                            <>
+                                <audio ref={audioRef} src={audioInfo[currentPage]} controls preload="auto" />
+                                <VoiceButton onClick={() => setIsModalOpen(true)}>내 목소리로 녹음하기</VoiceButton>
+                            </>
                         )}
-                        {!userAudioInfo[currentPage] && <button onClick={() => setIsModalOpen(true)}>녹음하기</button>}
-                        {
-                            <select
-                                onChange={(e) => {
-                                    setCheck(e.target.value);
-                                    console.log('check', check);
-                                }}
-                            >
-                                <option value={'tts'}>Original Audio</option>
-                                <option value={'user'}>User Audio</option>
-                            </select>
-                        }
+                        {userAudioInfo[currentPage] && (
+                            <>
+                                <audio
+                                    ref={audioRef}
+                                    src={check === 'tts' ? audioInfo[currentPage] : userAudioInfo[currentPage]}
+                                    controls
+                                    preload="auto"
+                                />
+
+                                {check === 'user' ? (
+                                    <Voicechange onClick={handleToggleAudio}>자동음성 변환</Voicechange>
+                                ) : (
+                                    <Voicechange onClick={handleToggleAudio}>유저 음성변환</Voicechange>
+                                )}
+                            </>
+                        )}
                     </AudioContainer>
+
                     <div>
                         {isModalOpen && (
                             <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)}>
@@ -174,6 +186,7 @@ function FairytaleShow(bookid) {
                                         showBook(bookid.props);
                                     }}
                                     bookid={bookid.props}
+                                    bookstory = {bookStory[currentPage]}
                                 />
                             </Modal>
                         )}

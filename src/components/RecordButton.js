@@ -16,21 +16,59 @@ const buttonStyle = {
 const recordInfoStyle = {
     marginTop: '10px',
     fontWeight: 'bold',
+    textAlign: 'center',
 };
 
-const RecordButton = ({ pageNumber, onRecordingComplete, initialAudioUrl, audioRef, onCloseAndRefresh, bookid }) => {
+const RecordButton = ({
+    pageNumber,
+    onRecordingComplete,
+    initialAudioUrl,
+    audioRef,
+    onCloseAndRefresh,
+    bookid,
+    bookstory,
+}) => {
     const [isRecording, setIsRecording] = useState(false);
     const [audioBlob, setAudioBlob] = useState(null);
-    const [shouldAutoPlay, setShouldAutoPlay] = useState(false);
+    const [countdown, setCountdown] = useState(3);
     const mediaRecorder = useRef(null);
 
     useEffect(() => {
-        if (shouldAutoPlay && audioRef.current) {
-            audioRef.current.play();
-            setShouldAutoPlay(false);
-        }
-    }, [shouldAutoPlay, audioRef]);
+        const handleStartRecording = async () => {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder.current = new MediaRecorder(stream);
 
+            const audioChunks = [];
+            mediaRecorder.current.ondataavailable = (event) => {
+                audioChunks.push(event.data);
+            };
+
+            mediaRecorder.current.onstop = () => {
+                const newAudioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                setAudioBlob(newAudioBlob);
+                onRecordingComplete(pageNumber, newAudioBlob);
+                audioRef.current.src = URL.createObjectURL(newAudioBlob);
+            };
+
+            mediaRecorder.current.start();
+            setIsRecording(true);
+        };
+
+        const countdownTimeout = setTimeout(() => {
+            handleStartRecording();
+            setCountdown(0);
+        }, 3000);
+
+        return () => {
+            clearTimeout(countdownTimeout);
+
+            if (isRecording) {
+                mediaRecorder.current.stop();
+                setIsRecording(false);
+            }
+        };
+    }, []);
+    console.log(countdown);
     const handleStartRecording = async () => {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         mediaRecorder.current = new MediaRecorder(stream);
@@ -45,16 +83,10 @@ const RecordButton = ({ pageNumber, onRecordingComplete, initialAudioUrl, audioR
             setAudioBlob(newAudioBlob);
             onRecordingComplete(pageNumber, newAudioBlob);
             audioRef.current.src = URL.createObjectURL(newAudioBlob);
-            setShouldAutoPlay(true);
         };
 
         mediaRecorder.current.start();
         setIsRecording(true);
-    };
-
-    const handleStopRecording = () => {
-        mediaRecorder.current.stop();
-        setIsRecording(false);
     };
 
     const convertBlobToBase64 = (blob) => {
@@ -80,7 +112,7 @@ const RecordButton = ({ pageNumber, onRecordingComplete, initialAudioUrl, audioR
                 ],
             };
             console.log(payload);
-            sendAudioData(payload);
+            await sendAudioData(payload);
 
             if (onCloseAndRefresh) {
                 onCloseAndRefresh();
@@ -89,37 +121,59 @@ const RecordButton = ({ pageNumber, onRecordingComplete, initialAudioUrl, audioR
             console.error('Error converting audio blob to base64', error);
         }
     };
-    // const handleSaveRecording = async () => {
-    //     console.log('Saving to the backend server');
 
-    //     if (onCloseAndRefresh) {
-    //         onCloseAndRefresh();
-    //     }
-    // };
+    const handleRecordAgain = () => {
+        setAudioBlob(null);
+        setIsRecording(false);
+        if (audioRef.current) {
+            handleStartRecording();
+        }
+    };
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                {!isRecording && (
-                    <button style={buttonStyle} onClick={handleStartRecording}>
-                        녹음시작 {pageNumber}
-                    </button>
-                )}
-                {audioBlob && (
-                    <button style={buttonStyle} onClick={handleSaveRecording}>
-                        저장
-                    </button>
-                )}
+                {audioBlob ? (
+                    <>
+                        <button style={buttonStyle} onClick={handleSaveRecording}>
+                            저장
+                        </button>
+                        <button style={buttonStyle} onClick={handleRecordAgain}>
+                            다시 녹음하기
+                        </button>
+                    </>
+                ) : null}
             </div>
-            {isRecording && (
-                <div>
-                    <div style={recordInfoStyle}>녹음중입니다... {pageNumber}</div>
-                    <button style={buttonStyle} onClick={handleStopRecording}>
-                        녹음종료
-                    </button>
-                </div>
-            )}
 
+            {isRecording && !audioBlob ? (
+                <div>
+                    <button
+                        style={buttonStyle}
+                        onClick={() => {
+                            mediaRecorder.current.stop();
+                        }}
+                    >
+                        녹음 완료
+                    </button>
+                    <div style={recordInfoStyle}>{pageNumber} 녹음중입니다.</div>
+                    <br />
+                    <img src="rec.gif" alt="녹화중"></img>
+                    <br />
+                    <div>스토리: {bookstory}</div>
+                </div>
+            ) : null}
+
+            {/* Countdown */}
+            {!isRecording && countdown > 0 && (
+                <>
+                    <div style={recordInfoStyle}>
+                        ⚠️ 3초뒤 녹음이 시작됩니다! <br />
+                        긴장을 풀고 녹음해보세요
+                    </div>
+                    <br />
+                    <img src="calmdown.gif" alt="침착하세여"></img>
+                </>
+            )}
             {/* Dropdown to select the version of audio if available */}
             {initialAudioUrl && (
                 <select onChange={(e) => (audioRef.current.src = e.target.value)}>
@@ -127,8 +181,7 @@ const RecordButton = ({ pageNumber, onRecordingComplete, initialAudioUrl, audioR
                     {audioBlob && <option value={URL.createObjectURL(audioBlob)}>User Audio</option>}
                 </select>
             )}
-
-            <audio ref={audioRef} controls style={{ marginTop: '10px' }} />
+            <audio ref={audioRef} controls style={{ marginTop: '10px', display: 'none' }} />
         </div>
     );
 };
