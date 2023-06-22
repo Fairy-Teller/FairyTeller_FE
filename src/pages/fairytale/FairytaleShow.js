@@ -59,6 +59,18 @@ const Voicechange = styled.button`
     background: rgba(239, 153, 153, 1);
 `;
 
+const CloseButton = styled.button`
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px;
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+`;
+
 function FairytaleShow(bookid) {
     const audioRef = useRef(null);
     const [bookInfo, setBookInfo] = useState([]);
@@ -112,6 +124,9 @@ function FairytaleShow(bookid) {
         if (currentPage < bookInfo.length - 1) {
             setCurrentPage((prevPage) => prevPage + 1);
         }
+    };
+    const closeModal = () => {
+        setIsModalOpen(false);
     };
 
     const handleRecordingComplete = async (pageNumber, audioBlob) => {
@@ -177,6 +192,9 @@ function FairytaleShow(bookid) {
                     <div>
                         {isModalOpen && (
                             <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)}>
+                                <CloseButton onClick={closeModal}>
+                                    <img src="/images/closeicon.png" alt="Close" />
+                                </CloseButton>
                                 <RecordButton
                                     pageNumber={currentPage + 1}
                                     onRecordingComplete={handleRecordingComplete}
@@ -186,7 +204,7 @@ function FairytaleShow(bookid) {
                                         showBook(bookid.props);
                                     }}
                                     bookid={bookid.props}
-                                    bookstory = {bookStory[currentPage]}
+                                    bookstory={bookStory[currentPage]}
                                 />
                             </Modal>
                         )}
