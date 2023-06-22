@@ -184,7 +184,7 @@ const RecordButton = ({
                         긴장을 풀고 녹음해보세요
                     </div>
                     <br />
-                    <img src="calmdown.gif" alt="침착하세여"></img>
+                    <img src="images/calmdown.gif" alt="침착하세여"></img>
                 </>
             )}
             {/* Dropdown to select the version of audio if available */}

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import { useLocation } from 'react-router-dom';
-import RecordButton from '../../components/RecordButton';
+import RecordButton from '../../components/RecordModal';
 import { call } from '../../service/ApiService';
 import { sendAudioData } from '../../service/FairytaleService';
 import Modal from 'react-modal';
