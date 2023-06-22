@@ -39,7 +39,7 @@ const Text = styled.p`
   height: 100px;
   background: #fcdede;
   border-radius: 20px;
-  font-family: "Amiri";
+
   font-style: normal;
   font-weight: 400;
   font-size: 20px;

@@ -17,7 +17,7 @@ const Text = styled.p`
   align-items: center;
   width: 100%;
   height: 110px;
-  font-family: "Amiri";
+
   font-style: normal;
   font-weight: 400;
   font-size: 25px;
@@ -62,7 +62,7 @@ const Button = styled.button`
   height: 40px;
   background: #99f0cc;
   border-radius: 10px;
-  font-family: "Amiri";
+
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
