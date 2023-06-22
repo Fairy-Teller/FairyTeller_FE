@@ -14,17 +14,19 @@ import ContentTitle from '../../components/global/ContentTitle';
 import InnerCover from '../../components/global/InnerCover';
 
 const TextArea = styled.textarea`
-    width: calc(100% - 0.25rem);
-    height: 4rem;
-    background-color: #efd3d3;
-    overflow: auto;
-    resize: none;
-    font-size: 1.3em;
-    border-radius: 1em;
-    padding: 0.7em;
-    font-family: emoji;
-    text-align: center;
+  width: calc(100% - 8rem);
+  min-height: 4rem;
+  background-color: #f2c166;
+  overflow: auto;
+  resize: none;
+  font-size: 1.3rem;
+  border-radius: 2rem;
+  box-sizing: content-box;
+  padding: 2rem 4rem;
+  font-family: emoji;
+  text-align: center;
 `;
+
 const Button = styled.button`
     width: auto;
     height: auto;
