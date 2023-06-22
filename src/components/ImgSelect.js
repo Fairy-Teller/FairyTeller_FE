@@ -5,7 +5,7 @@ const Button = styled.button`
   width: 8rem;
   height: 3.2rem;
   padding: 0.25rem 0.5rem;
-  font-family: "Amiri";
+
   font-style: normal;
   font-weight: 400;
   font-size: 1.2rem;

@@ -8,7 +8,7 @@ const Button = styled.button`
   width: 8rem;
   height: 3.2rem;
   margin: 2rem 0 0;
-  font-family: "Amiri";
+
   font-style: normal;
   font-weight: 400;
   font-size: 1.2rem;
