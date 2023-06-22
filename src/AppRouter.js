@@ -11,6 +11,8 @@ import Logout from "./pages/user/Logout";
 //mypage
 import UpdateUser from "./pages/mypage/UpdateUser";
 import MyBookList from "./pages/mypage/MyBookList";
+import MyBookDetail from "./pages/mypage/MyBookDetail";
+
 //community
 import Board from "./pages/community/Board";
 import BoardDetail from "./pages/community/BoardDetail";
@@ -42,6 +44,7 @@ function AppRouter() {
         <Route path="logout" element={<Logout />} />
         <Route path="updateUser" element={<UpdateUser />} />
         <Route path="myBookList" element={<MyBookList />} />
+        <Route path="myBookList/:bookId" element={<MyBookDetail />} />
         <Route path="board" element={<Board />} />
         <Route path="board/:boardId" element={<BoardDetail />} />
         <Route path="my" element={<My />} />

@@ -1,55 +1,45 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import Header from "../components/global/Header";
 import Container from "../components/global/Container";
 import CenteredWrap from "../components/global/CenteredWrap";
 import { styled } from "styled-components";
+import React, { useEffect } from "react";
 
 const Button = styled.button`
-  color: #000000;
-  font-family: "Amiri";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 3rem;
+  background: #ef9999;
+  border-radius: 20px;
+  padding: 30px 50px;
+  border: none;
   margin: 1em;
-  border-radius: 0.4em;
-  padding: 1em;
-  background-color: #f1a0a0;
-  position: relative;
-  bottom: -6em;
+  color: #fff;
+  font-size: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
-const Bar = styled.div`
-    width: 100hw;
-    height: 99px;
-    text-align: left;
-    background: #FCDEDE;
-    font-family: 'Amiri';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 50px;
-    line-height: 88px;
-    color: #000000;
-`;
-// ./public/images/tmp_background.jpg
 const Start = () => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
   return (
-    <div className='start'>
-      <Bar>FairyTeller</Bar>
-      <Container>
+    <Container>
+      <Header mode={"default"} />
+      <div className='start an1'>
         <CenteredWrap>
           <Button>
-            <Link to='/story-user'>
-              스스로 동화 이야기 만들기
-              </Link>
+            <Link to='/story-user'>스스로 동화 이야기 만들기</Link>
           </Button>
           <Button>
-            <Link to='/keyword'>
-              AI한테 이야기 부탁하기
-            </Link>
+            <Link to='/keyword'>AI한테 이야기 부탁하기</Link>
           </Button>
         </CenteredWrap>
-      </Container>
-    </div>
+      </div>
+    </Container>
   );
 };
 

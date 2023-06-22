@@ -11,6 +11,20 @@ $thc1: #fe5c6b;
 $thc2: #ff9768;
 $thc3: #87ddde;
 
+//~~~~~~~~~~~~~  선명
+$color1:#052940;
+$color1:#113E59;
+$color1:#326173;
+$color1:#F2C166;
+$color1:#D9A362;
+
+//~~~~~~~~~~~~~  연하게
+$color1:#052940;
+$color1:#366273;
+$color1:#64888C;
+$color1:#F2C166;
+$color1:#D9A362;
+
 // transform
 @mixin transform($transforms) {
   -webkit-transform: $transforms;

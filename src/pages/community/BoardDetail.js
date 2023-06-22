@@ -30,6 +30,7 @@ const BoardDetail = () => {
       setComments(boardData.comments);
       setCurrentPage(response.currentPage);
       setTotalPages(response.totalPages);
+      setIsLiked(boardData.liked);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
@@ -44,19 +45,14 @@ const BoardDetail = () => {
     }
   };
 
-
-  const handleDeleteComment = async (comment) => {};
-
-
-//   const handleDeleteComment = async (commentId) => {
-//     try {
-//       await call(`/board/${boardId}/comment/${commentId}`, "DELETE", null);
-//       fetchDataComments(currentPage);
-//     } catch (error) {
-//       console.log("Error deleting comment:", error);
-//     }
-//   };
-
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await call(`/board/${boardId}/comment/${commentId}`, "DELETE", null);
+      fetchDataComments(currentPage);
+    } catch (error) {
+      console.log("Error deleting comment:", error);
+    }
+  };
 
   const handleLike = async () => {
     try {
@@ -111,8 +107,8 @@ const BoardDetail = () => {
           )}
         </div>
         <div>
-          <h2 className="title center" style={{ fontSize: '28px' }}>{board.title}</h2>
-          <div className="author center" style={{ fontSize: '23px'}}>Author: {board.nickname}</div>
+        <h2 className="title center" style={{ fontSize: '25px' }}>{board.title}</h2>
+          <div className="author center" style={{ fontSize: '20px'}}>Author: {board.nickname}</div>
           <div>
             <FairytaleShow props={board.bookId} />
           </div>

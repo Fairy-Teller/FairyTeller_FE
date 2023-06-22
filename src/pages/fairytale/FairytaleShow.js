@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import { useLocation } from 'react-router-dom';
@@ -7,36 +8,36 @@ import { sendAudioData } from '../../service/FairytaleService';
 import Modal from 'react-modal';
 
 const CenteredContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const CardContainer = styled.img`
-    width: 1250px;
-    height: 720px;
-    margin-left: 2%;
-    margin-right: 2%;
-    src: '/images/prev.png';
+  width: 1250px;
+  height: 720px;
+  margin-left: 2%;
+  margin-right: 2%;
+  src: "/images/prev.png";
 `;
 
 const AudioContainer = styled.div`
-    bottom: 0;
-    text-align: center;
-    padding: 20px;
+  bottom: 0;
+  text-align: center;
+  padding: 20px;
 `;
 
 const FairyPage = styled.div`
-    display: flex;
+  display: flex;
 `;
 
 const Arrow = styled.button`
-    ${(props) =>
-        props.disabled &&
-        css`
-            opacity: 0.5;
-            pointer-events: none;
-        `}
+  ${(props) =>
+    props.disabled &&
+    css`
+      opacity: 0.5;
+      pointer-events: none;
+    `}
 `;
 
 const VoiceButton = styled.button`
@@ -114,11 +115,12 @@ function FairytaleShow(bookid) {
         }
     };
 
-    const handlePrevPage = () => {
-        if (currentPage > 0) {
-            setCurrentPage((prevPage) => prevPage - 1);
-        }
-    };
+
+  const handlePrevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage((prevPage) => prevPage - 1);
+    }
+  };
 
     const handleNextPage = () => {
         if (currentPage < bookInfo.length - 1) {
@@ -227,6 +229,7 @@ function FairytaleShow(bookid) {
             )}
         </CenteredContainer>
     );
+
 }
 
 export default FairytaleShow;

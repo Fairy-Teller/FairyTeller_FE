@@ -1,7 +1,7 @@
 /* login.css */
 
 #background {
-  background-image: url("/public/images/background2.jpg");
+  /* background-image: url("/public/images/background2.jpg"); */
   background-size: cover;
   background-position: center;
   height: 100vh;

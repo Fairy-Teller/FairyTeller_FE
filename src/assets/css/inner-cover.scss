@@ -1,0 +1,9 @@
+.inner-wrap {
+  width: 80%;
+  margin: auto;
+  &.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
