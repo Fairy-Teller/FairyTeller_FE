@@ -217,23 +217,23 @@ const Keyword = () => {
           <ContentTitle>단어를 3개부터 5개까지 선택해보아요!</ContentTitle>
           {loaded ? (
             <InnerCover>
-              <Row className='current'>
-                <div>
-                  {keywords.length > 0 ? (
-                    keywords.map((item) => {
-                      return <div key={item}>{item}</div>;
-                    })
-                  ) : (
-                    <p>동화에 넣을 키워드를 골라보아요</p>
-                  )}
-                </div>
-                <button
-                  type='submit'
-                  className='button'>
-                  이야기 만들러 가기
-                </button>
-              </Row>
               <form onSubmit={onSubmitHandler}>
+                <Row className='current'>
+                  <div>
+                    {keywords.length > 0 ? (
+                      keywords.map((item) => {
+                        return <div key={item}>{item}</div>;
+                      })
+                    ) : (
+                      <p>동화에 넣을 키워드를 골라보아요</p>
+                    )}
+                  </div>
+                  <button
+                    type='submit'
+                    className='button'>
+                    이야기 만들러 가기
+                  </button>
+                </Row>
                 <SectionKeyword>
                   <Section>
                     <InputLabel>
