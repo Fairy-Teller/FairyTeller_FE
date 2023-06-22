@@ -12,6 +12,7 @@ import Logout from "./pages/user/Logout";
 import UpdateUser from "./pages/mypage/UpdateUser";
 import MyBookList from "./pages/mypage/MyBookList";
 import MyBookDetail from "./pages/mypage/MyBookDetail";
+
 //community
 import Board from "./pages/community/Board";
 import BoardDetail from "./pages/community/BoardDetail";
