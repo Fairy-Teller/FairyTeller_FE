@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
 import { SelectedKeywordsState, StoryState, BookState } from "../../recoil/Fairytailstate";
@@ -17,15 +17,15 @@ import InnerCover from "../../components/global/InnerCover";
 
 const TextArea = styled.textarea`
   width: calc(100% - 8rem);
-  min-height: 4rem;
-  background-color: #f2c166;
-  overflow: auto;
+  min-height: 8rem;
+  height: auto;
+  background-color: pink;
   resize: none;
-  font-size: 1.3rem;
+  font-size: 1.6rem;
+  line-height: 1.4;
   border-radius: 2rem;
   box-sizing: content-box;
   padding: 2rem 4rem;
-  font-family: emoji;
   text-align: center;
 `;
 
@@ -36,6 +36,8 @@ const StoryGenerated = () => {
   const [savedStory, setSavedStory] = useRecoilState(StoryState);
   // const showImage = useRecoilValue(ImageFix);
   // const [savedBook, setSavedBook] = useRecoilState(BookState);
+  const textAreaRef = useRef(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -62,7 +64,10 @@ const StoryGenerated = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    window.scrollTo(0, document.body.scrollHeight);
+
     try {
+      setIsLoading(true);
       const bookDTO = savedStory.map((item, index) => ({
         pageNo: index + 1,
         fullStory: item["paragraph"],
@@ -71,6 +76,7 @@ const StoryGenerated = () => {
     } catch (error) {
       console.log("Error fetching data:", error);
     } finally {
+      setIsLoading(false);
       navigate("/image-generated");
     }
   };
@@ -119,8 +125,8 @@ const StoryGenerated = () => {
   });
 
   return (
-    <div className='write tmp_story-generated'>
-      {isLoading && <LoadingModal message='AI가 열심히 이야기를 만드는 중입니다.' />}
+    <div className='story story-generated '>
+      {isLoading && <LoadingModal message='AI가 그림 그릴 준비를 합니다!' />}
       {loaded ? (
         <Container>
           <Header mode={"default"} />
@@ -151,7 +157,6 @@ const StoryGenerated = () => {
                     className='button'>
                     키워드 다시 고르기
                   </Link>
-
                   <button
                     type='submit'
                     className='button'>

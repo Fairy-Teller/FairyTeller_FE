@@ -7,8 +7,7 @@ const [PREV, NEXT, DONE] = ["prev", "next", "done"];
 const Button = styled.button`
   width: 8rem;
   height: 3.2rem;
-  margin: 2rem 0 0;
-
+  margin: -8rem 0 0;
   font-style: normal;
   font-weight: 400;
   font-size: 1.2rem;
