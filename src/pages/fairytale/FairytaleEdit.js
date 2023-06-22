@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
+import { SaveState } from "../../recoil/Fairytailstate";
 import { call } from "../../service/ApiService";
 import styled, { css } from "styled-components";
 
@@ -9,9 +11,7 @@ import TitleModal from "../../components/TitleModal";
 import PageSelectionFrame from "../../components/PageSelectionFrame";
 import PageSelection from "../../components/PageSelection";
 
-import { SaveState } from "../../recoil/Fairytailstate";
-import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
-
+const NULL = "NULL";
 const Container = styled.div`
   display: flex;
   position: relative;
@@ -67,11 +67,13 @@ const FairytaleEdit = () => {
       });
       return updatedVisibility;
     });
+
     console.log(id);
   };
   useEffect(() => {
     getNewest();
     document.body.style.overflow = "hidden";
+
     return () => {
       // 컴포넌트가 언마운트될 때 스크롤 가능하게 되돌림
       document.body.style.overflow = "auto";
