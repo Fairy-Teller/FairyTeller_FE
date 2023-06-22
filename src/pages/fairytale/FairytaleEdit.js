@@ -4,13 +4,10 @@ import { call } from '../../service/ApiService';
 import styled, { css } from 'styled-components';
 
 import TryCanvas from '../../components/TryCanvas';
-import TitleModal from './TitleModal';
+import TitleModal from '../../components/TitleModal';
 
 import PageSelectionFrame from '../../components/PageSelectionFrame';
 import PageSelection from '../../components/PageSelection';
-
-import { SampleDataState, SaveState } from '../../recoil/Fairytailstate';
-import { useRecoilValue, useSetRecoilState, useResetRecoilState } from 'recoil';
 
 const NULL = 'NULL';
 const Container = styled.div`
@@ -59,10 +56,6 @@ const FairytaleEdit = () => {
     const [saveAll, setSaveall] = useState(false);
     const [showImage, setShowImage] = useState([]);
     const [activeTab, setActiveTab] = useState(null);
-
-    const sampleDataStucure = useRecoilValue(SampleDataState);
-    const setSampleDataState = useSetRecoilState(SampleDataState);
-    const saveState = useResetRecoilState(SaveState);
 
     const toggleCanvasVisibility = (id) => {
         setActiveTab(id);
