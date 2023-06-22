@@ -39,25 +39,6 @@
   }
 }
 
-// .start {
-//     a {
-//         width: 24rem;
-//         height: 24rem;
-//         padding: 2rem;
-//         display: flex;
-//         justify-content: center;
-//         align-items: center;
-//         border-radius: 50%;
-//         transition: all 0.4s;
-//         background-color: $thc1;
-//         &:hover {
-//             width: 28rem;
-//             height: 28rem;
-//             background-color: $thc3;
-//         }
-//     }
-// }
-
 .start {
   .container {
     //background-image: url("../../../public/images/tmp_background.jpg");
@@ -223,34 +204,6 @@
   }
 }
 
-.edit {
-  .page-selection-frame {
-    // height: calc(100% - 720px);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    flex-wrap: nowrap;
-    margin: 0;
-    padding: 0.8rem;
-    box-sizing: border-box;
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: aquamarine;
-  }
-  .page-selection {
-    flex: 1;
-    margin: 0 0.2rem;
-    padding: 0 0.2rem;
-    box-sizing: border-box;
-
-    &:first-of-type {
-      margin-left: 0;
-    }
-  }
-}
-
 ///----------------------------------
 .write {
   // .container {
@@ -308,4 +261,7 @@
       }
     }
   }
+}
+
+.tabsel {
 }
