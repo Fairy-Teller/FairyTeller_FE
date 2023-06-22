@@ -39,25 +39,6 @@
   }
 }
 
-// .start {
-//     a {
-//         width: 24rem;
-//         height: 24rem;
-//         padding: 2rem;
-//         display: flex;
-//         justify-content: center;
-//         align-items: center;
-//         border-radius: 50%;
-//         transition: all 0.4s;
-//         background-color: $thc1;
-//         &:hover {
-//             width: 28rem;
-//             height: 28rem;
-//             background-color: $thc3;
-//         }
-//     }
-// }
-
 .start {
   .container {
     //background-image: url("../../../public/images/tmp_background.jpg");
@@ -280,4 +261,7 @@
       }
     }
   }
+}
+
+.tabsel {
 }

@@ -4,26 +4,24 @@ import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
 import { SaveState } from "../../recoil/Fairytailstate";
 import { call } from "../../service/ApiService";
 import styled, { css } from "styled-components";
-
 import TryCanvas from "../../components/TryCanvas";
 import TitleModal from "../../components/TitleModal";
-
+import Header from "../../components/global/Header";
 import PageSelectionFrame from "../../components/PageSelectionFrame";
 import PageSelection from "../../components/PageSelection";
 
 const Frame = styled.div`
   position: relative;
-  // width: 95vw;
-  // height: 100vh;
 `;
+const FrameInner = styled.div``;
 const Savebutton = styled.button`
-  width: 362px;
-  height: 83px;
-  border-radius: 10px;
-  background: #80f06e;
+  width: 12rem;
+  height: 3.6rem;
+  border-radius: 0.4rem;
+  background: pink;
   margin-top: 28px;
   margin-right: 38px;
-  font-size: 30px;
+  font-size: 1.2rem;
   float: right;
 `;
 
@@ -44,11 +42,14 @@ const FairytaleEdit = () => {
 
   const toggleCanvasVisibility = (id) => {
     setActiveTab(id);
+
     setCanvasVisibility((prevState) => {
       const updatedVisibility = { ...prevState };
+
       Object.keys(updatedVisibility).forEach((key) => {
         updatedVisibility[key] = key == id ? true : false;
       });
+
       return updatedVisibility;
     });
 
@@ -68,7 +69,7 @@ const FairytaleEdit = () => {
   const getNewest = async () => {
     try {
       const data = await call("/book/my-newest", "GET", null);
-      await setShowImage(data);
+      setShowImage(data);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
@@ -80,60 +81,41 @@ const FairytaleEdit = () => {
     setSaveall(true);
   };
 
-  console.log(">>>", showImage);
-
   return (
     <div className='edit'>
-      <div
-        style={{
-          position: "absolute",
-          width: "100%",
+      <Header />
+      <Frame>
+        <Savebutton onClick={saveClick}>동화 완성하기</Savebutton>
 
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}>
-        <img
-          src='/images/loding_4.png'
-          style={{ marginTop: "2%" }}
-        />
-      </div>
+        {Object.keys(canvasVisibility).map((key) => (
+          <FrameInner
+            key={key}
+            style={{
+              display: canvasVisibility[key] ? "block" : "none",
+            }}>
+            <TryCanvas
+              idx={Number(key)}
+              BookInfo={showImage}
+            />
+          </FrameInner>
+        ))}
 
-      <div>
-        <Frame>
-          <Savebutton onClick={saveClick}>동화 완성하기</Savebutton>
-          {Object.keys(canvasVisibility).map((key) => (
-            <div
-              key={key}
-              style={{
-                display: canvasVisibility[key] ? "block" : "none",
-                textAlign: "center",
-              }}>
-              <TryCanvas
-                props={Number(key)}
-                BookInfo={showImage}
+        <PageSelectionFrame>
+          {showImage.pages && showImage.pages.length > 0 ? (
+            showImage.pages.map((page, index) => (
+              <PageSelection
+                key={index}
+                idx={page.pageNo}
+                src={page.originalImageUrl}
+                onClick={() => toggleCanvasVisibility(page.pageNo)}
               />
-            </div>
-          ))}
-
-          <PageSelectionFrame>
-            {showImage.pages && showImage.pages.length > 0 ? (
-              showImage.pages.map((page, index) => (
-                <PageSelection
-                  key={index}
-                  idx={page.pageNo}
-                  src={page.originalImageUrl}
-                  onClick={() => toggleCanvasVisibility(page.pageNo)}
-                />
-              ))
-            ) : (
-              <div>가져오는 중...</div>
-            )}
-          </PageSelectionFrame>
-        </Frame>
-
-        {saveAll && <TitleModal props={showImage.bookId} />}
-      </div>
+            ))
+          ) : (
+            <div>가져오는 중...</div>
+          )}
+        </PageSelectionFrame>
+      </Frame>
+      {saveAll && <TitleModal props={showImage.bookId} />}
     </div>
   );
 };

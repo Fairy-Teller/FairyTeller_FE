@@ -1,5 +1,5 @@
 import React from 'react';
-import './assets/font/KyoboHand.scss';
+import './assets/font/font.scss';
 import './assets/css/ui.scss';
 
 function App() {
