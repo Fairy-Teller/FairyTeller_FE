@@ -27,7 +27,6 @@
         "recoil-persist": "^4.2.0",
         "sass": "^1.63.2",
         "styled-components": "^6.0.0-rc.3",
-        "wavesurfer.js": "^6.6.4",
         "web-vitals": "^2.1.4"
     },
     "devDependencies": {
