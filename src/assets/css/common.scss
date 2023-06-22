@@ -75,12 +75,6 @@
       margin-top: 1.2rem;
     }
   }
-  textarea {
-    width: 100%;
-    padding: 2rem;
-    box-sizing: border-box;
-    background-color: transparent;
-  }
   .button-wrap {
     display: flex;
     justify-content: center;
@@ -179,113 +173,51 @@
         background-color: $thc3;
       }
     }
-    &-user {
-      .container {
-        background-color: $bgc3;
-      }
-      .button {
-        background-color: $thc1;
-        &:hover {
-          background-color: $thc3;
-        }
-      }
-    }
-    &-generated {
-      .container {
-        //  background-color: $thc3;
-      }
-      form:first-of-type {
-        .button-wrap {
-          margin-top: 4rem;
-          position: relative;
-          a {
-            left: 0;
-          }
-          button[type="submit"] {
-            right: 0;
-          }
-        }
-      }
-      form:last-of-type {
-        height: 0;
-        .button-wrap {
-          margin: -0.2rem;
-          position: relative;
-          button[type="submit"] {
-            position: absolute;
-            left: 40%;
-          }
-        }
-      }
-      .button {
-        position: absolute;
-        background-color: $thc1;
-        &:hover {
-          background-color: $bgc3;
-        }
-      }
-    }
   }
-}
-
-///----------------------------------
-.write {
-  // .container {
-  // }
-  section {
-    padding: 2rem;
-    box-sizing: border-box;
-    border-radius: 2rem;
-    & + section {
-      margin-top: 1.2rem;
+  &-user {
+    .container {
+      background-color: $bgc3;
     }
-  }
-  .button-wrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     .button {
-      padding: 1.2rem 2rem;
-      margin-top: 2rem;
-      color: #fff;
-      text-align: center;
-
-      font-weight: 600;
-      font-size: 2rem;
-      border-radius: 8rem;
-      transition: all 0.4s;
+      background-color: $thc1;
+      &:hover {
+        background-color: $thc3;
+      }
     }
   }
   &-generated {
-    // .container {
-    // }
+    .container {
+      //  background-color: $thc3;
+    }
     form:first-of-type {
       .button-wrap {
         margin-top: 4rem;
         position: relative;
         a {
           left: 0;
-          &:last-of-type {
-            margin-right: 0;
-          }
-          text-align: center;
         }
-
-        .image-frame {
-          background-color: #fff;
-
-          > div {
-            background: {
-              size: cover;
-              repeat: no-repeat;
-              position: center center;
-            }
-          }
+        button[type="submit"] {
+          right: 0;
         }
       }
     }
+    form:last-of-type {
+      height: 0;
+      .button-wrap {
+        margin: -0.2rem;
+        position: relative;
+        button[type="submit"] {
+          position: absolute;
+          left: 40%;
+        }
+      }
+    }
+    .button {
+      position: absolute;
+      background-color: $thc1;
+      &:hover {
+        background-color: $bgc3;
+      }
+    }
   }
-}
-
-.tabsel {
 }

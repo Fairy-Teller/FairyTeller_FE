@@ -25,37 +25,43 @@ const ImageWrap = styled.div`
   overflow: hidden;
 `;
 const Img = styled.img`
-  width: 896px;
-  height: 504px;
+  // width: 960px;
+  // height: 540px;
+  width: 1024px;
+  height: 576px;
   padding: 0;
   margin: 0;
   background-color: #d9d9d9;
 `;
-const Text = styled.p`
-  display: flex;
-  text-align: center;
-  align-items: center;
-  width: 800px;
-  height: 100px;
-  background: #fcdede;
-  border-radius: 20px;
+const Story = styled.div`
+  position: fixed;
+  top: 220px;
+  left: ${(props) => (!props.isHovered ? "10rem" : "8rem")};
+  z-index: 99;
+  border-radius: 50%;
+  transition: left 0.4s;
+`;
+const TextContent = styled.p`
+  width: ${(props) => (!props.isHovered ? "120px" : "720px")};
+  height: ${(props) => (!props.isHovered ? "120px" : "auto")};
+  padding: ${(props) => (!props.isHovered ? "0" : "1.2rem 2.4rem")};
+  font-size: ${(props) => (!props.isHovered ? "1.6rem" : "1.2rem")};
+  display: ${(props) => (!props.isHovered ? "flex" : "block")};
+  justify-content: ${(props) => (!props.isHovered ? "center" : "center")};
+  align-items: ${(props) => (!props.isHovered ? "center" : "center")};
+  box-sizing: border-box;
+  text-align: left;
+  line-height: 1.4;
+  color: #000000;
+  word-break: keep-all;
+  border: 0.4rem solid #edaeae;
+  background-color: white;
+  border-radius: 12rem;
+`;
 
-  font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
-  color: #000000;
-  margin: 10px;
-  padding: 0 10px;
-`;
-const P = styled.p`
-  display: flex;
-  text-align: center;
-  align-items: center;
-  font-weight: 600;
-  font-size: 20px;
-  color: #000000;
-  margin-top: 20px;
-`;
+const Text = (props) => {
+  return <TextContent isHovered={props.isHovered}>{props.children}</TextContent>;
+};
 
 const PreviewGeneratedIamge = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -133,12 +139,20 @@ const PreviewGeneratedIamge = (props) => {
     }
   };
 
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <Div>
       {isLoading && <LoadingModal message='AI가 열심히 그림을 그리는 중입니다.' />}
-      <div>
-        <Text>{savedStory[props.index]["paragraph"]}</Text>
-      </div>
+      <Story
+        isHovered={isHovered}
+        className='current'
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}>
+        <Text isHovered={isHovered}>
+          {isHovered ? savedStory[props.index]["paragraph"] : "내용"}
+        </Text>
+      </Story>
 
       <ImageWrap>
         <Img src={savedImageTemp[props.index] && savedImageTemp[props.index]["url"]} />

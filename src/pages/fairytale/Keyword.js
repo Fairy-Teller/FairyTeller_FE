@@ -9,7 +9,6 @@ import ProgressBar from "../../components/global/ProgressBar";
 import Container from "../../components/global/Container";
 import Row from "../../components/global/Row";
 import Section from "../../components/global/Section";
-import ButtonWrap from "../../components/common/ButtonWrap";
 import LoadingModal from "../../components/LoadingModal";
 import ContentCover from "../../components/global/ContentCover";
 import ContentTitle from "../../components/global/ContentTitle";
@@ -191,20 +190,24 @@ const Keyword = () => {
   });
 
   useEffect(() => {
-    const handleScroll = () => {
-      const target = document.querySelector(".current");
-      const scrollThreshold = 300;
+    const target = document.querySelector(".current");
+    console.log(target);
 
-      if (window.scrollY > scrollThreshold) {
-        target.classList.add("fixed");
-      } else {
-        target.classList.remove("fixed");
-      }
-    };
+    if (target !== null) {
+      const handleScroll = () => {
+        const scrollThreshold = 300;
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+        if (window.scrollY > scrollThreshold) {
+          target.classList.add("fixed");
+        } else {
+          target.classList.remove("fixed");
+        }
+      };
+
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
+  });
 
   return (
     <div className='story keyword'>

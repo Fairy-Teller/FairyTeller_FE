@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
 import { SavedBoolState, AllSavedBoolState, StoryState } from "../../recoil/Fairytailstate";
 import styled from "styled-components";
@@ -71,44 +71,46 @@ const IamgeGenerated = () => {
   };
 
   return (
-    <Container>
-      <Header mode={"default"} />
-      <ContentCover>
-        <ProgressBar step={2} />
-        <ContentTitle>
-          {page < 5
-            ? `AI가 동화책의 ${page + 1}번째 페이지에 들어가는 이미지를 그려줘요!`
-            : `고른 이미지들을 확인해주세요! 이제 동화책을 만들러 가볼까요?`}
-        </ContentTitle>
-        <InnerCover className={"row"}>
-          {page > 0 ? (
-            <Control
-              mode={PREV}
-              onControl={handleControl}
-            />
-          ) : (
-            <div style={{ marginLeft: "10rem" }}></div>
-          )}
-          {savedStory.map(
-            (item, index) => item && page === index && <PreviewGeneratedImage index={index} />
-          )}
-          {page < 4 && !allSelectDone ? (
-            <Control
-              mode={NEXT}
-              onControl={handleControl}
-            />
-          ) : page === 4 && !allSelectDone ? (
-            <div style={{ marginRight: "10rem" }}></div>
-          ) : page === 4 && allSelectDone ? (
-            <Control
-              mode={NEXT}
-              onControl={handleControl}
-            />
-          ) : null}
-          {page === 5 && <PreviewAllGeneratedImage />}
-        </InnerCover>
-      </ContentCover>
-    </Container>
+    <div className='illu'>
+      <Container>
+        <Header mode={"default"} />
+        <ContentCover>
+          <ProgressBar step={2} />
+          <ContentTitle>
+            {page < 5
+              ? `AI가 동화책의 ${page + 1}번째 페이지에 들어가는 이미지를 그려줘요!`
+              : `고른 이미지들을 확인해주세요! 이제 동화책을 만들러 가볼까요?`}
+          </ContentTitle>
+          <InnerCover className={"row"}>
+            {page > 0 ? (
+              <Control
+                mode={PREV}
+                onControl={handleControl}
+              />
+            ) : (
+              <div style={{ marginLeft: "10rem" }}></div>
+            )}
+            {savedStory.map(
+              (item, index) => item && page === index && <PreviewGeneratedImage index={index} />
+            )}
+            {page < 4 && !allSelectDone ? (
+              <Control
+                mode={NEXT}
+                onControl={handleControl}
+              />
+            ) : page === 4 && !allSelectDone ? (
+              <div style={{ marginRight: "10rem" }}></div>
+            ) : page === 4 && allSelectDone ? (
+              <Control
+                mode={NEXT}
+                onControl={handleControl}
+              />
+            ) : null}
+            {page === 5 && <PreviewAllGeneratedImage />}
+          </InnerCover>
+        </ContentCover>
+      </Container>
+    </div>
   );
 };
 
