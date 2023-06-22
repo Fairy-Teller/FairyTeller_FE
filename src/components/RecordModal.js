@@ -134,6 +134,9 @@ const RecordButton = ({
             handleStartRecording();
         }
     };
+
+
+
     // Format stopwatch time to HH:MM:SS
     const formatStopwatchTime = (time) => {
         const hours = Math.floor(time / 3600);
