@@ -1,13 +1,11 @@
 import React from 'react';
 import PageFlip from 'react-pageflip';
-import '../../css/Book.css';
-
+import "../../css/Board.css";
 function Book({ bookInfo }) {
     const imageUrls = bookInfo;
-
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <PageFlip width={685} height={450}>
+            <PageFlip width={515} height={580}>
                 {imageUrls.flatMap((url, i) => [
                     <div className="flip-paper-page" key={`left-${i}`}>
                         <div className="half-image-container">
