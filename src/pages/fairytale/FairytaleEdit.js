@@ -3,15 +3,24 @@ import { useNavigate } from "react-router-dom";
 import { call } from "../../service/ApiService";
 import styled, { css } from "styled-components";
 
+<<<<<<< HEAD
 import TryCanvas from "../../components/TryCanvas";
 import TitleModal from "./TitleModal";
+=======
+import TryCanvas from '../../components/TryCanvas';
+import TitleModal from '../../components/TitleModal';
+>>>>>>> 78-feature-canvas-css
 
 import PageSelectionFrame from "../../components/PageSelectionFrame";
 import PageSelection from "../../components/PageSelection";
 
+<<<<<<< HEAD
 import { SampleDataState, SaveState } from "../../recoil/Fairytailstate";
 import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
 
+=======
+const NULL = 'NULL';
+>>>>>>> 78-feature-canvas-css
 const Container = styled.div`
   display: flex;
   position: relative;
@@ -70,6 +79,7 @@ const FairytaleEdit = () => {
       return updatedVisibility;
     });
 
+<<<<<<< HEAD
     console.log(id);
   };
   useEffect(() => {
@@ -79,6 +89,19 @@ const FairytaleEdit = () => {
     return () => {
       // 컴포넌트가 언마운트될 때 스크롤 가능하게 되돌림
       document.body.style.overflow = "auto";
+=======
+    const toggleCanvasVisibility = (id) => {
+        setActiveTab(id);
+        setCanvasVisibility((prevState) => {
+            const updatedVisibility = { ...prevState };
+            Object.keys(updatedVisibility).forEach((key) => {
+                updatedVisibility[key] = key == id ? true : false;
+            });
+            return updatedVisibility;
+        });
+
+        console.log(id);
+>>>>>>> 78-feature-canvas-css
     };
   }, []);
 
