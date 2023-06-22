@@ -76,7 +76,7 @@ const IamgeGenerated = () => {
       <ContentCover>
         <ProgressBar step={2} />
         <ContentTitle>
-          {page > 5
+          {page < 5
             ? `AI가 동화책의 ${page + 1}번째 페이지에 들어가는 이미지를 그려줘요!`
             : `고른 이미지들을 확인해주세요! 이제 동화책을 만들러 가볼까요?`}
         </ContentTitle>

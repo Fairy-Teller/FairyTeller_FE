@@ -12,6 +12,7 @@ const Selection = styled.div`
 `;
 
 const Image = styled.div`
+  width: ${(props) => (props.isHovered ? "104%" : "100%")};
   min-height: ${(props) => (props.isHovered ? "160px" : "40px")};
   ${(props) =>
     props.src &&
