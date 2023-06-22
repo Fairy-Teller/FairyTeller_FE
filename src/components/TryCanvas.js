@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-
 import {
   atomFamily,
   useRecoilState,
@@ -9,63 +8,61 @@ import {
 } from "recoil";
 import { SelectStickers, SaveState, Canvasexport } from "../recoil/Fairytailstate";
 import { call } from "../service/ApiService";
-
 import styled, { css } from "styled-components";
 import { fabric } from "fabric";
-
 import PageSelection from "../components/PageSelection";
+import TabSelection from "../components/TabSelection";
 
-const [IMAGE, USERIMAGE, TEXT, DELETE, STICKER] = [
+const [IMAGE, USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER] = [
   "AI삽화",
-  "유저\n이미지",
-  "텍스트",
+  "사용자이미지",
+  "텍스트추가",
+  "글씨스타일",
   "삭제",
-  "스티커",
+  "스티커추가",
 ];
-const [AI, USER, STI] = ["AI", "USER", "STI"];
+const [NOTO, TAEB] = ["Noto Sans KR", "TAEBAEK milkyway"];
+const fonts = [NOTO, TAEB];
+const [LEFT, CENTER, RIGHT] = ["left", "center", "right"];
+const aligns = [LEFT, CENTER, RIGHT];
 
 const canvasState = atomFamily({
   key: "canvasState",
   default: null,
 });
+
 const CanvasFrame = styled.div`
   display: flex;
-
   height: 100vh;
 `;
-
 const Nav = styled.nav`
-  width: 6vw;
-  height: 74.5%;
-
+  width: 2.5vw;
   height: 100vh;
+  padding: 0 0 0 1.2rem;
   flex-direction: column;
-  background-color: #d9d9d9;
 `;
 const Tab = styled.button`
   width: 100%;
-  margin-top: 4px;
-  height: 9%;
-  top: 216px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  padding: 1.2rem 0.6rem;
+  margin: 0.8rem 0;
+  border-radius: 1.2rem;
+  background-color: white;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
 
   ${({ clicked }) =>
     clicked &&
     css`
-      background-color: #ed9696;
+      background-color: black;
       color: white;
     `}
 `;
 const Tooltab = styled.div`
-  width: 10%;
-  height: 74.5%;
-
-  flex-direction: column;
-
-  top: 0;
-  right: 0;
-  bottom: 0;
-  overflow: auto;
+  width: 12.5vw;
+  min-height: 100%;
+  padding: 2rem 0.4rem;
+  margin: 0 0 0 2rem;
+  overflow-y: scroll;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
 
   ${({ visible }) =>
     !visible &&
@@ -73,16 +70,19 @@ const Tooltab = styled.div`
       display: none;
     `}
 `;
-const InputBox = styled.input`
-  width: 244px;
-  height: 91px;
-
-  background: #80f06e;
-  border-radius: 10px;
+const Item = styled.div`
+  margin: 0 0 4rem 0;
+  * {
+    font-size: 1.6rem;
+  }
+`;
+const ItemTitle = styled.div`
+  padding: 0 0 1.2rem 0;
+  font-size: 2.4rem;
 `;
 
 const TryCanvas = (props) => {
-  const btnLabels = [IMAGE, USERIMAGE, TEXT, DELETE, STICKER];
+  const btnLabels = [USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER];
   const canvasRef = useRef(null);
   const fabricCanvasRef = useRef(null);
   // const [canvasStates, setCanvasStates] = useState({});
@@ -101,30 +101,11 @@ const TryCanvas = (props) => {
   const [canvas, setCanvas] = useState();
   const bookInfo = useRef(null);
   const [showEditToolTab, setShowEditToolTab] = useState(false); // Add new state variable
+
+  // 최신 저장 가져오기
   useEffect(() => {
     getNewest();
   }, []);
-  useEffect(() => {
-    if (saveState == "save") {
-      saveAsImage("jpeg");
-    }
-  }, [saveState]);
-
-  const handleButtonClick = (label) => {
-    setActiveTab(label === activeTab ? null : label);
-    setShowButtonFunctiontion(!showButtonFunction);
-    if (label === TEXT) {
-      addTextBox();
-    }
-    if (label === DELETE) {
-      deleteObject();
-    }
-    if (label === STICKER) {
-      setShowEditToolTab(true);
-    } else {
-      setShowEditToolTab(false);
-    }
-  };
 
   const getNewest = async () => {
     try {
@@ -139,20 +120,51 @@ const TryCanvas = (props) => {
     }
   };
 
-  // 캔버스 세팅
+  // 이미지 저장하기
+  useEffect(() => {
+    if (saveState === "save") {
+      saveAsImage("jpeg");
+    }
+  }, [saveState]);
+
+  const saveAsImage = (format) => {
+    if (canvas) {
+      const dataURL = canvas.toDataURL({
+        width: canvas.width,
+        height: canvas.height,
+        left: 0,
+        top: 0,
+        format: format,
+      });
+
+      const link = document.createElement("a");
+
+      link.href = dataURL;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      setCanvasExport((prev) => [...prev, { id: props.idx, img: link.href }]);
+    } else {
+      console.log("없나?");
+    }
+  };
+
+  // 캔버스 초기화
   const initCanvas = (data) => {
     console.log("data", data);
+
     const canvas = new fabric.Canvas(canvasRef.current, {
       height: 720,
       width: 1280,
-      backgroundColor: "#D9D9D9",
     });
-    canvas.state = [];
+
     canvas.index = 0;
+    canvas.state = [];
     canvas.stateaction = true;
 
     fabric.Image.fromURL(
-      data.pages[props.props - 1].originalImageUrl + "?timestamp=" + new Date().getTime(),
+      data.pages[props.idx - 1].originalImageUrl + "?timestamp=" + new Date().getTime(),
       (image) => {
         canvas.setBackgroundImage(image, canvas.renderAll.bind(canvas), {
           scaleX: canvas.width / image.width,
@@ -162,25 +174,106 @@ const TryCanvas = (props) => {
       { crossOrigin: "anonymous" }
     );
 
-    var text = new fabric.Textbox(data.pages[props.props - 1].fullStory, {
+    let text = new fabric.Textbox(data.pages[props.idx - 1].fullStory, {
       selectable: true,
-      left: canvas.width / 2,
-      top: canvas.height - 100,
       originX: "center",
       originY: "center",
       textAlign: "center",
-      width: 1280,
+      top: canvas.height / 2,
+      left: canvas.width / 2,
+      width: 640,
+      fontFamily: TAEB,
+      fontSize: 32,
+      lineHeight: 1.4,
+      shadow: "rgba(0,0,0,0.2) 0 0 5px",
     });
+
     canvas.add(text);
+
     return canvas;
+  };
+
+  // 탭
+  const handleButtonClick = (label) => {
+    setActiveTab(label === activeTab ? null : label);
+    setShowButtonFunctiontion(!showButtonFunction);
+    if (label === TEXT) {
+      addTextBox();
+    } else if (label === DELETE) {
+      deleteObject();
+    } else if (label === STICKER) {
+      setShowEditToolTab(true);
+    } else {
+      setShowEditToolTab(false);
+    }
   };
 
   // 텍스트 박스
   const addTextBox = () => {
-    var text = new fabric.Textbox("텍스트를 추가하세요", {
+    let text = new fabric.Textbox("원하는 글을 추가하세요", {
       selectable: true,
+      originX: "center",
+      originY: "center",
+      textAlign: "center",
+      top: canvas.height / 4,
+      left: canvas.width / 4,
+      width: 640,
+      fontFamily: TAEB,
+      fontSize: 32,
+      lineHeight: 1.4,
+      shadow: "rgba(0,0,0,0.2) 0 0 5px",
     });
+
     canvas.add(text);
+  };
+
+  // 폰트
+  const selectFontStyle = (item) => {
+    const activeObject = canvas.getActiveObject();
+
+    if (activeObject && (activeObject.type === "textbox" || "text")) {
+      activeObject.set("fontFamily", item);
+
+      canvas.requestRenderAll();
+    } else if (!activeObject) {
+      alert("VACANT");
+    } else {
+      alert("NOT A TEXT");
+    }
+  };
+
+  // 얼라인
+  const selectAlignStyle = (item) => {
+    const activeObject = canvas.getActiveObject();
+
+    if (activeObject && (activeObject.type === "textbox" || "text")) {
+      activeObject.set("textAlign", item);
+
+      canvas.requestRenderAll();
+    } else if (!activeObject) {
+      alert("VACANT");
+    } else {
+      alert("NOT A TEXT");
+    }
+  };
+
+  const [selcolor, setSelColor] = useState(true);
+
+  // 색
+  const selectColorStyle = () => {
+    const activeObject = canvas.getActiveObject();
+    if (activeObject && (activeObject.type === "textbox" || "text")) {
+      const nextColor = selcolor ? "black" : "white";
+
+      activeObject.set({ fill: nextColor });
+      canvas.requestRenderAll();
+
+      setSelColor(!selcolor);
+    } else if (!activeObject) {
+      alert("VACANT");
+    } else {
+      alert("NOT A TEXT");
+    }
   };
 
   // 삭제
@@ -190,13 +283,14 @@ const TryCanvas = (props) => {
 
   // 파일 불러와서 이미지 첨부
   const readImage = (e) => {
-    var file = e.target.files[0];
+    let file = e.target.files[0];
+    let reader = new FileReader();
 
-    var reader = new FileReader();
     reader.onload = function (f) {
-      var data = f.target.result;
+      let data = f.target.result;
+
       fabric.Image.fromURL(data, function (img) {
-        var oImg = img.set({
+        let oImg = img.set({
           left: 0,
           top: 0,
           angle: 0,
@@ -206,6 +300,7 @@ const TryCanvas = (props) => {
         canvas.centerObject(oImg);
       });
     };
+
     reader.readAsDataURL(file);
   };
 
@@ -227,36 +322,8 @@ const TryCanvas = (props) => {
 
         canvas.add(img).setActiveObject(img);
       },
-
       { crossOrigin: "anonymous" }
     );
-  };
-
-  // 이미지 저장하기
-  const saveAsImage = (format) => {
-    if (canvas) {
-      const dataURL = canvas.toDataURL({
-        width: canvas.width,
-        height: canvas.height,
-        left: 0,
-        top: 0,
-        format: format,
-      });
-      const link = document.createElement("a");
-
-      // link.download = `${props.props}image.${format}`;
-      // link를 디비로 보내야 합니다.
-
-      link.href = dataURL;
-
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      setCanvasExport((prev) => [...prev, { id: props.props, img: link.href }]);
-    } else {
-      console.log("없나?");
-    }
   };
 
   return (
@@ -272,36 +339,83 @@ const TryCanvas = (props) => {
         ))}
       </Nav>
       {!activeTab && <Tooltab visible></Tooltab>}
-      <Tooltab visible={activeTab === IMAGE}></Tooltab>
+
+      <Tooltab visible={activeTab === TEXT}></Tooltab>
+
+      <Tooltab visible={activeTab === TEXTSTYLE}>
+        <Item>
+          <ItemTitle>글씨체</ItemTitle>
+          {fonts.map((item) =>
+            fonts.length > 0 ? (
+              <TabSelection
+                name={TEXTSTYLE + "-tab"}
+                stylename={item}
+                onClick={(e) => {
+                  selectFontStyle(item);
+                }}
+              />
+            ) : (
+              <div>폰트</div>
+            )
+          )}
+        </Item>
+        <Item>
+          <ItemTitle>정렬</ItemTitle>
+          {aligns.map((item) =>
+            aligns.length > 0 ? (
+              <TabSelection
+                name={TEXTSTYLE + "-tab"}
+                stylename={item}
+                onClick={(e) => {
+                  selectAlignStyle(item);
+                }}
+              />
+            ) : (
+              <div>얼라인</div>
+            )
+          )}
+        </Item>
+        <Item>
+          <ItemTitle>색</ItemTitle>
+          <TabSelection
+            name={TEXTSTYLE + "-tab"}
+            stylename={selcolor ? "black" : "white"}
+            onClick={(e) => {
+              selectColorStyle(selcolor);
+            }}
+          />
+        </Item>
+      </Tooltab>
+
+      <Tooltab visible={activeTab === DELETE}></Tooltab>
+
+      <Tooltab visible={activeTab === STICKER}>
+        {selectStickers.map((item) =>
+          selectStickers.length > 0 ? (
+            <TabSelection
+              name={STICKER + "-tab"}
+              idx={item.id}
+              src={item.src}
+              onClick={() => {
+                selectStickersShow(item.src);
+              }}
+            />
+          ) : null
+        )}
+      </Tooltab>
+
       <Tooltab visible={activeTab === USERIMAGE}>
         <input
           type='file'
           onChange={readImage}
         />
       </Tooltab>
-      <Tooltab visible={activeTab === TEXT}></Tooltab>
-      <Tooltab visible={activeTab === DELETE}></Tooltab>
-      <Tooltab visible={activeTab === STICKER}>
-        {selectStickers.map((item) =>
-          selectStickers.length > 0 ? (
-            <PageSelection
-              idx={item.id}
-              src={item.src}
-              onClick={(e) => {
-                selectStickersShow(item.src);
-              }}
-            />
-          ) : (
-            <div>가져오는 중...</div>
-          )
-        )}
-      </Tooltab>
 
       <canvas
         id='canvas'
         key={props.canvasid + "c"}
         ref={canvasRef}
-        style={{ border: "10px outset rgba(252, 222, 222, 1)", margin: "13% 1% 1% 3%" }}
+        style={{ margin: "2rem 0 0 0" }}
       />
     </CanvasFrame>
   );
