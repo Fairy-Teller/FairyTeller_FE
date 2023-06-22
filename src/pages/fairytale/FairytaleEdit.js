@@ -3,14 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { call } from "../../service/ApiService";
 import styled, { css } from "styled-components";
 
-import TryCanvas from "../../components/TryCanvas";
-import TitleModal from "./TitleModal";
+
+import TryCanvas from '../../components/TryCanvas';
+import TitleModal from '../../components/TitleModal';
+
 
 import PageSelectionFrame from "../../components/PageSelectionFrame";
 import PageSelection from "../../components/PageSelection";
 
-import { SampleDataState, SaveState } from "../../recoil/Fairytailstate";
-import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
+
+const NULL = 'NULL';
 
 const Container = styled.div`
   display: flex;
@@ -69,6 +71,42 @@ const FairytaleEdit = () => {
       });
       return updatedVisibility;
     });
+
+    const [saveAll, setSaveall] = useState(false);
+    const [showImage, setShowImage] = useState([]);
+    const [activeTab, setActiveTab] = useState(null);
+
+    const toggleCanvasVisibility = (id) => {
+        setActiveTab(id);
+        setCanvasVisibility((prevState) => {
+            const updatedVisibility = { ...prevState };
+            Object.keys(updatedVisibility).forEach((key) => {
+                updatedVisibility[key] = key == id ? true : false;
+            });
+            return updatedVisibility;
+        });
+
+        console.log(id);
+    };
+    useEffect(() => {
+        getNewest();
+        document.body.style.overflow = 'hidden';
+
+        return () => {
+            // 컴포넌트가 언마운트될 때 스크롤 가능하게 되돌림
+            document.body.style.overflow = 'auto';
+        };
+    }, []);
+
+    const getNewest = async () => {
+        try {
+            const data = await call('/book/my-newest', 'GET', null);
+            await setShowImage(data);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
+    };
+
 
     console.log(id);
   };
