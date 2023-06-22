@@ -33,7 +33,7 @@ const Button = styled.button`
   height: 50px;
   background: #99f0cc;
   border-radius: 10px;
-  font-family: "Amiri";
+
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
