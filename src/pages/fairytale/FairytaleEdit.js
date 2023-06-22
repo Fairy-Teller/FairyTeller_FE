@@ -11,11 +11,6 @@ import TitleModal from "../../components/TitleModal";
 import PageSelectionFrame from "../../components/PageSelectionFrame";
 import PageSelection from "../../components/PageSelection";
 
-const NULL = "NULL";
-const Container = styled.div`
-  display: flex;
-  position: relative;
-`;
 const Frame = styled.div`
   position: relative;
   // width: 95vw;
@@ -31,18 +26,6 @@ const Savebutton = styled.button`
   font-size: 30px;
   float: right;
 `;
-const Bar = styled.div`
-  width: 100hw;
-  height: 60px;
-  text-align: left;
-  background: #fcdede;
-  font-family: "Amiri";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 40px;
-  line-height: 60px;
-  color: #000000;
-`;
 
 const FairytaleEdit = () => {
   const [canvasVisibility, setCanvasVisibility] = useState({
@@ -52,6 +35,7 @@ const FairytaleEdit = () => {
     4: false,
     5: false,
   });
+
   const [saveAll, setSaveall] = useState(false);
   const [showImage, setShowImage] = useState([]);
   const [activeTab, setActiveTab] = useState(null);
@@ -70,6 +54,7 @@ const FairytaleEdit = () => {
 
     console.log(id);
   };
+
   useEffect(() => {
     getNewest();
     document.body.style.overflow = "hidden";
@@ -89,16 +74,16 @@ const FairytaleEdit = () => {
     }
   };
 
-  const [canvasWidth, canvasHeight] = [1280, 720];
   console.log(canvasVisibility);
+
   const saveClick = () => {
     setSaveall(true);
   };
+
   console.log(">>>", showImage);
 
   return (
     <div className='edit'>
-      <Bar>FairyTeller</Bar>
       <div
         style={{
           position: "absolute",
