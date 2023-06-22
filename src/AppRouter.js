@@ -12,7 +12,6 @@ import Logout from "./pages/user/Logout";
 import UpdateUser from "./pages/mypage/UpdateUser";
 import MyBookList from "./pages/mypage/MyBookList";
 import MyBookDetail from "./pages/mypage/MyBookDetail";
-
 //community
 import Board from "./pages/community/Board";
 import BoardDetail from "./pages/community/BoardDetail";
@@ -27,7 +26,7 @@ import StoryGenerated from "./pages/fairytale/StoryGenerated";
 import ImageGenerated from "./pages/fairytale/ImageGenerated";
 import StoryUser from "./pages/fairytale/StoryUser";
 //exam
-
+import LoadingBarExample from "./pages/fairytale/LoadingBarExample";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -56,6 +55,7 @@ function AppRouter() {
         <Route path="story-generated" element={<StoryGenerated />} />
         <Route path="image-generated" element={<ImageGenerated />} />
         <Route path="story-user" element={<StoryUser />} />
+        <Route path="loading-test" element={<LoadingBarExample />} />
       </Routes>
     </BrowserRouter>
   );

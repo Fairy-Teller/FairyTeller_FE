@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-import { call } from '../service/ApiService';
-import LoadingModal from './LoadingModal';
+import { call } from '../../service/ApiService';
+import LoadingModal from '../../components/LoadingModal';
 
-import { SaveState, Canvasexport } from '../recoil/Fairytailstate';
+import { SaveState, Canvasexport } from '../../recoil/Fairytailstate';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { async } from 'q';
 
@@ -79,6 +79,11 @@ const bookData = {
     ],
 };
 
+// 여기서 save state바꾸고 난 다음에 제목 입력 후, 최종 저장이 이뤄지는 프로세스로 가야합니다.
+// 캔버스내에서 리코일에 저장된 이미지를 불러와서 명세에 맞게 파싱한다음 DB로 보냅시다.
+// 그 다음엔 네비게이트로 f-export를 실행합니다.
+// 722
+
 const TitleModal = (bookid) => {
     const navigate = useNavigate();
     const saveState = useSetRecoilState(SaveState);
@@ -113,7 +118,7 @@ const TitleModal = (bookid) => {
 
     const onChangeHandler = (e) => {
         // title 적용하는 부분
-        // 한글자씩 밀림 (수정!!!)
+        // 한글자씩 밀림 
         setTitle(e.target.value);
         bookData.title = titles;
     };

@@ -38,37 +38,82 @@ export const BookState = atom({
   },
 });
 
-export const SavedBoolState = atom({
-  key: "SavedBoolState",
-  default: [false, false, false, false, false],
+export const ImageState = atom({
+  key: "ImageState",
+  default: { url: "" },
 });
 
-export const AllSavedBoolState = atom({
-  key: "AllSavedBoolState",
-  default: false,
+export const SelectedImageState = atom({
+  key: "SelectedImageState",
+  default: [
+    {
+      id: 1,
+      src: "./images/sample.jpg",
+    },
+    {
+      id: 2,
+      src: "./images/sample.jpg",
+    },
+    {
+      id: 3,
+      src: "./images/sample.jpg",
+    },
+    {
+      id: 4,
+      src: "./images/sample.jpg",
+    },
+    {
+      id: 5,
+      src: "./images/sample.jpg",
+    },
+  ],
 });
 
-export const GeneratedBoolState = atom({
-  key: "GeneratedBoolState",
-  default: [false, false, false, false, false],
+export const SampleDataState = atom({
+  key: "SampleDataState",
+  default: [
+    {
+      id: 1,
+      bookId: 1,
+      title: null,
+      thumbnailUrl: null,
+      pages: [
+        {
+          id: 1,
+          src: "./images/sample.jpg",
+          sampledata: "ivory",
+        },
+        {
+          id: 2,
+          src: "./images/sample.png",
+          sampledata: "orange",
+        },
+        {
+          id: 3,
+          src: "./images/img-default.png",
+          sampledata: "yellow",
+        },
+        {
+          id: 4,
+          src: "./images/sample.jpg",
+          sampledata: "green",
+        },
+        {
+          id: 5,
+          src: "./images/sample.png",
+          sampledata: "skyblue",
+        },
+      ],
+    },
+  ],
 });
 
-export const GeneratedCountState = atom({
-  key: "GeneratedCountState",
-  default: [3, 3, 3, 3, 3],
-});
-
-// ==============================================
-
-
-// 스티커 저장하는 state - edit페이지에서 사용 
-// (추후 DB에서 관리될 예정 백엔드 작업이 선제되어야 함)
 export const SelectStickers = atom({
   key: "SelectStickers",
   default: [
     {
       id: 1,
-      src: "https://fairyteller-dev.s3.ap-northeast-2.amazonaws.com/stickers/01.png",
+      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQshoMsYa1hFvjaMAwebiP2l99ssM_XWVrp7g&usqp=CAU",
     },
     {
       id: 2,
@@ -105,18 +150,33 @@ export const SelectStickers = atom({
   ],
 });
 
-// 각 캔버스를 통합할 수 있는 전역적 save state 
-// TryCanvas에서 사용
 export const SaveState = atom({
   key: "SaveState",
   default: "none",
 });
 
-// TryCanvas에서 사용
 export const Canvasexport = atom({
   key: "Canvasexport",
   default: [],
   effects_UNSTABLE: [persistAtom],
 });
 
+export const SavedBoolState = atom({
+  key: "SavedBoolState",
+  default: [false, false, false, false, false],
+});
 
+export const AllSavedBoolState = atom({
+  key: "AllSavedBoolState",
+  default: false,
+});
+
+export const GeneratedBoolState = atom({
+  key: "GeneratedBoolState",
+  default: [false, false, false, false, false],
+});
+
+export const GeneratedCountState = atom({
+  key: "GeneratedCountState",
+  default: [3, 3, 3, 3, 3],
+});
