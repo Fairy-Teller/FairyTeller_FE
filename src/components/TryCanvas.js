@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import {
   atomFamily,
   useRecoilState,
@@ -86,21 +86,23 @@ const TryCanvas = (props) => {
   const saveState = useRecoilValue(SaveState); // 캔버스 저장 버튼 useEffect에 쓰기 위함 state
   const setCanvasExport = useSetRecoilState(Canvasexport); // 캔버스 내보내기 state
   // const showCanvasExport = useRecoilValue(Canvasexport); // console.log 용 state
-  const resetCanvasexport = useResetRecoilState(Canvasexport); // 첫 랜더링 될 때, 이전 저장된 이미지 state삭제
+  const resetCanvasexport = useResetRecoilState(Canvasexport); // 첫 랜더링 될 때, 이전 저장된 이미지 state 삭제
 
   // const [savedCanvasState, setSavedCanvasState] = useRecoilState(canvasState(props.canvasid));
   const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
   const [showImage, setShowImage] = useState(props.BookId);
 
-  const [canvas, setCanvas] = useState();
+  const [canvas, setCanvas] = useState(null);
   // const bookInfo = useRef(null);
   const [showEditToolTab, setShowEditToolTab] = useState(false); // Add new state variable
 
-  // 최신 저장 가져오기
   useEffect(() => {
-    getNewest();
+    try {
+      getNewest();
+    } catch {}
   }, []);
 
+  // 최신 저장 가져오기
   const getNewest = async () => {
     try {
       const data = await call("/book/my-newest", "GET", null);
@@ -109,7 +111,7 @@ const TryCanvas = (props) => {
       const initializedCanvas = initCanvas(data);
       setCanvas(initializedCanvas);
 
-      resetCanvasexport();
+      resetCanvasexport(null);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
@@ -147,7 +149,7 @@ const TryCanvas = (props) => {
 
   // 캔버스 초기화
   const initCanvas = (data) => {
-    console.log("data", data);
+    // console.log("data", data);
 
     const canvas = new fabric.Canvas(canvasRef.current, {
       height: 720,
@@ -160,16 +162,16 @@ const TryCanvas = (props) => {
 
     fabric.Image.fromURL(
       data.pages[props.idx - 1].originalImageUrl + "?timestamp=" + new Date().getTime(),
-      (image) => {
-        canvas.setBackgroundImage(image, canvas.renderAll.bind(canvas), {
-          scaleX: canvas.width / image.width,
-          scaleY: canvas.height / image.height,
+      (defimage) => {
+        canvas.setBackgroundImage(defimage, canvas.renderAll.bind(canvas), {
+          scaleX: canvas.width / defimage.width,
+          scaleY: canvas.height / defimage.height,
         });
       },
       { crossOrigin: "anonymous" }
     );
 
-    let text = new fabric.Textbox(data.pages[props.idx - 1].fullStory, {
+    let deftext = new fabric.Textbox(data.pages[props.idx - 1].fullStory, {
       selectable: true,
       originX: "center",
       originY: "center",
@@ -197,8 +199,7 @@ const TryCanvas = (props) => {
             }
       ),
     });
-
-    canvas.add(text);
+    canvas.add(deftext);
 
     return canvas;
   };
@@ -273,18 +274,18 @@ const TryCanvas = (props) => {
     }
   };
 
-  const [selcolor, setSelColor] = useState(true); // true : 'white'
+  const [selectColor, setSelectColor] = useState(true); // true : 'white'
 
   // 색
   const selectColorStyle = () => {
     const activeObject = canvas.getActiveObject();
     if (activeObject && (activeObject.type === "textbox" || "text")) {
-      setSelColor(activeObject.fill === "white" ? true : false);
+      setSelectColor(activeObject.fill === "white" ? true : false);
 
       activeObject.set({
-        fill: selcolor ? "white" : "black",
+        fill: selectColor ? "white" : "black",
         shadow: new fabric.Shadow(
-          selcolor
+          selectColor
             ? {
                 color: "rgba(34, 34, 34, 0.8)",
                 blur: 8,
@@ -301,7 +302,7 @@ const TryCanvas = (props) => {
       });
       canvas.requestRenderAll();
 
-      setSelColor(!selcolor);
+      setSelectColor(!selectColor);
     } else if (!activeObject) {
       alert("VACANT");
     } else {
@@ -359,8 +360,24 @@ const TryCanvas = (props) => {
     );
   };
 
+  // 현재 활성 객체
+  const [currActiveObject, setCurrActiveObject] = useState(null);
+
+  const getCurrActiveObject = (e) => {
+    if (e.target) {
+      setCurrActiveObject(canvas.getActiveObject());
+    }
+  };
+
+  if (canvas) {
+    canvas.on("mouse:down:before", getCurrActiveObject);
+  }
+
+  // redo/undo
+
   return (
     <CanvasFrame>
+      {console.log(currActiveObject)}
       <Nav>
         {btnLabels.map((label) => (
           <Tab
@@ -370,6 +387,9 @@ const TryCanvas = (props) => {
             <h2>{label}</h2>
           </Tab>
         ))}
+        {/* <button onClick={() => handleUndo(indexInHistory, history, setIndexInHistory)}>Undo</button>
+        <br>
+        <button onClick={() => handleRedo(indexInHistory, setIndexInHistory)}>Redo</button> */}
       </Nav>
       {!activeTab && <Tooltab visible></Tooltab>}
 
@@ -412,9 +432,16 @@ const TryCanvas = (props) => {
           <ItemTitle>색</ItemTitle>
           <TabSelection
             name={TEXTSTYLE + "-tab"}
-            stylename={selcolor ? "white" : "black"}
+            stylename='white'
             onClick={(e) => {
-              selectColorStyle(selcolor);
+              selectColorStyle(e.target.stylename);
+            }}
+          />
+          <TabSelection
+            name={TEXTSTYLE + "-tab"}
+            stylename='black'
+            onClick={(e) => {
+              selectColorStyle(e.target.stylename);
             }}
           />
         </Item>
@@ -448,7 +475,7 @@ const TryCanvas = (props) => {
         id='canvas'
         key={props.canvasid + "c"}
         ref={canvasRef}
-        style={{ margin: "2rem 0 0 0" }}
+        style={{ margin: "4% 0 0 0" }}
       />
     </CanvasFrame>
   );

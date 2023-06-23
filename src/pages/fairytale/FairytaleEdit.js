@@ -28,7 +28,7 @@ const Savebutton = styled.button`
 const FairytaleEdit = () => {
   const [saveAll, setSaveall] = useState(false);
   const [showImage, setShowImage] = useState([]);
-  const [activeTab, setActiveTab] = useState(null);
+  const [activeTab, setActiveTab] = useState(1);
   const saveState = useResetRecoilState(SaveState);
   const [canvasVisibility, setCanvasVisibility] = useState({
     1: true,
