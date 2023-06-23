@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
-import { SaveState } from "../../recoil/Fairytailstate";
+import { SaveState } from "../../recoil/FairytaleState";
 import { call } from "../../service/ApiService";
 import styled, { css } from "styled-components";
-import TryCanvas from "../../components/TryCanvas";
+import Canvas from "../../components/Canvas";
 import TitleModal from "../../components/TitleModal";
 import Header from "../../components/global/Header";
 import PageSelectionFrame from "../../components/PageSelectionFrame";
@@ -26,6 +26,10 @@ const Savebutton = styled.button`
 `;
 
 const FairytaleEdit = () => {
+  const [saveAll, setSaveall] = useState(false);
+  const [showImage, setShowImage] = useState([]);
+  const [activeTab, setActiveTab] = useState(1);
+  const saveState = useResetRecoilState(SaveState);
   const [canvasVisibility, setCanvasVisibility] = useState({
     1: true,
     2: false,
@@ -34,26 +38,17 @@ const FairytaleEdit = () => {
     5: false,
   });
 
-  const [saveAll, setSaveall] = useState(false);
-  const [showImage, setShowImage] = useState([]);
-  const [activeTab, setActiveTab] = useState(null);
-
-  const saveState = useResetRecoilState(SaveState);
-
   const toggleCanvasVisibility = (id) => {
     setActiveTab(id);
-
     setCanvasVisibility((prevState) => {
       const updatedVisibility = { ...prevState };
 
       Object.keys(updatedVisibility).forEach((key) => {
-        updatedVisibility[key] = key == id ? true : false;
+        updatedVisibility[key] = Number(key) === id ? true : false;
       });
-
       return updatedVisibility;
     });
-
-    console.log(id);
+    console.log("id", id, activeTab);
   };
 
   useEffect(() => {
@@ -75,8 +70,6 @@ const FairytaleEdit = () => {
     }
   };
 
-  console.log(canvasVisibility);
-
   const saveClick = () => {
     setSaveall(true);
   };
@@ -93,7 +86,7 @@ const FairytaleEdit = () => {
             style={{
               display: canvasVisibility[key] ? "block" : "none",
             }}>
-            <TryCanvas
+            <Canvas
               idx={Number(key)}
               BookInfo={showImage}
             />

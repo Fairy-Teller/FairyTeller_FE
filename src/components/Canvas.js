@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useReducer } from "react";
 import {
   atomFamily,
   useRecoilState,
@@ -6,12 +6,11 @@ import {
   useSetRecoilState,
   useResetRecoilState,
 } from "recoil";
-import { SelectStickers, SaveState, Canvasexport } from "../recoil/Fairytailstate";
+import { SelectStickers, SaveState, Canvasexport } from "../recoil/FairytaleState";
 import { call } from "../service/ApiService";
 import styled, { css } from "styled-components";
 import { fabric } from "fabric";
-import PageSelection from "../components/PageSelection";
-import TabSelection from "../components/TabSelection";
+import TabSelection from "./TabSelection";
 
 const [IMAGE, USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER] = [
   "AI삽화",
@@ -25,11 +24,6 @@ const [NOTO, TAEB] = ["Noto Sans KR", "TAEBAEK milkyway"];
 const fonts = [NOTO, TAEB];
 const [LEFT, CENTER, RIGHT] = ["left", "center", "right"];
 const aligns = [LEFT, CENTER, RIGHT];
-
-const canvasState = atomFamily({
-  key: "canvasState",
-  default: null,
-});
 
 const CanvasFrame = styled.div`
   display: flex;
@@ -81,32 +75,34 @@ const ItemTitle = styled.div`
   font-size: 2.4rem;
 `;
 
-const TryCanvas = (props) => {
+const Canvas = (props) => {
   const btnLabels = [USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER];
   const canvasRef = useRef(null);
-  const fabricCanvasRef = useRef(null);
+  // const fabricCanvasRef = useRef(null);
   // const [canvasStates, setCanvasStates] = useState({});
 
   const [activeTab, setActiveTab] = useState(null); // 수정탭 출력 여부를 위한 state
   const selectStickers = useRecoilValue(SelectStickers); // 선택한 스티커의 정보 state
   const saveState = useRecoilValue(SaveState); // 캔버스 저장 버튼 useEffect에 쓰기 위함 state
   const setCanvasExport = useSetRecoilState(Canvasexport); // 캔버스 내보내기 state
-  const showCanvasExport = useRecoilValue(Canvasexport); // console.log 용 state
-  const resetCanvasexport = useResetRecoilState(Canvasexport); // 첫 랜더링 될 때, 이전 저장된 이미지 state삭제
+  // const showCanvasExport = useRecoilValue(Canvasexport); // console.log 용 state
+  const resetCanvasexport = useResetRecoilState(Canvasexport); // 첫 랜더링 될 때, 이전 저장된 이미지 state 삭제
 
-  const [savedCanvasState, setSavedCanvasState] = useRecoilState(canvasState(props.canvasid));
+  // const [savedCanvasState, setSavedCanvasState] = useRecoilState(canvasState(props.canvasid));
   const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
   const [showImage, setShowImage] = useState(props.BookId);
 
-  const [canvas, setCanvas] = useState();
-  const bookInfo = useRef(null);
+  const [canvas, setCanvas] = useState(null);
+  // const bookInfo = useRef(null);
   const [showEditToolTab, setShowEditToolTab] = useState(false); // Add new state variable
 
-  // 최신 저장 가져오기
   useEffect(() => {
-    getNewest();
+    try {
+      getNewest();
+    } catch {}
   }, []);
 
+  // 최신 저장 가져오기
   const getNewest = async () => {
     try {
       const data = await call("/book/my-newest", "GET", null);
@@ -114,7 +110,8 @@ const TryCanvas = (props) => {
 
       const initializedCanvas = initCanvas(data);
       setCanvas(initializedCanvas);
-      resetCanvasexport();
+
+      resetCanvasexport(null);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
@@ -152,7 +149,7 @@ const TryCanvas = (props) => {
 
   // 캔버스 초기화
   const initCanvas = (data) => {
-    console.log("data", data);
+    // console.log("data", data);
 
     const canvas = new fabric.Canvas(canvasRef.current, {
       height: 720,
@@ -165,16 +162,16 @@ const TryCanvas = (props) => {
 
     fabric.Image.fromURL(
       data.pages[props.idx - 1].originalImageUrl + "?timestamp=" + new Date().getTime(),
-      (image) => {
-        canvas.setBackgroundImage(image, canvas.renderAll.bind(canvas), {
-          scaleX: canvas.width / image.width,
-          scaleY: canvas.height / image.height,
+      (defimage) => {
+        canvas.setBackgroundImage(defimage, canvas.renderAll.bind(canvas), {
+          scaleX: canvas.width / defimage.width,
+          scaleY: canvas.height / defimage.height,
         });
       },
       { crossOrigin: "anonymous" }
     );
 
-    let text = new fabric.Textbox(data.pages[props.idx - 1].fullStory, {
+    let deftext = new fabric.Textbox(data.pages[props.idx - 1].fullStory, {
       selectable: true,
       originX: "center",
       originY: "center",
@@ -185,16 +182,24 @@ const TryCanvas = (props) => {
       fontFamily: TAEB,
       fontSize: 32,
       lineHeight: 1.4,
-      fill: "white",
-      shadow: new fabric.Shadow({
-        color: "rgba(34, 34, 100, 0.4)",
-        blur: 1,
-        offsetX: -4,
-        offsetY: 4,
-      }),
+      fill: data.pages[props.idx - 1].dark ? "white" : "black",
+      shadow: new fabric.Shadow(
+        data.pages[props.idx - 1].dark
+          ? {
+              color: "rgba(34, 34, 34, 0.8)",
+              blur: 8,
+              offsetX: 4,
+              offsetY: 4,
+            }
+          : {
+              color: "rgba(255, 255, 255, 0.625)",
+              blur: 8,
+              offsetX: 4,
+              offsetY: 4,
+            }
+      ),
     });
-
-    canvas.add(text);
+    canvas.add(deftext);
 
     return canvas;
   };
@@ -227,10 +232,11 @@ const TryCanvas = (props) => {
       fontFamily: TAEB,
       fontSize: 32,
       lineHeight: 1.4,
+      fill: "white",
       shadow: new fabric.Shadow({
-        color: "rgba(34, 34, 100, 0.4)",
-        blur: 1,
-        offsetX: -4,
+        color: "rgba(34, 34, 34, 0.8)",
+        blur: 8,
+        offsetX: 4,
         offsetY: 4,
       }),
     });
@@ -238,54 +244,56 @@ const TryCanvas = (props) => {
     canvas.add(text);
   };
 
-  // 폰트
-  const selectFontStyle = (item) => {
-    const activeObject = canvas.getActiveObject();
+  // 텍스트 스타일링
+  const stylesReducer = (state, action) => {
+    const activeObject = action.canvas.getActiveObject();
 
-    if (activeObject && (activeObject.type === "textbox" || "text")) {
-      activeObject.set("fontFamily", item);
+    if (!activeObject || !(activeObject.type === "textbox" || "text")) {
+      return {
+        ...state,
+        message: activeObject ? "NOT A TEXT" : "VACANT",
+      };
+    }
 
-      canvas.requestRenderAll();
-    } else if (!activeObject) {
-      alert("VACANT");
-    } else {
-      alert("NOT A TEXT");
+    switch (action.type) {
+      case "fontStyle":
+        activeObject.set("fontFamily", action.payload);
+        action.canvas.requestRenderAll();
+        return state;
+      case "alignStyle":
+        activeObject.set("textAlign", action.payload);
+        action.canvas.requestRenderAll();
+        return state;
+      case "colorStyle":
+        activeObject.set({
+          fill: action.payload ? "white" : "black",
+          shadow: new fabric.Shadow(
+            action.payload
+              ? {
+                  color: "rgba(34, 34, 34, 0.8)",
+                  blur: 8,
+                  offsetX: 4,
+                  offsetY: 4,
+                }
+              : {
+                  color: "rgba(255, 255, 255, 0.625)",
+                  blur: 8,
+                  offsetX: 4,
+                  offsetY: 4,
+                }
+          ),
+        });
+        action.canvas.requestRenderAll();
+        return {
+          ...state,
+          selectColor: !action.payload,
+        };
+      default:
+        return state;
     }
   };
 
-  // 얼라인
-  const selectAlignStyle = (item) => {
-    const activeObject = canvas.getActiveObject();
-
-    if (activeObject && (activeObject.type === "textbox" || "text")) {
-      activeObject.set("textAlign", item);
-
-      canvas.requestRenderAll();
-    } else if (!activeObject) {
-      alert("VACANT");
-    } else {
-      alert("NOT A TEXT");
-    }
-  };
-
-  const [selcolor, setSelColor] = useState(true);
-
-  // 색
-  const selectColorStyle = () => {
-    const activeObject = canvas.getActiveObject();
-    if (activeObject && (activeObject.type === "textbox" || "text")) {
-      const nextColor = selcolor ? "black" : "white";
-
-      activeObject.set({ fill: nextColor });
-      canvas.requestRenderAll();
-
-      setSelColor(!selcolor);
-    } else if (!activeObject) {
-      alert("VACANT");
-    } else {
-      alert("NOT A TEXT");
-    }
-  };
+  const [state, dispatch] = useReducer(stylesReducer, { selectColor: true });
 
   // 삭제
   const deleteObject = () => {
@@ -337,8 +345,24 @@ const TryCanvas = (props) => {
     );
   };
 
+  // 현재 활성 객체
+  const [currActiveObject, setCurrActiveObject] = useState(null);
+
+  const getCurrActiveObject = (e) => {
+    if (e.target) {
+      setCurrActiveObject(canvas.getActiveObject());
+    }
+  };
+
+  if (canvas) {
+    canvas.on("mouse:down:before", getCurrActiveObject);
+  }
+
+  // redo/undo
+
   return (
     <CanvasFrame>
+      {console.log(currActiveObject)}
       <Nav>
         {btnLabels.map((label) => (
           <Tab
@@ -348,6 +372,9 @@ const TryCanvas = (props) => {
             <h2>{label}</h2>
           </Tab>
         ))}
+        {/* <button onClick={() => handleUndo(indexInHistory, history, setIndexInHistory)}>Undo</button>
+        <br>
+        <button onClick={() => handleRedo(indexInHistory, setIndexInHistory)}>Redo</button> */}
       </Nav>
       {!activeTab && <Tooltab visible></Tooltab>}
 
@@ -362,7 +389,7 @@ const TryCanvas = (props) => {
                 name={TEXTSTYLE + "-tab"}
                 stylename={item}
                 onClick={(e) => {
-                  selectFontStyle(item);
+                  dispatch({ type: "fontStyle", payload: item, canvas: canvas });
                 }}
               />
             ) : (
@@ -378,7 +405,7 @@ const TryCanvas = (props) => {
                 name={TEXTSTYLE + "-tab"}
                 stylename={item}
                 onClick={(e) => {
-                  selectAlignStyle(item);
+                  dispatch({ type: "alignStyle", payload: item, canvas: canvas });
                 }}
               />
             ) : (
@@ -390,9 +417,24 @@ const TryCanvas = (props) => {
           <ItemTitle>색</ItemTitle>
           <TabSelection
             name={TEXTSTYLE + "-tab"}
-            stylename={selcolor ? "black" : "white"}
+            stylename='white'
             onClick={(e) => {
-              selectColorStyle(selcolor);
+              dispatch({
+                type: "colorStyle",
+                payload: true,
+                canvas: canvas,
+              });
+            }}
+          />
+          <TabSelection
+            name={TEXTSTYLE + "-tab"}
+            stylename='black'
+            onClick={(e) => {
+              dispatch({
+                type: "colorStyle",
+                payload: false,
+                canvas: canvas,
+              });
             }}
           />
         </Item>
@@ -426,10 +468,10 @@ const TryCanvas = (props) => {
         id='canvas'
         key={props.canvasid + "c"}
         ref={canvasRef}
-        style={{ margin: "2rem 0 0 0" }}
+        style={{ margin: "4% 0 0 0" }}
       />
     </CanvasFrame>
   );
 };
 
-export default TryCanvas;
+export default Canvas;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
-import { SavedBoolState, StoryState, ImageTempState, BookState } from "../recoil/Fairytailstate";
+import { SavedBoolState, StoryState, ImageTempState, BookState } from "../recoil/FairytaleState";
 import { call } from "../service/ApiService";
 import styled from "styled-components";
 import LoadingModal from "./LoadingModal";
