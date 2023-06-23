@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
-import { SavedBoolState, AllSavedBoolState, StoryState } from "../../recoil/Fairytailstate";
+import { SavedBoolState, AllSavedBoolState, StoryState } from "../../recoil/FairytaleState";
 import styled from "styled-components";
 import Header from "../../components/global/Header";
 import ProgressBar from "../../components/global/ProgressBar";

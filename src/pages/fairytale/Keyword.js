@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilCallback } from "recoil";
-import { SelectedKeywordsState, StoryState } from "../../recoil/Fairytailstate";
+import { SelectedKeywordsState, StoryState } from "../../recoil/FairytaleState";
 import { call } from "../../service/ApiService";
 import styled from "styled-components";
 import Header from "../../components/global/Header";

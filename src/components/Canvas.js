@@ -6,11 +6,11 @@ import {
   useSetRecoilState,
   useResetRecoilState,
 } from "recoil";
-import { SelectStickers, SaveState, Canvasexport } from "../recoil/Fairytailstate";
+import { SelectStickers, SaveState, Canvasexport } from "../recoil/FairytaleState";
 import { call } from "../service/ApiService";
 import styled, { css } from "styled-components";
 import { fabric } from "fabric";
-import TabSelection from "../components/TabSelection";
+import TabSelection from "./TabSelection";
 
 const [IMAGE, USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER] = [
   "AI삽화",
@@ -75,7 +75,7 @@ const ItemTitle = styled.div`
   font-size: 2.4rem;
 `;
 
-const TryCanvas = (props) => {
+const Canvas = (props) => {
   const btnLabels = [USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER];
   const canvasRef = useRef(null);
   // const fabricCanvasRef = useRef(null);
@@ -474,4 +474,4 @@ const TryCanvas = (props) => {
   );
 };
 
-export default TryCanvas;
+export default Canvas;

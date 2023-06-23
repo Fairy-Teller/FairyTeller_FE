@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
-import { GeneratedBoolState, GeneratedCountState } from "../recoil/Fairytailstate";
+import { GeneratedBoolState, GeneratedCountState } from "../recoil/FairytaleState";
 import styled from "styled-components";
 
 const Button = styled.button`

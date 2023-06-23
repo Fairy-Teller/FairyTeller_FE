@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { call } from "../service/ApiService";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { ImageTempState } from "../recoil/Fairytailstate";
+import { ImageTempState } from "../recoil/FairytaleState";
 import styled from "styled-components";
 
 const ImageContainerFrame = styled.div`

@@ -60,8 +60,7 @@ export const GeneratedCountState = atom({
 
 // ==============================================
 
-
-// 스티커 저장하는 state - edit페이지에서 사용 
+// 스티커 저장하는 state - edit페이지에서 사용
 // (추후 DB에서 관리될 예정 백엔드 작업이 선제되어야 함)
 export const SelectStickers = atom({
   key: "SelectStickers",
@@ -105,14 +104,14 @@ export const SelectStickers = atom({
   ],
 });
 
-// 각 캔버스를 통합할 수 있는 전역적 save state 
-// TryCanvas에서 사용
+// 각 캔버스를 통합할 수 있는 전역적 save state
+// Canvas에서 사용
 export const SaveState = atom({
   key: "SaveState",
   default: "none",
 });
 
-// TryCanvas에서 사용
+// Canvas에서 사용
 export const Canvasexport = atom({
   key: "Canvasexport",
   default: [],
@@ -123,4 +122,3 @@ export const BookPage = atom({
   key: "BookPage",
   default: 0,
 });
-
