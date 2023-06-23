@@ -21,7 +21,7 @@ const Home = () => {
       transform: translateX(0%);
     }
     100% {
-      transform: translateX(-50%);
+      transform: translateX(-20%);
     }
   `;
     const ImageLogo = styled.img`
@@ -45,7 +45,7 @@ const Home = () => {
     const containerFadeIn = keyframes`
        0% {
       opacity: 0;
-      transform: translateY(-20px);
+      transform: translateY(-25px);
     }
     100% {
       opacity: 1;
@@ -60,7 +60,7 @@ const Home = () => {
         width: 200%;
         height: 100vh;
         object-fit: cover;
-        animation: ${slideAnimation} 50s infinite linear;
+        animation: ${slideAnimation} 30s infinite linear;
         background-repeat: repeat;
         background-image: url('images/CartoonStarryNight.png');
     `;
