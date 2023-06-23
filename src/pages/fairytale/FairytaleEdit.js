@@ -26,6 +26,10 @@ const Savebutton = styled.button`
 `;
 
 const FairytaleEdit = () => {
+  const [saveAll, setSaveall] = useState(false);
+  const [showImage, setShowImage] = useState([]);
+  const [activeTab, setActiveTab] = useState(null);
+  const saveState = useResetRecoilState(SaveState);
   const [canvasVisibility, setCanvasVisibility] = useState({
     1: true,
     2: false,
@@ -34,26 +38,17 @@ const FairytaleEdit = () => {
     5: false,
   });
 
-  const [saveAll, setSaveall] = useState(false);
-  const [showImage, setShowImage] = useState([]);
-  const [activeTab, setActiveTab] = useState(null);
-
-  const saveState = useResetRecoilState(SaveState);
-
   const toggleCanvasVisibility = (id) => {
     setActiveTab(id);
-
     setCanvasVisibility((prevState) => {
       const updatedVisibility = { ...prevState };
 
       Object.keys(updatedVisibility).forEach((key) => {
-        updatedVisibility[key] = key == id ? true : false;
+        updatedVisibility[key] = Number(key) === id ? true : false;
       });
-
       return updatedVisibility;
     });
-
-    console.log(id);
+    console.log("id", id, activeTab);
   };
 
   useEffect(() => {
@@ -74,8 +69,6 @@ const FairytaleEdit = () => {
       console.log("Error fetching data:", error);
     }
   };
-
-  console.log(canvasVisibility);
 
   const saveClick = () => {
     setSaveall(true);

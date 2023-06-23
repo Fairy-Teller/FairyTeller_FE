@@ -10,7 +10,6 @@ import { SelectStickers, SaveState, Canvasexport } from "../recoil/Fairytailstat
 import { call } from "../service/ApiService";
 import styled, { css } from "styled-components";
 import { fabric } from "fabric";
-import PageSelection from "../components/PageSelection";
 import TabSelection from "../components/TabSelection";
 
 const [IMAGE, USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER] = [
@@ -25,11 +24,6 @@ const [NOTO, TAEB] = ["Noto Sans KR", "TAEBAEK milkyway"];
 const fonts = [NOTO, TAEB];
 const [LEFT, CENTER, RIGHT] = ["left", "center", "right"];
 const aligns = [LEFT, CENTER, RIGHT];
-
-const canvasState = atomFamily({
-  key: "canvasState",
-  default: null,
-});
 
 const CanvasFrame = styled.div`
   display: flex;
@@ -84,22 +78,22 @@ const ItemTitle = styled.div`
 const TryCanvas = (props) => {
   const btnLabels = [USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER];
   const canvasRef = useRef(null);
-  const fabricCanvasRef = useRef(null);
+  // const fabricCanvasRef = useRef(null);
   // const [canvasStates, setCanvasStates] = useState({});
 
   const [activeTab, setActiveTab] = useState(null); // 수정탭 출력 여부를 위한 state
   const selectStickers = useRecoilValue(SelectStickers); // 선택한 스티커의 정보 state
   const saveState = useRecoilValue(SaveState); // 캔버스 저장 버튼 useEffect에 쓰기 위함 state
   const setCanvasExport = useSetRecoilState(Canvasexport); // 캔버스 내보내기 state
-  const showCanvasExport = useRecoilValue(Canvasexport); // console.log 용 state
+  // const showCanvasExport = useRecoilValue(Canvasexport); // console.log 용 state
   const resetCanvasexport = useResetRecoilState(Canvasexport); // 첫 랜더링 될 때, 이전 저장된 이미지 state삭제
 
-  const [savedCanvasState, setSavedCanvasState] = useRecoilState(canvasState(props.canvasid));
+  // const [savedCanvasState, setSavedCanvasState] = useRecoilState(canvasState(props.canvasid));
   const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
   const [showImage, setShowImage] = useState(props.BookId);
 
   const [canvas, setCanvas] = useState();
-  const bookInfo = useRef(null);
+  // const bookInfo = useRef(null);
   const [showEditToolTab, setShowEditToolTab] = useState(false); // Add new state variable
 
   // 최신 저장 가져오기
@@ -114,6 +108,7 @@ const TryCanvas = (props) => {
 
       const initializedCanvas = initCanvas(data);
       setCanvas(initializedCanvas);
+
       resetCanvasexport();
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -185,13 +180,22 @@ const TryCanvas = (props) => {
       fontFamily: TAEB,
       fontSize: 32,
       lineHeight: 1.4,
-      fill: "white",
-      shadow: new fabric.Shadow({
-        color: "rgba(34, 34, 100, 0.4)",
-        blur: 1,
-        offsetX: -4,
-        offsetY: 4,
-      }),
+      fill: data.pages[props.idx - 1].dark ? "white" : "black",
+      shadow: new fabric.Shadow(
+        data.pages[props.idx - 1].dark
+          ? {
+              color: "rgba(34, 34, 34, 0.8)",
+              blur: 8,
+              offsetX: 4,
+              offsetY: 4,
+            }
+          : {
+              color: "rgba(255, 255, 255, 0.625)",
+              blur: 8,
+              offsetX: 4,
+              offsetY: 4,
+            }
+      ),
     });
 
     canvas.add(text);
@@ -227,10 +231,11 @@ const TryCanvas = (props) => {
       fontFamily: TAEB,
       fontSize: 32,
       lineHeight: 1.4,
+      fill: "white",
       shadow: new fabric.Shadow({
-        color: "rgba(34, 34, 100, 0.4)",
-        blur: 1,
-        offsetX: -4,
+        color: "rgba(34, 34, 34, 0.8)",
+        blur: 8,
+        offsetX: 4,
         offsetY: 4,
       }),
     });
@@ -268,15 +273,32 @@ const TryCanvas = (props) => {
     }
   };
 
-  const [selcolor, setSelColor] = useState(true);
+  const [selcolor, setSelColor] = useState(true); // true : 'white'
 
   // 색
   const selectColorStyle = () => {
     const activeObject = canvas.getActiveObject();
     if (activeObject && (activeObject.type === "textbox" || "text")) {
-      const nextColor = selcolor ? "black" : "white";
+      setSelColor(activeObject.fill === "white" ? true : false);
 
-      activeObject.set({ fill: nextColor });
+      activeObject.set({
+        fill: selcolor ? "white" : "black",
+        shadow: new fabric.Shadow(
+          selcolor
+            ? {
+                color: "rgba(34, 34, 34, 0.8)",
+                blur: 8,
+                offsetX: 4,
+                offsetY: 4,
+              }
+            : {
+                color: "rgba(255, 255, 255, 0.625)",
+                blur: 8,
+                offsetX: 4,
+                offsetY: 4,
+              }
+        ),
+      });
       canvas.requestRenderAll();
 
       setSelColor(!selcolor);
@@ -390,7 +412,7 @@ const TryCanvas = (props) => {
           <ItemTitle>색</ItemTitle>
           <TabSelection
             name={TEXTSTYLE + "-tab"}
-            stylename={selcolor ? "black" : "white"}
+            stylename={selcolor ? "white" : "black"}
             onClick={(e) => {
               selectColorStyle(selcolor);
             }}
