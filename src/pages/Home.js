@@ -1,27 +1,106 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import "../css/home.css";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled, { keyframes } from 'styled-components';
+import '../css/home.css';
 
 const Home = () => {
-  const [showMain, setShowMain] = useState(false);
+    const [showMain, setShowMain] = useState(false);
+    const navigation = useNavigate();
 
-  useEffect(() => {
-    setShowMain(true);
-  }, []);
+    const ImagesContainer = styled.div`
+        position: relative;
+    `;
 
-  return (
-    <div id="main-background" className={showMain ? "show" : ""}>
-      <div id="main-logo">
-        <h1>fairyTeller</h1>
-        <h3>AI를 활용한 나만의 동화 만들기</h3>
-      </div>
-      <div id="main-button">
-        <Link to="/login">
-          <button>동화 만들기</button>
-        </Link>
-      </div>
-    </div>
-  );
+    const slideAnimation = keyframes`
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  `;
+    const ImageLogo = styled.img`
+        filter: drop-shadow(5px 5px 5px #000);
+        position: absolute;
+        width: 100%;
+        height: 100vh;
+        object-fit: cover;
+
+        opacity: 0;
+        animation: containerFadeIn 1s ease-in forwards;
+    `;
+    const Image = styled.img`
+        filter: drop-shadow(5px 5px 5px #000);
+        position: absolute;
+        width: 100%;
+        height: 100vh;
+        object-fit: cover;
+    `;
+
+    const containerFadeIn = keyframes`
+       0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+  `;
+
+    const BackImage = styled.div`
+        filter: drop-shadow(5px 5px 5px #000);
+        position: absolute;
+        width: 200%;
+        height: 100vh;
+        object-fit: cover;
+        animation: ${slideAnimation} 50s infinite linear;
+        background-repeat: repeat;
+        background-image: url('images/CartoonStarryNight.png');
+    `;
+
+    const StartButton = styled.button`
+        /* Star 1 */
+
+        box-sizing: border-box;
+
+        position: absolute;
+        width: 207px;
+        height: 40px;
+        margin-top: 15%;
+        margin-left: 47.5%;
+        /* 시작하기 */
+
+        color: #ffffff;
+        font-size: large;
+
+        background: linear-gradient(180deg, #fee080 0%, rgba(254, 224, 128, 0) 100%);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 22px;
+        animation: containerFadeIn 1s ease-in forwards;
+        z-index: 4;
+    `;
+    const gotoLogin = () => {
+        navigation('/Login');
+    };
+
+    useEffect(() => {
+        setShowMain(true);
+    }, []);
+
+    return (
+        <ImagesContainer>
+            {showMain && (
+                <>
+                    <StartButton onClick={gotoLogin}>시작하기</StartButton>
+                    <BackImage src="images/CartoonStarryNight.png" style={{ zIndex: 1 }} />
+                    <Image src="images/girl.png" style={{ zIndex: 2 }} />
+                    <ImageLogo src="images/logo_home.png" style={{ zIndex: 3 }} />
+                </>
+            )}
+        </ImagesContainer>
+    );
 };
 
 export default Home;
