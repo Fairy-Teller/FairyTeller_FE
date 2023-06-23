@@ -9,6 +9,11 @@ const Home = () => {
 
     const ImagesContainer = styled.div`
         position: relative;
+        display: flex;
+        justify-content: center; /* Center horizontally */
+
+        width: 100vw;
+        height: 100vh;
     `;
 
     const slideAnimation = keyframes`
@@ -68,13 +73,12 @@ const Home = () => {
         position: absolute;
         width: 207px;
         height: 40px;
-        margin-top: 15%;
-        margin-left: 47.5%;
+
         /* 시작하기 */
 
         color: #ffffff;
         font-size: large;
-
+        margin-top: 15%;
         background: linear-gradient(180deg, #fee080 0%, rgba(254, 224, 128, 0) 100%);
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 22px;
@@ -87,6 +91,10 @@ const Home = () => {
 
     useEffect(() => {
         setShowMain(true);
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
     }, []);
 
     return (
