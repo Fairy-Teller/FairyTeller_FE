@@ -5,10 +5,10 @@ import React from 'react';
 import PageFlip from 'react-pageflip';
 
 
-function Book({ bookInfo }) {
+function Book({ bookInfo, bookStory }) {
     const imageUrls = bookInfo;
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '78vh' }}>
             <PageFlip width={515} height={580}>
             {imageUrls.flatMap((url, i) => [
                     <div className="flip-paper-page" key={`left-${i}`}>
