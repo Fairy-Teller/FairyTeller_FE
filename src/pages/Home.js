@@ -9,6 +9,11 @@ const Home = () => {
 
     const ImagesContainer = styled.div`
         position: relative;
+        display: flex;
+        justify-content: center; /* Center horizontally */
+
+        width: 100vw;
+        height: 100vh;
     `;
 
     const slideAnimation = keyframes`
@@ -16,7 +21,7 @@ const Home = () => {
       transform: translateX(0%);
     }
     100% {
-      transform: translateX(-50%);
+      transform: translateX(-20%);
     }
   `;
     const ImageLogo = styled.img`
@@ -40,7 +45,7 @@ const Home = () => {
     const containerFadeIn = keyframes`
        0% {
       opacity: 0;
-      transform: translateY(-20px);
+      transform: translateY(-25px);
     }
     100% {
       opacity: 1;
@@ -55,7 +60,7 @@ const Home = () => {
         width: 200%;
         height: 100vh;
         object-fit: cover;
-        animation: ${slideAnimation} 50s infinite linear;
+        animation: ${slideAnimation} 30s infinite linear;
         background-repeat: repeat;
         background-image: url('images/CartoonStarryNight.png');
     `;
@@ -68,13 +73,12 @@ const Home = () => {
         position: absolute;
         width: 207px;
         height: 40px;
-        margin-top: 15%;
-        margin-left: 47.5%;
+
         /* 시작하기 */
 
         color: #ffffff;
         font-size: large;
-
+        margin-top: 15%;
         background: linear-gradient(180deg, #fee080 0%, rgba(254, 224, 128, 0) 100%);
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         border-radius: 22px;
@@ -87,6 +91,10 @@ const Home = () => {
 
     useEffect(() => {
         setShowMain(true);
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
     }, []);
 
     return (
