@@ -164,8 +164,8 @@ function FairytaleShow(bookid) {
 
     return (
         <div>
-            <Book bookInfo={bookInfo} />
-        {/* <CenteredContainer>
+            <Book bookInfo={bookInfo}/>
+        <CenteredContainer>
             {bookInfo.length > 0 && (
                 <div>
                     <AudioContainer>
@@ -229,7 +229,7 @@ function FairytaleShow(bookid) {
                     </FairyPage>
                 </div>
             )}
-        </CenteredContainer> */}
+        </CenteredContainer>
         </div>
     );
 

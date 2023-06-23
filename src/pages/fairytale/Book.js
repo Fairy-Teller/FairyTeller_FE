@@ -5,7 +5,7 @@ import React from 'react';
 import PageFlip from 'react-pageflip';
 
 
-function Book({ bookInfo, bookStory }) {
+function Book({ bookInfo }) {
     const imageUrls = bookInfo;
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '78vh' }}>
