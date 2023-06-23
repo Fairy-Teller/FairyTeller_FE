@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import { useLocation } from 'react-router-dom';
@@ -6,58 +5,75 @@ import RecordButton from '../../components/RecordModal';
 import { call } from '../../service/ApiService';
 import { sendAudioData } from '../../service/FairytaleService';
 import Modal from 'react-modal';
+import Book from './Book.js';
+
+import { useRecoilValue } from 'recoil';
+import { BookPage } from '../../recoil/Fairytailstate';
 
 const CenteredContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const CardContainer = styled.img`
-  width: 1250px;
-  height: 720px;
-  margin-left: 2%;
-  margin-right: 2%;
-  src: "/images/prev.png";
+    width: 1250px;
+    height: 720px;
+    margin-left: 2%;
+    margin-right: 2%;
+    src: '/images/prev.png';
 `;
 
 const AudioContainer = styled.div`
-  bottom: 0;
-  text-align: center;
-  padding: 20px;
+    text-align: center;
+    padding: 20px;
 `;
 
 const FairyPage = styled.div`
-  display: flex;
+    display: flex;
 `;
 
 const Arrow = styled.button`
-  ${(props) =>
-    props.disabled &&
-    css`
-      opacity: 0.5;
-      pointer-events: none;
-    `}
+    ${(props) =>
+        props.disabled &&
+        css`
+            opacity: 0.5;
+            pointer-events: none;
+        `}
 `;
 
 const VoiceButton = styled.button`
-    width: 15%;
-    height: 59px;
+    width: 54px;
+    height: 53px;
     left: 528px;
     top: 200px;
-    border-radius: 16px;
+    margin-left: 30px;
+    margin-bottom: 25px;
 
-    background: rgba(252, 222, 222, 1);
+    background-image: url('/images/mic.png');
+    background-size: cover;
 `;
 
 const Voicechange = styled.button`
-    width: 15%;
-    height: 59px;
+    width: 54px;
+    height: 53px;
     left: 528px;
     top: 200px;
-    border-radius: 16px;
+    margin-left: 30px;
+    margin-bottom: 25px;
+    background-image: url('/images/tts.png');
+    background-size: cover;
+`;
 
-    background: rgba(239, 153, 153, 1);
+const Voiceuserchange = styled.button`
+    width: 54px;
+    height: 53px;
+    left: 528px;
+    top: 200px;
+    margin-left: 30px;
+    margin-bottom: 25px;
+    background-image: url('/images/uservoice.png');
+    background-size: cover;
 `;
 
 const CloseButton = styled.button`
@@ -83,6 +99,8 @@ function FairytaleShow(bookid) {
     const [recordingInProgress, setRecordingInProgress] = useState(false);
     const [recordedAudioBlob, setRecordedAudioBlob] = useState(null);
     const [check, setCheck] = useState('user');
+
+    const bookPage = useRecoilValue(BookPage);
 
     useEffect(() => {
         if (bookid.props !== '') {
@@ -115,12 +133,11 @@ function FairytaleShow(bookid) {
         }
     };
 
-
-  const handlePrevPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage((prevPage) => prevPage - 1);
-    }
-  };
+    const handlePrevPage = () => {
+        if (currentPage > 0) {
+            setCurrentPage((prevPage) => prevPage - 1);
+        }
+    };
 
     const handleNextPage = () => {
         if (currentPage < bookInfo.length - 1) {
@@ -162,74 +179,72 @@ function FairytaleShow(bookid) {
         };
     }, []);
 
+    console.log('bookPage', bookPage);
+
     return (
-        <CenteredContainer>
-            {bookInfo.length > 0 && (
-                <div>
-                    <AudioContainer>
-                        {!userAudioInfo[currentPage] && (
-                            <>
-                                <audio ref={audioRef} src={audioInfo[currentPage]} controls preload="auto" />
-                                <VoiceButton onClick={() => setIsModalOpen(true)}>내 목소리로 녹음하기</VoiceButton>
-                            </>
-                        )}
-                        {userAudioInfo[currentPage] && (
-                            <>
-                                <audio
-                                    ref={audioRef}
-                                    src={check === 'tts' ? audioInfo[currentPage] : userAudioInfo[currentPage]}
-                                    controls
-                                    preload="auto"
-                                />
-
-                                {check === 'user' ? (
-                                    <Voicechange onClick={handleToggleAudio}>자동음성 변환</Voicechange>
-                                ) : (
-                                    <Voicechange onClick={handleToggleAudio}>유저 음성변환</Voicechange>
-                                )}
-                            </>
-                        )}
-                    </AudioContainer>
-
+        <div>
+            <CenteredContainer>
+                {bookInfo.length > 0 && (
                     <div>
-                        {isModalOpen && (
-                            <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)}>
-                                <CloseButton onClick={closeModal}>
-                                    <img src="/images/closeicon.png" alt="Close" />
-                                </CloseButton>
-                                <RecordButton
-                                    pageNumber={currentPage + 1}
-                                    onRecordingComplete={handleRecordingComplete}
-                                    audioRef={audioRef}
-                                    onCloseAndRefresh={() => {
-                                        setIsModalOpen(false);
-                                        showBook(bookid.props);
-                                    }}
-                                    bookid={bookid.props}
-                                    bookstory={bookStory[currentPage]}
-                                />
-                            </Modal>
-                        )}
+                        <AudioContainer>
+                            {!userAudioInfo[bookPage] && (
+                                <>
+                                    <audio ref={audioRef} src={audioInfo[bookPage]} controls preload="auto" />
+                                    <VoiceButton onClick={() => setIsModalOpen(true)}></VoiceButton>
+
+                                    <p>마이크 버튼을 눌러 나만의 동화를 녹음해 보세요</p>
+                                </>
+                            )}
+                            {userAudioInfo[bookPage] && (
+                                <>
+                                    <audio
+                                        ref={audioRef}
+                                        src={check === 'tts' ? audioInfo[bookPage] : userAudioInfo[bookPage]}
+                                        controls
+                                        preload="auto"
+                                    />
+
+                                    {check === 'user' ? (
+                                        <>
+                                            <Voicechange onClick={handleToggleAudio}></Voicechange>
+                                            <p>로벗 버튼을 누르시면 기계음성으로 변환합니다.</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Voiceuserchange onClick={handleToggleAudio}></Voiceuserchange>
+                                            <p>사람 버튼을 누르시면 녹음 음성으로 변환합니다.</p>
+                                        </>
+                                    )}
+                                </>
+                            )}
+                        </AudioContainer>
+
+                        <div>
+                            {isModalOpen && (
+                                <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)}>
+                                    <CloseButton onClick={closeModal}>
+                                        <img src="/images/closeicon.png" alt="Close" />
+                                    </CloseButton>
+                                    <RecordButton
+                                        pageNumber={bookPage + 1}
+                                        onRecordingComplete={handleRecordingComplete}
+                                        audioRef={audioRef}
+                                        onCloseAndRefresh={() => {
+                                            setIsModalOpen(false);
+                                            showBook(bookid.props);
+                                        }}
+                                        bookid={bookid.props}
+                                        bookstory={bookStory[bookPage]}
+                                    />
+                                </Modal>
+                            )}
+                        </div>
                     </div>
-
-                    <FairyPage>
-                        <Arrow className="prevButton" disabled={currentPage === 0} onClick={handlePrevPage}>
-                            <img src="/images/prev.png" />
-                        </Arrow>
-                        <img src={bookInfo[currentPage]} style={{ margin: '0 10px 0 10px' }} />
-                        <Arrow
-                            className="nextButton"
-                            disabled={currentPage === bookInfo.length - 1}
-                            onClick={handleNextPage}
-                        >
-                            <img src="/images/next.png" />
-                        </Arrow>
-                    </FairyPage>
-                </div>
-            )}
-        </CenteredContainer>
+                )}
+            </CenteredContainer>
+            <Book bookInfo={bookInfo} />
+        </div>
     );
-
 }
 
 export default FairytaleShow;
