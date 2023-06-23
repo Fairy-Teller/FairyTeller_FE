@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useReducer } from "react";
 import {
   atomFamily,
   useRecoilState,
@@ -244,71 +244,56 @@ const TryCanvas = (props) => {
     canvas.add(text);
   };
 
-  // 폰트
-  const selectFontStyle = (item) => {
-    const activeObject = canvas.getActiveObject();
+  // 텍스트 스타일링
+  const stylesReducer = (state, action) => {
+    const activeObject = action.canvas.getActiveObject();
 
-    if (activeObject && (activeObject.type === "textbox" || "text")) {
-      activeObject.set("fontFamily", item);
+    if (!activeObject || !(activeObject.type === "textbox" || "text")) {
+      return {
+        ...state,
+        message: activeObject ? "NOT A TEXT" : "VACANT",
+      };
+    }
 
-      canvas.requestRenderAll();
-    } else if (!activeObject) {
-      alert("VACANT");
-    } else {
-      alert("NOT A TEXT");
+    switch (action.type) {
+      case "fontStyle":
+        activeObject.set("fontFamily", action.payload);
+        action.canvas.requestRenderAll();
+        return state;
+      case "alignStyle":
+        activeObject.set("textAlign", action.payload);
+        action.canvas.requestRenderAll();
+        return state;
+      case "colorStyle":
+        activeObject.set({
+          fill: action.payload ? "white" : "black",
+          shadow: new fabric.Shadow(
+            action.payload
+              ? {
+                  color: "rgba(34, 34, 34, 0.8)",
+                  blur: 8,
+                  offsetX: 4,
+                  offsetY: 4,
+                }
+              : {
+                  color: "rgba(255, 255, 255, 0.625)",
+                  blur: 8,
+                  offsetX: 4,
+                  offsetY: 4,
+                }
+          ),
+        });
+        action.canvas.requestRenderAll();
+        return {
+          ...state,
+          selectColor: !action.payload,
+        };
+      default:
+        return state;
     }
   };
 
-  // 얼라인
-  const selectAlignStyle = (item) => {
-    const activeObject = canvas.getActiveObject();
-
-    if (activeObject && (activeObject.type === "textbox" || "text")) {
-      activeObject.set("textAlign", item);
-
-      canvas.requestRenderAll();
-    } else if (!activeObject) {
-      alert("VACANT");
-    } else {
-      alert("NOT A TEXT");
-    }
-  };
-
-  const [selectColor, setSelectColor] = useState(true); // true : 'white'
-
-  // 색
-  const selectColorStyle = () => {
-    const activeObject = canvas.getActiveObject();
-    if (activeObject && (activeObject.type === "textbox" || "text")) {
-      setSelectColor(activeObject.fill === "white" ? true : false);
-
-      activeObject.set({
-        fill: selectColor ? "white" : "black",
-        shadow: new fabric.Shadow(
-          selectColor
-            ? {
-                color: "rgba(34, 34, 34, 0.8)",
-                blur: 8,
-                offsetX: 4,
-                offsetY: 4,
-              }
-            : {
-                color: "rgba(255, 255, 255, 0.625)",
-                blur: 8,
-                offsetX: 4,
-                offsetY: 4,
-              }
-        ),
-      });
-      canvas.requestRenderAll();
-
-      setSelectColor(!selectColor);
-    } else if (!activeObject) {
-      alert("VACANT");
-    } else {
-      alert("NOT A TEXT");
-    }
-  };
+  const [state, dispatch] = useReducer(stylesReducer, { selectColor: true });
 
   // 삭제
   const deleteObject = () => {
@@ -404,7 +389,7 @@ const TryCanvas = (props) => {
                 name={TEXTSTYLE + "-tab"}
                 stylename={item}
                 onClick={(e) => {
-                  selectFontStyle(item);
+                  dispatch({ type: "fontStyle", payload: item, canvas: canvas });
                 }}
               />
             ) : (
@@ -420,7 +405,7 @@ const TryCanvas = (props) => {
                 name={TEXTSTYLE + "-tab"}
                 stylename={item}
                 onClick={(e) => {
-                  selectAlignStyle(item);
+                  dispatch({ type: "alignStyle", payload: item, canvas: canvas });
                 }}
               />
             ) : (
@@ -434,14 +419,22 @@ const TryCanvas = (props) => {
             name={TEXTSTYLE + "-tab"}
             stylename='white'
             onClick={(e) => {
-              selectColorStyle(e.target.stylename);
+              dispatch({
+                type: "colorStyle",
+                payload: true,
+                canvas: canvas,
+              });
             }}
           />
           <TabSelection
             name={TEXTSTYLE + "-tab"}
             stylename='black'
             onClick={(e) => {
-              selectColorStyle(e.target.stylename);
+              dispatch({
+                type: "colorStyle",
+                payload: false,
+                canvas: canvas,
+              });
             }}
           />
         </Item>
