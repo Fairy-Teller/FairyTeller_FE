@@ -207,7 +207,7 @@ function FairytaleShow(bookid) {
                                     {check === 'user' ? (
                                         <>
                                             <Voicechange onClick={handleToggleAudio}></Voicechange>
-                                            <p>로벗 버튼을 누르시면 기계음성으로 변환합니다.</p>
+                                            <p>로봇 버튼을 누르시면 기계음성으로 변환합니다.</p>
                                         </>
                                     ) : (
                                         <>

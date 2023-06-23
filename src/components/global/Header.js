@@ -7,7 +7,7 @@ const Header = (props) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/home")
+    navigate("/start")
    };
   return (
     <div className='header-wrap'>
