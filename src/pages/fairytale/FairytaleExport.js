@@ -6,8 +6,8 @@ import FairytaleShow from './FairytaleShow';
 import Container from '../../components/global/Container';
 import Header from '../../components/global/Header';
 import ContentCover from '../../components/global/ContentCover';
-import ProgressBar from '../../components/global/ProgressBar';
 import ContentTitle from '../../components/global/ContentTitle';
+
 import InnerCover from '../../components/global/InnerCover';
 
 const ButtonFrame = styled.div`
@@ -19,7 +19,8 @@ const ButtonFrame = styled.div`
 
 const Button = styled.button`
     width: 15%;
-    height: 104px;
+    height: 40px;
+    margin-top: 2%;
     background-color: #99f0cc;
     font-size: 150%;
     border-radius: 51.5px;
@@ -30,14 +31,10 @@ const Button = styled.button`
     text-decoration: none;
 `;
 
-const BookCover = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+const TitleBox = styled.div`
+    /* Rectangle 758 */
 
-    width: 100vw;
-    height: 100vh;
-    background-size: cover;
+    margin-top: 15px;
 `;
 
 function FairytaleExport() {
@@ -61,10 +58,6 @@ function FairytaleExport() {
                 imgearr[i] = data.pages[i].finalImageUrl;
             }
             setImage(imgearr);
-
-            // await call('/book/create/story', 'POST', {
-            //     fullStory: 'ha ha ha ha ha ha ha',
-            // });
         } catch (error) {
             console.log('Error fetching data:', error);
         }
@@ -100,8 +93,9 @@ function FairytaleExport() {
         <Container>
             <Header mode={'default'} />
             <ContentCover>
-                <ProgressBar step={4} />
-                <ContentTitle>{Title}</ContentTitle>
+                <TitleBox />
+                <ContentTitle>동화 제목: {Title}</ContentTitle>
+
                 <InnerCover>
                     <FairytaleShow props={BookId}></FairytaleShow>
                     <div>

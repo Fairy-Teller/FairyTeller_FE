@@ -119,4 +119,8 @@ export const Canvasexport = atom({
   effects_UNSTABLE: [persistAtom],
 });
 
+export const BookPage = atom({
+  key: "BookPage",
+  default: 0,
+});
 
