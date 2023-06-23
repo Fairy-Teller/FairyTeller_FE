@@ -58,6 +58,18 @@ const TextContent = styled.p`
   background-color: white;
   border-radius: 12rem;
 `;
+const Button = styled.button`
+  width: 8rem;
+  height: 3.2rem;
+  margin: 2rem 0 0 0;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.2rem;
+  text-align: center;
+  color: #000000;
+  background-color: #99f0cc;
+  border-radius: 0.8rem;
+`;
 
 const Text = (props) => {
   return <TextContent isHovered={props.isHovered}>{props.children}</TextContent>;
@@ -167,7 +179,7 @@ const PreviewGeneratedIamge = (props) => {
           <ImgSelect onSave={saveImg} />
         </ButtonWrap>
       ) : (
-        <button disabled>선택 완료!</button>
+        <Button disabled>선택 완료!</Button>
       )}
     </Div>
   );

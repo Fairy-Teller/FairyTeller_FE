@@ -88,6 +88,9 @@ const InputSubmit = styled.button`
   border-radius: 2rem;
   background-color: pink;
 `;
+const NoticeText = styled.p`
+  font-size: 1.6rem;
+`;
 
 const Keyword = () => {
   const [loaded, setLoaded] = useState(false);
@@ -228,7 +231,7 @@ const Keyword = () => {
                         return <div key={item}>{item}</div>;
                       })
                     ) : (
-                      <p>동화에 넣을 키워드를 골라보아요</p>
+                      <NoticeText>동화에 넣을 키워드를 골라보아요</NoticeText>
                     )}
                   </div>
                   <button
