@@ -178,14 +178,20 @@ const TryCanvas = (props) => {
       selectable: true,
       originX: "center",
       originY: "center",
-      textAlign: "center",
-      top: canvas.height / 2,
-      left: canvas.width / 2,
+      textAlign: "right",
+      top: canvas.height / 1.4,
+      left: canvas.width / 1.4,
       width: 640,
       fontFamily: TAEB,
       fontSize: 32,
       lineHeight: 1.4,
-      shadow: "rgba(0,0,0,0.2) 0 0 5px",
+      fill: "white",
+      shadow: new fabric.Shadow({
+        color: "rgba(34, 34, 100, 0.4)",
+        blur: 1,
+        offsetX: -4,
+        offsetY: 4,
+      }),
     });
 
     canvas.add(text);
@@ -210,18 +216,23 @@ const TryCanvas = (props) => {
 
   // 텍스트 박스
   const addTextBox = () => {
-    let text = new fabric.Textbox("원하는 글을 추가하세요", {
+    let text = new fabric.Textbox("원하는 내용을 추가하세요", {
       selectable: true,
       originX: "center",
       originY: "center",
       textAlign: "center",
-      top: canvas.height / 4,
-      left: canvas.width / 4,
+      top: canvas.height / 2,
+      left: canvas.width / 2,
       width: 640,
       fontFamily: TAEB,
       fontSize: 32,
       lineHeight: 1.4,
-      shadow: "rgba(0,0,0,0.2) 0 0 5px",
+      shadow: new fabric.Shadow({
+        color: "rgba(34, 34, 100, 0.4)",
+        blur: 1,
+        offsetX: -4,
+        offsetY: 4,
+      }),
     });
 
     canvas.add(text);

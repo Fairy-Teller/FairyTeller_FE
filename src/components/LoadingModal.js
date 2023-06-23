@@ -33,6 +33,7 @@ const MoveImg = styled.img`
 `;
 
 const Message = styled.p`
+  font-size: 1.6rem;
   color: black;
 `;
 

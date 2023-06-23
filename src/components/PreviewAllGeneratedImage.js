@@ -5,25 +5,11 @@ import { useRecoilValue } from "recoil";
 import { ImageTempState } from "../recoil/Fairytailstate";
 import styled from "styled-components";
 
-const Div = styled.div`
+const ImageContainerFrame = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 10px;
-`;
-const Text = styled.p`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 110px;
-
-  font-style: normal;
-  font-weight: 400;
-  font-size: 25px;
-  color: #000000;
-  margin-bottom: 20px;
-  text-align: center;
 `;
 const ImageContainer = styled.div`
   display: flex;
@@ -49,7 +35,7 @@ const Image = styled.img`
   }
 
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.04);
   }
 `;
 const ButtonWrap = styled.div`
@@ -62,7 +48,6 @@ const Button = styled.button`
   height: 40px;
   background: #99f0cc;
   border-radius: 10px;
-
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -89,7 +74,7 @@ const PreviewAllGeneratedIamge = () => {
   };
 
   return (
-    <Div>
+    <ImageContainerFrame>
       <ImageContainer>
         {savedImageTemp.map((item, index) => (
           <Image
@@ -102,7 +87,7 @@ const PreviewAllGeneratedIamge = () => {
       <ButtonWrap>
         <Button onClick={goEdit}>동화책 꾸미기</Button>
       </ButtonWrap>
-    </Div>
+    </ImageContainerFrame>
   );
 };
 
