@@ -112,7 +112,7 @@ const BoardDetail = () => {
                         Author: {board.nickname}
                     </div>
                     <div>
-                        <FairytaleShow props={board.bookId} />
+                        <FairytaleShow props={board.bookId} state="board" />
                     </div>
                     <div className="action-section">
                         <div className="like-button">
