@@ -17,12 +17,10 @@ const Board = () => {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await call(
-        `/board?page=${currentPage}&size=8`,
-        "GET",
-        null
-      );
+      const response = await call(`/board?page=${currentPage}&size=8`, "GET", null);
+      console.log("API Response:", response); // API 응답 확인
       if (response && response.data) {
+        console.log("Data:", response.data); // 데이터 확인
         setBooks(response.data);
         setTotalPages(response.totalPages);
       }
@@ -31,7 +29,7 @@ const Board = () => {
     }
   }, [currentPage]);
 
-  useEffect(() => {
+  useEffect(() => { 
     fetchData();
   }, [fetchData, currentPage]);
 
@@ -44,16 +42,18 @@ const Board = () => {
       let endpoint = "/board";
       
       if (searchType === "author") {
-        endpoint += `?author=${keyword}`;
+        endpoint += `?author=${encodeURIComponent(keyword)}`;
       } else if (searchType === "title") {
-        endpoint += `?title=${keyword}`;
+        endpoint += `?title=${encodeURIComponent(keyword)}`;
       } else {
-        endpoint += `?keyword=${keyword}`;
+        endpoint += `?keyword=${encodeURIComponent(keyword)}`;
       }
   
       const response = await call(endpoint, "GET", null);
       if (response && response.data) {
-        setBooks(response.data.data);
+        console.log('데이터모양이다른가?1',response)
+        console.log('데이터모양이다른가?2',response.data)
+        setBooks(response.data);
         setTotalPages(response.data.totalPages);
         setCurrentPage(0); 
       }
@@ -70,7 +70,7 @@ const Board = () => {
   };
 
   useEffect(() => {
-    console.log("Books:", books);
+    console.log("Books:븍븍 ", books);
   }, [books]);
 
   return (
@@ -88,12 +88,12 @@ const Board = () => {
         <BoardSearch handleSearch={handleSearch} />
         <InnerCover>
           <BookContainer>
-            {books.length > 0 ? (
+            {books && books.length > 0 ? (
               books.map((book) => (
                 <Book
                   book={book}
                   linkPath="board"
-                  idProperty="boardId" // Use the 'boardId' property
+                  idProperty="boardId"
                   truncateTitle={truncateTitle}
                   key={book.boardId}
                 />
