@@ -54,7 +54,14 @@ const Board = () => {
     <Container>
       <Header mode={"default"} />
       <ContentCover>
-        <ContentTitle>우리들의 도서관</ContentTitle>
+      <div id="board-title"
+        style={{
+          margin: "2rem auto",
+          fontWeight: 400,
+          fontSize: "2.8rem",
+          textAlign: "left"
+        }}
+        >우리들의 도서관</div>
         <InnerCover>
           <BookContainer>
             {books.length > 0 ? (
