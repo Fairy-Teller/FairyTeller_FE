@@ -1,0 +1,27 @@
+.board-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0;
+    width: 100vw;
+    height: 60px;
+    text-align: left;
+    background: #1F334A;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 60px;
+    color: #E7F1F9;
+    font-family: 'Great Vibes', cursive;
+  }
+  .title-link {
+    margin-left: 20px; /* 타이틀과 유저 이름 사이의 오른쪽 간격 설정 */
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.3s;
+  }
+  
+  .username {
+    font-size: 20px;
+    margin-right: 20px;
+  }
