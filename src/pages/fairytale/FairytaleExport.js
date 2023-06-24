@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { call } from '../../service/ApiService';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import FairytaleShow from './FairytaleShow';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 
-const FairytaleTitle = styled.div`
-    font-weight: 400;
-    font-size: 45px;
+import Container from '../../components/global/Container';
+import Header from '../../components/global/Header';
+import ContentCover from '../../components/global/ContentCover';
+import ContentTitle from '../../components/global/ContentTitle';
 
-    text-align: center;
-`;
+import InnerCover from '../../components/global/InnerCover';
 
 const ButtonFrame = styled.div`
     display: flex;
@@ -22,7 +19,8 @@ const ButtonFrame = styled.div`
 
 const Button = styled.button`
     width: 15%;
-    height: 104px;
+    height: 40px;
+    margin-top: 2%;
     background-color: #99f0cc;
     font-size: 150%;
     border-radius: 51.5px;
@@ -33,31 +31,11 @@ const Button = styled.button`
     text-decoration: none;
 `;
 
-const Bar = styled.div`
-    width: 100hw;
-    height: 99px;
-    text-align: left;
-    background: #fcdede;
+const TitleBox = styled.div`
+    /* Rectangle 758 */
 
-    font-family: 'Amiri';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 50px;
-    line-height: 88px;
-
-    color: #000000;
+    margin-top: 15px;
 `;
-
-const BookCover = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    width: 100vw;
-    height: 100vh;
-    background-size: cover;
-`;
-const Container = styled.div``;
 
 function FairytaleExport() {
     const [thumbnailUrl, setThumbnailUrl] = useState('');
@@ -68,19 +46,6 @@ function FairytaleExport() {
     useEffect(() => {
         fetchData();
     }, []);
-
-    // const fetchData = async () => {
-    //     try {
-    //         const response = await call('/book/my-newest', 'GET', null);
-    //         setThumbnailUrl('https://s3.ap-northeast-2.amazonaws.com/' + response.thumbnailUrl);
-    //         setBookId(response.bookId);
-    //         console.log(BookId);
-    //         // const boardresponse = await call('/board/save', 'POST', { bookId: '11' });
-    //         // console.log(boardresponse);
-    //     } catch (error) {
-    //         console.log('Error fetching data:', error);
-    //     }
-    // };
 
     const fetchData = async () => {
         try {
@@ -93,10 +58,6 @@ function FairytaleExport() {
                 imgearr[i] = data.pages[i].finalImageUrl;
             }
             setImage(imgearr);
-
-            // await call('/book/create/story', 'POST', {
-            //     fullStory: 'ha ha ha ha ha ha ha',
-            // });
         } catch (error) {
             console.log('Error fetching data:', error);
         }
@@ -130,18 +91,21 @@ function FairytaleExport() {
 
     return (
         <Container>
-            <Bar>FairyTeller</Bar>
-            <BookCover>
-                <img src="/images/loding_4.png" style={{ marginTop: '2%' }} />
-                <FairytaleTitle>{Title}</FairytaleTitle>
-                <FairytaleShow props={BookId}></FairytaleShow>
-                <div style={{ position: 'absolute', bottom: '0px', width: '100%' }}>
-                    <ButtonFrame>
-                        <Button onClick={gotoBoard}>게시판 전시하기</Button>
-                        <Button onClick={exportPDF}>파일 저장하기</Button>
-                    </ButtonFrame>
-                </div>
-            </BookCover>
+            <Header mode={'default'} />
+            <ContentCover>
+                <TitleBox />
+                <ContentTitle>동화 제목: {Title}</ContentTitle>
+
+                <InnerCover>
+                    <FairytaleShow props={BookId}></FairytaleShow>
+                    <div>
+                        <ButtonFrame>
+                            <Button onClick={gotoBoard}>게시판 전시하기</Button>
+                            <Button onClick={exportPDF}>파일 저장하기</Button>
+                        </ButtonFrame>
+                    </div>
+                </InnerCover>
+            </ContentCover>
         </Container>
     );
 }

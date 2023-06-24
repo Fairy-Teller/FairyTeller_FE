@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { call } from "../../service/ApiService";
-import {
-  Container,
-  ImageList,
-  ImageListItem,
-  ImageListItemBar,
-} from "@mui/material";
+
+import Container from "../../components/global/Container";
+import Header from "../../components/global/Header";
+import ContentCover from "../../components/global/ContentCover";
+import ContentTitle from "../../components/global/ContentTitle";
+import InnerCover from "../../components/global/InnerCover";
+import BookContainer from "../../components/global/BookContainer";
+import Book from "../../components/global/Book";
 
 const MyBookList = () => {
   const [books, setBooks] = useState([]);
+
+  const truncateTitle = (title) => {
+    if (title.length > 10) {
+      return title.substring(0, 10) + "...";
+    }
+    return title;
+  };
 
   useEffect(() => {
     call("/book/mine", "GET", null).then((response) => {
@@ -17,22 +26,27 @@ const MyBookList = () => {
   }, []);
 
   return (
-    <Container component="main" maxWidth="2xl" style={{ marginTop: "8%" }}>
-      <h2>내가 만든 책 모음</h2>
-      <ImageList variant="masonry" cols={3} gap={8}>
-        {books.map((book, index) => (
-          <ImageListItem key={index}>
-            <img
-              src={book.thumbnailUrl}
-              alt={book.title}
-              loading="lazy"
-              className="MuiImageListItem-img"
-              style={{ objectFit: "cover" }}
-            />
-            <ImageListItemBar title={book.title} />
-          </ImageListItem>
-        ))}
-      </ImageList>
+    <Container>
+      <Header mode={"default"} />
+      <ContentCover>
+        <ContentTitle>내가 만든 책 모음</ContentTitle>
+        <InnerCover>
+          <BookContainer>
+            {books.length > 0 ? (
+              books.map((book) => (
+                <Book
+                  book={book}
+                  linkPath="myBookList"
+                  idProperty="bookId" // Use the 'bookId' property
+                  key={book.bookId}
+                />
+              ))
+            ) : (
+              <p style={{ textAlign: "center" }}>게시물이 없습니다.</p>
+            )}
+          </BookContainer>
+        </InnerCover>
+      </ContentCover>
     </Container>
   );
 };

@@ -1,126 +1,134 @@
 import React, { useState, useEffect } from "react";
+import { useRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
+import { SavedBoolState, StoryState, ImageTempState, BookState } from "../recoil/FairytaleState";
 import { call } from "../service/ApiService";
-import ButtonWrap from "../components/common/ButtonWrap";
-import {
-  useRecoilState,
-  useResetRecoilState,
-  useRecoilValue,
-  useRecoilCallback,
-} from "recoil";
-import {
-  StoryState,
-  ImageTempState,
-  BookState,
-} from "../recoil/Fairytailstate";
 import styled from "styled-components";
 import LoadingModal from "./LoadingModal";
+import ButtonWrap from "../components/common/ButtonWrap";
+import ImgSelect from "../components/ImgSelect";
+import ImgGenerate from "../components/ImgGenerate";
+
 const Div = styled.div`
+  margin-bottom: 6rem;
   color: white;
   display: flex;
   flex-direction: column;
-  align-items: center; // Align child elements (including the Img) to the center horizontally
+  align-items: center;
 `;
-
+const ImageWrap = styled.div`
+  padding: 0;
+  margin: 1.6rem 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 1.2rem;
+  overflow: hidden;
+`;
 const Img = styled.img`
-  width: 600px;
-  height: 300px;
-  background: #d9d9d9;
-  border-radius: 20px;
-  margin-top: 20px; // Optional: add some margin at the top for some spacing
+  // width: 960px;
+  // height: 540px;
+  width: 1024px;
+  height: 576px;
+  padding: 0;
+  margin: 0;
+  background-color: #d9d9d9;
 `;
-
-const Text = styled.p`
-  display: flex;
-  text-align: center; // Center text horizontally
-  align-items: center; // Center text vertically
-  width: 800px;
-  height: 100px; // Increased the height here
-  background: #fcdede;
-  border-radius: 20px;
-  font-family: "Amiri";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
-  color: #000000;
-  margin: 10px;
-  padding: 0 10px;
+const Story = styled.div`
+  position: fixed;
+  top: 220px;
+  left: ${(props) => (!props.isHovered ? "10rem" : "8rem")};
+  z-index: 99;
+  border-radius: 50%;
+  transition: left 0.4s;
 `;
-
-const P = styled.p`
-  display: flex;
-  text-align: center; /* 가운데 정렬 속성 추가 */
-  align-items: center; /* 세로 가운데 정렬 */
-  font-weight: 600;
-  font-size: 20px;
+const TextContent = styled.p`
+  width: ${(props) => (!props.isHovered ? "120px" : "720px")};
+  height: ${(props) => (!props.isHovered ? "120px" : "auto")};
+  padding: ${(props) => (!props.isHovered ? "0" : "1.2rem 2.4rem")};
+  font-size: ${(props) => (!props.isHovered ? "1.6rem" : "1.2rem")};
+  display: ${(props) => (!props.isHovered ? "flex" : "block")};
+  justify-content: ${(props) => (!props.isHovered ? "center" : "center")};
+  align-items: ${(props) => (!props.isHovered ? "center" : "center")};
+  box-sizing: border-box;
+  text-align: left;
+  line-height: 1.4;
   color: #000000;
-  margin-top: 20px;
+  word-break: keep-all;
+  border: 0.4rem solid #edaeae;
+  background-color: white;
+  border-radius: 12rem;
 `;
 const Button = styled.button`
-  width: 200px;
-  height: 40px;
-  background: #99f0cc;
-  border-radius: 10px;
-  font-family: "Amiri";
+  width: 8rem;
+  height: 3.2rem;
+  margin: 2rem 0 0 0;
   font-style: normal;
   font-weight: 400;
-  font-size: 18px;
-  text-align: center !important; /* 가운데 정렬 속성 추가 */
+  font-size: 1.2rem;
+  text-align: center;
   color: #000000;
-  justify-content: center; /* 가로 가운데 정렬 */
-  align-items: center; /* 세로 가운데 정렬 */
-  margin-right: 10px; /* Add margin to the right of each button */
+  background-color: #99f0cc;
+  border-radius: 0.8rem;
 `;
+
+const Text = (props) => {
+  return <TextContent isHovered={props.isHovered}>{props.children}</TextContent>;
+};
 
 const PreviewGeneratedIamge = (props) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [imgUrl, setImgURL] = useState(null);
-  const [savedStory, setSavedStory] = useRecoilState(StoryState);
+  const savedStory = useRecoilValue(StoryState);
   const [savedImageTemp, setSavedImageTemp] = useRecoilState(ImageTempState);
   const [savedBook, setSavedBook] = useRecoilState(BookState);
-  const [isSaveImage, setIsSaveImage] = useState(false);
-
-  useEffect(() => {
-    console.log(savedStory);
-    console.log(savedImageTemp);
-    console.log(props.index);
-    console.log(savedBook);
-    console.log(savedStory[props.index]["paragraph"]);
-  }, []);
+  // const [imgUrl, setImgURL] = useState(null);
+  const [isSaveImage, setIsSaveImage] = useRecoilState(SavedBoolState);
 
   const createImg = async () => {
     try {
       setIsLoading(true);
-      console.log("이미지 요청");
-      const imageData = await call("/chat-gpt/textToImage", "POST", {
+
+      const imageData = await call("/chat-gpt/textToImage/v2", "POST", {
+        loraNo: 1,
         text: savedStory[props.index]["paragraph"],
       });
+
       const byteCharacters = atob(imageData); // Base64 디코딩
       const byteArrays = new Uint8Array(byteCharacters.length);
+
       for (let i = 0; i < byteCharacters.length; i++) {
         byteArrays[i] = byteCharacters.charCodeAt(i);
       }
+
       const imageBlob = new Blob([byteArrays], { type: "image/jpeg" });
       const imageUrl = URL.createObjectURL(imageBlob);
 
-      setIsLoading(false);
-
       const newPage = [...savedBook["pages"]];
+
       newPage[props.index] = {
         ...newPage[props.index],
         imageBase64: imageData,
       };
-      setSavedBook({ ...savedBook, pages: newPage });
 
+      setSavedBook({ ...savedBook, pages: newPage });
       onChangeHandler(imageUrl, props.index);
+
+      setIsLoading(false);
     } catch (error) {
       console.log("Error fetching data:", error);
       setIsLoading(false);
     }
   };
 
+  const onChangeHandler = (targetUrl, index) => {
+    const newImage = [...savedImageTemp];
+    newImage[index] = { ...newImage[index], url: targetUrl };
+    setSavedImageTemp(newImage);
+  };
+
   const saveImg = async () => {
     try {
-      // 이미지 저장하기
+      alert(`${props.index + 1}번째 페이지에 대한 이미지가 저장되었습니다!`);
+
       const bookDTO = {
         bookId: savedBook["bookId"],
         pages: [
@@ -132,56 +140,47 @@ const PreviewGeneratedIamge = (props) => {
       };
       const imageData = await call("/book/create/image", "POST", bookDTO);
       console.log(imageData);
-      alert("이미지 등록 성공!");
-      setIsSaveImage(true);
+
+      const newIsSaveImage = [...isSaveImage];
+      newIsSaveImage[props.index] = true;
+      setIsSaveImage(newIsSaveImage);
     } catch (error) {
       console.log("Error fetching data:", error);
+    } finally {
+      console.log("isSaveImage", isSaveImage);
     }
   };
 
-  const onChangeHandler = (imgUrl, index) => {
-    const newImage = [...savedImageTemp];
-    newImage[index] = { ...newImage[index], url: imgUrl };
-    setSavedImageTemp(newImage);
-  };
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <Div>
-      {isLoading && (
-        <LoadingModal message="AI가 열심히 그림을 그리는 중입니다." />
-      )}
-      <div>
-        <Text>{savedStory[props.index]["paragraph"]}</Text>
-      </div>
+      {isLoading && <LoadingModal message='AI가 열심히 그림을 그리는 중입니다.' />}
+      <Story
+        isHovered={isHovered}
+        className='current'
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}>
+        <Text isHovered={isHovered}>
+          {isHovered ? savedStory[props.index]["paragraph"] : "내용"}
+        </Text>
+      </Story>
 
-      <ButtonWrap>
-        {!isSaveImage && (
-          <Button className="button" onClick={createImg}>
-            이미지 생성하기
-          </Button>
-        )}
-      </ButtonWrap>
-      <P>{props.index + 1}번째 페이지</P>
-      <div>
-        <Img
-          src={
-            savedImageTemp[props.index] && savedImageTemp[props.index]["url"]
-          }
-        />
-      </div>
-      <ButtonWrap>
-        <Button className="button">다시 뽑기</Button>
-        {isSaveImage && (
-          <Button className="button" style={{ backgroundColor: "gray" }}>
-            삽화 선택 완료
-          </Button>
-        )}
-        {!isSaveImage && (
-          <Button className="button" onClick={saveImg}>
-            삽화 선택
-          </Button>
-        )}
-      </ButtonWrap>
+      <ImageWrap>
+        <Img src={savedImageTemp[props.index] && savedImageTemp[props.index]["url"]} />
+      </ImageWrap>
+
+      {!isSaveImage[props.index] ? (
+        <ButtonWrap>
+          <ImgGenerate
+            onCreate={createImg}
+            index={props.index}
+          />
+          <ImgSelect onSave={saveImg} />
+        </ButtonWrap>
+      ) : (
+        <Button disabled>선택 완료!</Button>
+      )}
     </Div>
   );
 };

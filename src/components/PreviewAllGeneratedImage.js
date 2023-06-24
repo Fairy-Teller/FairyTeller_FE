@@ -1,32 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { call } from "../service/ApiService";
 import { Link, useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { ImageTempState } from "../recoil/Fairytailstate";
+import { useRecoilValue } from "recoil";
+import { ImageTempState } from "../recoil/FairytaleState";
 import styled from "styled-components";
 
-const Div = styled.div`
+const ImageContainerFrame = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 10px;
 `;
-
-const Text = styled.p`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 110px;
-  font-family: "Amiri";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 25px;
-  color: #000000;
-  margin-bottom: 20px;
-  text-align: center;
-`;
-
 const ImageContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -35,7 +19,6 @@ const ImageContainer = styled.div`
   margin-bottom: 30px;
   width: 1000px; /* Sum of Image widths and gaps (350 * 3 + 30 * 2) */
 `;
-
 const Image = styled.img`
   width: 300px;
   height: 200px;
@@ -52,22 +35,19 @@ const Image = styled.img`
   }
 
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.04);
   }
 `;
-
 const ButtonWrap = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 20px;
 `;
-
 const Button = styled.button`
   width: 200px;
   height: 40px;
   background: #99f0cc;
   border-radius: 10px;
-  font-family: "Amiri";
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -82,19 +62,19 @@ const Button = styled.button`
 `;
 
 const PreviewAllGeneratedIamge = () => {
-  const [savedImageTemp, setSavedImageTemp] = useRecoilState(ImageTempState);
+  const savedImageTemp = useRecoilValue(ImageTempState);
   const navigate = useNavigate();
+
   useEffect(() => {
     console.log("savedImageTemp", savedImageTemp);
   }, []);
 
-  const gotoEdit = () => {
+  const goEdit = () => {
     navigate("/f-edit");
   };
 
   return (
-    <Div>
-      <Text>AI가 만들어준 그림을 확인해보아요!</Text>
+    <ImageContainerFrame>
       <ImageContainer>
         {savedImageTemp.map((item, index) => (
           <Image
@@ -105,9 +85,9 @@ const PreviewAllGeneratedIamge = () => {
         ))}
       </ImageContainer>
       <ButtonWrap>
-        <Button onClick={gotoEdit}>동화책 꾸미기</Button>
+        <Button onClick={goEdit}>동화책 꾸미기</Button>
       </ButtonWrap>
-    </Div>
+    </ImageContainerFrame>
   );
 };
 

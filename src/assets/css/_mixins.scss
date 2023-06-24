@@ -11,31 +11,28 @@ $thc1: #fe5c6b;
 $thc2: #ff9768;
 $thc3: #87ddde;
 
-// transform
-@mixin transform($transforms) {
-  -webkit-transform: $transforms;
-  -moz-transform: $transforms;
-  -o-transform: $transforms;
-  -ms-transform: $transforms;
-  transform: $transforms;
+//~~~~~~~~~~~~~  선명
+$color1: #052940;
+$color1: #113e59;
+$color1: #326173;
+$color1: #f2c166;
+$color1: #d9a362;
+
+//~~~~~~~~~~~~~  연하게
+$color1: #052940;
+$color1: #366273;
+$color1: #64888c;
+$color1: #f2c166;
+$color1: #d9a362;
+
+@mixin font-noto($weight) {
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: $weight;
 }
 
-//ellipse
-@mixin ellipse($line) {
-  @if ($line > 1) {
-    white-space: normal;
-    word-wrap: break-word;
-    display: -webkit-box;
-    -webkit-line-clamp: $line;
-    -webkit-box-orient: vertical;
-  } @else {
-    // white-space:nowrap;
-    white-space: normal;
-    word-wrap: break-word;
-    display: -webkit-box;
-    -webkit-line-clamp: $line;
-    -webkit-box-orient: vertical;
-  }
-  overflow: hidden;
-  text-overflow: ellipsis;
+@mixin font-taeb() {
+  font-family: "TAEBAEK milkyway";
+  font-style: normal;
+  font-weight: 400;
 }
