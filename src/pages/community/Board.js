@@ -5,7 +5,6 @@ import BoardSearch from "./BoardSearch";
 import Container from "../../components/global/Container";
 import Header from "../../components/global/Header";
 import ContentCover from "../../components/global/ContentCover";
-import ContentTitle from "../../components/global/ContentTitle";
 import InnerCover from "../../components/global/InnerCover";
 import BookContainer from "../../components/global/BookContainer";
 import Book from "../../components/global/Book";
@@ -14,24 +13,37 @@ const Board = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [books, setBooks] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
+  const [keyword, setKeyword] = useState("");
+  const [searchType, setSearchType] = useState("");
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await call(`/board?page=${currentPage}&size=8`, "GET", null);
-      console.log("API Response:", response); // API 응답 확인
+      let endpoint = "/board";
+      let params = `?page=${currentPage}&size=8`;
+
+      if (searchType === "author") {
+        params += `&author=${encodeURIComponent(keyword)}`;
+      } else if (searchType === "title") {
+        params += `&title=${encodeURIComponent(keyword)}`;
+      } else {
+        params += `&keyword=${encodeURIComponent(keyword)}`;
+      }
+
+      const response = await call(endpoint + params, "GET", null);
+      console.log("Board API Response:", response); // API 응답 확인
       if (response && response.data) {
-        console.log("Data:", response.data); // 데이터 확인
+        console.log("Board Data:", response.data); // 데이터 확인
         setBooks(response.data);
         setTotalPages(response.totalPages);
       }
     } catch (error) {
       console.log("Error fetching data:", error);
     }
-  }, [currentPage]);
+  }, [currentPage, keyword, searchType]);
 
   useEffect(() => { 
     fetchData();
-  }, [fetchData, currentPage]);
+  }, [fetchData, currentPage, keyword]);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -39,24 +51,10 @@ const Board = () => {
 
   const handleSearch = async (keyword, searchType) => {
     try {
-      let endpoint = "/board";
-      
-      if (searchType === "author") {
-        endpoint += `?author=${encodeURIComponent(keyword)}`;
-      } else if (searchType === "title") {
-        endpoint += `?title=${encodeURIComponent(keyword)}`;
-      } else {
-        endpoint += `?keyword=${encodeURIComponent(keyword)}`;
-      }
-  
-      const response = await call(endpoint, "GET", null);
-      if (response && response.data) {
-        console.log('데이터모양이다른가?1',response)
-        console.log('데이터모양이다른가?2',response.data)
-        setBooks(response.data);
-        setTotalPages(response.data.totalPages);
-        setCurrentPage(0); 
-      }
+      setKeyword(keyword);
+      setSearchType(searchType);
+      setCurrentPage(0); // 검색어가 변경되면 페이지 번호를 0으로 초기화
+      fetchData(); // fetchData 함수 호출하여 데이터 가져오기
     } catch (error) {
       console.log("Error fetching data:", error);
     }
@@ -70,7 +68,7 @@ const Board = () => {
   };
 
   useEffect(() => {
-    console.log("Books:븍븍 ", books);
+    console.log("Books:", books);
   }, [books]);
 
   return (
