@@ -1,7 +1,7 @@
 import "../../css/Board.css";
 import React, { useState, useEffect, useCallback } from "react";
 import { call } from "../../service/ApiService";
-
+import BoardSearch from "./BoardSearch";
 import Container from "../../components/global/Container";
 import Header from "../../components/global/Header";
 import ContentCover from "../../components/global/ContentCover";
@@ -39,6 +39,29 @@ const Board = () => {
     setCurrentPage(pageNumber);
   };
 
+  const handleSearch = async (keyword, searchType) => {
+    try {
+      let endpoint = "/board";
+      
+      if (searchType === "author") {
+        endpoint += `?author=${keyword}`;
+      } else if (searchType === "title") {
+        endpoint += `?title=${keyword}`;
+      } else {
+        endpoint += `?keyword=${keyword}`;
+      }
+  
+      const response = await call(endpoint, "GET", null);
+      if (response && response.data) {
+        setBooks(response.data.data);
+        setTotalPages(response.data.totalPages);
+        setCurrentPage(0); 
+      }
+    } catch (error) {
+      console.log("Error fetching data:", error);
+    }
+  };
+  
   const truncateTitle = (title) => {
     if (title.length > 10) {
       return title.substring(0, 10) + "...";
@@ -62,6 +85,7 @@ const Board = () => {
           textAlign: "left"
         }}
         >우리들의 도서관</div>
+        <BoardSearch handleSearch={handleSearch} />
         <InnerCover>
           <BookContainer>
             {books.length > 0 ? (
