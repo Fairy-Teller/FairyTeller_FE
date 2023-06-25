@@ -149,6 +149,10 @@ function FairytaleShow(bookid) {
         setIsModalOpen(false);
     };
 
+    const Text = styled.p`
+        color: white;
+    `;
+
     const handleRecordingComplete = async (pageNumber, audioBlob) => {
         console.log('Recording completed for page:', pageNumber);
         console.log('audioBlob', audioBlob);
@@ -192,13 +196,13 @@ function FairytaleShow(bookid) {
                                 <>
                                     <audio ref={audioRef} src={audioInfo[bookPage]} controls preload="auto" />
                                     <VoiceButton onClick={() => setIsModalOpen(true)}></VoiceButton>
-                                    <p>마이크 버튼을 눌러 나만의 동화를 녹음해 보세요</p>
+                                    <Text>마이크 버튼을 눌러 나만의 동화를 녹음해 보세요</Text>
                                 </>
                             ) : !userAudioInfo[bookPage] && bookid.state ? (
                                 <>
                                     <audio ref={audioRef} src={audioInfo[bookPage]} controls preload="auto" />
                                     <Voicechange></Voicechange>
-                                    <p>동화를 읽어드립니다! 재생버튼을 클릭해 보세요</p>
+                                    <Text>동화를 읽어드립니다! 재생버튼을 클릭해 보세요</Text>
                                 </>
                             ) : null}
                             {userAudioInfo[bookPage] && (
@@ -213,12 +217,12 @@ function FairytaleShow(bookid) {
                                     {check === 'user' ? (
                                         <>
                                             <Voicechange onClick={handleToggleAudio}></Voicechange>
-                                            <p>로봇 버튼을 누르시면 기계음성으로 변환합니다.</p>
+                                            <Text>로봇 버튼을 누르시면 기계음성으로 변환합니다.</Text>
                                         </>
                                     ) : (
                                         <>
                                             <Voiceuserchange onClick={handleToggleAudio}></Voiceuserchange>
-                                            <p>사람 버튼을 누르시면 녹음 음성으로 변환합니다.</p>
+                                            <Text>사람 버튼을 누르시면 녹음 음성으로 변환합니다.</Text>
                                         </>
                                     )}
                                 </>
