@@ -9,11 +9,10 @@ import ImgSelect from "../components/ImgSelect";
 import ImgGenerate from "../components/ImgGenerate";
 
 const Div = styled.div`
-  margin-bottom: 6rem;
-  color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: white;
 `;
 const ImageWrap = styled.div`
   padding: 0;
@@ -33,7 +32,16 @@ const Img = styled.img`
   margin: 0;
   background-color: #d9d9d9;
 `;
-const Story = styled.div`
+const StoryText = styled.div`
+  width: 960px;
+  padding: 1.2rem 1.6rem;
+  margin: 0.4rem auto;
+  color: black;
+  line-height: 1.4;
+  word-break: keep-all;
+  background-color: pink;
+`;
+const Guide = styled.div`
   position: fixed;
   top: 220px;
   left: ${(props) => (!props.isHovered ? "10rem" : "8rem")};
@@ -67,7 +75,7 @@ const Button = styled.button`
   font-size: 1.2rem;
   text-align: center;
   color: #000000;
-  background-color: #99f0cc;
+  background-color: pink;
   border-radius: 0.8rem;
 `;
 
@@ -155,16 +163,19 @@ const PreviewGeneratedIamge = (props) => {
 
   return (
     <Div>
+      <StoryText>{savedStory[props.index]["paragraph"]}</StoryText>
       {isLoading && <LoadingModal message='AI가 열심히 그림을 그리는 중입니다.' />}
-      <Story
+      <Guide
         isHovered={isHovered}
         className='current'
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}>
         <Text isHovered={isHovered}>
-          {isHovered ? savedStory[props.index]["paragraph"] : "내용"}
+          {isHovered
+            ? "이미지 생성 -> 이미지가 맘에 들면 선택하기 -> 맘에 안 들면 다시 뽑기 (최대 2회)"
+            : "안내"}
         </Text>
-      </Story>
+      </Guide>
 
       <ImageWrap>
         <Img src={savedImageTemp[props.index] && savedImageTemp[props.index]["url"]} />
