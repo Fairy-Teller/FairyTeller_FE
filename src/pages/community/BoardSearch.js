@@ -18,7 +18,7 @@ const BoardSearch = ({ handleSearch }) => {
   };
 
   return (
-    <div style={{ marginBottom: '20px' }}>
+    <div className="board-search-container"style={{ marginBottom: '20px' }}>
       <form className="board-search" onSubmit={handleFormSubmit}>
         <select
           className="board-search__select"

@@ -1,6 +1,13 @@
+.board-search-container {
+  display: flex;
+  justify-content: center;
+  width: 40%;
+}
+
 .board-search {
   display: flex;
   align-items: center;
+  width: 80%;
 }
 
 .board-search__select {
