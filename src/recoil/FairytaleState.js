@@ -118,7 +118,14 @@ export const Canvasexport = atom({
   effects_UNSTABLE: [persistAtom],
 });
 
+// Book show에서 페이지 변환시, state 사용
 export const BookPage = atom({
   key: "BookPage",
   default: 0,
+});
+
+// 그림체 선택
+export const Imagetheme = atom({
+  key: "Imagetheme",
+  default: 1,
 });
