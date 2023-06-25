@@ -1,6 +1,11 @@
 import React, { useEffect, useState, useRef, useReducer } from "react";
-import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
-import { SelectStickers, SaveState, Canvasexport } from "../recoil/FairytaleState";
+import {
+  atomFamily,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+  useResetRecoilState,
+} from "recoil";
 import { call } from "../service/ApiService";
 import styled, { css } from "styled-components";
 import { fabric } from "fabric";
@@ -72,23 +77,15 @@ const ItemTitle = styled.div`
 const Canvas = (props) => {
   const btnLabels = [USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER];
   const canvasRef = useRef(null);
-  // const fabricCanvasRef = useRef(null);
-  // const [canvasStates, setCanvasStates] = useState({});
-
-  const [activeTab, setActiveTab] = useState(null); // 수정탭 출력 여부를 위한 state
-  const selectStickers = useRecoilValue(SelectStickers); // 선택한 스티커의 정보 state
-  const saveState = useRecoilValue(SaveState); // 캔버스 저장 버튼 useEffect에 쓰기 위함 state
-  const setCanvasExport = useSetRecoilState(Canvasexport); // 캔버스 내보내기 state
-  // const showCanvasExport = useRecoilValue(Canvasexport); // console.log 용 state
-  const resetCanvasexport = useResetRecoilState(Canvasexport); // 첫 랜더링 될 때, 이전 저장된 이미지 state 삭제
-
-  // const [savedCanvasState, setSavedCanvasState] = useRecoilState(canvasState(props.canvasid));
+  const [activeTab, setActiveTab] = useState(null);
+  const selectStickers = useRecoilValue(SelectStickers);
+  const saveState = useRecoilValue(SaveState);
+  const setCanvasExport = useSetRecoilState(Canvasexport);
+  const resetCanvasexport = useResetRecoilState(Canvasexport);
   const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
   const [showImage, setShowImage] = useState(props.BookId);
-
   const [canvas, setCanvas] = useState(null);
-  // const bookInfo = useRef(null);
-  const [showEditToolTab, setShowEditToolTab] = useState(false); // Add new state variable
+  const [showEditToolTab, setShowEditToolTab] = useState(false);
 
   useEffect(() => {
     try {
@@ -98,27 +95,17 @@ const Canvas = (props) => {
     }
   }, []);
 
-  // 최신 저장 가져오기
   const getNewest = async () => {
     try {
       const data = await call("/book/my-newest", "GET", null);
       setShowImage(data);
-
       const initializedCanvas = initCanvas(data);
       setCanvas(initializedCanvas);
-
       resetCanvasexport(null);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
   };
-
-  // 이미지 저장하기
-  useEffect(() => {
-    if (saveState === "save") {
-      saveAsImage("jpeg");
-    }
-  }, [saveState]);
 
   const saveAsImage = (format) => {
     if (canvas) {
@@ -141,10 +128,7 @@ const Canvas = (props) => {
     }
   };
 
-  // 캔버스 초기화
   const initCanvas = (data) => {
-    // console.log("data", data);
-
     const canvas = new fabric.Canvas(canvasRef.current, {
       height: 720,
       width: 1280,
@@ -198,7 +182,6 @@ const Canvas = (props) => {
     return canvas;
   };
 
-  // 탭
   const handleButtonClick = (label) => {
     setActiveTab(label === activeTab ? null : label);
     setShowButtonFunctiontion(!showButtonFunction);
@@ -213,7 +196,6 @@ const Canvas = (props) => {
     }
   };
 
-  // 텍스트 박스
   const addTextBox = () => {
     let text = new fabric.Textbox("원하는 내용을 추가하세요", {
       selectable: true,
@@ -238,7 +220,6 @@ const Canvas = (props) => {
     canvas.add(text);
   };
 
-  // 텍스트 스타일링
   const stylesReducer = (state, action) => {
     const activeObject = action.canvas.getActiveObject();
 
@@ -289,12 +270,10 @@ const Canvas = (props) => {
 
   const [state, dispatch] = useReducer(stylesReducer, { selectColor: true });
 
-  // 삭제
   const deleteObject = () => {
     canvas.remove(canvas.getActiveObject());
   };
 
-  // 파일 불러와서 이미지 첨부
   const readImage = (e) => {
     let file = e.target.files[0];
     let reader = new FileReader();
@@ -317,21 +296,15 @@ const Canvas = (props) => {
     reader.readAsDataURL(file);
   };
 
-  // 스티커 투입
   const selectStickersShow = (item) => {
     fabric.Image.fromURL(
       item + "?timestamp=" + new Date().getTime(),
       function (img) {
-        // img.crossOrigin = `Anonymous`;
-        // img.setAttribute('crossOrigin', '');
         img.scale(0.5).set({
           left: 150,
           top: 150,
           angle: -15,
         });
-
-        // img.getElement().setAttribute('crossOrigin', 'anonymous');
-        // canvas.add(img).setActiveObject(img);
 
         canvas.add(img).setActiveObject(img);
       },
@@ -339,7 +312,6 @@ const Canvas = (props) => {
     );
   };
 
-  // 현재 활성 객체
   const [currActiveObject, setCurrActiveObject] = useState(null);
 
   const getCurrActiveObject = (e) => {
@@ -352,7 +324,6 @@ const Canvas = (props) => {
     canvas.on("mouse:down:before", getCurrActiveObject);
   }
 
-  // redo/undo
   const canvasStates = useRef([]);
   const currentStateIndex = useRef(-1);
 
@@ -364,9 +335,7 @@ const Canvas = (props) => {
   };
 
   const undo = () => {
-    console.log("undo버튼눌림");
     if (currentStateIndex.current > 0) {
-      console.log("undo들어왔당");
       currentStateIndex.current--;
       const json = canvasStates.current[currentStateIndex.current];
       canvas.loadFromJSON(json, () => {
@@ -376,9 +345,7 @@ const Canvas = (props) => {
   };
 
   const redo = () => {
-    console.log("redo버튼눌림");
     if (currentStateIndex.current < canvasStates.current.length - 1) {
-      console.log("redo들어왔당");
       currentStateIndex.current++;
       const json = canvasStates.current[currentStateIndex.current];
       canvas.loadFromJSON(json, () => {
@@ -411,6 +378,7 @@ const Canvas = (props) => {
           {fonts.map((item) =>
             fonts.length > 0 ? (
               <TabSelection
+                key={item}
                 name={TEXTSTYLE + "-tab"}
                 stylename={item}
                 onClick={(e) => {
@@ -427,6 +395,7 @@ const Canvas = (props) => {
           {aligns.map((item) =>
             aligns.length > 0 ? (
               <TabSelection
+                key={item}
                 name={TEXTSTYLE + "-tab"}
                 stylename={item}
                 onClick={(e) => {
@@ -471,6 +440,7 @@ const Canvas = (props) => {
         {selectStickers.map((item) =>
           selectStickers.length > 0 ? (
             <TabSelection
+              key={item.id}
               name={STICKER + "-tab"}
               idx={item.id}
               src={item.src}
