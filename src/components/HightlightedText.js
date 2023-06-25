@@ -23,13 +23,15 @@ const Wrapper = styled.h1`
     }
 
     &::after {
+        /* Rectangle 762 */
+
         content: '';
         position: absolute;
         bottom: -2px; /* Half the thickness of the underline */
         left: 0;
         width: 0;
         height: 8px; /* Thickness of the underline */
-        background-color: yellow;
+        background-color: rgba(254, 224, 128, 0.53);
         animation: ${underlineAnimation} 5s linear forwards;
 
         ${(props) =>
@@ -89,7 +91,11 @@ const HighlightedText = (props) => {
         ));
     };
 
-    return <>{renderHighlightedText()}</>;
+    return (
+        <>
+            <div style={{ marginTop: '10%', marginLeft: '15%' }}>{renderHighlightedText()}</div>
+        </>
+    );
 };
 
 export default HighlightedText;

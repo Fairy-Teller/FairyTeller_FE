@@ -13,6 +13,16 @@ const buttonStyle = {
     transition: 'background-color 0.3s ease',
     marginRight: '10px',
 };
+const buttonStyles = {
+    backgroundColor: '#70A5E3',
+    color: '#fff',
+    padding: '10px 20px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontSize: '1rem',
+    transition: 'background-color 0.3s ease',
+};
 const recordInfoStyle = {
     marginTop: '10px',
     fontWeight: 'bold',
@@ -39,6 +49,7 @@ const RecordButton = ({
     const [stopwatch, setStopwatch] = useState(0);
     const mediaRecorder = useRef(null);
     const stopwatchInterval = useRef(null);
+
     useEffect(() => {
         const handleStartRecording = async () => {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -67,6 +78,7 @@ const RecordButton = ({
             handleStartRecording();
             setCountdown(0);
         }, 3000);
+
         return () => {
             clearTimeout(countdownTimeout);
             if (isRecording) {
@@ -135,8 +147,6 @@ const RecordButton = ({
         }
     };
 
-
-
     // Format stopwatch time to HH:MM:SS
     const formatStopwatchTime = (time) => {
         const hours = Math.floor(time / 3600);
@@ -151,7 +161,7 @@ const RecordButton = ({
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <VerticallyCenteredDiv>
                 {audioBlob ? (
-                    <div style={{ display: 'float' }}>
+                    <div style={{ display: 'float', marginBottom: '2%' }}>
                         <button style={buttonStyle} onClick={handleSaveRecording}>
                             저장
                         </button>
@@ -163,19 +173,21 @@ const RecordButton = ({
             </VerticallyCenteredDiv>
             {isRecording && !audioBlob ? (
                 <div>
-                    <button
-                        style={buttonStyle}
-                        onClick={() => {
-                            mediaRecorder.current.stop();
-                        }}
-                    >
-                        녹음 완료
-                    </button>
-                    <div style={recordInfoStyle}>{pageNumber} 녹음중입니다.</div>
+                    <div style={{ width: '100vw', display: 'flex', justifyContent: 'center', marginBottom: '2%' }}>
+                        <button
+                            style={buttonStyles}
+                            onClick={() => {
+                                mediaRecorder.current.stop();
+                            }}
+                        >
+                            녹음 완료
+                        </button>
+                    </div>
+                    <div style={recordInfoStyle}>{pageNumber} 페이지 녹음중입니다.</div>
                     <div style={recordInfoStyle}>경과 시간: {formatStopwatchTime(stopwatch)}</div>
-                    <br />
+
                     {/* <img src="rec.gif" alt="녹화중"></img> */}
-                    <br />
+
                     <HighlightedText bookstorys={bookstory} />
                 </div>
             ) : null}
