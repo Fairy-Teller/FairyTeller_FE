@@ -50,6 +50,14 @@
   margin-right: 20px;
 }
 
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
 .boardContent {
   margin-top: 20px;
 }
