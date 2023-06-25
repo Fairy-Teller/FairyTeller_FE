@@ -37,6 +37,9 @@ const Start = () => {
           <Button>
             <Link to='/keyword'>AI한테 이야기 부탁하기</Link>
           </Button>
+          <Button>
+            <Link to='/board'>우리들의 도서관 가기</Link>
+          </Button>
         </CenteredWrap>
       </div>
     </Container>
