@@ -31,7 +31,7 @@ const Div = styled.div`
 const Button = styled.button`
   width: 100px;
   height: 50px;
-  background: #99f0cc;
+  background: pink;
   border-radius: 10px;
 
   font-style: normal;

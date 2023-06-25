@@ -13,7 +13,7 @@ const Button = styled.button`
   font-size: 1.2rem;
   text-align: center;
   color: #000000;
-  background-color: #99f0cc;
+  background-color: pink;
   border-radius: 0.8rem;
 `;
 

@@ -46,7 +46,7 @@ const ButtonWrap = styled.div`
 const Button = styled.button`
   width: 200px;
   height: 40px;
-  background: #99f0cc;
+  background: pink;
   border-radius: 10px;
   font-style: normal;
   font-weight: 400;
