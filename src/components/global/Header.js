@@ -33,6 +33,9 @@ const Header = (props) => {
     const myPageClick = () => {
         navigate('/My');
     };
+    const updateUserClick = () => {
+        navigate('/updateUser');
+    };
     return (
         <div className="header-wrap">
             <header className={`header ${props.className === undefined ? '' : props.className}`}>
@@ -40,9 +43,10 @@ const Header = (props) => {
                 <button id={'logo'} onClick={handleClick}>
                     <img src="../../logo-bright.png" />
                 </button>
-                <div style={{ width: '255px' }}>
+                <div style={{ width: '350px', display: 'flex', flexDirection: 'row' }}>
                     <UserName onClick={signoutClick}>로그아웃</UserName>
-                    <UserName onClick={myPageClick}>{useInfo} 작가님</UserName>
+                    <UserName onClick={myPageClick}>마이페이지</UserName>
+                    <UserName onClick={updateUserClick}>{useInfo} 작가님</UserName>
                 </div>
 
                 {props.children}
