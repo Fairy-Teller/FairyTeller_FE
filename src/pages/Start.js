@@ -36,7 +36,7 @@ const Start = () => {
                     <CenteredWrap>
                         <Button onClick={() => navigate('/story-user')}>스스로 동화 이야기 만들기</Button>
                         <Button onClick={() => navigate('/keyword')}>AI한테 이야기 부탁하기</Button>
-                        <Button onClick={() => navigate('/boar')}>우리들의 도서관 가기</Button>
+                        <Button onClick={() => navigate('/board')}>우리들의 도서관 가기</Button>
                     </CenteredWrap>
                 </div>
             </Container>
