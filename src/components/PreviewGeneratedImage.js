@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useRecoilCallback } from 'recoil';
-import { SavedBoolState, StoryState, ImageTempState, BookState, Imagetheme } from '../recoil/FairytaleState';
+import { SavedBoolState, StoryState, ImageTempState, BookState } from '../recoil/FairytaleState';
 import { call } from '../service/ApiService';
 import styled from 'styled-components';
 import LoadingModal from './LoadingModal';
@@ -13,15 +13,6 @@ const Div = styled.div`
     flex-direction: column;
     align-items: center;
     color: white;
-`;
-
-const Story = styled.div`
-    position: fixed;
-    top: 220px;
-    left: ${(props) => (!props.isHovered ? '10rem' : '8rem')};
-    z-index: 99;
-    border-radius: 50%;
-    transition: left 0.4s;
 `;
 const ImageWrap = styled.div`
     padding: 0;
@@ -41,7 +32,6 @@ const Img = styled.img`
     margin: 0;
     background-color: #d9d9d9;
 `;
-
 const StoryText = styled.div`
     width: 960px;
     padding: 1.2rem 1.6rem;
@@ -98,7 +88,6 @@ const PreviewGeneratedIamge = (props) => {
     const savedStory = useRecoilValue(StoryState);
     const [savedImageTemp, setSavedImageTemp] = useRecoilState(ImageTempState);
     const [savedBook, setSavedBook] = useRecoilState(BookState);
-    const imagetheme = useRecoilValue(Imagetheme);
     // const [imgUrl, setImgURL] = useState(null);
     const [isSaveImage, setIsSaveImage] = useRecoilState(SavedBoolState);
 
@@ -107,7 +96,7 @@ const PreviewGeneratedIamge = (props) => {
             setIsLoading(true);
 
             const imageData = await call('/chat-gpt/textToImage/v2', 'POST', {
-                loraNo: imagetheme,
+                loraNo: 1,
                 text: savedStory[props.index]['paragraph'],
             });
 
@@ -174,15 +163,20 @@ const PreviewGeneratedIamge = (props) => {
 
     return (
         <Div>
+            <StoryText>{savedStory[props.index]['paragraph']}</StoryText>
             {isLoading && <LoadingModal message="AI가 열심히 그림을 그리는 중입니다." />}
-            <Story
+            <Guide
                 isHovered={isHovered}
                 className="current"
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
-                <Text isHovered={isHovered}>{isHovered ? savedStory[props.index]['paragraph'] : '내용'}</Text>
-            </Story>
+                <Text isHovered={isHovered}>
+                    {isHovered
+                        ? '이미지 생성 -> 이미지가 맘에 들면 선택하기 -> 맘에 안 들면 다시 뽑기 (최대 2회)'
+                        : '안내'}
+                </Text>
+            </Guide>
 
             <ImageWrap>
                 <Img src={savedImageTemp[props.index] && savedImageTemp[props.index]['url']} />
