@@ -29,16 +29,18 @@ const Start = () => {
     const navigate = useNavigate();
 
     return (
-        <Container>
-            <Header mode={'default'} />
-            <div className="start an1">
-                <CenteredWrap>
-                    <Button onClick={() => navigate('/story-user')}>스스로 동화 이야기 만들기</Button>
-                    <Button onClick={() => navigate('/keyword')}>AI한테 이야기 부탁하기</Button>
-                    <Button onClick={() => navigate('/boar')}>우리들의 도서관 가기</Button>
-                </CenteredWrap>
-            </div>
-        </Container>
+        <div style={{ backgroundImage: 'url("/images/background_start.png")' }}>
+            <Container>
+                <Header mode={'default'} />
+                <div className="start an1">
+                    <CenteredWrap>
+                        <Button onClick={() => navigate('/story-user')}>스스로 동화 이야기 만들기</Button>
+                        <Button onClick={() => navigate('/keyword')}>AI한테 이야기 부탁하기</Button>
+                        <Button onClick={() => navigate('/boar')}>우리들의 도서관 가기</Button>
+                    </CenteredWrap>
+                </div>
+            </Container>
+        </div>
     );
 };
 
