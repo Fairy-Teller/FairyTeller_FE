@@ -30,7 +30,9 @@ const Header = (props) => {
         userReset();
         signout();
     };
-    const myPageClick = () => {};
+    const myPageClick = () => {
+        navigate('/My');
+    };
     return (
         <div className="header-wrap">
             <header className={`header ${props.className === undefined ? '' : props.className}`}>

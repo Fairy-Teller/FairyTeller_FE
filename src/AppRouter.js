@@ -17,6 +17,9 @@ import MyBookDetail from './pages/mypage/MyBookDetail';
 import Board from './pages/community/Board';
 import BoardDetail from './pages/community/BoardDetail';
 import My from './pages/community/My';
+
+import Mypage from "./pages/mypage/MyBookList"
+
 //fairytale
 import Artstyle from './pages/fairytale/Artstyle';
 import FairytaleEdit from './pages/fairytale/FairytaleEdit';
@@ -45,7 +48,7 @@ function AppRouter() {
                 <Route path="myBookList/:bookId" element={<MyBookDetail />} />
                 <Route path="board" element={<Board />} />
                 <Route path="board/:boardId" element={<BoardDetail />} />
-                <Route path="my" element={<My />} />
+                <Route path="my" element={<Mypage />} />
                 <Route path="artstyle" element={<Artstyle />} />
                 <Route path="f-edit" element={<FairytaleEdit />} />
                 <Route path="f-export" element={<FairytaleExport />} />
