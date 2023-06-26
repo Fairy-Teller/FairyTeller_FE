@@ -42,12 +42,20 @@
 .deleteButton {
   padding: 8px 18px;
   border: none;
-  background: #99f0cc;
+  background: pink;
   color: #333;
   cursor: pointer;
   margin-bottom: 2px;
   margin-left: 10px;
   margin-right: 20px;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
 }
 
 .boardContent {
@@ -85,7 +93,7 @@
   margin-left: 5px;
   padding: 5px 10px;
   border: none;
-  background: #99f0cc;
+  background: pink;
   color: #d9d9d9;
   cursor: pointer;
 }

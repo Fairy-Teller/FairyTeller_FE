@@ -29,10 +29,12 @@ const Div = styled.div`
     justify-content: flex-start; /* Align items at the top */
 `;
 const Button = styled.button`
-    width: 100px;
-    height: 50px;
-    background: #99f0cc;
-    border-radius: 10px;
+
+  width: 100px;
+  height: 50px;
+  background: pink;
+  border-radius: 10px;
+
 
     font-style: normal;
     font-weight: 400;

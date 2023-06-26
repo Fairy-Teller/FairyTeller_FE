@@ -98,11 +98,12 @@ const BoardDetail = () => {
             <Header mode={'default'} />
             <div>
                 <div className="deleteButtonContainer">
-                    {board.editable && (
-                        <button className="deleteButton" onClick={handleDeleteBoard}>
-                            Delete
-                        </button>
-                    )}
+                <button
+                className={`deleteButton ${board.editable ? 'visible' : 'hidden'}`}
+                onClick={handleDeleteBoard}
+                >
+                    Delete
+                </button>
                 </div>
                 <div>
                     <h2 className="title center" style={{ fontSize: '25px' }}>
@@ -117,21 +118,21 @@ const BoardDetail = () => {
                     <div className="action-section">
                         <div className="like-button">
                             <button
-                                class="like-btn"
+                                className="like-btn"
                                 onClick={handleLike}
                                 style={{ backgroundColor: 'transparent', border: 'none' }}
                             >
                                 {isLiked ? (
-                                    <FontAwesomeIcon icon={solidHeart} class="fa-heart" style={{ color: 'red' }} />
+                                    <FontAwesomeIcon icon={solidHeart} className="fa-heart" style={{ color: 'red' }} />
                                 ) : (
-                                    <FontAwesomeIcon icon={regularHeart} class="fa-heart" style={{ color: 'red' }} />
+                                    <FontAwesomeIcon icon={regularHeart} className="fa-heart" style={{ color: 'red' }} />
                                 )}
                                 <span style={{ marginLeft: '5px' }}>
                                     {isLiked ? '동화가 마음에 들었어요!' : '동화가 마음에 드시나요?'}
                                 </span>
                             </button>
                         </div>
-                        <div class="comment-section">
+                        <div className="comment-section">
                             <CommentSection
                                 comments={comments}
                                 setComments={setComments}

@@ -9,11 +9,11 @@ import ImgSelect from '../components/ImgSelect';
 import ImgGenerate from '../components/ImgGenerate';
 
 const Div = styled.div`
-    margin-bottom: 6rem;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+
 `;
 const ImageWrap = styled.div`
     padding: 0;
@@ -33,13 +33,24 @@ const Img = styled.img`
     margin: 0;
     background-color: #d9d9d9;
 `;
-const Story = styled.div`
-    position: fixed;
-    top: 220px;
-    left: ${(props) => (!props.isHovered ? '10rem' : '8rem')};
-    z-index: 99;
-    border-radius: 50%;
-    transition: left 0.4s;
+
+const StoryText = styled.div`
+  width: 960px;
+  padding: 1.2rem 1.6rem;
+  margin: 0.4rem auto;
+  color: black;
+  line-height: 1.4;
+  word-break: keep-all;
+  background-color: pink;
+`;
+const Guide = styled.div`
+  position: fixed;
+  top: 220px;
+  left: ${(props) => (!props.isHovered ? "10rem" : "8rem")};
+  z-index: 99;
+  border-radius: 50%;
+  transition: left 0.4s;
+
 `;
 const TextContent = styled.p`
     width: ${(props) => (!props.isHovered ? '120px' : '720px')};
@@ -59,16 +70,18 @@ const TextContent = styled.p`
     border-radius: 12rem;
 `;
 const Button = styled.button`
-    width: 8rem;
-    height: 3.2rem;
-    margin: 2rem 0 0 0;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 1.2rem;
-    text-align: center;
-    color: #000000;
-    background-color: #99f0cc;
-    border-radius: 0.8rem;
+
+  width: 8rem;
+  height: 3.2rem;
+  margin: 2rem 0 0 0;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.2rem;
+  text-align: center;
+  color: #000000;
+  background-color: pink;
+  border-radius: 0.8rem;
+
 `;
 
 const Text = (props) => {
