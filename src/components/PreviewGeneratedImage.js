@@ -50,21 +50,21 @@ const Guide = styled.div`
     transition: left 0.4s;
 `;
 const TextContent = styled.p`
-    width: ${(props) => (!props.isHovered ? '120px' : '720px')};
-    height: ${(props) => (!props.isHovered ? '120px' : 'auto')};
-    padding: ${(props) => (!props.isHovered ? '0' : '1.2rem 2.4rem')};
-    font-size: ${(props) => (!props.isHovered ? '1.6rem' : '1.2rem')};
-    display: ${(props) => (!props.isHovered ? 'flex' : 'block')};
-    justify-content: ${(props) => (!props.isHovered ? 'center' : 'center')};
-    align-items: ${(props) => (!props.isHovered ? 'center' : 'center')};
-    box-sizing: border-box;
-    text-align: left;
-    line-height: 1.4;
-    color: #000000;
-    word-break: keep-all;
-    border: 0.4rem solid #edaeae;
-    background-color: white;
-    border-radius: 12rem;
+  width: ${(props) => (!props.isHovered ? "120px" : "720px")};
+  height: 120px;
+  padding: ${(props) => (!props.isHovered ? "0" : "1.2rem 2.4rem")};
+  font-size: ${(props) => (!props.isHovered ? "1.6rem" : "1.2rem")};
+  display: ${(props) => (!props.isHovered ? "flex" : "block")};
+  justify-content: ${(props) => (!props.isHovered ? "center" : "center")};
+  align-items: ${(props) => (!props.isHovered ? "center" : "center")};
+  box-sizing: border-box;
+  text-align: left;
+  line-height: 1.4;
+  color: #000000;
+  word-break: keep-all;
+  border: 0.4rem solid #edaeae;
+  background-color: white;
+  border-radius: 12rem;
 `;
 const Button = styled.button`
     width: 8rem;
