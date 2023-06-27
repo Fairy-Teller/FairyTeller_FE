@@ -38,11 +38,20 @@ const TitleBox = styled.div`
     color: white;
 
     font-weight: 400;
-    font-size: 2.8rem;
+    font-size: 30px;
     text-align: center;
 `;
 
-function FairytaleExport() {
+const PageWrapper = styled.div`
+    background-image: url('/images/background_blur.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed; /* 배경 이미지를 스크롤에 고정 */
+    min-height: 100vh;
+`;
+
+const FairytaleExport = () => {
     const [thumbnailUrl, setThumbnailUrl] = useState('');
     const [BookId, setBookId] = useState('');
     const [Title, setTitle] = useState('');
@@ -50,13 +59,11 @@ function FairytaleExport() {
 
     useEffect(() => {
         fetchData();
-        document.body.style.overflow = 'hidden';
-
-        return () => {
-            // 컴포넌트가 언마운트될 때 스크롤 가능하게 되돌림
-            document.body.style.overflow = 'auto';
-        };
+        scrollToTop();
     }, []);
+    const scrollToTop = () => {
+        window.scrollTo(0, 0);
+    };
 
     const fetchData = async () => {
         try {
@@ -83,6 +90,7 @@ function FairytaleExport() {
             console.log('Error fetching data:', error);
         }
     };
+
     const exportPDF = async () => {
         for (var i = 0; i < Image.length; i++) {
             (function (index) {
@@ -101,22 +109,13 @@ function FairytaleExport() {
     };
 
     return (
-        <div
-            style={{
-                backgroundImage: 'url("/images/background_blur.png")',
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center',
-                backgroundAttachment: 'fixed', // 배경 이미지를 스크롤에 고정
-                minHeight: '100vh',
-            }}
-        >
+        <PageWrapper>
             <Header mode={'default'} />
             <ContentCover>
-                <TitleBox>동화 제목: {Title} </TitleBox>
-
                 <InnerCover>
+                    <TitleBox>동화 제목: {Title} </TitleBox>
                     <FairytaleShow props={BookId}></FairytaleShow>
+
                     <div>
                         <ButtonFrame>
                             <Button onClick={gotoBoard}>게시판 전시하기</Button>
@@ -125,8 +124,8 @@ function FairytaleExport() {
                     </div>
                 </InnerCover>
             </ContentCover>
-        </div>
+        </PageWrapper>
     );
-}
+};
 
 export default FairytaleExport;
