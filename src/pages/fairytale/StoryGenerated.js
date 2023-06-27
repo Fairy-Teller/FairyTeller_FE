@@ -73,10 +73,10 @@ const StoryGenerated = () => {
         fullStory: item["paragraph"],
       }));
       await createBook({ pages: bookDTO });
+      setIsLoading(false);
     } catch (error) {
       console.log("Error fetching data:", error);
     } finally {
-      setIsLoading(false);
       navigate("/artstyle");
     }
   };
@@ -131,7 +131,6 @@ const StoryGenerated = () => {
         <Container>
           <Header mode={"default"} />
           <ContentCover>
-            <ProgressBar step={1} />
             <ContentTitle>AI가 만든 동화를 수정할 수 있어요!</ContentTitle>
             <InnerCover>
               <form onSubmit={onSubmitHandler}>

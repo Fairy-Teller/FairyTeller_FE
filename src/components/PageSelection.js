@@ -21,7 +21,7 @@ const Image = styled.div`
     `}
   background-size: cover;
   border-radius: 0.4rem;
-  transition: all 0.4s ease-in-out;
+  transition: all 0.24s ease-in-out;
   box-shadow: ${(props) =>
     props.isHovered
       ? "0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.8)"

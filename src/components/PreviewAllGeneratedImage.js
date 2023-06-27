@@ -15,27 +15,20 @@ const ImageContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 30px;
-  margin-bottom: 30px;
   width: 1000px; /* Sum of Image widths and gaps (350 * 3 + 30 * 2) */
 `;
 const Image = styled.img`
-  width: 300px;
-  height: 200px;
+  width: 100%;
+  height: 240px;
+  margin-bottom: 0.8rem;
   object-fit: cover;
-  border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out;
-  margin-bottom: 30px;
-
-  &:nth-child(4),
-  &:nth-child(5) {
-    margin-right: auto;
-    margin-left: auto;
-  }
+  border-radius: 0.8rem;
+  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.2);
+  transition: all 0.24s ease-in-out;
 
   &:hover {
-    transform: scale(1.04);
+    height: 520px;
+    transform: scale(1.012);
   }
 `;
 const ButtonWrap = styled.div`
@@ -76,13 +69,17 @@ const PreviewAllGeneratedIamge = () => {
   return (
     <ImageContainerFrame>
       <ImageContainer>
-        {savedImageTemp.map((item, index) => (
-          <Image
-            key={index}
-            src={item["url"]}
-            alt={`Generated Image ${index + 1}`}
-          />
-        ))}
+        {savedImageTemp.length > 0 ? (
+          savedImageTemp.map((item, index) => (
+            <Image
+              key={index}
+              src={item["url"]}
+              alt={`Generated Image ${index + 1}`}
+            />
+          ))
+        ) : (
+          <div>이미지를 생성해주세요!</div>
+        )}
       </ImageContainer>
       <ButtonWrap>
         <Button onClick={goEdit}>동화책 꾸미기</Button>

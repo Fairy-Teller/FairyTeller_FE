@@ -17,7 +17,6 @@ const TextArea = styled.textarea`
   width: calc(100% - 8rem);
   min-height: 4rem;
   background-color: #f2c166;
-  overflow: auto;
   resize: none;
   font-size: 1.3rem;
   border-radius: 2rem;

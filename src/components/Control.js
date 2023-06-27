@@ -1,20 +1,31 @@
 import React from "react";
 import styled from "styled-components";
 import "../assets/css/control.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowAltCircleLeft as prev } from "@fortawesome/free-regular-svg-icons";
+import { faArrowAltCircleRight as next } from "@fortawesome/free-regular-svg-icons";
 
 const [PREV, NEXT, DONE] = ["prev", "next", "done"];
 
 const Button = styled.button`
-  width: 8rem;
-  height: 3.2rem;
-  margin: -8rem 0 0;
+  width: 4.4rem;
+  height: 4.4rem;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-style: normal;
   font-weight: 400;
-  font-size: 1.2rem;
+  font-size: 4rem;
   text-align: center;
-  color: #000000;
-  background-color: pink;
-  border-radius: 0.8rem;
+  color: #edaeae;
+  border-radius: 50%;
+  transition: background 0.24s;
+  background-color: #fff;
+  &:hover {
+    color: #fff;
+    background-color: #edaeae;
+  }
 `;
 
 const Control = (props) => {
@@ -27,8 +38,8 @@ const Control = (props) => {
       <Button
         type='button'
         onClick={onClickHandler}
-        style={{ marginRight: "2rem" }}>
-        이전
+        style={{ marginRight: "0.4rem" }}>
+        <FontAwesomeIcon icon={prev} />
       </Button>
     );
   } else if (props.mode === NEXT) {
@@ -36,15 +47,15 @@ const Control = (props) => {
       <Button
         type='button'
         onClick={onClickHandler}
-        style={{ marginLeft: "2rem" }}>
-        다음
+        style={{ marginLeft: "0.4rem" }}>
+        <FontAwesomeIcon icon={next} />
       </Button>
     );
   } else if (props.mode === DONE) {
     <Button
       type='button'
       onClick={onClickHandler}
-      style={{ marginLeft: "2rem" }}>
+      style={{ marginLeft: "0.4rem" }}>
       확인하러 가기
     </Button>;
   } else {
