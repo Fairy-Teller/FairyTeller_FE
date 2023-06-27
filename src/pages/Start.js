@@ -29,7 +29,16 @@ const Start = () => {
     const navigate = useNavigate();
 
     return (
-        <div style={{ backgroundImage: 'url("/images/background_start.png")' }}>
+        <div
+            style={{
+                backgroundImage: 'url("/images/background_start.png")',
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                backgroundAttachment: 'fixed', // 배경 이미지를 스크롤에 고정
+                minHeight: '100vh',
+            }}
+        >
             <Container>
                 <Header mode={'default'} />
                 <div className="start an1">

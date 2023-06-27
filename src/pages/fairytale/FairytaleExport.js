@@ -101,7 +101,16 @@ function FairytaleExport() {
     };
 
     return (
-        <div style={{ backgroundImage: 'url("/images/background_blur.png")' }}>
+        <div
+            style={{
+                backgroundImage: 'url("/images/background_blur.png")',
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                backgroundAttachment: 'fixed', // 배경 이미지를 스크롤에 고정
+                minHeight: '100vh',
+            }}
+        >
             <Header mode={'default'} />
             <ContentCover>
                 <TitleBox>동화 제목: {Title} </TitleBox>
