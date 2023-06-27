@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { SavedBoolState, StoryState } from "../../recoil/FairytaleState";
+import React, { useState, useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import { StoryState } from "../../recoil/FairytaleState";
 import styled from "styled-components";
+import { history } from "../../history/history";
+// import useToast from "../../components/global/useToast";
 import Header from "../../components/global/Header";
 // import LoadingModal from "../../components/LoadingModal";
 // import ButtonWrap from "../../components/common/ButtonWrap";
@@ -13,50 +15,53 @@ import ContentTitle from "../../components/global/ContentTitle";
 import InnerCover from "../../components/global/InnerCover";
 import Control from "../../components/Control";
 
-const ContentContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-const Div = styled.div`
-  width: 100%;
-  max-width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column; /* Added to stack elements vertically */
-  align-items: center;
-  justify-content: flex-start; /* Align items at the top */
-`;
-const Button = styled.button`
-  width: 100px;
-  height: 50px;
-  background: pink;
-  border-radius: 10px;
-
-  font-style: normal;
-  font-weight: 400;
-  font-size: 18px;
-  text-align: center;
-  color: #000000;
-`;
-
-const [PREV, NEXT, DONE] = ["prev", "next", "done"];
-// const ALLTRUE = [true, true, true, true, true];
+const [PREV, NEXT] = ["prev", "next"];
 
 const IamgeGenerated = () => {
   const savedStory = useRecoilValue(StoryState);
-  // const isSaveImage = useRecoilValue(SavedBoolState);
-
   const [page, setPage] = useState(0);
-  // const [allSelectDone, setAllSelectDone] = useRecoilState(AllSavedBoolState);
 
-  // useEffect(() => {
-  //   console.log("isSaveImage", isSaveImage);
+  const usePreventGoBack = () => {
+    const preventGoBack = () => {
+      history.push(null, "", history.location.href);
+      alert("현재 화면에서는 뒤로 갈 수 없어요");
+    };
 
-  //   // if (isSaveImage.every((item, index) => item === ALLTRUE[index])) {
-  //   //   setAllSelectDone(!allSelectDone);
-  //   // }
-  // }, [isSaveImage]);
+    useEffect(() => {
+      (() => {
+        history.push(null, "", history.location.href);
+        window.addEventListener("popstate", preventGoBack);
+      })();
+
+      return () => {
+        window.removeEventListener("popstate", preventGoBack);
+      };
+    }, []);
+
+    useEffect(() => {
+      history.push(null, "", history.location.href);
+    }, [history.location]);
+  };
+
+  const usePreventRefresh = () => {
+    const preventClose = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    useEffect(() => {
+      (() => {
+        window.addEventListener("beforeunload", preventClose);
+      })();
+
+      return () => {
+        window.removeEventListener("beforeunload", preventClose);
+      };
+    });
+  };
+
+  usePreventGoBack();
+  usePreventRefresh();
 
   const handleControl = (mode) => {
     if (mode === PREV) {

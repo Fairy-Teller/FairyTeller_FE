@@ -123,15 +123,14 @@ const StoryGenerated = () => {
             <form onSubmit={onSubmitHandler}>
               <Section>
                 {savedStory.map((item, index) => (
-                  <div style={{ margin: "1em" }}>
-                    <TextArea
-                      key={index}
-                      value={item["paragraph"]}
-                      placeholder='재미있는 이야기를 작성해볼까요?'
-                      maxLength={200}
-                      onChange={(e) => onChangeHandler(e, index)}
-                    />
-                  </div>
+                  <TextArea
+                    key={index}
+                    value={item["paragraph"]}
+                    placeholder='재미있는 이야기를 작성해볼까요?'
+                    maxLength={200}
+                    onChange={(e) => onChangeHandler(e, index)}
+                    style={{ margin: "1.2rem 0 0" }}
+                  />
                 ))}
               </Section>
               <ButtonWrap>

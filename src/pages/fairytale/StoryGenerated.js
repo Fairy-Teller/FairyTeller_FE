@@ -40,13 +40,6 @@ const StoryGenerated = () => {
 
   useEffect(() => {
     fetchData();
-    setSavedStory([
-      { paragraph: "" },
-      { paragraph: "" },
-      { paragraph: "" },
-      { paragraph: "" },
-      { paragraph: "" },
-    ]);
     setIsLoading(false);
   }, [keywords]);
 
@@ -80,6 +73,7 @@ const StoryGenerated = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    console.log(savedStory);
     setIsBlockingKey(true);
 
     for (let i = 0; i < 5; i++) {
@@ -110,6 +104,7 @@ const StoryGenerated = () => {
 
   const regenerateHandler = (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     resendkeyword({
       parameter1: keywords[0],
@@ -122,8 +117,7 @@ const StoryGenerated = () => {
 
   const resendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
     try {
-      setIsLoading(true);
-      const response = await call("/chat-gpt/question", "POST", userDTO);
+      const response = await call("/chat-gpt/question/recreate", "POST", userDTO);
       set(StoryState, response);
     } catch (error) {
       console.log(error);
@@ -162,19 +156,15 @@ const StoryGenerated = () => {
             <InnerCover>
               <form onSubmit={onSubmitHandler}>
                 <Section>
-                  {savedStory.map(
-                    (item, index) =>
-                      item && (
-                        <div style={{ margin: "1.2rem 0" }}>
-                          <TextArea
-                            key={"paragraph" + index}
-                            value={item["paragraph"]}
-                            placeholder='만들어진 시나리오를 확인하고 수정해보아요'
-                            onChange={(e) => onChangeHandler(e, index)}
-                          />
-                        </div>
-                      )
-                  )}
+                  {savedStory.map((item, index) => (
+                    <TextArea
+                      key={"paragraph" + index}
+                      value={item["paragraph"] ? item["paragraph"] : ""}
+                      placeholder='만들어진 시나리오를 확인하고 수정해보아요'
+                      onChange={(e) => onChangeHandler(e, index)}
+                      style={{ margin: "1.2rem 0" }}
+                    />
+                  ))}
                 </Section>
                 <ButtonWrap>
                   <Link
