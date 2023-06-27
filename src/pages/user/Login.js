@@ -2,9 +2,15 @@ import React from 'react';
 import { signin, socialLogin } from '../../service/UserService';
 import { Link } from 'react-router-dom';
 
+// UserInfo
+import { useSetRecoilState } from 'recoil';
+import { UserInfo } from '../../recoil/FairytaleState';
+
 import '../../css/login.css';
 
 const Login = () => {
+    const userInfo = useSetRecoilState(UserInfo);
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.target);
@@ -15,8 +21,14 @@ const Login = () => {
             alert('아이디 혹은 비밀번호를 입력해주세요');
             return;
         }
-        signin({ userid: userid, password: password });
+        signin({ userid: userid, password: password }).then((response) => {
+            userInfo(response.nickname);
+        });
+
+        // userInfo(signin({ userid: userid, password: password }));
     };
+
+
 
     const handleSocialLogin = (provider) => {
         socialLogin(provider);

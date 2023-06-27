@@ -77,7 +77,7 @@ const StoryGenerated = () => {
       console.log("Error fetching data:", error);
     } finally {
       setIsLoading(false);
-      navigate("/image-generated");
+      navigate("/artstyle");
     }
   };
 

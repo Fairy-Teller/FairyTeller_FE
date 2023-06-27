@@ -25,7 +25,7 @@
   padding: 5px 10px;
   border: none;
   border-radius: 5px;
-  background-color: #99f0cc;
+  background-color: pink;
   cursor: pointer;
 }
 
@@ -60,4 +60,9 @@
   width: 100%;
   height: auto;
   max-height: 200px; /* 원하는 높이 값으로 조정 */
+}
+
+#board-title:hover {
+  transform: scale(1.04); /* 원하는 확대 비율로 수정하세요 */
+  transition: transform 0.3s ease; /* 애니메이션 지속 시간과 이징 함수를 조정하세요 */
 }

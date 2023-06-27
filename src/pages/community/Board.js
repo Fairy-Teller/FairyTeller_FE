@@ -1,5 +1,6 @@
 import "../../css/Board.css";
 import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { call } from "../../service/ApiService";
 import BoardSearch from "./BoardSearch";
 import Container from "../../components/global/Container";
@@ -8,12 +9,22 @@ import ContentCover from "../../components/global/ContentCover";
 import InnerCover from "../../components/global/InnerCover";
 import BookContainer from "../../components/global/BookContainer";
 import Book from "../../components/global/Book";
+
 const Board = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
   const [books, setBooks] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [keyword, setKeyword] = useState("");
   const [searchType, setSearchType] = useState("");
+
+  const handleBoardTitleClick = () => {
+    setKeyword("");
+    setSearchType("");
+    setCurrentPage(0);
+    navigate("/board");
+  };  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,9 +50,11 @@ const Board = () => {
     };
     fetchData();
   }, [currentPage, keyword, searchType]);
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
   const handleSearch = async (keyword, searchType) => {
     try {
       setKeyword(keyword);
@@ -51,27 +64,34 @@ const Board = () => {
       console.log("Error fetching data:", error);
     }
   };
+
   const truncateTitle = (title) => {
     if (title.length > 10) {
       return title.substring(0, 10) + "...";
     }
     return title;
   };
+
   useEffect(() => {
     console.log("Books:", books);
   }, [books]);
+
   return (
     <Container>
       <Header mode={"default"} />
       <ContentCover>
-      <div id="board-title"
-        style={{
-          margin: "2rem auto",
-          fontWeight: 400,
-          fontSize: "2.8rem",
-          textAlign: "left"
-        }}
-        >우리들의 도서관</div>
+        <div
+          id="board-title"
+          style={{
+            margin: "2rem auto",
+            fontWeight: 400,
+            fontSize: "2.8rem",
+            textAlign: "left",
+            cursor: "pointer"
+          }}
+          onClick={handleBoardTitleClick}
+        >
+          우리들의 도서관</div>
         <BoardSearch handleSearch={handleSearch} />
         <InnerCover>
           <BookContainer>

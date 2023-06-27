@@ -21,7 +21,7 @@ const Button = styled.button`
     width: 15%;
     height: 40px;
     margin-top: 2%;
-    background-color: #99f0cc;
+    background-color: #ffde67;
     font-size: 150%;
     border-radius: 51.5px;
     margin-right: 1%;
@@ -34,7 +34,12 @@ const Button = styled.button`
 const TitleBox = styled.div`
     /* Rectangle 758 */
 
-    margin-top: 15px;
+    margin-top: 2%;
+    color: white;
+
+    font-weight: 400;
+    font-size: 2.8rem;
+    text-align: center;
 `;
 
 function FairytaleExport() {
@@ -45,6 +50,12 @@ function FairytaleExport() {
 
     useEffect(() => {
         fetchData();
+        document.body.style.overflow = 'hidden';
+
+        return () => {
+            // 컴포넌트가 언마운트될 때 스크롤 가능하게 되돌림
+            document.body.style.overflow = 'auto';
+        };
     }, []);
 
     const fetchData = async () => {
@@ -90,11 +101,10 @@ function FairytaleExport() {
     };
 
     return (
-        <Container>
+        <div style={{ backgroundImage: 'url("/images/background_blur.png")' }}>
             <Header mode={'default'} />
             <ContentCover>
-                <TitleBox />
-                <ContentTitle>동화 제목: {Title}</ContentTitle>
+                <TitleBox>동화 제목: {Title} </TitleBox>
 
                 <InnerCover>
                     <FairytaleShow props={BookId}></FairytaleShow>
@@ -106,7 +116,7 @@ function FairytaleExport() {
                     </div>
                 </InnerCover>
             </ContentCover>
-        </Container>
+        </div>
     );
 }
 
