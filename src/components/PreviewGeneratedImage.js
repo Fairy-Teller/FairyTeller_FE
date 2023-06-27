@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { useRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
+import React, { useState, useEffect, useHistory } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { isSaveImageState, StoryState, ImageTempState, BookState } from "../recoil/FairytaleState";
 import { call } from "../service/ApiService";
+import { FairytaleNew } from "../service/FairytaleService";
 import styled from "styled-components";
 import LoadingModal from "./LoadingModal";
 import ButtonWrap from "../components/common/ButtonWrap";
 // import ImgSelect from "../components/ImgSelect";
 import ImgGenerate from "../components/ImgGenerate";
+import { alertClasses } from "@mui/material";
 
 const Div = styled.div`
   display: flex;
@@ -83,19 +85,26 @@ const Button = styled.button`
 const Text = (props) => {
   return <TextContent isHovered={props.isHovered}>{props.children}</TextContent>;
 };
-
 const PreviewGeneratedIamge = (props) => {
   const [isLoading, setIsLoading] = useState(false);
+  // const [image64, setimage64] = useState(null);
+  const [respones, setRespone] = useState(null);
   const savedStory = useRecoilValue(StoryState);
   const [savedImageTemp, setSavedImageTemp] = useRecoilState(ImageTempState);
   const [savedBook, setSavedBook] = useRecoilState(BookState);
-  // const [imgUrl, setImgURL] = useState(null);
   const [isSaveImage, setIsSaveImage] = useRecoilState(isSaveImageState);
+  const [isHovered, setIsHovered] = useState(false);
+  const [locationKeys, setLocationKeys] = useState([]);
+
+  useEffect(() => {
+    FairytaleNew().then((response) => {
+      setRespone(response.bookId);
+    });
+  }, []);
 
   const createImg = async () => {
     try {
       setIsLoading(true);
-
       const imageData = await call("/chat-gpt/textToImage/v2", "POST", {
         loraNo: 1,
         text: savedStory[props.index]["paragraph"],
@@ -103,7 +112,6 @@ const PreviewGeneratedIamge = (props) => {
 
       const byteCharacters = atob(imageData); // Base64 디코딩
       const byteArrays = new Uint8Array(byteCharacters.length);
-
       for (let i = 0; i < byteCharacters.length; i++) {
         byteArrays[i] = byteCharacters.charCodeAt(i);
       }
@@ -112,43 +120,33 @@ const PreviewGeneratedIamge = (props) => {
       const imageUrl = URL.createObjectURL(imageBlob);
 
       const newPage = [...savedBook["pages"]];
-
       newPage[props.index] = {
         ...newPage[props.index],
         imageBase64: imageData,
       };
+      // setSavedBook({ ...savedBook, pages: newPage });
 
-      console.log(newPage);
-
-      setSavedBook({ ...savedBook, pages: newPage });
       onChangeHandler(imageUrl, props.index);
+
+      await saveImg(imageData);
+      setIsLoading(false);
     } catch (error) {
       console.log("Error fetching data:", error);
-      setIsLoading(false);
-    } finally {
-      saveImg();
       setIsLoading(false);
     }
   };
 
-  const onChangeHandler = (targetUrl, index) => {
-    const newImage = [...savedImageTemp];
-    newImage[index] = { ...newImage[index], url: targetUrl };
-    setSavedImageTemp(newImage);
-  };
-
-  const saveImg = async () => {
+  const saveImg = async (image) => {
     try {
       const bookDTO = {
-        bookId: savedBook["bookId"],
+        bookId: respones,
         pages: [
           {
-            pageNo: savedBook["pages"][props.index]["pageNo"],
-            originalImageUrl: savedBook["pages"][props.index]["imageBase64"],
+            pageNo: props.index + 1,
+            originalImageUrl: image,
           },
         ],
       };
-
       const imageData = await call("/book/create/image", "POST", bookDTO);
       console.log("imageData", imageData);
     } catch (error) {
@@ -157,12 +155,15 @@ const PreviewGeneratedIamge = (props) => {
       const newIsSaveImage = [...isSaveImage];
       newIsSaveImage[props.index] = true;
       setIsSaveImage(newIsSaveImage);
-
       console.log("isSaveImage", isSaveImage);
     }
   };
 
-  const [isHovered, setIsHovered] = useState(false);
+  const onChangeHandler = (targetUrl, index) => {
+    const newImage = [...savedImageTemp];
+    newImage[index] = { ...newImage[index], url: targetUrl };
+    setSavedImageTemp(newImage);
+  };
 
   return (
     <Div>
@@ -189,16 +190,6 @@ const PreviewGeneratedIamge = (props) => {
           index={props.index}
         />
       </ButtonWrap>
-      {/* {!isSaveImage[props.index] ? (
-        <ButtonWrap>
-          <ImgGenerate
-            onCreate={createImg}
-            index={props.index}
-          />
-        </ButtonWrap>
-      ) : (
-        <Button disabled>선택 완료!</Button>
-      )} */}
     </Div>
   );
 };
