@@ -43,11 +43,11 @@ const ItemTitleText = styled.p`
   font-size: 1.6rem;
 `;
 const ItemInput = styled.input`
-  width: 5.4rem;
-  height: 6.2rem;
+  width: 11rem;
+  height: 11.6rem;
   position: absolute;
-  left: 0;
-  right: 0;
+  // left: 0;
+  // right: 0;
   top: 0;
   cursor: pointer;
   border: 0;

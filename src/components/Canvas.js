@@ -356,35 +356,68 @@ const Canvas = (props) => {
   const canvasStates = useRef([]);
   const currentStateIndex = useRef(-1);
 
-  const saveCanvasState = () => {
-    const json = canvas.toJSON();
-    currentStateIndex.current++;
-    canvasStates.current[currentStateIndex.current] = json;
-    canvasStates.current.length = currentStateIndex.current + 1;
+  // const saveCanvasState = () => {
+  //   const json = canvas.toJSON();
+  //   currentStateIndex.current++;
+  //   canvasStates.current[currentStateIndex.current] = json;
+  //   canvasStates.current.length = currentStateIndex.current + 1;
+  // };
+
+  // const undo = () => {
+  //   console.log("undo버튼눌림");
+  //   if (currentStateIndex.current > 0) {
+  //     console.log("undo들어왔당");
+  //     currentStateIndex.current--;
+  //     const json = canvasStates.current[currentStateIndex.current];
+  //     canvas.loadFromJSON(json, () => {
+  //       canvas.renderAll();
+  //     });
+  //   }
+  // };
+
+  // const redo = () => {
+  //   console.log("redo버튼눌림");
+  //   if (currentStateIndex.current < canvasStates.current.length - 1) {
+  //     console.log("redo들어왔당");
+  //     currentStateIndex.current++;
+  //     const json = canvasStates.current[currentStateIndex.current];
+  //     canvas.loadFromJSON(json, () => {
+  //       canvas.renderAll();
+  //     });
+  //   }
+  // };
+
+  const [pickerColor, setPickerColor] = useState("#ffadcb");
+  const [originLength, setOriginLength] = useState(0);
+
+  let redoData = [];
+  let undoData = [];
+  //Start Free Drawing
+  const drawing = (canvas) => {
+    let originData = canvas._objects.length;
+    setOriginLength(originData);
+    // setIsDrawing(true);
+    canvas.isDrawingMode = true;
+    canvas.freeDrawingBrush.color = pickerColor;
+    canvas.renderAll();
   };
 
+  //undo
   const undo = () => {
-    console.log("undo버튼눌림");
-    if (currentStateIndex.current > 0) {
-      console.log("undo들어왔당");
-      currentStateIndex.current--;
-      const json = canvasStates.current[currentStateIndex.current];
-      canvas.loadFromJSON(json, () => {
-        canvas.renderAll();
-      });
-    }
+    let newLength = canvas._objects.length;
+    if (newLength <= originLength) return;
+    let popData = canvas._objects.pop();
+    redoData.push(popData);
+    canvas.renderAll();
   };
 
+  //redo
   const redo = () => {
-    console.log("redo버튼눌림");
-    if (currentStateIndex.current < canvasStates.current.length - 1) {
-      console.log("redo들어왔당");
-      currentStateIndex.current++;
-      const json = canvasStates.current[currentStateIndex.current];
-      canvas.loadFromJSON(json, () => {
-        canvas.renderAll();
-      });
-    }
+    if (redoData.length === 0) return;
+    let popData = redoData.pop();
+    undoData.push(popData);
+    canvas._objects.push(popData);
+    canvas.renderAll();
   };
 
   return (
