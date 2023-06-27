@@ -15,8 +15,15 @@ import ContentTitle from "../../components/global/ContentTitle";
 import InnerCover from "../../components/global/InnerCover";
 
 const KeywordItem = styled.div`
-  padding: 0.625rem;
+  width: 100%;
+  max-width: 17.5%;
   margin: 0.4rem auto 0.4rem;
+`;
+const KeywordInner = styled.div`
+  width: 8rem;
+  padding: 0.4rem 0.8rem 0.8rem;
+  margin: 0 auto 0.8rem;
+  position: relative;
   border-radius: 2rem;
   overflow: hidden;
   transition: background 0.4s;
@@ -24,12 +31,6 @@ const KeywordItem = styled.div`
     color: white;
     background-color: #edaeae;
   }
-`;
-const KeywordInner = styled.div`
-  width: 8rem;
-  margin: 0 1.2rem;
-  padding: 0;
-  position: relative;
 `;
 const ItemTitle = styled.div`
   display: flex;
@@ -43,11 +44,9 @@ const ItemTitleText = styled.p`
   font-size: 1.6rem;
 `;
 const ItemInput = styled.input`
-  width: 5.4rem;
-  height: 6.2rem;
+  width: 10.4rem;
+  height: 12.8rem;
   position: absolute;
-  left: 0;
-  right: 0;
   top: 0;
   cursor: pointer;
   border: 0;
@@ -160,7 +159,16 @@ const Keyword = () => {
         updatedValues = updatedValues.filter((item) => item !== target.name);
       }
 
-      console.log(updatedValues);
+      return updatedValues;
+    });
+  };
+
+  const handleCurrClicked = (target) => {
+    const name = target.getAttribute("name");
+    setKeywords((prev) => {
+      let updatedValues = [...prev];
+      updatedValues = updatedValues.filter((item) => item !== name);
+
       return updatedValues;
     });
   };
@@ -194,7 +202,6 @@ const Keyword = () => {
 
   useEffect(() => {
     const target = document.querySelector(".current");
-    console.log(target);
 
     if (target !== null) {
       const handleScroll = () => {
@@ -228,7 +235,14 @@ const Keyword = () => {
                   <div>
                     {keywords.length > 0 ? (
                       keywords.map((item) => {
-                        return <div key={item}>{item}</div>;
+                        return (
+                          <div
+                            key={item + "-inputed"}
+                            name={item}
+                            onClick={(e) => handleCurrClicked(e.target)}>
+                            {item}
+                          </div>
+                        );
                       })
                     ) : (
                       <NoticeText>동화에 넣을 키워드를 골라보아요</NoticeText>
@@ -267,7 +281,7 @@ const Keyword = () => {
                       <h2 style={{ paddingBottom: "1rem" }}>{item.theme}</h2>
                       <Row className={"wrap"}>
                         {item.titles.map((title, subIndex) => (
-                          <KeywordItem key={subIndex}>
+                          <KeywordItem key={subIndex + "-options"}>
                             <KeywordInner>
                               <img
                                 src={`./images/keywords/${title}.png`}
