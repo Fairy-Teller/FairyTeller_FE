@@ -1,9 +1,6 @@
 import { call } from "./ApiService";
 import { API_BASE_URL } from "../api-config";
 
-// UserInfo
-import { useSetRecoilState } from "recoil";
-import { UserInfo } from "../recoil/FairytaleState";
 //"../../recoil/FairytaleState";
 
 export function signup(userDTO) {
@@ -14,10 +11,9 @@ export function signin(userDTO) {
   return call("/auth/signin", "POST", userDTO)
     .then((response) => {
       console.log(response);
-      const userInfo = useSetRecoilState(UserInfo);
       if (response && response.token) {
         localStorage.setItem("ACCESS_TOKEN", response.token);
-        userInfo(response.nickname);
+
         window.location.href = "/start";
       }
       return response;

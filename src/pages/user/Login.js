@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import { signin, socialLogin } from "../../service/UserService";
 import { Link } from "react-router-dom";
 
+// UserInfo
+import { useSetRecoilState } from "recoil";
+import { UserInfo } from "../../recoil/FairytaleState";
+
 import "../../css/login.css";
 
 const Login = () => {
+  const userInfo = useSetRecoilState(UserInfo);
   const [isSocialLogin, setIsSocialLogin] = useState(false);
 
   const handleSubmit = (event) => {
@@ -19,9 +24,13 @@ const Login = () => {
       alert("아이디 혹은 비밀번호를 입력해주세요");
       return;
     }
-    signin({ userid: userid, password: password }).then((response) => {});
-
-    // userInfo(signin({ userid: userid, password: password }));
+    signin({ userid: userid, password: password })
+      .then((response) => {
+        userInfo(response.nickname);
+      })
+      .catch((error) => {
+        console.error("Login failed:", error);
+      });
   };
 
   const handleSocialLogin = (provider) => {
@@ -78,7 +87,7 @@ const Login = () => {
               class="submit"
               onClick={() => {
                 setIsSocialLogin(true);
-                handleSocialLogin("naver");
+                handleSocialLogin("");
               }}
               style={{ backgroundColor: "#50CA7E" }}
             >
