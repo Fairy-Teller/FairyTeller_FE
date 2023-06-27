@@ -51,7 +51,7 @@ const Guide = styled.div`
 `;
 const TextContent = styled.p`
   width: ${(props) => (!props.isHovered ? "120px" : "720px")};
-  height: ${(props) => (!props.isHovered ? "120px" : "auto")};
+  height: 120px;
   padding: ${(props) => (!props.isHovered ? "0" : "1.2rem 2.4rem")};
   font-size: ${(props) => (!props.isHovered ? "1.6rem" : "1.2rem")};
   display: ${(props) => (!props.isHovered ? "flex" : "block")};
