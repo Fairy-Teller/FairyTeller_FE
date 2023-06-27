@@ -40,13 +40,6 @@ const StoryGenerated = () => {
 
   useEffect(() => {
     fetchData();
-    setSavedStory([
-      { paragraph: "" },
-      { paragraph: "" },
-      { paragraph: "" },
-      { paragraph: "" },
-      { paragraph: "" },
-    ]);
     setIsLoading(false);
   }, [keywords]);
 
@@ -110,6 +103,7 @@ const StoryGenerated = () => {
 
   const regenerateHandler = (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     resendkeyword({
       parameter1: keywords[0],
@@ -122,8 +116,7 @@ const StoryGenerated = () => {
 
   const resendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
     try {
-      setIsLoading(true);
-      const response = await call("/chat-gpt/question", "POST", userDTO);
+      const response = await call("/chat-gpt/question/recreate", "POST", userDTO);
       set(StoryState, response);
     } catch (error) {
       console.log(error);
