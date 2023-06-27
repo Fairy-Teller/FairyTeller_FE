@@ -16,7 +16,9 @@ import MyBookDetail from './pages/mypage/MyBookDetail';
 //community
 import Board from './pages/community/Board';
 import BoardDetail from './pages/community/BoardDetail';
-import My from './pages/community/My';
+
+
+
 //fairytale
 import Artstyle from './pages/fairytale/Artstyle';
 import FairytaleEdit from './pages/fairytale/FairytaleEdit';
@@ -41,11 +43,10 @@ function AppRouter() {
                 <Route path="sociallogin" element={<SocialLogin />} />
                 <Route path="logout" element={<Logout />} />
                 <Route path="updateUser" element={<UpdateUser />} />
-                <Route path="myBookList" element={<MyBookList />} />
                 <Route path="myBookList/:bookId" element={<MyBookDetail />} />
                 <Route path="board" element={<Board />} />
                 <Route path="board/:boardId" element={<BoardDetail />} />
-                <Route path="my" element={<My />} />
+                <Route path="my" element={<MyBookList />} />
                 <Route path="artstyle" element={<Artstyle />} />
                 <Route path="f-edit" element={<FairytaleEdit />} />
                 <Route path="f-export" element={<FairytaleExport />} />

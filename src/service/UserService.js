@@ -13,6 +13,7 @@ export function signin(userDTO) {
                 localStorage.setItem('ACCESS_TOKEN', response.token);
                 window.location.href = '/start';
             }
+            return response;
         })
         .catch((error) => {
             console.error(error);

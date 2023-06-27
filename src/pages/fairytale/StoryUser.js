@@ -79,7 +79,7 @@ const StoryGenerated = () => {
       console.log("Error fetching data:", error);
     } finally {
       console.log(savedStory);
-      navigate("/image-generated");
+      navigate("/artstyle");
     }
   };
 
