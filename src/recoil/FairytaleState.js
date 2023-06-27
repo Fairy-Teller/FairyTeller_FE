@@ -24,7 +24,7 @@ export const StoryState = atom({
 
 export const ImageTempState = atom({
   key: "ImageTempState",
-  default: [],
+  default: [{ url: "" }, { url: "" }, { url: "" }, { url: "" }, { url: "" }],
 });
 
 export const BookState = atom({

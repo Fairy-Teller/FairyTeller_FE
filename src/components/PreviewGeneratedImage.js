@@ -94,7 +94,6 @@ const PreviewGeneratedIamge = (props) => {
   const [savedBook, setSavedBook] = useRecoilState(BookState);
   const [isSaveImage, setIsSaveImage] = useRecoilState(isSaveImageState);
   const [isHovered, setIsHovered] = useState(false);
-  const [locationKeys, setLocationKeys] = useState([]);
 
   useEffect(() => {
     FairytaleNew().then((response) => {
