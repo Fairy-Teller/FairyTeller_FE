@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Header from '../../components/global/Header';
-import ProgressBar from '../../components/global/ProgressBar';
+
 import ContentCover from '../../components/global/ContentCover';
 import ContentTitle from '../../components/global/ContentTitle';
 
@@ -46,16 +46,24 @@ function Artstyle() {
         setImageState(e);
         navigate('/image-generated');
     };
+    // useEffect(() => {
+    //     document.body.style.overflow = 'hidden';
+    //     return () => {
+    //         document.body.style.overflow = 'auto';
+    //     };
+    // }, []);
     console.log(imageState);
     return (
         <div>
             <Header mode={'default'} />
             <ContentCover>
-                <ProgressBar step={2} />
                 <SampleDiv>
-                    <ContentTitle style={{ marginBottom: '2%' }}>그림체 선택</ContentTitle>
+                    <div style={{ margin: '1.5rem auto' }}>
+                        <ContentTitle>그림체 선택</ContentTitle>
+                    </div>
+
                     <SampleImg src="./images/artstyle/sample.png" />
-                    <p style={{ margin: '5% 0 10% 0 ', textAlign: 'center' }}>
+                    <p style={{ margin: '5% 0 5% 0 ', textAlign: 'center' }}>
                         위 이미지를 각각의 테마별로 그려보았어요 <br />
                         마음에 드는 그림체를 선택해 보세요!
                     </p>
@@ -63,20 +71,20 @@ function Artstyle() {
                 <StyleDiv>
                     <SampleDiv>
                         <StyleImg src="./images/artstyle/style2.png" onClick={() => IamgestateChange(1)} />
-                        <p>애니메이션</p>
+                        <h2>애니메이션</h2>
                     </SampleDiv>
                     <SampleDiv>
                         <StyleImg src="./images/artstyle/style1.png" onClick={() => IamgestateChange(2)} />
-                        <p>미국 카툰</p>
+                        <h2>미국 카툰</h2>
                     </SampleDiv>
 
                     <SampleDiv>
                         <StyleImg src="./images/artstyle/style3.png" onClick={() => IamgestateChange(3)} />
-                        <p>스케치</p>
+                        <h2>스케치</h2>
                     </SampleDiv>
                     <SampleDiv>
                         <StyleImg src="./images/artstyle/style4.png" onClick={() => IamgestateChange(4)} />
-                        <p>극화체</p>
+                        <h2>극화체</h2>
                     </SampleDiv>
                 </StyleDiv>
             </ContentCover>

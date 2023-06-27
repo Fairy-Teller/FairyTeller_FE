@@ -5,12 +5,10 @@ import { SelectedKeywordsState, StoryState, BookState } from "../../recoil/Fairy
 import { call } from "../../service/ApiService";
 import styled from "styled-components";
 import Header from "../../components/global/Header";
-import ProgressBar from "../../components/global/ProgressBar";
 import Container from "../../components/global/Container";
 import Section from "../../components/global/Section";
 import ButtonWrap from "../../components/common/ButtonWrap";
 import LoadingModal from "../../components/LoadingModal";
-
 import ContentCover from "../../components/global/ContentCover";
 import ContentTitle from "../../components/global/ContentTitle";
 import InnerCover from "../../components/global/InnerCover";
@@ -19,10 +17,9 @@ const TextArea = styled.textarea`
   width: calc(100% - 8rem);
   min-height: 8rem;
   height: auto;
-  background-color: pink;
   resize: none;
-  font-size: 1.6rem;
-  line-height: 1.4;
+  font-size: 1.4rem;
+  line-height: 1.6;
   border-radius: 2rem;
   box-sizing: content-box;
   padding: 2rem 4rem;
@@ -32,6 +29,7 @@ const TextArea = styled.textarea`
 const StoryGenerated = () => {
   const [loaded, setLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isBlockingKey, setIsBlockingKey] = useState(false);
   const keywords = useRecoilValue(SelectedKeywordsState);
   const [savedStory, setSavedStory] = useRecoilState(StoryState);
   // const showImage = useRecoilValue(ImageFix);
@@ -42,11 +40,29 @@ const StoryGenerated = () => {
 
   useEffect(() => {
     fetchData();
+    setSavedStory([
+      { paragraph: "" },
+      { paragraph: "" },
+      { paragraph: "" },
+      { paragraph: "" },
+      { paragraph: "" },
+    ]);
+    setIsLoading(false);
   }, [keywords]);
 
   useEffect(() => {
-    window.scrollTo(0, document.body.scrollHeight);
-  }, []);
+    window.addEventListener("keydown", disableKeyboardEvents);
+
+    return () => {
+      window.removeEventListener("keydown", disableKeyboardEvents);
+    };
+  }, [isBlockingKey]);
+
+  const disableKeyboardEvents = (event) => {
+    if (isBlockingKey) {
+      event.preventDefault();
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -64,10 +80,20 @@ const StoryGenerated = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    setIsBlockingKey(true);
+
+    for (let i = 0; i < 5; i++) {
+      if (savedStory[i]["paragraph"].length === 0) {
+        alert("모든 페이지에 대한 내용을 입력해주세요");
+        setIsBlockingKey(false);
+        return;
+      }
+    }
+
+    setIsLoading(true);
     window.scrollTo(0, document.body.scrollHeight);
 
     try {
-      setIsLoading(true);
       const bookDTO = savedStory.map((item, index) => ({
         pageNo: index + 1,
         fullStory: item["paragraph"],
@@ -77,6 +103,7 @@ const StoryGenerated = () => {
     } catch (error) {
       console.log("Error fetching data:", error);
     } finally {
+      setIsBlockingKey(false);
       navigate("/artstyle");
     }
   };
@@ -149,7 +176,7 @@ const StoryGenerated = () => {
                       )
                   )}
                 </Section>
-                <ButtonWrap className='button-wrap'>
+                <ButtonWrap>
                   <Link
                     to='/keyword'
                     onClick={resetSelectedKeywords}
@@ -164,7 +191,7 @@ const StoryGenerated = () => {
                 </ButtonWrap>
               </form>
               <form onSubmit={regenerateHandler}>
-                <ButtonWrap className='button-wrap'>
+                <ButtonWrap>
                   <button
                     type='submit'
                     className='button'>

@@ -94,6 +94,7 @@ const NoticeText = styled.p`
 const Keyword = () => {
   const [loaded, setLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isBlockingKey, setIsBlockingKey] = useState(false);
   const [keywords, setKeywords] = useRecoilState(SelectedKeywordsState);
   const [dataIdx, setDataIdx] = useState(0);
   const [input, setInput] = useState("");
@@ -104,6 +105,20 @@ const Keyword = () => {
     fetchData();
     setInput("");
   }, []);
+
+  useEffect(() => {
+    window.addEventListener("keydown", disableKeyboardEvents);
+
+    return () => {
+      window.removeEventListener("keydown", disableKeyboardEvents);
+    };
+  }, [isBlockingKey]);
+
+  const disableKeyboardEvents = (event) => {
+    if (isBlockingKey) {
+      event.preventDefault();
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -175,6 +190,8 @@ const Keyword = () => {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
+    setIsBlockingKey(true);
+
     keywords.length < 3
       ? alert("단어는 3개 이상 선택해주세요!")
       : sendkeyword({
@@ -195,7 +212,7 @@ const Keyword = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      // setIsLoading(false);
+      setIsBlockingKey(false);
       navigate("/story-generated");
     }
   });

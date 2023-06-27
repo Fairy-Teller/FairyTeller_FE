@@ -52,9 +52,6 @@
 }
 
 .story {
-  .container {
-    // padding-top: 4%;
-  }
   h1 {
     margin: 0 0 2rem 0;
     color: #fff;
@@ -76,12 +73,9 @@
     }
   }
   .button-wrap {
-    display: flex;
     justify-content: center;
-    align-items: center;
     .button {
       padding: 1.2rem 2rem;
-      margin-top: 2rem;
       color: #fff;
       text-align: center;
 
@@ -175,8 +169,8 @@
     }
   }
   &-user {
-    .container {
-      background-color: $bgc3;
+    textarea {
+      background-color: $thc3;
     }
     .button {
       background-color: $thc1;
@@ -186,8 +180,8 @@
     }
   }
   &-generated {
-    .container {
-      //  background-color: $thc3;
+    textarea {
+      background-color: pink;
     }
     form:first-of-type {
       .button-wrap {
@@ -207,8 +201,8 @@
         margin: -0.2rem;
         position: relative;
         button[type="submit"] {
-          position: absolute;
-          left: 40%;
+          // position: absolute;
+          // left: 40%;
         }
       }
     }
