@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Header from '../../components/global/Header';
-import ProgressBar from '../../components/global/ProgressBar';
+
 import ContentCover from '../../components/global/ContentCover';
 import ContentTitle from '../../components/global/ContentTitle';
 
@@ -46,12 +46,12 @@ function Artstyle() {
         setImageState(e);
         navigate('/image-generated');
     };
-    useEffect(() => {
-        document.body.style.overflow = 'hidden';
-        return () => {
-            document.body.style.overflow = 'auto';
-        };
-    }, []);
+    // useEffect(() => {
+    //     document.body.style.overflow = 'hidden';
+    //     return () => {
+    //         document.body.style.overflow = 'auto';
+    //     };
+    // }, []);
     console.log(imageState);
     return (
         <div>
