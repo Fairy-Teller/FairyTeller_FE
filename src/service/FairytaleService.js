@@ -15,3 +15,8 @@ export function sendAudioData(audioDTO) {
     console.log(audioDTO);
     return call('/audio/user-record', 'POST', audioDTO);
 }
+
+export function ImageTheme(audioDTO) {
+    console.log(audioDTO);
+    return call('/book/create/theme', 'POST', audioDTO);
+}

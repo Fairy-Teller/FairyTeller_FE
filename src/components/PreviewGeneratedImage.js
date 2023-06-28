@@ -2,7 +2,7 @@ import React, { useState, useEffect, useHistory } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { isSaveImageState, StoryState, ImageTempState, BookState, Imagetheme } from '../recoil/FairytaleState';
 import { call } from '../service/ApiService';
-import { FairytaleNew } from '../service/FairytaleService';
+import { FairytaleNew, ImageTheme } from '../service/FairytaleService';
 import styled from 'styled-components';
 import LoadingModal from './LoadingModal';
 import ButtonWrap from '../components/common/ButtonWrap';
@@ -109,6 +109,12 @@ const PreviewGeneratedIamge = (props) => {
     useEffect(() => {
         FairytaleNew().then((response) => {
             setRespone(response.bookId);
+            const theme = {
+                bookId: response.bookId,
+                theme: imagetheme,
+            };
+
+            ImageTheme(theme);
         });
     }, []);
 
