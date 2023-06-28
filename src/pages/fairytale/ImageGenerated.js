@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { StoryState } from "../../recoil/FairytaleState";
-import styled from "styled-components";
 import { history } from "../../history/history";
+// import styled from "styled-components";
 // import useToast from "../../components/global/useToast";
 import Header from "../../components/global/Header";
 // import LoadingModal from "../../components/LoadingModal";
@@ -24,7 +24,7 @@ const IamgeGenerated = () => {
   const usePreventGoBack = () => {
     const preventGoBack = () => {
       history.push(null, "", history.location.href);
-      alert("현재 화면에서는 뒤로 갈 수 없어요");
+      alert("현재 화면에서 이탈 시 생성된 데이터가 모두 사라집니다.");
     };
 
     useEffect(() => {

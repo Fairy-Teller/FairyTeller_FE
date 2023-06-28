@@ -11,7 +11,7 @@ const [IMAGE, USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER] = [
 
 const Selection = styled.div`
   // flex: 1;
-  margin: 1.2rem 0;
+  margin: 0.4rem 0;
   padding: 0.4rem;
   box-sizing: border-box;
   border-radius: 0.4rem;
@@ -23,8 +23,7 @@ const Selection = styled.div`
   }
 
   &:hover {
-    background-color: black;
-    color: white;
+    background-color: white;
   }
 `;
 

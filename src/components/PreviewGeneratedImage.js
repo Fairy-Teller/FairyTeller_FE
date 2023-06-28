@@ -33,6 +33,15 @@ const Img = styled.img`
   flex-shrink: 0;
   padding: 0;
   margin: 0;
+`;
+const ImgArea = styled.div`
+  // width: 960px;
+  // height: 540px;
+  width: 1024px;
+  height: 576px;
+  flex-shrink: 0;
+  padding: 0;
+  margin: 0;
   background-color: #d9d9d9;
 `;
 const StoryText = styled.div`
@@ -46,8 +55,8 @@ const StoryText = styled.div`
 `;
 const Guide = styled.div`
   position: fixed;
-  top: 220px;
-  left: ${(props) => (!props.isHovered ? "10rem" : "8rem")};
+  top: 4rem;
+  left: ${(props) => (!props.isHovered ? "4rem" : "2.4rem")};
   z-index: 99;
   border-radius: 50%;
   transition: left 0.24s;
@@ -87,6 +96,7 @@ const Text = (props) => {
 };
 const PreviewGeneratedIamge = (props) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isBlockingKey, setIsBlockingKey] = useState(false);
   // const [image64, setimage64] = useState(null);
   const [respones, setRespone] = useState(null);
   const savedStory = useRecoilValue(StoryState);
@@ -101,9 +111,24 @@ const PreviewGeneratedIamge = (props) => {
     });
   }, []);
 
+  useEffect(() => {
+    window.addEventListener("keydown", disableKeyboardEvents);
+
+    return () => {
+      window.removeEventListener("keydown", disableKeyboardEvents);
+    };
+  }, [isBlockingKey]);
+
+  const disableKeyboardEvents = (event) => {
+    if (isBlockingKey) {
+      event.preventDefault();
+    }
+  };
+
   const createImg = async () => {
     try {
       setIsLoading(true);
+      setIsBlockingKey(true);
       const imageData = await call("/chat-gpt/textToImage/v2", "POST", {
         loraNo: 1,
         text: savedStory[props.index]["paragraph"],
@@ -128,10 +153,13 @@ const PreviewGeneratedIamge = (props) => {
       onChangeHandler(imageUrl, props.index);
 
       await saveImg(imageData);
+
       setIsLoading(false);
+      setIsBlockingKey(false);
     } catch (error) {
       console.log("Error fetching data:", error);
       setIsLoading(false);
+      setIsBlockingKey(false);
     }
   };
 
@@ -180,7 +208,11 @@ const PreviewGeneratedIamge = (props) => {
       </Guide>
 
       <ImageWrap>
-        <Img src={savedImageTemp[props.index] && savedImageTemp[props.index]["url"]} />
+        {savedImageTemp[props.index]["url"] !== "" ? (
+          <Img src={savedImageTemp[props.index] && savedImageTemp[props.index]["url"]} />
+        ) : (
+          <ImgArea />
+        )}
       </ImageWrap>
 
       <ButtonWrap>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { call } from "../service/ApiService";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { ImageTempState } from "../recoil/FairytaleState";
+import { ImageTempState, GeneratedBoolState } from "../recoil/FairytaleState";
 import styled from "styled-components";
 
 const ImageContainerFrame = styled.div`
@@ -56,6 +56,7 @@ const Button = styled.button`
 
 const PreviewAllGeneratedIamge = () => {
   const savedImageTemp = useRecoilValue(ImageTempState);
+  const isFirstCreated = useRecoilValue(GeneratedBoolState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,7 +64,10 @@ const PreviewAllGeneratedIamge = () => {
   }, []);
 
   const goEdit = () => {
-    navigate("/f-edit");
+    isFirstCreated.every((value, index) => value === [true, true, true, true, true][index])
+      ? navigate("/f-edit")
+      : alert("모든 페이지에 대한 이미지를 생성해주세요!");
+    console.log(isFirstCreated);
   };
 
   return (
