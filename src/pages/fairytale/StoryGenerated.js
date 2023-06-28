@@ -156,15 +156,18 @@ const StoryGenerated = () => {
             <InnerCover>
               <form onSubmit={onSubmitHandler}>
                 <Section>
-                  {savedStory.map((item, index) => (
-                    <TextArea
-                      key={"paragraph" + index}
-                      value={item["paragraph"] ? item["paragraph"] : ""}
-                      placeholder='만들어진 시나리오를 확인하고 수정해보아요'
-                      onChange={(e) => onChangeHandler(e, index)}
-                      style={{ margin: "1.2rem 0" }}
-                    />
-                  ))}
+                  {[...Array(5)].map((_, index) => {
+                    const item = savedStory[index] || {};
+                    return (
+                      <TextArea
+                        key={"paragraph-" + index}
+                        value={item["paragraph"] !== "" ? item["paragraph"] : ""}
+                        placeholder='만들어진 시나리오를 확인하고 수정해보아요'
+                        onChange={(e) => onChangeHandler(e, index)}
+                        style={{ margin: "1.2rem 0" }}
+                      />
+                    );
+                  })}
                 </Section>
                 <ButtonWrap>
                   <Link

@@ -21,7 +21,10 @@ const aligns = [LEFT, CENTER, RIGHT];
 
 const CanvasFrame = styled.div`
   height: calc(100vh - 40px);
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
+  position: relative;
 `;
 const Nav = styled.nav`
   width: 5vw;
@@ -181,10 +184,12 @@ const Canvas = (props) => {
       top = windowH / 2 - 300 + "px";
     }
 
-    const canvasContainer = document.querySelector(".canvas-container");
-    canvasContainer.style.position = "absolute";
-    canvasContainer.style.left = left;
-    canvasContainer.style.top = top;
+    const canvasContainer = document.querySelectorAll(".canvas-container");
+    for (let i = 0; i < canvasContainer.length; i++) {
+      canvasContainer[i].style.position = "absolute";
+      canvasContainer[i].style.left = left;
+      canvasContainer[i].style.top = top;
+    }
 
     canvas.index = 0;
     canvas.state = [];
