@@ -215,3 +215,24 @@
     }
   }
 }
+
+.edit {
+  padding: 2.4rem 0 0 0 !important;
+  margin: 0 !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  border: 0;
+  .header-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 0.04rem;
+}

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
+import React, { useEffect } from "react";
+import { useRecoilState } from "recoil";
 import { GeneratedBoolState, GeneratedCountState } from "../recoil/FairytaleState";
 import styled from "styled-components";
 
