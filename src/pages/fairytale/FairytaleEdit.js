@@ -28,6 +28,7 @@ const Savebutton = styled.button`
   border-radius: 1.2rem;
   background-color: white;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+  z-index: 98;
 `;
 
 const FairytaleEdit = () => {
@@ -119,9 +120,8 @@ const FairytaleEdit = () => {
   return (
     <div className='edit'>
       <Header />
+      <Savebutton onClick={saveClick}>동화 완성하기</Savebutton>
       <Frame>
-        <Savebutton onClick={saveClick}>동화 완성하기</Savebutton>
-
         {Object.keys(canvasVisibility).map((key) => (
           <FrameInner
             key={key}

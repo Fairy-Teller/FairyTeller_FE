@@ -231,6 +231,14 @@
     right: 0;
     z-index: 99;
   }
+
+  button {
+    transition: all 0.24s ease-in-out;
+
+    &:hover {
+      transform: scale(1.04);
+    }
+  }
 }
 
 ::-webkit-scrollbar {
