@@ -178,10 +178,10 @@ const Canvas = (props) => {
     let left, top;
     if (windowW >= 1920) {
       left = windowW / 2 - 640 + "px";
-      top = windowH / 2 - 360 + "px";
+      top = windowH / 2 - 360 - 30 + "px";
     } else {
       left = windowW / 2 - 512 + "px";
-      top = windowH / 2 - 300 + "px";
+      top = windowH / 2 - 300 - 30 + "px";
     }
 
     const canvasContainer = document.querySelectorAll(".canvas-container");
