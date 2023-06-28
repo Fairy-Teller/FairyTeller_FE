@@ -14,8 +14,8 @@ const [IMAGE, USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER] = [
   "삭제",
   "스티커추가",
 ];
-const [NOTO, TAEB] = ["Noto Sans KR", "TAEBAEK milkyway"];
-const fonts = [NOTO, TAEB];
+const [NOTO, NAMJ, KATU, TAEB] = ["NotoSansKR", "NanumMyeongjo", "Katuri", "TAEBAEK"];
+const fonts = [NOTO, NAMJ, KATU, TAEB];
 const [LEFT, CENTER, RIGHT] = ["left", "center", "right"];
 const aligns = [LEFT, CENTER, RIGHT];
 
@@ -53,7 +53,7 @@ const Tab = styled.button`
     `}
 `;
 const Tooltab = styled.div`
-  width: 12.5vw;
+  width: 15vw;
   height: calc(100vh - 5.8rem);
   padding: 2rem 0.4rem;
   margin: 0;

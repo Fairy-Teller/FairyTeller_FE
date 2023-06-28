@@ -120,7 +120,7 @@ const FairytaleEdit = () => {
   return (
     <div className='edit'>
       <Header />
-      <Savebutton onClick={saveClick}>동화 완성하기</Savebutton>
+      <Savebutton onClick={saveClick}>완성하기</Savebutton>
       <Frame>
         {Object.keys(canvasVisibility).map((key) => (
           <FrameInner
