@@ -7,8 +7,15 @@ import ContentTitle from "../../components/global/ContentTitle";
 
 import { useNavigate } from "react-router-dom";
 
-import { useRecoilState } from "recoil";
-import { Imagetheme } from "../../recoil/FairytaleState";
+import { useRecoilValue, useRecoilState, useSetRecoilState } from "recoil";
+import {
+  Imagetheme,
+  StoryState,
+  ImageTempState,
+  GeneratedBoolState,
+  GeneratedCountState,
+  isSaveImageState,
+} from "../../recoil/FairytaleState";
 
 const SampleImg = styled.img`
   display: flex;
@@ -39,15 +46,28 @@ const StyleDiv = styled.div`
 `;
 
 function Artstyle() {
-  const [imageState, setImageState] = useRecoilState(Imagetheme);
+  const setImageState = useSetRecoilState(Imagetheme);
+  const savedStory = useRecoilValue(StoryState);
   const navigate = useNavigate();
+
+  let pagelength = savedStory.length;
+
+  const setSavedImageTemp = useSetRecoilState(ImageTempState);
+  const setIsFirstCreated = useSetRecoilState(GeneratedBoolState);
+  const setImgCount = useSetRecoilState(GeneratedCountState);
+  const setIsSaveImage = useSetRecoilState(isSaveImageState);
+
+  useEffect(() => {
+    setIsFirstCreated(new Array(pagelength).fill().map(() => false));
+    setImgCount(new Array(pagelength).fill().map(() => 3));
+    setIsSaveImage(new Array(pagelength).fill().map(() => false));
+    setSavedImageTemp(new Array(pagelength).fill().map(() => ({ url: "" })));
+  }, []);
 
   const IamgestateChange = (e) => {
     setImageState(e);
     navigate("/image-generated");
   };
-
-  console.log(imageState);
 
   return (
     <div>
