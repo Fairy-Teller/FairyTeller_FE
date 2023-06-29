@@ -76,7 +76,7 @@ const StoryGenerated = () => {
     console.log(savedStory);
     setIsBlockingKey(true);
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < savedStory.length; i++) {
       if (savedStory[i]["paragraph"].length === 0) {
         alert("모든 페이지에 대한 내용을 입력해주세요");
         setIsBlockingKey(false);
@@ -117,7 +117,7 @@ const StoryGenerated = () => {
 
   const resendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
     try {
-      const response = await call("/chat-gpt/question/recreate", "POST", userDTO);
+      const response = await call("/chat-gpt/question/test/4/recreate", "POST", userDTO);
       set(StoryState, response);
     } catch (error) {
       console.log(error);
@@ -156,8 +156,7 @@ const StoryGenerated = () => {
             <InnerCover>
               <form onSubmit={onSubmitHandler}>
                 <Section>
-                  {[...Array(5)].map((_, index) => {
-                    const item = savedStory[index] || {};
+                  {savedStory.map((item, index) => {
                     return (
                       <TextArea
                         key={"paragraph-" + index}

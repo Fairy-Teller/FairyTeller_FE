@@ -22,11 +22,6 @@ export const StoryState = atom({
   // effects_UNSTABLE: [persistAtom],
 });
 
-export const ImageTempState = atom({
-  key: "ImageTempState",
-  default: [{ url: "" }, { url: "" }, { url: "" }, { url: "" }, { url: "" }],
-});
-
 export const BookState = atom({
   key: "BookState",
   default: {
@@ -38,24 +33,28 @@ export const BookState = atom({
   },
 });
 
-export const isSaveImageState = atom({
-  key: "isSaveImageState",
-  default: [false, false, false, false, false],
+export const ImageTempState = atom({
+  key: "ImageTempState",
+  default: null,
+  effects_UNSTABLE: [persistAtom],
 });
-
-// export const AllSavedBoolState = atom({
-//     key: 'AllSavedBoolState',
-//     default: false,
-// });
 
 export const GeneratedBoolState = atom({
   key: "GeneratedBoolState",
-  default: [false, false, false, false, false],
+  default: null,
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const GeneratedCountState = atom({
   key: "GeneratedCountState",
-  default: [3, 3, 3, 3, 3],
+  default: null,
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const isSaveImageState = atom({
+  key: "isSaveImageState",
+  default: null,
+  effects_UNSTABLE: [persistAtom],
 });
 
 // ==============================================

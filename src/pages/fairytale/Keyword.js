@@ -207,7 +207,7 @@ const Keyword = () => {
   const sendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
     try {
       setIsLoading(true);
-      const response = await call("/chat-gpt/question", "POST", userDTO);
+      const response = await call("/chat-gpt/question/test/4", "POST", userDTO);
       set(StoryState, response);
     } catch (error) {
       console.log(error);
