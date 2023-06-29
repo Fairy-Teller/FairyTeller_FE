@@ -12,7 +12,7 @@ const Button = styled.button`
   color: #000000;
   background-color: pink;
   border-radius: 0.8rem;
-  word-break: keep-all;
+  background-color: violet;
 `;
 
 const ImgSelect = (props) => {

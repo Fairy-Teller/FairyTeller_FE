@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
 import { SaveState } from "../../recoil/FairytaleState";
 import { call } from "../../service/ApiService";
+import { history } from "../../history/history";
 import styled, { css } from "styled-components";
 import Canvas from "../../components/Canvas";
 import TitleModal from "../../components/TitleModal";
@@ -11,18 +12,23 @@ import PageSelectionFrame from "../../components/PageSelectionFrame";
 import PageSelection from "../../components/PageSelection";
 
 const Frame = styled.div`
-  position: relative;
+  height: calc(100vh - 2.4rem);
 `;
 const FrameInner = styled.div``;
 const Savebutton = styled.button`
-  width: 12rem;
-  height: 3.6rem;
-  border-radius: 0.4rem;
-  background: pink;
-  margin-top: 28px;
-  margin-right: 38px;
-  font-size: 1.2rem;
-  float: right;
+  height: 16rem;
+  width: 4.8rem;
+  padding: 1.2rem 1.6rem;
+  margin: 0;
+  box-sizing: border-box;
+  font-size: 1.6rem;
+  position: fixed;
+  top: 4.8rem;
+  right: 2.4rem;
+  border-radius: 1.2rem;
+  background-color: white;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+  z-index: 98;
 `;
 
 const FairytaleEdit = () => {
@@ -53,12 +59,7 @@ const FairytaleEdit = () => {
 
   useEffect(() => {
     getNewest();
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      // 컴포넌트가 언마운트될 때 스크롤 가능하게 되돌림
-      document.body.style.overflow = "auto";
-    };
+    window.scrollTo(0, 0);
   }, []);
 
   const getNewest = async () => {
@@ -70,6 +71,48 @@ const FairytaleEdit = () => {
     }
   };
 
+  const usePreventGoBack = () => {
+    const preventGoBack = () => {
+      history.push(null, "", history.location.href);
+      alert("현재 화면에서 이탈 시 생성된 데이터가 모두 사라집니다.");
+    };
+
+    useEffect(() => {
+      (() => {
+        history.push(null, "", history.location.href);
+        window.addEventListener("popstate", preventGoBack);
+      })();
+
+      return () => {
+        window.removeEventListener("popstate", preventGoBack);
+      };
+    }, []);
+
+    useEffect(() => {
+      history.push(null, "", history.location.href);
+    }, [history.location]);
+  };
+
+  const usePreventRefresh = () => {
+    const preventClose = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    useEffect(() => {
+      (() => {
+        window.addEventListener("beforeunload", preventClose);
+      })();
+
+      return () => {
+        window.removeEventListener("beforeunload", preventClose);
+      };
+    });
+  };
+
+  usePreventGoBack();
+  usePreventRefresh();
+
   const saveClick = () => {
     setSaveall(true);
   };
@@ -77,9 +120,8 @@ const FairytaleEdit = () => {
   return (
     <div className='edit'>
       <Header />
+      <Savebutton onClick={saveClick}>완성하기</Savebutton>
       <Frame>
-        <Savebutton onClick={saveClick}>동화 완성하기</Savebutton>
-
         {Object.keys(canvasVisibility).map((key) => (
           <FrameInner
             key={key}

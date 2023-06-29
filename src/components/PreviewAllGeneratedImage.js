@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { call } from "../service/ApiService";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { ImageTempState } from "../recoil/FairytaleState";
+import { ImageTempState, GeneratedBoolState } from "../recoil/FairytaleState";
 import styled from "styled-components";
 
 const ImageContainerFrame = styled.div`
@@ -15,45 +15,38 @@ const ImageContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 30px;
-  margin-bottom: 30px;
   width: 1000px; /* Sum of Image widths and gaps (350 * 3 + 30 * 2) */
 `;
 const Image = styled.img`
-  width: 300px;
-  height: 200px;
+  width: 100%;
+  height: 240px;
+  margin-bottom: 0.8rem;
   object-fit: cover;
-  border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out;
-  margin-bottom: 30px;
-
-  &:nth-child(4),
-  &:nth-child(5) {
-    margin-right: auto;
-    margin-left: auto;
-  }
+  border-radius: 0.8rem;
+  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.2);
+  transition: all 0.24s ease-in-out;
 
   &:hover {
-    transform: scale(1.04);
+    height: 520px;
+    transform: scale(1.012);
   }
 `;
 const ButtonWrap = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 1.6rem;
 `;
 const Button = styled.button`
-  width: 200px;
-  height: 40px;
+  width: 24rem;
+  height: 4rem;
   background: pink;
-  border-radius: 10px;
+  border-radius: 0.8rem;
   font-style: normal;
   font-weight: 400;
-  font-size: 18px;
+  font-size: 1.6rem;
   text-align: center;
   color: #000000;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.16);
   cursor: pointer;
 
   &:hover {
@@ -63,6 +56,7 @@ const Button = styled.button`
 
 const PreviewAllGeneratedIamge = () => {
   const savedImageTemp = useRecoilValue(ImageTempState);
+  const isFirstCreated = useRecoilValue(GeneratedBoolState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -70,7 +64,10 @@ const PreviewAllGeneratedIamge = () => {
   }, []);
 
   const goEdit = () => {
-    navigate("/f-edit");
+    isFirstCreated.every((value, index) => value === [true, true, true, true, true][index])
+      ? navigate("/f-edit")
+      : alert("모든 페이지에 대한 이미지를 생성해주세요!");
+    console.log(isFirstCreated);
   };
 
   return (
@@ -78,9 +75,9 @@ const PreviewAllGeneratedIamge = () => {
       <ImageContainer>
         {savedImageTemp.map((item, index) => (
           <Image
-            key={index}
-            src={item["url"]}
-            alt={`Generated Image ${index + 1}`}
+            key={index + "-generated"}
+            src={item["url"] !== "" ? item["url"] : "/images/default-image.jpg"}
+            alt={`Generated-Image-${index + 1}`}
           />
         ))}
       </ImageContainer>

@@ -1,11 +1,5 @@
 import React, { useEffect, useState, useRef, useReducer } from "react";
-import {
-  atomFamily,
-  useRecoilState,
-  useRecoilValue,
-  useSetRecoilState,
-  useResetRecoilState,
-} from "recoil";
+import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
 import { SelectStickers, SaveState, Canvasexport } from "../recoil/FairytaleState";
 import { call } from "../service/ApiService";
 import styled, { css } from "styled-components";
@@ -20,20 +14,28 @@ const [IMAGE, USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER] = [
   "삭제",
   "스티커추가",
 ];
-const [NOTO, TAEB] = ["Noto Sans KR", "TAEBAEK milkyway"];
-const fonts = [NOTO, TAEB];
+const [NOTO, NAMJ, KATU, TAEB] = ["NotoSansKR", "NanumMyeongjo", "Katuri", "TAEBAEK"];
+const fonts = [NOTO, NAMJ, KATU, TAEB];
 const [LEFT, CENTER, RIGHT] = ["left", "center", "right"];
 const aligns = [LEFT, CENTER, RIGHT];
 
 const CanvasFrame = styled.div`
-  display: flex;
-  height: 100vh;
+  height: calc(100vh - 40px);
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  position: relative;
 `;
 const Nav = styled.nav`
-  width: 2.5vw;
-  height: 100vh;
-  padding: 0 0 0 1.2rem;
+  width: 5vw;
+  height: calc(100vh - 40px);
+  padding: 0 1.2rem 3.6rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
   flex-direction: column;
+  overflow-y: scroll;
+  overflow-x: hidden;
 `;
 const Tab = styled.button`
   width: 100%;
@@ -51,12 +53,17 @@ const Tab = styled.button`
     `}
 `;
 const Tooltab = styled.div`
-  width: 12.5vw;
-  min-height: 100%;
+  width: 15vw;
+  height: calc(100vh - 5.8rem);
   padding: 2rem 0.4rem;
-  margin: 0 0 0 2rem;
-  overflow-y: scroll;
+  margin: 0;
+  position: absolute;
+  top: 2.4rem;
+  left: 5vw;
+  background-color: rgba(255, 255, 255, 0.8);
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+  overflow-y: scroll;
+  z-index: 98;
 
   ${({ visible }) =>
     !visible &&
@@ -151,10 +158,42 @@ const Canvas = (props) => {
   const initCanvas = (data) => {
     // console.log("data", data);
 
-    const canvas = new fabric.Canvas(canvasRef.current, {
-      height: 720,
-      width: 1280,
-    });
+    const windowW = window.innerWidth;
+    const windowH = window.innerHeight;
+    console.log(windowW, windowH);
+
+    const canvas = new fabric.Canvas(
+      canvasRef.current,
+      windowW >= 1920
+        ? {
+            width: 1280,
+            height: 720,
+          }
+        : {
+            // width: 1024,
+            // height: 600,
+            width: 1280,
+            height: 720,
+          }
+    );
+
+    let left, top;
+    if (windowW >= 1920) {
+      left = windowW / 2 - 640 + "px";
+      top = windowH / 2 - 360 - 30 + "px";
+    } else {
+      // left = windowW / 2 - 512 + "px";
+      // top = windowH / 2 - 300 - 30 + "px";
+      left = windowW / 2 - 640 + "px";
+      top = windowH / 2 - 360 - 30 + "px";
+    }
+
+    const canvasContainer = document.querySelectorAll(".canvas-container");
+    for (let i = 0; i < canvasContainer.length; i++) {
+      canvasContainer[i].style.position = "absolute";
+      canvasContainer[i].style.left = left;
+      canvasContainer[i].style.top = top;
+    }
 
     canvas.index = 0;
     canvas.state = [];
@@ -182,9 +221,9 @@ const Canvas = (props) => {
       fontFamily: TAEB,
       fontSize: 32,
       lineHeight: 1.4,
-      fill: data.pages[props.idx - 1].dark ? "white" : "black",
+      fill: !data.pages[props.idx - 1].dark ? "white" : "black",
       shadow: new fabric.Shadow(
-        data.pages[props.idx - 1].dark
+        !data.pages[props.idx - 1].dark
           ? {
               color: "rgba(34, 34, 34, 0.8)",
               blur: 8,
@@ -268,7 +307,7 @@ const Canvas = (props) => {
         activeObject.set({
           fill: action.payload ? "white" : "black",
           shadow: new fabric.Shadow(
-            action.payload
+            action.payload === "white"
               ? {
                   color: "rgba(34, 34, 34, 0.8)",
                   blur: 8,
@@ -346,23 +385,22 @@ const Canvas = (props) => {
   };
 
   // 현재 활성 객체
-  const [currActiveObject, setCurrActiveObject] = useState(null);
+  //   const [currActiveObject, setCurrActiveObject] = useState(null);
 
-  const getCurrActiveObject = (e) => {
-    if (e.target) {
-      setCurrActiveObject(canvas.getActiveObject());
-    }
-  };
+  //   const getCurrActiveObject = (e) => {
+  //     if (e.target) {
+  //       setCurrActiveObject(canvas.getActiveObject());
+  //     }
+  //   };
 
-  if (canvas) {
-    canvas.on("mouse:down:before", getCurrActiveObject);
-  }
+  //   if (canvas) {
+  //     canvas.on("mouse:down:before", getCurrActiveObject);
+  //   }
 
   // redo/undo
 
   return (
     <CanvasFrame>
-      {console.log(currActiveObject)}
       <Nav>
         {btnLabels.map((label) => (
           <Tab
@@ -376,9 +414,8 @@ const Canvas = (props) => {
         <br>
         <button onClick={() => handleRedo(indexInHistory, setIndexInHistory)}>Redo</button> */}
       </Nav>
-      {!activeTab && <Tooltab visible></Tooltab>}
 
-      <Tooltab visible={activeTab === TEXT}></Tooltab>
+      {/* <Tooltab visible={activeTab === TEXT}></Tooltab> */}
 
       <Tooltab visible={activeTab === TEXTSTYLE}>
         <Item>
@@ -440,7 +477,7 @@ const Canvas = (props) => {
         </Item>
       </Tooltab>
 
-      <Tooltab visible={activeTab === DELETE}></Tooltab>
+      {/* <Tooltab visible={activeTab === DELETE}></Tooltab> */}
 
       <Tooltab visible={activeTab === STICKER}>
         {selectStickers.map((item) =>
@@ -468,7 +505,6 @@ const Canvas = (props) => {
         id='canvas'
         key={props.canvasid + "c"}
         ref={canvasRef}
-        style={{ margin: "4% 0 0 0" }}
       />
     </CanvasFrame>
   );

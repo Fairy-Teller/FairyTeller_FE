@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
+import React, { useEffect } from "react";
+import { useRecoilState } from "recoil";
 import { GeneratedBoolState, GeneratedCountState } from "../recoil/FairytaleState";
 import styled from "styled-components";
 
 const Button = styled.button`
-  width: 8rem;
-  height: 3.2rem;
-  padding: 0.4rem 2.4rem;
+  width: 16rem;
+  height: 3.6rem;
   font-style: normal;
   font-weight: 400;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   text-align: center;
   color: #000000;
-  background-color: pink;
   border-radius: 0.8rem;
   word-break: keep-all;
+  background-color: pink;
 `;
 
 const ImgGenerate = (props) => {
@@ -33,8 +32,6 @@ const ImgGenerate = (props) => {
     const newImgCount = [...imgCount];
     --newImgCount[props.index];
     setImgCount(newImgCount);
-
-    console.log(e.target.name, imgCount);
   };
 
   if (isFirstCreated[props.index]) {
@@ -44,8 +41,7 @@ const ImgGenerate = (props) => {
         name={"idx" + props.index}
         onClick={(e) => {
           onClickHandler(e);
-        }}
-        style={{ marginRight: "2rem" }}>
+        }}>
         다시 뽑기 {imgCount[props.index]}
       </Button>
     );
@@ -62,8 +58,7 @@ const ImgGenerate = (props) => {
           setIsFirstCreated(newIsFirstCreated);
 
           console.log(props.index, isFirstCreated);
-        }}
-        style={{ marginRight: "2rem" }}>
+        }}>
         이미지 생성
       </Button>
     );

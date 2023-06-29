@@ -1,53 +1,35 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilCallback } from "recoil";
 import { StoryState, BookState } from "../../recoil/FairytaleState";
 import { call } from "../../service/ApiService";
 import Header from "../../components/global/Header";
-import ProgressBar from "../../components/global/ProgressBar";
 import Container from "../../components/global/Container";
 import Section from "../../components/global/Section";
+import ButtonWrap from "../../components/common/ButtonWrap";
+import LoadingModal from "../../components/LoadingModal";
 import styled from "styled-components";
-
 import ContentCover from "../../components/global/ContentCover";
 import ContentTitle from "../../components/global/ContentTitle";
 import InnerCover from "../../components/global/InnerCover";
 
 const TextArea = styled.textarea`
   width: calc(100% - 8rem);
-  min-height: 4rem;
-  background-color: #f2c166;
-  overflow: auto;
+  min-height: 6.4rem;
+  height: auto;
   resize: none;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
+  line-height: 1.6;
   border-radius: 2rem;
   box-sizing: content-box;
   padding: 2rem 4rem;
-  font-family: emoji;
   text-align: center;
 `;
 
-const Button = styled.button`
-  width: auto;
-  height: auto;
-  display: inline-flex;
-  flex-shrink: 0;
-  font-size: 24px;
-  word-break: keep-all;
-  background-color: #ea6262;
-  padding: 20px;
-`;
-const ButtonDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  background-size: cover;
-  padding-bottom: 80px;
-`;
-
 const StoryGenerated = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [savedStory, setSavedStory] = useRecoilState(StoryState);
+  const [isBlockingKey, setIsBlockingKey] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -58,27 +40,57 @@ const StoryGenerated = () => {
       { paragraph: "" },
       { paragraph: "" },
     ]);
+    setIsLoading(false);
   }, []);
+
+  useEffect(() => {
+    window.addEventListener("keydown", disableKeyboardEvents);
+
+    return () => {
+      window.removeEventListener("keydown", disableKeyboardEvents);
+    };
+  }, [isBlockingKey]);
+
+  const disableKeyboardEvents = (event) => {
+    if (isBlockingKey) {
+      event.preventDefault();
+    }
+  };
 
   const onChangeHandler = (e, index) => {
     const updatedStory = [...savedStory];
+
     updatedStory[index] = { ...updatedStory[index], paragraph: e.target.value };
     setSavedStory(updatedStory);
-    console.log(savedStory[index]);
   };
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    setIsBlockingKey(true);
+
+    for (let i = 0; i < 5; i++) {
+      if (savedStory[i]["paragraph"].length === 0) {
+        alert("모든 페이지에 대한 내용을 입력해주세요");
+        setIsBlockingKey(false);
+        return;
+      }
+    }
+
+    setIsLoading(true);
+    window.scrollTo(0, document.body.scrollHeight);
+
     try {
-      const bookDTO = savedStory.map((text, index) => ({
+      const bookDTO = savedStory.map((item, index) => ({
         pageNo: index + 1,
-        fullStory: text["paragraph"],
+        fullStory: item["paragraph"],
       }));
       await createBook({ pages: bookDTO });
     } catch (error) {
       console.log("Error fetching data:", error);
     } finally {
       console.log(savedStory);
+      setIsLoading(false);
+      setIsBlockingKey(false);
       navigate("/artstyle");
     }
   };
@@ -101,29 +113,33 @@ const StoryGenerated = () => {
   });
 
   return (
-    <div className='write tmp_story-generated'>
+    <div className='story story-user'>
+      {isLoading && <LoadingModal message='AI가 그림 그릴 준비를 합니다!' />}
       <Container>
         <Header mode={"default"} />
         <ContentCover>
-          <ProgressBar step={1} />
           <ContentTitle>동화를 직접 써볼 수 있어요!</ContentTitle>
           <InnerCover>
             <form onSubmit={onSubmitHandler}>
               <Section>
                 {savedStory.map((item, index) => (
-                  <div style={{ margin: "1em" }}>
-                    <TextArea
-                      key={index}
-                      value={item["paragraph"]}
-                      placeholder='재미있는 이야기를 작성해볼까요?'
-                      onChange={(e) => onChangeHandler(e, index)}
-                    />
-                  </div>
+                  <TextArea
+                    key={index}
+                    value={item["paragraph"]}
+                    placeholder='재미있는 이야기를 작성해볼까요?'
+                    maxLength={200}
+                    onChange={(e) => onChangeHandler(e, index)}
+                    style={{ margin: "1.2rem 0 0" }}
+                  />
                 ))}
               </Section>
-              <ButtonDiv>
-                <Button type='submit'>동화 만들러 가기</Button>
-              </ButtonDiv>
+              <ButtonWrap>
+                <button
+                  type='submit'
+                  className='button'>
+                  동화 만들러 가기
+                </button>
+              </ButtonWrap>
             </form>
           </InnerCover>
         </ContentCover>
