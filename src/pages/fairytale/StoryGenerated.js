@@ -117,7 +117,7 @@ const StoryGenerated = () => {
 
   const resendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
     try {
-      const response = await call("/chat-gpt/question/test/4/recreate", "POST", userDTO);
+      const response = await call("/chat-gpt/question/test/6/recreate", "POST", userDTO);
       set(StoryState, response);
     } catch (error) {
       console.log(error);
