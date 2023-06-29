@@ -91,10 +91,11 @@ const Home = () => {
   `;
   const gotoLogin = () => {
     const token = localStorage.getItem("ACCESS_TOKEN");
-    if (token) {
-      navigation("/start");
-    } else {
+    console.log(token);
+    if (token === null) {
       navigation("/Login");
+    } else {
+      navigation("/start");
     }
   };
 
