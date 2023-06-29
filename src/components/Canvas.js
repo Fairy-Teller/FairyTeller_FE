@@ -156,7 +156,7 @@ const Canvas = (props) => {
 
   // 캔버스 초기화
   const initCanvas = (data) => {
-    // console.log("data", data);
+    console.log("data", data);
 
     const windowW = window.innerWidth;
     const windowH = window.innerHeight;
@@ -211,8 +211,8 @@ const Canvas = (props) => {
       originX: "center",
       originY: "center",
       textAlign: "right",
-      top: canvas.height / 1.4,
-      left: canvas.width / 1.4,
+      top: canvas.height / 2,
+      left: canvas.width / 2,
       width: 640,
       fontFamily: TAEB,
       fontSize: 32,
