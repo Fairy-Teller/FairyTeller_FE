@@ -170,10 +170,8 @@ const Canvas = (props) => {
             height: 720,
           }
         : {
-            // width: 1024,
-            // height: 600,
-            width: 1280,
-            height: 720,
+            width: 1024,
+            height: 600,
           }
     );
 
@@ -182,10 +180,8 @@ const Canvas = (props) => {
       left = windowW / 2 - 640 + "px";
       top = windowH / 2 - 360 - 30 + "px";
     } else {
-      // left = windowW / 2 - 512 + "px";
-      // top = windowH / 2 - 300 - 30 + "px";
-      left = windowW / 2 - 640 + "px";
-      top = windowH / 2 - 360 - 30 + "px";
+      left = windowW / 2 - 512 + "px";
+      top = windowH / 2 - 300 - 30 + "px";
     }
 
     const canvasContainer = document.querySelectorAll(".canvas-container");
