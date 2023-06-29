@@ -59,11 +59,11 @@ const FairytaleExport = () => {
 
     useEffect(() => {
         fetchData();
-        scrollToTop();
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
     }, []);
-    const scrollToTop = () => {
-        window.scrollTo(0, 0);
-    };
 
     const fetchData = async () => {
         try {
@@ -113,7 +113,6 @@ const FairytaleExport = () => {
             <Header mode={'default'} />
             <ContentCover>
                 <InnerCover>
-                    <TitleBox>동화 제목: {Title} </TitleBox>
                     <FairytaleShow props={BookId}></FairytaleShow>
 
                     <div>
