@@ -3,31 +3,14 @@ import '../../css/Book.css';
 import React from 'react';
 import PageFlip from 'react-pageflip';
 
-import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { BookPage } from '../../recoil/FairytaleState';
 
 function Book({ bookInfo }) {
     const imageUrls = bookInfo;
     const bookPage = useSetRecoilState(BookPage);
-    const showBook = useRecoilValue(BookPage);
 
     const handlePageClick = (i, state) => {
-        // if (i == imageUrls.length - 1 && state == 'next') {
-        //     bookPage(imageUrls.length - 2);
-        // } else if (i == imageUrls.length - 1 && state == 'prev') {
-        //     bookPage(imageUrls.length - 3);
-        // } else if (i == imageUrls.length - 2 && state == 'prev') {
-        //     bookPage(imageUrls.length - 4);
-        // } else if (i == imageUrls.length - 3 && state == 'prev') {
-        //     bookPage(imageUrls.length - 5);
-        // } else if (i == imageUrls.length - 4 && state == 'prev') {
-        //     bookPage(imageUrls.length - 6);
-        // } else if (i == imageUrls.length - 5 && state == 'prev') {
-        //     bookPage(-1);
-        // } else if (i == imageUrls.length - 6 && state == 'prev') {
-        //     bookPage(-1);
-        // } else bookPage(i);
-
         if (state === 'next') {
             if (i < imageUrls.length - 1) {
                 bookPage(i);

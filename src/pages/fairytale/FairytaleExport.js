@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { call } from '../../service/ApiService';
 import styled from 'styled-components';
 import FairytaleShow from './FairytaleShow';
-
-import Container from '../../components/global/Container';
 import Header from '../../components/global/Header';
 import ContentCover from '../../components/global/ContentCover';
-import ContentTitle from '../../components/global/ContentTitle';
 
 import InnerCover from '../../components/global/InnerCover';
 
@@ -31,17 +28,6 @@ const Button = styled.button`
     text-decoration: none;
 `;
 
-const TitleBox = styled.div`
-    /* Rectangle 758 */
-
-    margin-top: 2%;
-    color: white;
-
-    font-weight: 400;
-    font-size: 30px;
-    text-align: center;
-`;
-
 const PageWrapper = styled.div`
     background-image: url('/images/background_blur.png');
     background-size: cover;
@@ -52,7 +38,6 @@ const PageWrapper = styled.div`
 `;
 
 const FairytaleExport = () => {
-    const [thumbnailUrl, setThumbnailUrl] = useState('');
     const [BookId, setBookId] = useState('');
     const [Title, setTitle] = useState('');
     const [Image, setImage] = useState([]);
