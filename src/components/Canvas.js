@@ -6,8 +6,8 @@ import styled, { css } from "styled-components";
 import { fabric } from "fabric";
 import TabSelection from "./TabSelection";
 
-const [IMAGE, USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER] = [
-  "AI삽화",
+const [OBJECTS, USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER] = [
+  "선택",
   "사용자이미지",
   "텍스트추가",
   "글씨스타일",
@@ -79,11 +79,29 @@ const Item = styled.div`
 `;
 const ItemTitle = styled.div`
   padding: 0 0 1.2rem 0;
-  font-size: 2.4rem;
+  font-size: 2rem;
+`;
+const ItemButton = styled.button`
+  display: block;
+  margin: 0.6rem 0;
+  padding: 0.6rem;
+  box-sizing: border-box;
+  font-size: 1.6rem;
+  border-radius: 0.4rem;
+  overflow: hidden;
+  transition: background-color 0.24s, color 0.24s;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+
+  &:hover {
+    background-color: white;
+  }
 `;
 
 const Canvas = (props) => {
-  const btnLabels = [USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER];
+  const btnLabels = [TEXTSTYLE, TEXT, OBJECTS, USERIMAGE, STICKER];
   const canvasRef = useRef(null);
   // const fabricCanvasRef = useRef(null);
   // const [canvasStates, setCanvasStates] = useState({});
@@ -106,7 +124,9 @@ const Canvas = (props) => {
   useEffect(() => {
     try {
       getNewest();
-    } catch {}
+    } catch {
+      // saveCanvasState();
+    }
   }, []);
 
   // 최신 저장 가져오기
@@ -149,8 +169,6 @@ const Canvas = (props) => {
       document.body.removeChild(link);
 
       setCanvasExport((prev) => [...prev, { id: props.idx, img: link.href }]);
-    } else {
-      console.log("없나?");
     }
   };
 
@@ -219,15 +237,15 @@ const Canvas = (props) => {
       lineHeight: 1.4,
       fill: !data.pages[props.idx - 1].dark ? "white" : "black",
       shadow: new fabric.Shadow(
-        !data.pages[props.idx - 1].dark
+        data.pages[props.idx - 1].dark
           ? {
-              color: "rgba(34, 34, 34, 0.8)",
+              color: "rgba(34, 34, 34, 1)",
               blur: 8,
               offsetX: 4,
               offsetY: 4,
             }
           : {
-              color: "rgba(255, 255, 255, 0.625)",
+              color: "rgba(255, 255, 255, 0.8)",
               blur: 8,
               offsetX: 4,
               offsetY: 4,
@@ -245,10 +263,8 @@ const Canvas = (props) => {
     setShowButtonFunctiontion(!showButtonFunction);
     if (label === TEXT) {
       addTextBox();
-    } else if (label === DELETE) {
-      deleteObject();
-    } else if (label === STICKER) {
-      setShowEditToolTab(true);
+      // } else if (label === DELETE) {
+      //   deleteObject();
     } else {
       setShowEditToolTab(false);
     }
@@ -269,7 +285,7 @@ const Canvas = (props) => {
       lineHeight: 1.4,
       fill: "white",
       shadow: new fabric.Shadow({
-        color: "rgba(34, 34, 34, 0.8)",
+        color: "rgba(34, 34, 34, 1)",
         blur: 8,
         offsetX: 4,
         offsetY: 4,
@@ -293,7 +309,7 @@ const Canvas = (props) => {
     switch (action.type) {
       case "fontStyle":
         activeObject.set("fontFamily", action.payload);
-        action.canvas.requestRenderAll();
+        action.canvas.renderAll();
         return state;
       case "alignStyle":
         activeObject.set("textAlign", action.payload);
@@ -303,15 +319,15 @@ const Canvas = (props) => {
         activeObject.set({
           fill: action.payload ? "white" : "black",
           shadow: new fabric.Shadow(
-            action.payload === "white"
+            action.payload
               ? {
-                  color: "rgba(34, 34, 34, 0.8)",
+                  color: "rgba(34, 34, 34, 1)",
                   blur: 8,
                   offsetX: 4,
                   offsetY: 4,
                 }
               : {
-                  color: "rgba(255, 255, 255, 0.625)",
+                  color: "rgba(255, 255, 255, 0.8)",
                   blur: 8,
                   offsetX: 4,
                   offsetY: 4,
@@ -380,20 +396,58 @@ const Canvas = (props) => {
     );
   };
 
-  // 현재 활성 객체
-  //   const [currActiveObject, setCurrActiveObject] = useState(null);
+  // Start Free Drawing
+  const [pickerColor, setPickerColor] = useState("#ffadcb");
+  const [originLength, setOriginLength] = useState(0);
 
-  //   const getCurrActiveObject = (e) => {
-  //     if (e.target) {
-  //       setCurrActiveObject(canvas.getActiveObject());
-  //     }
-  //   };
+  let redoData = [];
+  let undoData = [];
 
-  //   if (canvas) {
-  //     canvas.on("mouse:down:before", getCurrActiveObject);
-  //   }
+  const drawing = () => {
+    let originData = canvas._objects.length;
+    setOriginLength(originData);
+    // setIsDrawing(true);
+    // canvas.isDrawingMode = true;
+    // canvas.freeDrawingBrush.color = pickerColor;
+    canvas.renderAll();
+  };
 
-  // redo/undo
+  //undo
+  const undo = (c) => {
+    let newLength = c._objects.length;
+    console.log("newLength", newLength);
+    if (newLength <= originLength) {
+      return null;
+    }
+    let popData = c._objects.pop();
+    redoData.push(popData);
+    c.renderAll();
+  };
+
+  //redo
+  const redo = (c) => {
+    if (redoData.length === 0) {
+      return null;
+    }
+    let popData = redoData.pop();
+    undoData.push(popData);
+    c._objects.push(popData);
+    c.renderAll();
+  };
+
+  // 앞으로 가져오기
+  const bringFront = (c) => {
+    let obj = canvas.getActiveObject();
+    c.bringToFront(obj);
+    c.renderAll();
+  };
+
+  // 뒤로 보내기
+  const bringBack = (c) => {
+    let obj = c.getActiveObject();
+    c.sendBackwards(obj);
+    c.renderAll();
+  };
 
   return (
     <CanvasFrame>
@@ -406,9 +460,6 @@ const Canvas = (props) => {
             <h2>{label}</h2>
           </Tab>
         ))}
-        {/* <button onClick={() => handleUndo(indexInHistory, history, setIndexInHistory)}>Undo</button>
-        <br>
-        <button onClick={() => handleRedo(indexInHistory, setIndexInHistory)}>Redo</button> */}
       </Nav>
 
       {/* <Tooltab visible={activeTab === TEXT}></Tooltab> */}
@@ -421,7 +472,7 @@ const Canvas = (props) => {
               <TabSelection
                 name={TEXTSTYLE + "-tab"}
                 stylename={item}
-                onClick={(e) => {
+                onClick={() => {
                   dispatch({ type: "fontStyle", payload: item, canvas: canvas });
                 }}
               />
@@ -437,7 +488,7 @@ const Canvas = (props) => {
               <TabSelection
                 name={TEXTSTYLE + "-tab"}
                 stylename={item}
-                onClick={(e) => {
+                onClick={() => {
                   dispatch({ type: "alignStyle", payload: item, canvas: canvas });
                 }}
               />
@@ -462,7 +513,7 @@ const Canvas = (props) => {
           <TabSelection
             name={TEXTSTYLE + "-tab"}
             stylename='black'
-            onClick={(e) => {
+            onClick={() => {
               dispatch({
                 type: "colorStyle",
                 payload: false,
@@ -473,7 +524,16 @@ const Canvas = (props) => {
         </Item>
       </Tooltab>
 
-      {/* <Tooltab visible={activeTab === DELETE}></Tooltab> */}
+      <Tooltab visible={activeTab === OBJECTS}>
+        <Item>
+          <ItemTitle>선택한 객체를</ItemTitle>
+        </Item>
+        <ItemButton onClick={() => bringFront(canvas)}>맨앞으로 가져오기</ItemButton>
+        <ItemButton onClick={() => bringBack(canvas)}>맨뒤로 보내기</ItemButton>
+        <ItemButton onClick={deleteObject}>삭제하기</ItemButton>
+        <ItemButton onClick={() => undo(canvas)}>Undo</ItemButton>
+        <ItemButton onClick={() => redo(canvas)}>Redo</ItemButton>
+      </Tooltab>
 
       <Tooltab visible={activeTab === STICKER}>
         {selectStickers.map((item) =>

@@ -5,6 +5,29 @@
   */
 
 @font-face {
+  font-family: "NanumMyeongjo";
+  font-style: normal;
+  font-weight: 700;
+  src: url("./NanumMyeongjo/NanumMyeongjoBold.woff") format("woff"),
+    url("./NanumMyeongjo/NanumMyeongjoBold.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "NanumMyeongjo";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./NanumMyeongjo/NanumMyeongjo.woff") format("woff"),
+    url("./NanumMyeongjo/NanumMyeongjo.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Katuri";
+  font-style: normal;
+  font-weight: normal;
+  src: url("./Katuri/KATURI.woff") format("woff"), url("./Katuri/KATURI.TTF") format("ttf");
+}
+
+@font-face {
   font-family: "NotoSansKR";
   font-style: normal;
   font-weight: 700;
@@ -34,25 +57,4 @@
   font-weight: 400;
   src: url("./TAEBAEK_milkyway/TAEBAEK_milkyway.woff") format("woff"),
     url("./TAEBAEK_milkyway/TAEBAEK_milkyway.ttf") format("ttf");
-}
-
-@font-face {
-  font-family: "NanumMyeongjo";
-  font-style: normal;
-  font-weight: 700;
-  src: url("./NanumMyeongjo/NanumMyeongjoBold.ttf") format("ttf");
-}
-
-@font-face {
-  font-family: "NanumMyeongjo";
-  font-style: normal;
-  font-weight: 400;
-  src: url("./NanumMyeongjo/NanumMyeongjo.ttf") format("ttf");
-}
-
-@font-face {
-  font-family: "Katuri";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_13@1.0/Katuri.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
 }
