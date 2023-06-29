@@ -101,7 +101,6 @@ function FairytaleShow(bookid) {
     const [check, setCheck] = useState('user');
 
     const bookPage = useRecoilValue(BookPage);
-    console.log('state', bookid);
 
     useEffect(() => {
         if (bookid.props !== '') {
@@ -114,37 +113,29 @@ function FairytaleShow(bookid) {
             const bookinfos = await call('/book/getBookById', 'POST', {
                 bookId: props,
             });
+
             const imgearr = [];
             const audioarr = [];
             const userAudioarr = [];
             const story = [];
+
+            imgearr[0] = bookinfos.thumbnailUrl;
             for (let i = 0; i < bookinfos.pages.length; i++) {
-                imgearr[i] = bookinfos.pages[i].finalImageUrl;
-                audioarr[i] = bookinfos.pages[i].audioUrl;
-                userAudioarr[i] = bookinfos.pages[i].userAudioUrl;
-                story[i] = bookinfos.pages[i].fullStory;
+                const page = bookinfos.pages[i];
+                audioarr[i] = page.audioUrl;
+                userAudioarr[i] = page.userAudioUrl;
+                story[i] = page.fullStory;
+                imgearr[i + 1] = page.finalImageUrl;
             }
             setBookInfo(imgearr);
             setAudioInfo(audioarr);
             setUserAudioInfo(userAudioarr);
             setBookStory(story);
-            console.log('story', story);
         } catch (error) {
             console.log('Error fetching data:', error);
         }
     };
 
-    const handlePrevPage = () => {
-        if (currentPage > 0) {
-            setCurrentPage((prevPage) => prevPage - 1);
-        }
-    };
-
-    const handleNextPage = () => {
-        if (currentPage < bookInfo.length - 1) {
-            setCurrentPage((prevPage) => prevPage + 1);
-        }
-    };
     const closeModal = () => {
         setIsModalOpen(false);
     };
@@ -154,8 +145,6 @@ function FairytaleShow(bookid) {
     `;
 
     const handleRecordingComplete = async (pageNumber, audioBlob) => {
-        console.log('Recording completed for page:', pageNumber);
-        console.log('audioBlob', audioBlob);
         setRecordedAudioBlob(audioBlob);
         setRecordingInProgress(false);
 
@@ -184,48 +173,51 @@ function FairytaleShow(bookid) {
         };
     }, []);
 
-    console.log('bookPage', bookPage);
-
     return (
         <div>
             <CenteredContainer>
                 {bookInfo.length > 0 && (
                     <div>
                         <AudioContainer>
-                            {!userAudioInfo[bookPage] && !bookid.state ? (
+                            {bookPage !== -1 ? (
                                 <>
-                                    <audio ref={audioRef} src={audioInfo[bookPage]} controls preload="auto" />
-                                    <VoiceButton onClick={() => setIsModalOpen(true)}></VoiceButton>
-                                    <Text>마이크 버튼을 눌러 나만의 동화를 녹음해 보세요</Text>
-                                </>
-                            ) : !userAudioInfo[bookPage] && bookid.state ? (
-                                <>
-                                    <audio ref={audioRef} src={audioInfo[bookPage]} controls preload="auto" />
-                                    <Voicechange></Voicechange>
-                                    <Text>동화를 읽어드립니다! 재생버튼을 클릭해 보세요</Text>
-                                </>
-                            ) : null}
-                            {userAudioInfo[bookPage] && (
-                                <>
-                                    <audio
-                                        ref={audioRef}
-                                        src={check === 'tts' ? audioInfo[bookPage] : userAudioInfo[bookPage]}
-                                        controls
-                                        preload="auto"
-                                    />
-
-                                    {check === 'user' ? (
+                                    {!userAudioInfo[bookPage] && !bookid.state ? (
                                         <>
-                                            <Voicechange onClick={handleToggleAudio}></Voicechange>
-                                            <Text>로봇 버튼을 누르시면 기계음성으로 변환합니다.</Text>
+                                            <audio ref={audioRef} src={audioInfo[bookPage]} controls preload="auto" />
+                                            <VoiceButton onClick={() => setIsModalOpen(true)}></VoiceButton>
+                                            <Text>마이크 버튼을 눌러 나만의 동화를 녹음해 보세요</Text>
                                         </>
-                                    ) : (
+                                    ) : !userAudioInfo[bookPage] && bookid.state ? (
                                         <>
-                                            <Voiceuserchange onClick={handleToggleAudio}></Voiceuserchange>
-                                            <Text>사람 버튼을 누르시면 녹음 음성으로 변환합니다.</Text>
+                                            <audio ref={audioRef} src={audioInfo[bookPage]} controls preload="auto" />
+                                            <Voicechange></Voicechange>
+                                            <Text>동화를 읽어드립니다! 재생버튼을 클릭해 보세요</Text>
+                                        </>
+                                    ) : null}
+                                    {userAudioInfo[bookPage] && (
+                                        <>
+                                            <audio
+                                                ref={audioRef}
+                                                src={check === 'tts' ? audioInfo[bookPage] : userAudioInfo[bookPage]}
+                                                controls
+                                                preload="auto"
+                                            />
+                                            {check === 'user' ? (
+                                                <>
+                                                    <Voicechange onClick={handleToggleAudio}></Voicechange>
+                                                    <Text>로봇 버튼을 누르시면 기계음성으로 변환합니다.</Text>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Voiceuserchange onClick={handleToggleAudio}></Voiceuserchange>
+                                                    <Text>사람 버튼을 누르시면 녹음 음성으로 변환합니다.</Text>
+                                                </>
+                                            )}
                                         </>
                                     )}
                                 </>
+                            ) : (
+                                <div style={{ height: '95px' }}></div>
                             )}
                         </AudioContainer>
 
