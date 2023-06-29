@@ -87,7 +87,7 @@ const Login = () => {
               class="submit"
               onClick={() => {
                 setIsSocialLogin(true);
-                handleSocialLogin("");
+                handleSocialLogin("naver");
               }}
               style={{ backgroundColor: "#50CA7E" }}
             >
