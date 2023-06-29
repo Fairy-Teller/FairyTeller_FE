@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { StoryState } from "../../recoil/FairytaleState";
 import { history } from "../../history/history";
 // import styled from "styled-components";
@@ -80,7 +80,7 @@ const IamgeGenerated = () => {
         <Header mode={"default"} />
         <ContentCover>
           <ContentTitle>
-            {page < 5
+            {page < savedStory.length
               ? `AI가 동화책의 ${page + 1}번째 페이지에 들어가는 이미지를 그려줘요!`
               : `고른 이미지들을 확인해주세요! 이제 동화책을 만들러 가볼까요?`}
           </ContentTitle>
@@ -94,20 +94,29 @@ const IamgeGenerated = () => {
               <div style={{ marginLeft: "4.8rem", flexShrink: 0 }}></div>
             )}
             {savedStory.map(
-              (item, index) => item && page === index && <PreviewGeneratedImage index={index} />
+              (item, index) =>
+                item &&
+                page === index && (
+                  <PreviewGeneratedImage
+                    index={index}
+                    pagelength={savedStory.length}
+                  />
+                )
             )}
-            {page < 4 ? (
+            {page < savedStory.length - 1 ? (
               <Control
                 mode={NEXT}
                 onControl={handleControl}
               />
-            ) : page === 4 ? (
+            ) : page === savedStory.length - 1 ? (
               <Control
                 mode={NEXT}
                 onControl={handleControl}
               />
             ) : null}
-            {page === 5 && <PreviewAllGeneratedImage />}
+            {page === savedStory.length && (
+              <PreviewAllGeneratedImage pagelength={savedStory.length} />
+            )}
           </InnerCover>
         </ContentCover>
       </Container>
