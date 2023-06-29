@@ -156,7 +156,7 @@ const Canvas = (props) => {
 
   // 캔버스 초기화
   const initCanvas = (data) => {
-    // console.log("data", data);
+    console.log("data", data);
 
     const windowW = window.innerWidth;
     const windowH = window.innerHeight;

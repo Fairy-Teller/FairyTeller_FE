@@ -174,6 +174,12 @@ const PreviewGeneratedIamge = (props) => {
     }
   };
 
+  const onChangeHandler = (targetUrl, index) => {
+    const newImage = [...savedImageTemp];
+    newImage[index] = { ...newImage[index], url: targetUrl };
+    setSavedImageTemp(newImage);
+  };
+
   const saveImg = async (image) => {
     try {
       const bookDTO = {
@@ -195,12 +201,6 @@ const PreviewGeneratedIamge = (props) => {
       setIsSaveImage(newIsSaveImage);
       console.log("isSaveImage", isSaveImage);
     }
-  };
-
-  const onChangeHandler = (targetUrl, index) => {
-    const newImage = [...savedImageTemp];
-    newImage[index] = { ...newImage[index], url: targetUrl };
-    setSavedImageTemp(newImage);
   };
 
   return (
