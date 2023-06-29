@@ -171,7 +171,7 @@ const Canvas = (props) => {
           }
         : {
             width: 1024,
-            height: 600,
+            height: 576,
           }
     );
 

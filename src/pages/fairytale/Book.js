@@ -30,7 +30,7 @@ function Book({ bookInfo }) {
     height = 720;
   } else {
     width = 1024 / 2;
-    height = 600;
+    height = 576;
   }
 
   return (
