@@ -26,13 +26,25 @@ $color1: #f2c166;
 $color1: #d9a362;
 
 @mixin font-noto($weight) {
-  font-family: "Noto Sans KR";
+  font-family: "NotoSansKR";
   font-style: normal;
   font-weight: $weight;
 }
 
-@mixin font-taeb() {
-  font-family: "TAEBAEK milkyway";
+@mixin font-namj($weight) {
+  font-family: "NanumMyeongjo";
   font-style: normal;
-  font-weight: 400;
+  font-weight: $weight;
+}
+
+@mixin font-taeb($weight) {
+  font-family: "TAEBAEK";
+  font-style: normal;
+  font-weight: $weight;
+}
+
+@mixin font-katu($weight) {
+  font-family: "Katuri";
+  font-style: normal;
+  font-weight: $weight;
 }

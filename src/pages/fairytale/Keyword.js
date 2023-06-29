@@ -15,21 +15,22 @@ import ContentTitle from "../../components/global/ContentTitle";
 import InnerCover from "../../components/global/InnerCover";
 
 const KeywordItem = styled.div`
-  padding: 0.625rem;
+  width: 100%;
+  max-width: 17.5%;
   margin: 0.4rem auto 0.4rem;
+`;
+const KeywordInner = styled.div`
+  width: 8rem;
+  padding: 0.4rem 0.8rem 0.8rem;
+  margin: 0 auto 0.8rem;
+  position: relative;
   border-radius: 2rem;
   overflow: hidden;
-  transition: background 0.4s;
+  transition: background 0.24s;
   &:hover {
     color: white;
     background-color: #edaeae;
   }
-`;
-const KeywordInner = styled.div`
-  width: 8rem;
-  margin: 0 1.2rem;
-  padding: 0;
-  position: relative;
 `;
 const ItemTitle = styled.div`
   display: flex;
@@ -43,11 +44,9 @@ const ItemTitleText = styled.p`
   font-size: 1.6rem;
 `;
 const ItemInput = styled.input`
-  width: 11rem;
-  height: 11.6rem;
+  width: 10.4rem;
+  height: 12.8rem;
   position: absolute;
-  // left: 0;
-  // right: 0;
   top: 0;
   cursor: pointer;
   border: 0;
@@ -95,6 +94,7 @@ const NoticeText = styled.p`
 const Keyword = () => {
   const [loaded, setLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isBlockingKey, setIsBlockingKey] = useState(false);
   const [keywords, setKeywords] = useRecoilState(SelectedKeywordsState);
   const [dataIdx, setDataIdx] = useState(0);
   const [input, setInput] = useState("");
@@ -105,6 +105,20 @@ const Keyword = () => {
     fetchData();
     setInput("");
   }, []);
+
+  useEffect(() => {
+    window.addEventListener("keydown", disableKeyboardEvents);
+
+    return () => {
+      window.removeEventListener("keydown", disableKeyboardEvents);
+    };
+  }, [isBlockingKey]);
+
+  const disableKeyboardEvents = (event) => {
+    if (isBlockingKey) {
+      event.preventDefault();
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -160,13 +174,24 @@ const Keyword = () => {
         updatedValues = updatedValues.filter((item) => item !== target.name);
       }
 
-      console.log(updatedValues);
+      return updatedValues;
+    });
+  };
+
+  const handleCurrClicked = (target) => {
+    const name = target.getAttribute("name");
+    setKeywords((prev) => {
+      let updatedValues = [...prev];
+      updatedValues = updatedValues.filter((item) => item !== name);
+
       return updatedValues;
     });
   };
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
+    setIsBlockingKey(true);
+
     keywords.length < 3
       ? alert("단어는 3개 이상 선택해주세요!")
       : sendkeyword({
@@ -182,19 +207,18 @@ const Keyword = () => {
   const sendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
     try {
       setIsLoading(true);
-      const response = await call("/chat-gpt/question", "POST", userDTO);
+      const response = await call("/chat-gpt/question/test/4", "POST", userDTO);
       set(StoryState, response);
     } catch (error) {
       console.log(error);
     } finally {
-      // setIsLoading(false);
+      setIsBlockingKey(false);
       navigate("/story-generated");
     }
   });
 
   useEffect(() => {
     const target = document.querySelector(".current");
-    console.log(target);
 
     if (target !== null) {
       const handleScroll = () => {
@@ -228,7 +252,14 @@ const Keyword = () => {
                   <div>
                     {keywords.length > 0 ? (
                       keywords.map((item) => {
-                        return <div key={item}>{item}</div>;
+                        return (
+                          <div
+                            key={item + "-inputed"}
+                            name={item}
+                            onClick={(e) => handleCurrClicked(e.target)}>
+                            {item}
+                          </div>
+                        );
                       })
                     ) : (
                       <NoticeText>동화에 넣을 키워드를 골라보아요</NoticeText>
@@ -267,7 +298,7 @@ const Keyword = () => {
                       <h2 style={{ paddingBottom: "1rem" }}>{item.theme}</h2>
                       <Row className={"wrap"}>
                         {item.titles.map((title, subIndex) => (
-                          <KeywordItem key={subIndex}>
+                          <KeywordItem key={subIndex + "-options"}>
                             <KeywordInner>
                               <img
                                 src={`./images/keywords/${title}.png`}

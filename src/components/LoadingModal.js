@@ -14,7 +14,6 @@ const ModalWrap = styled.div`
   z-index: 9999;
   background-color: rgba(0, 0, 0, 0.4);
 `;
-
 const Modal = styled.div`
   width: 36rem;
   height: 24rem;
@@ -25,13 +24,11 @@ const Modal = styled.div`
   background-color: white;
   border-radius: 4rem;
 `;
-
 const MoveImg = styled.img`
   width: 30%;
   height: 30%;
   margin: 0 0 2rem 0;
 `;
-
 const Message = styled.p`
   font-size: 1.6rem;
   color: black;

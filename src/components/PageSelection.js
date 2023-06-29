@@ -12,7 +12,7 @@ const Selection = styled.div`
 `;
 
 const Image = styled.div`
-  width: ${(props) => (props.isHovered ? "104%" : "100%")};
+  width: ${(props) => (props.isHovered ? "102.4%" : "100%")};
   min-height: ${(props) => (props.isHovered ? "160px" : "40px")};
   ${(props) =>
     props.src &&
@@ -21,7 +21,7 @@ const Image = styled.div`
     `}
   background-size: cover;
   border-radius: 0.4rem;
-  transition: all 0.4s ease-in-out;
+  transition: all 0.24s ease-in-out;
   box-shadow: ${(props) =>
     props.isHovered
       ? "0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.8)"

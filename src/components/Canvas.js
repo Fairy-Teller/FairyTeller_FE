@@ -6,28 +6,36 @@ import styled, { css } from "styled-components";
 import { fabric } from "fabric";
 import TabSelection from "./TabSelection";
 
-const [IMAGE, USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER] = [
-  "AI삽화",
+const [OBJECTS, USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER] = [
+  "선택",
   "사용자이미지",
   "텍스트추가",
   "글씨스타일",
   "삭제",
   "스티커추가",
 ];
-const [NOTO, TAEB] = ["Noto Sans KR", "TAEBAEK milkyway"];
-const fonts = [NOTO, TAEB];
+const [NOTO, NAMJ, KATU, TAEB] = ["NotoSansKR", "NanumMyeongjo", "Katuri", "TAEBAEK"];
+const fonts = [NOTO, NAMJ, KATU, TAEB];
 const [LEFT, CENTER, RIGHT] = ["left", "center", "right"];
 const aligns = [LEFT, CENTER, RIGHT];
 
 const CanvasFrame = styled.div`
-  display: flex;
-  height: 100vh;
+  height: calc(100vh - 40px);
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  position: relative;
 `;
 const Nav = styled.nav`
-  width: 2.5vw;
-  height: 100vh;
-  padding: 0 0 0 1.2rem;
+  width: 5vw;
+  height: calc(100vh - 40px);
+  padding: 0 1.2rem 3.6rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
   flex-direction: column;
+  overflow-y: scroll;
+  overflow-x: hidden;
 `;
 const Tab = styled.button`
   width: 100%;
@@ -45,12 +53,17 @@ const Tab = styled.button`
     `}
 `;
 const Tooltab = styled.div`
-  width: 12.5vw;
-  min-height: 100%;
+  width: 15vw;
+  height: calc(100vh - 5.8rem);
   padding: 2rem 0.4rem;
-  margin: 0 0 0 2rem;
-  overflow-y: scroll;
+  margin: 0;
+  position: absolute;
+  top: 2.4rem;
+  left: 5vw;
+  background-color: rgba(255, 255, 255, 0.8);
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+  overflow-y: scroll;
+  z-index: 98;
 
   ${({ visible }) =>
     !visible &&
@@ -66,11 +79,29 @@ const Item = styled.div`
 `;
 const ItemTitle = styled.div`
   padding: 0 0 1.2rem 0;
-  font-size: 2.4rem;
+  font-size: 2rem;
+`;
+const ItemButton = styled.button`
+  display: block;
+  margin: 0.6rem 0;
+  padding: 0.6rem;
+  box-sizing: border-box;
+  font-size: 1.6rem;
+  border-radius: 0.4rem;
+  overflow: hidden;
+  transition: background-color 0.24s, color 0.24s;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+
+  &:hover {
+    background-color: white;
+  }
 `;
 
 const Canvas = (props) => {
-  const btnLabels = [USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER];
+  const btnLabels = [TEXTSTYLE, TEXT, OBJECTS, USERIMAGE, STICKER];
   const canvasRef = useRef(null);
   // const fabricCanvasRef = useRef(null);
   // const [canvasStates, setCanvasStates] = useState({});
@@ -94,7 +125,7 @@ const Canvas = (props) => {
     try {
       getNewest();
     } catch {
-      saveCanvasState();
+      // saveCanvasState();
     }
   }, []);
 
@@ -143,12 +174,40 @@ const Canvas = (props) => {
 
   // 캔버스 초기화
   const initCanvas = (data) => {
-    // console.log("data", data);
+    console.log("data", data);
 
-    const canvas = new fabric.Canvas(canvasRef.current, {
-      height: 720,
-      width: 1280,
-    });
+    const windowW = window.innerWidth;
+    const windowH = window.innerHeight;
+    console.log(windowW, windowH);
+
+    const canvas = new fabric.Canvas(
+      canvasRef.current,
+      windowW >= 1920
+        ? {
+            width: 1280,
+            height: 720,
+          }
+        : {
+            width: 1024,
+            height: 576,
+          }
+    );
+
+    let left, top;
+    if (windowW >= 1920) {
+      left = windowW / 2 - 640 + "px";
+      top = windowH / 2 - 360 - 30 + "px";
+    } else {
+      left = windowW / 2 - 512 + "px";
+      top = windowH / 2 - 300 - 30 + "px";
+    }
+
+    const canvasContainer = document.querySelectorAll(".canvas-container");
+    for (let i = 0; i < canvasContainer.length; i++) {
+      canvasContainer[i].style.position = "absolute";
+      canvasContainer[i].style.left = left;
+      canvasContainer[i].style.top = top;
+    }
 
     canvas.index = 0;
     canvas.state = [];
@@ -170,15 +229,15 @@ const Canvas = (props) => {
       originX: "center",
       originY: "center",
       textAlign: "right",
-      top: canvas.height / 1.4,
-      left: canvas.width / 1.4,
+      top: canvas.height / 2,
+      left: canvas.width / 2,
       width: 640,
       fontFamily: TAEB,
       fontSize: 32,
       lineHeight: 1.4,
-      fill: data.pages[props.idx - 1].dark ? "white" : "black",
+      fill: !data.pages[props.idx - 1].dark ? "white" : "black",
       shadow: new fabric.Shadow(
-        data.pages[props.idx - 1].dark
+        !data.pages[props.idx - 1].dark
           ? {
               color: "rgba(34, 34, 34, 0.8)",
               blur: 8,
@@ -204,10 +263,8 @@ const Canvas = (props) => {
     setShowButtonFunctiontion(!showButtonFunction);
     if (label === TEXT) {
       addTextBox();
-    } else if (label === DELETE) {
-      deleteObject();
-    } else if (label === STICKER) {
-      setShowEditToolTab(true);
+      // } else if (label === DELETE) {
+      //   deleteObject();
     } else {
       setShowEditToolTab(false);
     }
@@ -262,7 +319,7 @@ const Canvas = (props) => {
         activeObject.set({
           fill: action.payload ? "white" : "black",
           shadow: new fabric.Shadow(
-            action.payload
+            action.payload === "white"
               ? {
                   color: "rgba(34, 34, 34, 0.8)",
                   blur: 8,
@@ -340,21 +397,21 @@ const Canvas = (props) => {
   };
 
   // 현재 활성 객체
-  const [currActiveObject, setCurrActiveObject] = useState(null);
+  //   const [currActiveObject, setCurrActiveObject] = useState(null);
 
-  const getCurrActiveObject = (e) => {
-    if (e.target) {
-      setCurrActiveObject(canvas.getActiveObject());
-    }
-  };
+  //   const getCurrActiveObject = (e) => {
+  //     if (e.target) {
+  //       setCurrActiveObject(canvas.getActiveObject());
+  //     }
+  //   };
 
-  if (canvas) {
-    canvas.on("mouse:down:before", getCurrActiveObject);
-  }
+  //   if (canvas) {
+  //     canvas.on("mouse:down:before", getCurrActiveObject);
+  //   }
 
   // redo/undo
-  const canvasStates = useRef([]);
-  const currentStateIndex = useRef(-1);
+  // const canvasStates = useRef([]);
+  // const currentStateIndex = useRef(-1);
 
   // const saveCanvasState = () => {
   //   const json = canvas.toJSON();
@@ -392,7 +449,8 @@ const Canvas = (props) => {
 
   let redoData = [];
   let undoData = [];
-  //Start Free Drawing
+
+  // Start Free Drawing
   const drawing = (canvas) => {
     let originData = canvas._objects.length;
     setOriginLength(originData);
@@ -404,8 +462,11 @@ const Canvas = (props) => {
 
   //undo
   const undo = () => {
+    console.log("undo버튼눌림");
     let newLength = canvas._objects.length;
-    if (newLength <= originLength) return;
+    if (newLength <= originLength) {
+      return null;
+    }
     let popData = canvas._objects.pop();
     redoData.push(popData);
     canvas.renderAll();
@@ -413,11 +474,28 @@ const Canvas = (props) => {
 
   //redo
   const redo = () => {
-    if (redoData.length === 0) return;
+    console.log("redo버튼눌림");
+    if (redoData.length === 0) {
+      return null;
+    }
     let popData = redoData.pop();
     undoData.push(popData);
     canvas._objects.push(popData);
     canvas.renderAll();
+  };
+
+  //bring to front
+  const bringFront = (c) => {
+    let obj = canvas.getActiveObject();
+    c.bringToFront(obj);
+    c.renderAll();
+  };
+
+  //send back
+  const bringBack = (c) => {
+    let obj = c.getActiveObject();
+    c.sendBackwards(obj);
+    c.renderAll();
   };
 
   return (
@@ -431,12 +509,9 @@ const Canvas = (props) => {
             <h2>{label}</h2>
           </Tab>
         ))}
-        <button onClick={undo}>Undo</button>
-        <button onClick={redo}>Redo</button>
       </Nav>
-      {!activeTab && <Tooltab visible></Tooltab>}
 
-      <Tooltab visible={activeTab === TEXT}></Tooltab>
+      {/* <Tooltab visible={activeTab === TEXT}></Tooltab> */}
 
       <Tooltab visible={activeTab === TEXTSTYLE}>
         <Item>
@@ -498,7 +573,16 @@ const Canvas = (props) => {
         </Item>
       </Tooltab>
 
-      <Tooltab visible={activeTab === DELETE}></Tooltab>
+      <Tooltab visible={activeTab === OBJECTS}>
+        <Item>
+          <ItemTitle>선택한 객체를</ItemTitle>
+        </Item>
+        <ItemButton onClick={() => bringFront(canvas)}>맨앞으로 가져오기</ItemButton>
+        <ItemButton onClick={() => bringBack(canvas)}>맨뒤로 보내기</ItemButton>
+        <ItemButton onClick={deleteObject}>삭제하기</ItemButton>
+        <ItemButton onClick={() => undo}>Undo</ItemButton>
+        <ItemButton onClick={() => redo}>Redo</ItemButton>
+      </Tooltab>
 
       <Tooltab visible={activeTab === STICKER}>
         {selectStickers.map((item) =>
@@ -526,7 +610,6 @@ const Canvas = (props) => {
         id='canvas'
         key={props.canvasid + "c"}
         ref={canvasRef}
-        style={{ margin: "4% 0 0 0" }}
       />
     </CanvasFrame>
   );

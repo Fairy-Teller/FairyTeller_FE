@@ -11,20 +11,19 @@ const [IMAGE, USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER] = [
 
 const Selection = styled.div`
   // flex: 1;
-  margin: 1.2rem 0;
+  margin: 0.4rem 0;
   padding: 0.4rem;
   box-sizing: border-box;
   border-radius: 0.4rem;
   overflow: hidden;
-  transition: background-color 0.4s, color 0.4s;
+  transition: background-color 0.24s, color 0.24s;
 
   &:first-of-type {
     margin-top: 0;
   }
 
   &:hover {
-    background-color: black;
-    color: white;
+    background-color: white;
   }
 `;
 
