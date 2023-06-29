@@ -13,7 +13,6 @@ export function signin(userDTO) {
       console.log(response);
       if (response && response.token) {
         localStorage.setItem("ACCESS_TOKEN", response.token);
-
         window.location.href = "/start";
       }
       return response;
@@ -35,7 +34,7 @@ export function socialLogin(provider) {
 }
 
 export function signout() {
-  localStorage.setItem("ACCESS_TOKEN", null);
+  localStorage.removeItem("ACCESS_TOKEN");
   window.location.href = "/login";
 }
 
