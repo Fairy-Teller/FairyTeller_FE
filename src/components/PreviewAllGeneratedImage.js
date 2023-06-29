@@ -76,7 +76,7 @@ const PreviewAllGeneratedIamge = () => {
         {savedImageTemp.map((item, index) => (
           <Image
             key={index + "-generated"}
-            src={item["url"] ? item["url"] : "/images/default-image.jpg"}
+            src={item["url"] !== "" ? item["url"] : "/images/default-image.jpg"}
             alt={`Generated-Image-${index + 1}`}
           />
         ))}

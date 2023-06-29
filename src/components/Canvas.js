@@ -170,8 +170,10 @@ const Canvas = (props) => {
             height: 720,
           }
         : {
-            width: 1024,
-            height: 600,
+            // width: 1024,
+            // height: 600,
+            width: 1280,
+            height: 720,
           }
     );
 
