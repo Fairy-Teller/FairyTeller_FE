@@ -186,12 +186,10 @@ const RecordButton = ({
                     <div style={recordInfoStyle}>{pageNumber} 페이지 녹음중입니다.</div>
                     <div style={recordInfoStyle}>경과 시간: {formatStopwatchTime(stopwatch)}</div>
 
-                    {/* <img src="rec.gif" alt="녹화중"></img> */}
 
                     <HighlightedText bookstorys={bookstory} />
                 </div>
             ) : null}
-            {/* Countdown */}
             {!isRecording && countdown > 0 && (
                 <>
                     <div style={recordInfoStyle}>
@@ -202,7 +200,6 @@ const RecordButton = ({
                     <img src="images/calmdown.gif" alt="침착하세여"></img>
                 </>
             )}
-            {/* Dropdown to select the version of audio if available */}
             {initialAudioUrl && (
                 <select onChange={(e) => (audioRef.current.src = e.target.value)}>
                     <option value={initialAudioUrl}>Original Audio</option>

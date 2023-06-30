@@ -34,30 +34,27 @@ export const BookState = atom({
 });
 
 export const ImageTempState = atom({
-  key: "ImageTempState",
-  default: null,
-  effects_UNSTABLE: [persistAtom],
-
+    key: 'ImageTempState',
+    default: null,
+    effects_UNSTABLE: [persistAtom],
 });
 
 export const GeneratedBoolState = atom({
-
-  key: "GeneratedBoolState",
-  default: null,
-  effects_UNSTABLE: [persistAtom],
+    key: 'GeneratedBoolState',
+    default: null,
+    effects_UNSTABLE: [persistAtom],
 });
 
 export const GeneratedCountState = atom({
-  key: "GeneratedCountState",
-  default: null,
-  effects_UNSTABLE: [persistAtom],
+    key: 'GeneratedCountState',
+    default: null,
+    effects_UNSTABLE: [persistAtom],
 });
 
 export const isSaveImageState = atom({
-  key: "isSaveImageState",
-  default: null,
-  effects_UNSTABLE: [persistAtom],
-
+    key: 'isSaveImageState',
+    default: null,
+    effects_UNSTABLE: [persistAtom],
 });
 
 // ==============================================
@@ -137,4 +134,10 @@ export const UserInfo = atom({
     key: 'UserInfo',
     default: '',
     effects_UNSTABLE: [persistAtom],
+});
+
+// 완성하기 취소 state
+export const TitleSave = atom({
+    key: 'TitleSave',
+    default: false,
 });
