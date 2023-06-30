@@ -55,11 +55,11 @@ const Tab = styled.button`
 `;
 const Tooltab = styled.div`
   width: 15vw;
-  height: calc(100vh - 5.8rem);
+  height: calc(100vh - 12.8rem);
   padding: 2rem 0.4rem;
   margin: 0;
   position: absolute;
-  top: 2.4rem;
+  top: 2rem;
   left: 5vw;
   background-color: rgba(255, 255, 255, 0.8);
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
@@ -73,21 +73,27 @@ const Tooltab = styled.div`
     `}
 `;
 const Item = styled.div`
-  margin: 0 0 4rem 0;
+  margin: 0 0 2.4rem 0;
   * {
     font-size: 1.6rem;
+    line-height: 1.4;
+    word-break: keep-all;
   }
 `;
 const ItemTitle = styled.div`
-  padding: 0 0 1.2rem 0;
+  padding: 0 0 1.2rem 0.8rem;
   font-size: 2rem;
+  font-weight: 900;
 `;
 const ItemButton = styled.button`
+  max-width: 100%;
+  width: 100%;
   display: block;
-  margin: 0.6rem 0;
-  padding: 0.6rem;
+  margin: 0.4rem 0;
+  padding: 0.8rem 0.4rem;
   box-sizing: border-box;
   font-size: 1.6rem;
+  text-align: left;
   border-radius: 0.4rem;
   overflow: hidden;
   transition: background-color 0.24s, color 0.24s;
@@ -101,13 +107,12 @@ const ItemButton = styled.button`
   }
 `;
 
-const DrawingButtons = styled.div`
-  padding: 1rem 1.5rem 0.8rem;
-  display: flex;
-  justify-content: space-between;
-  button {
-    font-weight: 600;
-  }
+const ColorPicker = styled.input`
+  width: 100%;
+  max-width: 100%;
+  height: 3.6rem;
+  padding: 0.8rem 0.4rem;
+  box-sizing: border-box;
 `;
 
 const Canvas = (props) => {
@@ -443,66 +448,6 @@ const Canvas = (props) => {
     canvas.renderAll();
   };
 
-  //color change
-  const colorChange = (e) => {
-    let obj = canvas.getActiveObject();
-    if (obj) {
-      canvas.backgroundColor = e.target.value;
-    } else if (obj) {
-      if (!obj.filters && obj.fill !== null && !obj._objects) {
-        obj.set({ fill: e.target.value });
-      } else if (obj._objects) {
-        for (let i = 0; i < obj._objects.length; i++) {
-          obj._objects[i].set({
-            fill: e.target.value,
-          });
-        }
-      } else if (obj.filters) {
-        let tint = new fabric.Image.filters.BlendColor({
-          color: e.target.value,
-          mode: "multiply",
-        });
-        obj.filters.push(tint);
-        obj.applyFilters();
-        obj.filters.pop(); //reset the filter so that the obj's color can be changed in response to the color picker
-      } else {
-        obj.set({ stroke: e.target.value });
-      }
-    }
-    setBrushColor(e.target.value);
-    canvas.renderAll();
-  };
-
-  //change color when clicked
-  const colorClickChange = (e) => {
-    let obj = canvas.getActiveObject();
-    if (obj) {
-      canvas.backgroundColor = e.target.value;
-    } else if (obj) {
-      if (!obj.filters && obj.fill !== null && !obj._objects) {
-        obj.set({ fill: e.target.value });
-      } else if (obj._objects) {
-        for (let i = 0; i < obj._objects.length; i++) {
-          obj._objects[i].set({
-            fill: e.target.value,
-          });
-        }
-      } else if (obj.filters) {
-        let tint = new fabric.Image.filters.BlendColor({
-          color: e.target.value,
-          mode: "multiply",
-        });
-        obj.filters.push(tint);
-        obj.applyFilters();
-        obj.filters.pop(); //reset the filter so the obj's color can be changed in response to the color picker
-      } else {
-        obj.set({ stroke: e.target.value });
-      }
-    }
-    setBrushColor(e.target.value);
-    canvas.renderAll();
-  };
-
   // undo/redo
   let objHistory = [];
   let undoHistory = [];
@@ -568,8 +513,6 @@ const Canvas = (props) => {
         ))}
       </Nav>
 
-      {/* <Tooltab visible={activeTab === TEXT}></Tooltab> */}
-
       <Tooltab visible={activeTab === TEXTSTYLE}>
         <Item>
           <ItemTitle>글씨체</ItemTitle>
@@ -632,45 +575,38 @@ const Canvas = (props) => {
 
       <Tooltab visible={activeTab === DRAWING}>
         <Item>
-          <ItemTitle>직접 그림을 그리거나 글씨를 쓸 수 있어요</ItemTitle>
-          <ItemButton onClick={() => undo(canvas)}>Undo</ItemButton>
-          <ItemButton onClick={() => redo(canvas)}>Redo</ItemButton>
+          <ItemTitle>직접 손그림을 그리거나 손글씨를 쓸 수 있어요</ItemTitle>
+          <ItemButton onClick={() => undo(canvas)}>뒤로가기</ItemButton>
+          <ItemButton onClick={() => redo(canvas)}>복구하기</ItemButton>
+          <ItemButton onClick={deleteObject}>삭제하기</ItemButton>
           {isDrawing ? (
             <ItemButton
               onClick={() => {
                 stopDrawing(canvas);
               }}>
-              stopdrawing
+              손그림 모드 OFF
             </ItemButton>
           ) : (
             <ItemButton
               onClick={() => {
                 startDrawing(canvas);
               }}>
-              startdrawing
+              손그림 모드 ON
             </ItemButton>
           )}
-
-          <input
-            id='drawing-line-color'
+          <ColorPicker
             type='color'
             value={brushColor}
             onChange={handleBrushColor}
           />
-          {/* <input
-            id='object-color'
-            type='color'
-            value={brushColor}
-            onChange={colorChange}
-            onClick={colorClickChange}
-          /> */}
           <Slider
-            min={1}
+            min={40}
             max={50}
             sx={{
               width: 180,
               height: 8,
-              color: "#ff679e",
+              margin: "0.4rem 0 0 1.2rem",
+              color: "pink",
             }}
             value={brushWidth}
             onChange={handleBrushWidth}
@@ -681,12 +617,12 @@ const Canvas = (props) => {
       <Tooltab visible={activeTab === OBJECTS}>
         <Item>
           <ItemTitle>선택한 객체를</ItemTitle>
+          <ItemButton onClick={() => bringForward(canvas)}>앞으로 가져오기</ItemButton>
+          <ItemButton onClick={() => sendBackwards(canvas)}>뒤로 보내기</ItemButton>
+          <ItemButton onClick={() => bringToFront(canvas)}>맨앞으로 가져오기</ItemButton>
+          <ItemButton onClick={() => sendToBack(canvas)}>맨뒤로 보내기</ItemButton>
+          <ItemButton onClick={deleteObject}>삭제하기</ItemButton>
         </Item>
-        <ItemButton onClick={() => bringForward(canvas)}>앞으로 가져오기</ItemButton>
-        <ItemButton onClick={() => sendBackwards(canvas)}>뒤로 보내기</ItemButton>
-        <ItemButton onClick={() => bringToFront(canvas)}>맨앞으로 가져오기</ItemButton>
-        <ItemButton onClick={() => sendToBack(canvas)}>맨뒤로 보내기</ItemButton>
-        <ItemButton onClick={deleteObject}>삭제하기</ItemButton>
       </Tooltab>
 
       <Tooltab visible={activeTab === STICKER}>
