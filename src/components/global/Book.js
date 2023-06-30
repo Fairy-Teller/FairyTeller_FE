@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 const Book = ({ book, truncateTitle, linkPath, idProperty }) => {
   const title = truncateTitle ? truncateTitle(book.title) : book.title;
   const author = truncateTitle ? truncateTitle(book.nickname) : book.nickname;
+  const { comments, likeCount } = book;
 
   const id = book[idProperty];
 
@@ -23,6 +24,9 @@ const Book = ({ book, truncateTitle, linkPath, idProperty }) => {
                 className="book__image"
               />
               <h6 className="book__title">{title}</h6>
+              <p className="book__stats">
+                좋아요수: {likeCount} 댓글수: {comments.length} 
+              </p>
               <h6 className="book__author">{author}</h6>
             </div>
           </div>
