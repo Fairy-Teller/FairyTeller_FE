@@ -1,17 +1,18 @@
 import React, { useEffect, useState, useRef, useReducer } from "react";
-import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
+import { useRecoilValue, useRecoilState, useSetRecoilState, useResetRecoilState } from "recoil";
 import { SelectStickers, SaveState, Canvasexport } from "../recoil/FairytaleState";
 import { call } from "../service/ApiService";
 import styled, { css } from "styled-components";
 import { fabric } from "fabric";
+import { Slider } from "@mui/material";
 import TabSelection from "./TabSelection";
 
-const [OBJECTS, USERIMAGE, TEXT, TEXTSTYLE, DELETE, STICKER] = [
+const [OBJECTS, USERIMAGE, TEXT, TEXTSTYLE, DRAWING, STICKER] = [
   "선택",
   "사용자이미지",
   "텍스트추가",
   "글씨스타일",
-  "삭제",
+  "손그림",
   "스티커추가",
 ];
 const [NOTO, NAMJ, KATU, TAEB] = ["NotoSansKR", "NanumMyeongjo", "Katuri", "TAEBAEK"];
@@ -100,8 +101,17 @@ const ItemButton = styled.button`
   }
 `;
 
+const DrawingButtons = styled.div`
+  padding: 1rem 1.5rem 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  button {
+    font-weight: 600;
+  }
+`;
+
 const Canvas = (props) => {
-  const btnLabels = [TEXTSTYLE, TEXT, OBJECTS, USERIMAGE, STICKER];
+  const btnLabels = [TEXTSTYLE, TEXT, OBJECTS, USERIMAGE, STICKER, DRAWING];
   const canvasRef = useRef(null);
   // const fabricCanvasRef = useRef(null);
   // const [canvasStates, setCanvasStates] = useState({});
@@ -125,7 +135,7 @@ const Canvas = (props) => {
     try {
       getNewest();
     } catch {
-      // saveCanvasState();
+      // initCanvasState();
     }
   }, []);
 
@@ -186,10 +196,12 @@ const Canvas = (props) => {
         ? {
             width: 1280,
             height: 720,
+            preserveObjectStacking: true,
           }
         : {
             width: 1024,
             height: 576,
+            preserveObjectStacking: true,
           }
     );
 
@@ -216,7 +228,7 @@ const Canvas = (props) => {
     fabric.Image.fromURL(
       data.pages[props.idx - 1].originalImageUrl + "?timestamp=" + new Date().getTime(),
       (defimage) => {
-        canvas.setBackgroundImage(defimage, canvas.renderAll.bind(canvas), {
+        canvas.setBackgroundImage(defimage, canvas.requestRenderAll.bind(canvas), {
           scaleX: canvas.width / defimage.width,
           scaleY: canvas.height / defimage.height,
         });
@@ -237,7 +249,7 @@ const Canvas = (props) => {
       lineHeight: 1.4,
       fill: !data.pages[props.idx - 1].dark ? "white" : "black",
       shadow: new fabric.Shadow(
-        data.pages[props.idx - 1].dark
+        !data.pages[props.idx - 1].dark
           ? {
               color: "rgba(34, 34, 34, 1)",
               blur: 8,
@@ -257,14 +269,22 @@ const Canvas = (props) => {
     return canvas;
   };
 
+  // 캔버스 스테이트 초기화
+  // const initCanvasState = () => {
+  //   canvas.on("object:modified", function () {
+  //     updated();
+  //   });
+  //   canvas.on("object:added", function () {
+  //     updated();
+  //   });
+  // };
+
   // 탭
   const handleButtonClick = (label) => {
     setActiveTab(label === activeTab ? null : label);
     setShowButtonFunctiontion(!showButtonFunction);
     if (label === TEXT) {
       addTextBox();
-      // } else if (label === DELETE) {
-      //   deleteObject();
     } else {
       setShowEditToolTab(false);
     }
@@ -300,10 +320,7 @@ const Canvas = (props) => {
     const activeObject = action.canvas.getActiveObject();
 
     if (!activeObject || !(activeObject.type === "textbox" || "text")) {
-      return {
-        ...state,
-        message: activeObject ? "NOT A TEXT" : "VACANT",
-      };
+      return null;
     }
 
     switch (action.type) {
@@ -361,9 +378,7 @@ const Canvas = (props) => {
 
       fabric.Image.fromURL(data, function (img) {
         let oImg = img.set({
-          left: 0,
-          top: 0,
-          angle: 0,
+          angle: -22.5,
         });
 
         canvas.add(oImg).renderAll();
@@ -381,69 +396,160 @@ const Canvas = (props) => {
       function (img) {
         // img.crossOrigin = `Anonymous`;
         // img.setAttribute('crossOrigin', '');
-        img.scale(0.5).set({
+        img.scale(0.25).set({
           left: 150,
           top: 150,
-          angle: -15,
+          angle: -22.5,
         });
 
         // img.getElement().setAttribute('crossOrigin', 'anonymous');
         // canvas.add(img).setActiveObject(img);
-
         canvas.add(img).setActiveObject(img);
       },
       { crossOrigin: "anonymous" }
     );
   };
 
-  // Start Free Drawing
-  const [pickerColor, setPickerColor] = useState("#ffadcb");
+  // 손그림
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [brushColor, setBrushColor] = useState("#FFaaFF");
+  const [brushWidth, setBrushWidth] = useState(1);
   const [originLength, setOriginLength] = useState(0);
 
-  let redoData = [];
-  let undoData = [];
+  const startDrawing = (c) => {
+    setIsDrawing(true);
+    setOriginLength(c._objects.length);
+    c.isDrawingMode = true;
+    c.freeDrawingBrush.color = brushColor;
+    c.requestRenderAll();
+  };
 
-  const drawing = () => {
-    let originData = canvas._objects.length;
-    setOriginLength(originData);
-    // setIsDrawing(true);
-    // canvas.isDrawingMode = true;
-    // canvas.freeDrawingBrush.color = pickerColor;
+  const stopDrawing = (c) => {
+    setIsDrawing(false);
+    c.isDrawingMode = false;
+    c.requestRenderAll();
+  };
+
+  //brush change
+  const handleBrushWidth = (e) => {
+    canvas.freeDrawingBrush.width = parseInt(e.target.value, 10);
+    setBrushWidth(canvas.freeDrawingBrush.width);
     canvas.renderAll();
   };
 
-  //undo
+  const handleBrushColor = (e) => {
+    canvas.freeDrawingBrush.color = e.target.value;
+    setBrushColor(e.target.value);
+    canvas.renderAll();
+  };
+
+  //color change
+  const colorChange = (e) => {
+    let obj = canvas.getActiveObject();
+    if (obj) {
+      canvas.backgroundColor = e.target.value;
+    } else if (obj) {
+      if (!obj.filters && obj.fill !== null && !obj._objects) {
+        obj.set({ fill: e.target.value });
+      } else if (obj._objects) {
+        for (let i = 0; i < obj._objects.length; i++) {
+          obj._objects[i].set({
+            fill: e.target.value,
+          });
+        }
+      } else if (obj.filters) {
+        let tint = new fabric.Image.filters.BlendColor({
+          color: e.target.value,
+          mode: "multiply",
+        });
+        obj.filters.push(tint);
+        obj.applyFilters();
+        obj.filters.pop(); //reset the filter so that the obj's color can be changed in response to the color picker
+      } else {
+        obj.set({ stroke: e.target.value });
+      }
+    }
+    setBrushColor(e.target.value);
+    canvas.renderAll();
+  };
+
+  //change color when clicked
+  const colorClickChange = (e) => {
+    let obj = canvas.getActiveObject();
+    if (obj) {
+      canvas.backgroundColor = e.target.value;
+    } else if (obj) {
+      if (!obj.filters && obj.fill !== null && !obj._objects) {
+        obj.set({ fill: e.target.value });
+      } else if (obj._objects) {
+        for (let i = 0; i < obj._objects.length; i++) {
+          obj._objects[i].set({
+            fill: e.target.value,
+          });
+        }
+      } else if (obj.filters) {
+        let tint = new fabric.Image.filters.BlendColor({
+          color: e.target.value,
+          mode: "multiply",
+        });
+        obj.filters.push(tint);
+        obj.applyFilters();
+        obj.filters.pop(); //reset the filter so the obj's color can be changed in response to the color picker
+      } else {
+        obj.set({ stroke: e.target.value });
+      }
+    }
+    setBrushColor(e.target.value);
+    canvas.renderAll();
+  };
+
+  // undo/redo
+  let objHistory = [];
+  let undoHistory = [];
+
   const undo = (c) => {
-    let newLength = c._objects.length;
-    console.log("newLength", newLength);
-    if (newLength <= originLength) {
+    let objLength = c._objects.length;
+    if (objLength === 0) {
       return null;
     }
     let popData = c._objects.pop();
-    redoData.push(popData);
+    undoHistory.push(popData);
     c.renderAll();
   };
 
-  //redo
   const redo = (c) => {
-    if (redoData.length === 0) {
+    if (undoHistory.length === 0) {
       return null;
     }
-    let popData = redoData.pop();
-    undoData.push(popData);
+    let popData = undoHistory.pop();
+    objHistory.push(popData);
     c._objects.push(popData);
     c.renderAll();
   };
 
-  // 앞으로 가져오기
-  const bringFront = (c) => {
+  // 맨앞으로 가져오기
+  const bringToFront = (c) => {
     let obj = canvas.getActiveObject();
     c.bringToFront(obj);
     c.renderAll();
   };
 
+  // 맨뒤로 보내기
+  const sendToBack = (c) => {
+    let obj = c.getActiveObject();
+    c.sendToBack(obj);
+    c.renderAll();
+  };
+
+  // 앞으로 가져오기
+  const bringForward = (c) => {
+    let obj = canvas.getActiveObject();
+    c.bringForward(obj);
+    c.renderAll();
+  };
+
   // 뒤로 보내기
-  const bringBack = (c) => {
+  const sendBackwards = (c) => {
     let obj = c.getActiveObject();
     c.sendBackwards(obj);
     c.renderAll();
@@ -524,15 +630,63 @@ const Canvas = (props) => {
         </Item>
       </Tooltab>
 
+      <Tooltab visible={activeTab === DRAWING}>
+        <Item>
+          <ItemTitle>직접 그림을 그리거나 글씨를 쓸 수 있어요</ItemTitle>
+          <ItemButton onClick={() => undo(canvas)}>Undo</ItemButton>
+          <ItemButton onClick={() => redo(canvas)}>Redo</ItemButton>
+          {isDrawing ? (
+            <ItemButton
+              onClick={() => {
+                stopDrawing(canvas);
+              }}>
+              stopdrawing
+            </ItemButton>
+          ) : (
+            <ItemButton
+              onClick={() => {
+                startDrawing(canvas);
+              }}>
+              startdrawing
+            </ItemButton>
+          )}
+
+          <input
+            id='drawing-line-color'
+            type='color'
+            value={brushColor}
+            onChange={handleBrushColor}
+          />
+          {/* <input
+            id='object-color'
+            type='color'
+            value={brushColor}
+            onChange={colorChange}
+            onClick={colorClickChange}
+          /> */}
+          <Slider
+            min={1}
+            max={50}
+            sx={{
+              width: 180,
+              height: 8,
+              color: "#ff679e",
+            }}
+            value={brushWidth}
+            onChange={handleBrushWidth}
+          />
+        </Item>
+      </Tooltab>
+
       <Tooltab visible={activeTab === OBJECTS}>
         <Item>
           <ItemTitle>선택한 객체를</ItemTitle>
         </Item>
-        <ItemButton onClick={() => bringFront(canvas)}>맨앞으로 가져오기</ItemButton>
-        <ItemButton onClick={() => bringBack(canvas)}>맨뒤로 보내기</ItemButton>
+        <ItemButton onClick={() => bringForward(canvas)}>앞으로 가져오기</ItemButton>
+        <ItemButton onClick={() => sendBackwards(canvas)}>뒤로 보내기</ItemButton>
+        <ItemButton onClick={() => bringToFront(canvas)}>맨앞으로 가져오기</ItemButton>
+        <ItemButton onClick={() => sendToBack(canvas)}>맨뒤로 보내기</ItemButton>
         <ItemButton onClick={deleteObject}>삭제하기</ItemButton>
-        <ItemButton onClick={() => undo(canvas)}>Undo</ItemButton>
-        <ItemButton onClick={() => redo(canvas)}>Redo</ItemButton>
       </Tooltab>
 
       <Tooltab visible={activeTab === STICKER}>
