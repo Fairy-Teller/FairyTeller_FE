@@ -4,7 +4,7 @@ import { call } from '../../service/ApiService';
 import CommentSection from './CommentSection';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
-import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as solidHeart, faComment } from '@fortawesome/free-solid-svg-icons';
 import '../../css/BoardDetail.css';
 import FairytaleShow from '../fairytale/FairytaleShow';
 import Header from '../../components/global/Header';
@@ -17,6 +17,9 @@ const BoardDetail = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
+    const [commentCount, setCommentCount] = useState(0); //temp 
+    const [likeCount, setLikeCount] = useState(0); //temp 
+
 
     useEffect(() => {
         fetchData();
@@ -28,6 +31,8 @@ const BoardDetail = () => {
             const boardData = response.data[0];
             setBoard(boardData);
             setComments(boardData.comments);
+            setCommentCount(boardData.comments.length); //temp 
+            setLikeCount(boardData.likes.length); //temp 
             setCurrentPage(response.currentPage);
             setTotalPages(response.totalPages);
             setIsLiked(boardData.liked);
@@ -132,6 +137,18 @@ const BoardDetail = () => {
                                 </span>
                             </button>
                         </div>
+                        <div className="action-icons" style={{ justifyContent: 'flex-start', marginBottom: '20px' }}>
+                        <div className="like-icon" style={{ marginRight: '15px' }}>
+                        <FontAwesomeIcon icon={solidHeart} className="fa-heart" style={{ color: 'red' }} />
+                        <span>{likeCount}명이 좋아합니다.</span>
+                        </div>
+
+                        <div className="comment-icon">
+                            <FontAwesomeIcon icon={faComment} className="fa-comment" style={{ color: '#808080' }} />
+                            <span>{commentCount}개의 댓글이 있습니다.</span> 
+                            </div>
+                        </div>
+
                         <div className="comment-section">
                             <CommentSection
                                 comments={comments}
@@ -146,7 +163,6 @@ const BoardDetail = () => {
                             />
                         </div>
                     </div>
-
                     <div className="pagination">
                         {Array.from({ length: totalPages }, (_, index) => (
                             <button
