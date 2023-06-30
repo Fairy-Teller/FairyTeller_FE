@@ -17,8 +17,8 @@ const BoardDetail = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
-    const [commentCount, setCommentCount] = useState(0); //temp 
-    const [likeCount, setLikeCount] = useState(0); //temp 
+    const [commentCount, setCommentCount] = useState(0);
+    const [likeCount, setLikeCount] = useState(0);
 
 
     useEffect(() => {
@@ -31,7 +31,7 @@ const BoardDetail = () => {
             const boardData = response.data[0];
             setBoard(boardData);
             setComments(boardData.comments);
-            setCommentCount(boardData.comments.length); //temp 
+            setCommentCount(boardData.comments.length);
             setLikeCount(boardData.likeCount);
             setCurrentPage(response.currentPage);
             setTotalPages(response.totalPages);
@@ -83,6 +83,7 @@ const BoardDetail = () => {
             const pageSize = 10;
             const response = await call(`/board/${boardId}/comment?page=${page}&size=${pageSize}`, 'GET', null);
             setComments(response.data);
+            setCommentCount(response.data.length);
             setCurrentPage(response.currentPage);
             setTotalPages(response.totalPages);
         } catch (error) {
