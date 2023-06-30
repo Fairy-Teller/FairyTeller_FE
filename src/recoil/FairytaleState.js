@@ -9,6 +9,12 @@ const { persistAtom } = recoilPersist();
 //   default: "default",
 // });
 
+export const UserInfo = atom({
+  key: "UserInfo",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+});
+
 export const SelectedKeywordsState = atom({
   key: "SelectedKeywordsState",
   default: [],
@@ -30,6 +36,11 @@ export const BookState = atom({
     thumbnailUrl: "",
     pages: [],
   },
+});
+
+export const Imagetheme = atom({
+  key: "Imagetheme",
+  default: 1,
 });
 
 export const ImageTempState = atom({
@@ -109,7 +120,11 @@ export const SaveState = atom({
   default: "none",
 });
 
-// Canvas에서 사용
+export const TitleSave = atom({
+  key: "TitleSave",
+  default: false,
+});
+
 export const Canvasexport = atom({
   key: "Canvasexport",
   default: [],
@@ -122,48 +137,35 @@ export const BookPage = atom({
   default: -1,
 });
 
-// 그림체 선택
-export const Imagetheme = atom({
-  key: "Imagetheme",
-  default: 1,
-});
-
-// 유저정보
-export const UserInfo = atom({
-  key: "UserInfo",
-  default: "",
-  effects_UNSTABLE: [persistAtom],
-});
-
 // -------------------
 // canvas
-export const objHistoryState = atom({
-  key: "objHistoryState",
-  default: [],
-});
+// export const objHistoryState = atom({
+//   key: "objHistoryState",
+//   default: [],
+// });
 
-export const currentStateIndexState = atom({
-  key: "currentStateIndexState",
-  default: -1,
-});
+// export const currentStateIndexState = atom({
+//   key: "currentStateIndexState",
+//   default: -1,
+// });
 
-export const undoState = selector({
-  key: "undoState",
-  get: () => null,
-  set: ({ get, set }) => {
-    const index = get(currentStateIndexState);
-    if (index <= 0) return;
-    set(currentStateIndexState, index - 1);
-  },
-});
+// export const undoState = selector({
+//   key: "undoState",
+//   get: () => null,
+//   set: ({ get, set }) => {
+//     const index = get(currentStateIndexState);
+//     if (index <= 0) return;
+//     set(currentStateIndexState, index - 1);
+//   },
+// });
 
-export const redoState = selector({
-  key: "redoState",
-  get: () => null,
-  set: ({ get, set }) => {
-    const history = get(objHistoryState);
-    const index = get(currentStateIndexState);
-    if (index >= history.length - 1) return;
-    set(currentStateIndexState, index + 1);
-  },
-});
+// export const redoState = selector({
+//   key: "redoState",
+//   get: () => null,
+//   set: ({ get, set }) => {
+//     const history = get(objHistoryState);
+//     const index = get(currentStateIndexState);
+//     if (index >= history.length - 1) return;
+//     set(currentStateIndexState, index + 1);
+//   },
+// });
