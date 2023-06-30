@@ -10,11 +10,14 @@ const Book = ({ book, truncateTitle, linkPath, idProperty }) => {
 
   const id = book[idProperty];
 
-  const formattedDate = new Date(createdDatetime).toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const formattedDate = new Date(createdDatetime).toLocaleDateString(
+    "ko-KR",
+    {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }
+  );
 
   return (
     <Link
@@ -32,19 +35,21 @@ const Book = ({ book, truncateTitle, linkPath, idProperty }) => {
                 className="book__image"
               />
               <h4 className="book__title">{title}</h4>
-              <div className="sub-info">
-                <span>{formattedDate}</span>
-                <span className="separator">·</span>
-                <span>{comments.length}개의 댓글</span>
-              </div>
-              <div className="author-likes">
-                <span className="author-name">{author}</span>
-                <div className="likes">
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    className="heart-icon"
-                  />
-                  <span className="like-count">{likeCount}</span>
+              <div className="book__info">
+                <div className="sub-info">
+                  <span>{formattedDate}</span>
+                  <span className="separator">·</span>
+                  <span>{comments.length}개의 댓글</span>
+                </div>
+                <div className="author-likes">
+                  <span className="author-name">{author}</span>
+                  <div className="likes">
+                    <FontAwesomeIcon
+                      icon={faHeart}
+                      className="heart-icon"
+                    />
+                    <span className="like-count">{likeCount}</span>
+                  </div>
                 </div>
               </div>
             </div>
