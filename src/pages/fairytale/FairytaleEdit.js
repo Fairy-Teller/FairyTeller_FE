@@ -36,7 +36,6 @@ const FairytaleEdit = () => {
 
     const [showImage, setShowImage] = useState([]);
     const [activeTab, setActiveTab] = useState(1);
-    const saveState = useResetRecoilState(SaveState);
     const [titleSave, setTitleSave] = useRecoilState(TitleSave);
     const [canvasVisibility, setCanvasVisibility] = useState({
         1: true,

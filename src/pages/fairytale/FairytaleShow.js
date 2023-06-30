@@ -90,6 +90,7 @@ function FairytaleShow(bookid) {
                 bookId: props,
             });
 
+
             const imgearr = [];
             const audioarr = [];
             const userAudioarr = [];
