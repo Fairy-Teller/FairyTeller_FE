@@ -5,13 +5,12 @@
   align-items: center;
   gap: 20px;
   max-height: calc(100vh - 200px);
-  grid-template-columns: repeat(4, 1fr); /* 한 행에 4개의 열 생성 */
+  grid-template-columns: repeat(4, 1fr);
   height: auto;
 }
 
 .bar {
-  margin-top: 20px; /* 글자를 더 올리기 위한 상단 여백 조정 */
-  /* 기타 스타일 속성 */
+  margin-top: 20px;
 }
 
 .pagination {
@@ -58,10 +57,36 @@
 .book__image {
   width: 100%;
   height: auto;
-  max-height: 200px; /* 원하는 높이 값으로 조정 */
+  max-height: 200px;
 }
 
 #board-title:hover {
-  transform: scale(1.04); /* 원하는 확대 비율로 수정하세요 */
-  transition: transform 0.3s ease; /* 애니메이션 지속 시간과 이징 함수를 조정하세요 */
+  transform: scale(1.04);
+  transition: transform 0.3s ease;
+}
+
+.sub-info {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #555555;
+}
+
+.separator {
+  margin: 0 8px;
+}
+
+.book__author-info {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #555555;
+}
+
+.heart-icon {
+  color: #ef3333;
+}
+
+.book__like-count {
+  margin-left: 5px;
 }
