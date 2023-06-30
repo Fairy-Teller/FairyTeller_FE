@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/global/Header";
 import Container from "../components/global/Container";
 import CenteredWrap from "../components/global/CenteredWrap";
+import LazyBackground from "../components/common/LazyBackground";
 import { styled } from "styled-components";
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 const Button = styled.button`
   background: #ef9999;
@@ -20,27 +20,15 @@ const Button = styled.button`
 `;
 
 const Start = () => {
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, []);
-
   const navigate = useNavigate();
 
   return (
-    <div
-      style={{
-        backgroundImage: 'url("/images/background_start.png")',
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed", // 배경 이미지를 스크롤에 고정
-        minHeight: "100vh",
-      }}>
+    <LazyBackground
+      type='bg'
+      src='images/CartoonStarryNight.png'
+      placeholder='https://ik.imagekit.io/hbcho/CartoonStarryNight.png?tr=w-512,h-288,bl-25,q-25'>
       <Container>
-        <Header mode={"default"} />
+        <Header />
         <div className='start an1'>
           <CenteredWrap>
             <Button onClick={() => navigate("/story-user")}>스스로 동화 이야기 만들기</Button>
@@ -49,7 +37,7 @@ const Start = () => {
           </CenteredWrap>
         </div>
       </Container>
-    </div>
+    </LazyBackground>
   );
 };
 

@@ -29,7 +29,7 @@ const Header = (props) => {
   const userReset = useResetRecoilState(UserInfo);
 
   const handleClick = () => {
-    navigate("/start");
+    navigate("/");
   };
 
   const signoutClick = () => {
