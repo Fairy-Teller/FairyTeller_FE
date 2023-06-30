@@ -67,6 +67,11 @@ const bookData = {
             fullStory: '줄거리2',
             finalImageUrl: '',
         },
+        {
+            pageNo: 3,
+            fullStory: '줄거리2',
+            finalImageUrl: '',
+        },
     ],
 };
 
@@ -80,7 +85,6 @@ const TitleModal = (bookid) => {
     const [titleSave, setTitleSave] = useRecoilState(TitleSave);
 
     useEffect(() => {
-        saveState('save');
         bookData.bookId = bookid.props;
 
         if (canvasExport.length !== 0) {
@@ -101,8 +105,9 @@ const TitleModal = (bookid) => {
     }, [canvasExport]);
 
     const allsave = async () => {
-        setIsLoading(true);
         try {
+            await setIsLoading(true);
+            await saveState('save');
             const response = await call('/book/create/final', 'POST', bookData);
         } catch (error) {
             console.error(error);
@@ -116,6 +121,14 @@ const TitleModal = (bookid) => {
         setTitle(value);
         bookData.title = value;
     };
+    const closeModal = () => {
+        setTitleSave(true);
+        bookData.bookId = 0;
+        bookData.title = '';
+        bookData.pages.forEach((page) => {
+            page.finalImageUrl = '';
+        });
+    };
 
     return (
         <Div>
@@ -125,7 +138,7 @@ const TitleModal = (bookid) => {
                     <InputTitle onChange={(e) => onChangeHandler(e)} placeholder="제목을 입력해주세요"></InputTitle>
                     <ButtonBox>
                         <Commit onClick={allsave}>확인</Commit>
-                        <Commit onClick={() => setTitleSave(true)}>취소하기</Commit>
+                        <Commit onClick={closeModal}>취소하기</Commit>
                     </ButtonBox>
                 </Modal>
             )}
