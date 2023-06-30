@@ -37,13 +37,15 @@ const Book = ({ book, truncateTitle, linkPath, idProperty }) => {
                 <span className="separator">·</span>
                 <span>{comments.length}개의 댓글</span>
               </div>
-              <div className="book__author-info">
-                <span>작가 </span>
-                <b className="book__author">{author}</b>
-              </div>
-              <div className="likes">
-                <FontAwesomeIcon icon={faHeart} className="heart-icon" />
-                <span className="book__like-count">{likeCount}</span>
+              <div className="author-likes">
+                <span className="author-name">{author}</span>
+                <div className="likes">
+                  <FontAwesomeIcon
+                    icon={faHeart}
+                    className="heart-icon"
+                  />
+                  <span className="like-count">{likeCount}</span>
+                </div>
               </div>
             </div>
           </div>

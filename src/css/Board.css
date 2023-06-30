@@ -60,9 +60,8 @@
   max-height: 200px;
 }
 
-#board-title:hover {
-  transform: scale(1.04);
-  transition: transform 0.3s ease;
+.book__title {
+  font-size: 18px;
 }
 
 .sub-info {
@@ -76,7 +75,19 @@
   margin: 0 8px;
 }
 
-.book__author-info {
+.author-likes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #555555;
+}
+
+.author-name {
+  font-weight: 600;
+}
+
+.likes {
   display: flex;
   align-items: center;
   font-size: 14px;
@@ -87,6 +98,6 @@
   color: #ef3333;
 }
 
-.book__like-count {
+.like-count {
   margin-left: 5px;
 }
