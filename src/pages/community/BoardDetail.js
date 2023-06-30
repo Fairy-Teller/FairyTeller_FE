@@ -32,7 +32,7 @@ const BoardDetail = () => {
             setBoard(boardData);
             setComments(boardData.comments);
             setCommentCount(boardData.comments.length); //temp 
-            setLikeCount(boardData.likes.length); //temp 
+            setLikeCount(boardData.likeCount);
             setCurrentPage(response.currentPage);
             setTotalPages(response.totalPages);
             setIsLiked(boardData.liked);
@@ -61,8 +61,13 @@ const BoardDetail = () => {
 
     const handleLike = async () => {
         try {
-            await call(`/board/${boardId}/like`, 'POST', null);
-            setIsLiked((prevIsLiked) => !prevIsLiked);
+            const response = await call(`/board/${boardId}/like`, 'POST', null);
+            
+            // 응답에서 'likeCount'와 'liked'를 사용하여 상태를 업데이트
+            if (response) {
+                setIsLiked(response.liked);
+                setLikeCount(response.likeCount);
+            }
         } catch (error) {
             console.log('Error liking the board:', error);
         }
