@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState, useResetRecoilState } from 'recoil';
-import { SaveState } from '../../recoil/FairytaleState';
+import { useRecoilState, useResetRecoilState } from 'recoil';
+import { SaveState, TitleSave } from '../../recoil/FairytaleState';
 import { call } from '../../service/ApiService';
 import { history } from '../../history/history';
 import styled, { css } from 'styled-components';
@@ -33,9 +33,11 @@ const Savebutton = styled.button`
 
 const FairytaleEdit = () => {
     const [saveAll, setSaveall] = useState(false);
+
     const [showImage, setShowImage] = useState([]);
     const [activeTab, setActiveTab] = useState(1);
     const saveState = useResetRecoilState(SaveState);
+    const [titleSave, setTitleSave] = useRecoilState(TitleSave);
     const [canvasVisibility, setCanvasVisibility] = useState({
         1: true,
     });
@@ -128,6 +130,7 @@ const FairytaleEdit = () => {
 
     const saveClick = () => {
         setSaveall(true);
+        setTitleSave(false);
     };
 
     return (
@@ -161,7 +164,7 @@ const FairytaleEdit = () => {
                     )}
                 </PageSelectionFrame>
             </Frame>
-            {saveAll && <TitleModal props={showImage.bookId} />}
+            {saveAll && !titleSave && <TitleModal props={showImage.bookId} />}
         </div>
     );
 };

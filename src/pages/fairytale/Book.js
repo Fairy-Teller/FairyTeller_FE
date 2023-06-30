@@ -1,14 +1,18 @@
 import '../../css/Book.css';
 
-import React from 'react';
 import PageFlip from 'react-pageflip';
 
-import { useSetRecoilState } from 'recoil';
+import { useSetRecoilState, useResetRecoilState } from 'recoil';
 import { BookPage } from '../../recoil/FairytaleState';
+import { useEffect } from 'react';
 
 function Book({ bookInfo }) {
     const imageUrls = bookInfo;
     const bookPage = useSetRecoilState(BookPage);
+    const bookpageReset = useResetRecoilState(BookPage);
+    useEffect(() => {
+        bookpageReset();
+    }, []);
 
     const handlePageClick = (i, state) => {
         if (state === 'next') {
