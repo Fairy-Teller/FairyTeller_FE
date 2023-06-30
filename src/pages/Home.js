@@ -42,17 +42,7 @@ const Home = () => {
     object-fit: cover;
   `;
 
-  const containerFadeIn = keyframes`
-       0% {
-      opacity: 0;
-      transform: translateY(-25px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
 
-  `;
 
   const BackImage = styled.div`
     filter: drop-shadow(5px 5px 5px #000);

@@ -118,30 +118,18 @@ const ColorPicker = styled.input`
 const Canvas = (props) => {
   const btnLabels = [TEXTSTYLE, TEXT, OBJECTS, USERIMAGE, STICKER, DRAWING];
   const canvasRef = useRef(null);
-  // const fabricCanvasRef = useRef(null);
-  // const [canvasStates, setCanvasStates] = useState({});
-
+  const [canvas, setCanvas] = useState(null);
   const [activeTab, setActiveTab] = useState(null); // 수정탭 출력 여부를 위한 state
+  const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
+  const [showImage, setShowImage] = useState(props.BookId);
+  const [showEditToolTab, setShowEditToolTab] = useState(false); // Add new state variable
   const selectStickers = useRecoilValue(SelectStickers); // 선택한 스티커의 정보 state
   const saveState = useRecoilValue(SaveState); // 캔버스 저장 버튼 useEffect에 쓰기 위함 state
   const setCanvasExport = useSetRecoilState(Canvasexport); // 캔버스 내보내기 state
-  // const showCanvasExport = useRecoilValue(Canvasexport); // console.log 용 state
   const resetCanvasexport = useResetRecoilState(Canvasexport); // 첫 랜더링 될 때, 이전 저장된 이미지 state 삭제
 
-  // const [savedCanvasState, setSavedCanvasState] = useRecoilState(canvasState(props.canvasid));
-  const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
-  const [showImage, setShowImage] = useState(props.BookId);
-
-  const [canvas, setCanvas] = useState(null);
-  // const bookInfo = useRef(null);
-  const [showEditToolTab, setShowEditToolTab] = useState(false); // Add new state variable
-
   useEffect(() => {
-    try {
-      getNewest();
-    } catch {
-      // initCanvasState();
-    }
+    getNewest();
   }, []);
 
   // 최신 저장 가져오기
@@ -273,16 +261,6 @@ const Canvas = (props) => {
 
     return canvas;
   };
-
-  // 캔버스 스테이트 초기화
-  // const initCanvasState = () => {
-  //   canvas.on("object:modified", function () {
-  //     updated();
-  //   });
-  //   canvas.on("object:added", function () {
-  //     updated();
-  //   });
-  // };
 
   // 탭
   const handleButtonClick = (label) => {

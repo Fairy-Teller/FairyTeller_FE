@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styled, { css, keyframes } from 'styled-components';
-import { useLocation } from 'react-router-dom';
+import styled from 'styled-components';
 import RecordButton from '../../components/RecordModal';
 import { call } from '../../service/ApiService';
-import { sendAudioData } from '../../service/FairytaleService';
 import Modal from 'react-modal';
 import Book from './Book.js';
 
@@ -16,30 +14,9 @@ const CenteredContainer = styled.div`
     align-items: center;
 `;
 
-const CardContainer = styled.img`
-    width: 1250px;
-    height: 720px;
-    margin-left: 2%;
-    margin-right: 2%;
-    src: '/images/prev.png';
-`;
-
 const AudioContainer = styled.div`
     text-align: center;
     padding: 20px;
-`;
-
-const FairyPage = styled.div`
-    display: flex;
-`;
-
-const Arrow = styled.button`
-    ${(props) =>
-        props.disabled &&
-        css`
-            opacity: 0.5;
-            pointer-events: none;
-        `}
 `;
 
 const VoiceButton = styled.button`
@@ -94,7 +71,6 @@ function FairytaleShow(bookid) {
     const [audioInfo, setAudioInfo] = useState([]);
     const [bookStory, setBookStory] = useState(null);
     const [userAudioInfo, setUserAudioInfo] = useState([]);
-    const [currentPage, setCurrentPage] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [recordingInProgress, setRecordingInProgress] = useState(false);
     const [recordedAudioBlob, setRecordedAudioBlob] = useState(null);
@@ -113,6 +89,7 @@ function FairytaleShow(bookid) {
             const bookinfos = await call('/book/getBookById', 'POST', {
                 bookId: props,
             });
+
 
             const imgearr = [];
             const audioarr = [];

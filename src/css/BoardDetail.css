@@ -113,7 +113,7 @@
 .like-button {
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   margin-bottom: 10px;
 }
 
@@ -163,4 +163,23 @@
   cursor: pointer;
   font-size: 1rem;
   transition: background-color 0.3s ease;
+}
+
+.action-icons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.like-icon,
+.comment-icon {
+  display: flex;
+  align-items: center;
+  color: #808080;
+}
+
+.like-icon .fa-heart,
+.comment-icon .fa-comment {
+  margin-right: 5px;
 }
