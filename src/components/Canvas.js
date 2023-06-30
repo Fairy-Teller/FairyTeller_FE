@@ -578,7 +578,7 @@ const Canvas = (props) => {
             onChange={handleBrushColor}
           />
           <Slider
-            min={40}
+            min={5}
             max={50}
             sx={{
               width: 180,
