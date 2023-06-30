@@ -8,7 +8,6 @@ import LoadingModal from './LoadingModal';
 import { SaveState, Canvasexport, TitleSave } from '../recoil/FairytaleState';
 import { useSetRecoilState, useRecoilValue, useRecoilState } from 'recoil';
 
-
 const Modal = styled.div`
     //   color: white;
     width: 30%;
@@ -41,12 +40,18 @@ const InputTitle = styled.input`
     font-size: 40px;
 `;
 const Commit = styled.button`
-    margin-top: 3%;
-    width: 60%;
-    height: 15%;
+    margin: 5% 3% 3% 3%;
+    width: 100px;
+    height: 30px;
     border-radius: 20px;
     background: #f0a6a6;
-    font-size: 35px;
+    font-size: 20px;
+`;
+
+const ButtonBox = styled.div`
+    display: flex;
+    justify-content: center; /* 수평 가운데 정렬 */
+    align-items: center; /* 수직 가운데 정렬 */
 `;
 const bookData = {
     bookId: 0,
@@ -118,8 +123,10 @@ const TitleModal = (bookid) => {
                 <Modal>
                     <p style={{ fontSize: '35px', marginBottom: '2%' }}>동화제목을 입력하세요</p>
                     <InputTitle onChange={(e) => onChangeHandler(e)} placeholder="제목을 입력해주세요"></InputTitle>
-                    <Commit onClick={allsave}>확인</Commit>
-                    <Commit onClick={() => setTitleSave(true)}>취소하기</Commit>
+                    <ButtonBox>
+                        <Commit onClick={allsave}>확인</Commit>
+                        <Commit onClick={() => setTitleSave(true)}>취소하기</Commit>
+                    </ButtonBox>
                 </Modal>
             )}
             {isLoading && <LoadingModal message="동화나라로 편지를 보내는 중입니다." />}
