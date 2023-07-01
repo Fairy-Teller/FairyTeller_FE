@@ -12,10 +12,11 @@
 }
 
 .board-image {
-    width: 100%; /* 이미지 가로 넓이 100% */
-    height: auto; /* 이미지 세로 넓이는 자동 */
-    object-fit: cover; /* 이미지 비율 유지하며 채우기 */
-    border-radius: 5px; /* 이미지 둥근 모서리 */
+    width: 100%;
+    height: auto;
+    max-height: 100px;
+    border-radius: 2%;
+    transition: transform 0.1s ease;
 }
 
 .board-title {
