@@ -1,0 +1,43 @@
+.popular-board {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 10px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.board-image {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    border-radius: 2%;
+    transition: transform 0.1s ease;
+}
+
+.board-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0; /* 위 아래 마진 추가 */
+}
+
+.board-price {
+    font-size: 16px;
+    color: #444;
+    margin-bottom: 5px;
+}
+
+.board-region-name {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.board-counts {
+    font-size: 14px;
+    color: #888;
+}
