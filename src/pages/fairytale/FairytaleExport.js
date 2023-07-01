@@ -7,6 +7,7 @@ import LazyBackground from "../../components/common/LazyBackground";
 import base64_bg_start from "../../script/base64_bg_start";
 import Header from "../../components/global/Header";
 import ContentCover from "../../components/global/ContentCover";
+
 import InnerCover from "../../components/global/InnerCover";
 import { useRecoilValue } from "recoil";
 import { BookId } from "../../recoil/FairytaleState";
