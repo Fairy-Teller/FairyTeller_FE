@@ -1,119 +1,120 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback } from "recoil";
-import { SelectedKeywordsState, StoryState, BookState } from "../../recoil/FairytaleState";
-import { call } from "../../service/ApiService";
-import styled from "styled-components";
-import Header from "../../components/global/Header";
-import Container from "../../components/global/Container";
-import Section from "../../components/global/Section";
-import ButtonWrap from "../../components/common/ButtonWrap";
-import LoadingModal from "../../components/LoadingModal";
-import ContentCover from "../../components/global/ContentCover";
-import ContentTitle from "../../components/global/ContentTitle";
-import InnerCover from "../../components/global/InnerCover";
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRecoilState, useResetRecoilState, useRecoilValue, useRecoilCallback, useSetRecoilState } from 'recoil';
+import { SelectedKeywordsState, StoryState, BookState, BookId } from '../../recoil/FairytaleState';
+import { call } from '../../service/ApiService';
+import styled from 'styled-components';
+import Header from '../../components/global/Header';
+import Container from '../../components/global/Container';
+import Section from '../../components/global/Section';
+import ButtonWrap from '../../components/common/ButtonWrap';
+import LoadingModal from '../../components/LoadingModal';
+import ContentCover from '../../components/global/ContentCover';
+import ContentTitle from '../../components/global/ContentTitle';
+import InnerCover from '../../components/global/InnerCover';
 
 const TextArea = styled.textarea`
-  width: calc(100% - 8rem);
-  min-height: 8rem;
-  height: auto;
-  resize: none;
-  font-size: 1.4rem;
-  line-height: 1.6;
-  border-radius: 2rem;
-  box-sizing: content-box;
-  padding: 2rem 4rem;
-  text-align: center;
+    width: calc(100% - 8rem);
+    min-height: 8rem;
+    height: auto;
+    resize: none;
+    font-size: 1.4rem;
+    line-height: 1.6;
+    border-radius: 2rem;
+    box-sizing: content-box;
+    padding: 2rem 4rem;
+    text-align: center;
 `;
 
 const StoryGenerated = () => {
-  const [loaded, setLoaded] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isBlockingKey, setIsBlockingKey] = useState(false);
-  const keywords = useRecoilValue(SelectedKeywordsState);
-  const [savedStory, setSavedStory] = useRecoilState(StoryState);
-  // const showImage = useRecoilValue(ImageFix);
-  // const [savedBook, setSavedBook] = useRecoilState(BookState);
-  const textAreaRef = useRef(null);
+    const [loaded, setLoaded] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isBlockingKey, setIsBlockingKey] = useState(false);
+    const keywords = useRecoilValue(SelectedKeywordsState);
+    const [savedStory, setSavedStory] = useRecoilState(StoryState);
+    const setBookId = useSetRecoilState(BookId);
 
-  const navigate = useNavigate();
+    // const showImage = useRecoilValue(ImageFix);
+    // const [savedBook, setSavedBook] = useRecoilState(BookState);
+    const textAreaRef = useRef(null);
 
-  useEffect(() => {
-    fetchData();
-    setIsLoading(false);
-  }, [keywords]);
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    window.addEventListener("keydown", disableKeyboardEvents);
+    useEffect(() => {
+        fetchData();
+        setIsLoading(false);
+    }, [keywords]);
 
-    return () => {
-      window.removeEventListener("keydown", disableKeyboardEvents);
+    useEffect(() => {
+        window.addEventListener('keydown', disableKeyboardEvents);
+
+        return () => {
+            window.removeEventListener('keydown', disableKeyboardEvents);
+        };
+    }, [isBlockingKey]);
+
+    const disableKeyboardEvents = (event) => {
+        if (isBlockingKey) {
+            event.preventDefault();
+        }
     };
-  }, [isBlockingKey]);
 
-  const disableKeyboardEvents = (event) => {
-    if (isBlockingKey) {
-      event.preventDefault();
-    }
-  };
+    const fetchData = async () => {
+        try {
+            setLoaded(true);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
+    };
 
-  const fetchData = async () => {
-    try {
-      setLoaded(true);
-    } catch (error) {
-      console.log("Error fetching data:", error);
-    }
-  };
+    const onChangeHandler = (e, index) => {
+        const newStory = [...savedStory];
+        newStory[index] = { ...newStory[index], paragraph: e.target.value };
+        setSavedStory(newStory);
+    };
 
-  const onChangeHandler = (e, index) => {
-    const newStory = [...savedStory];
-    newStory[index] = { ...newStory[index], paragraph: e.target.value };
-    setSavedStory(newStory);
-  };
+    const onSubmitHandler = async (e) => {
+        e.preventDefault();
+        setIsBlockingKey(true);
 
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
-    console.log(savedStory);
-    setIsBlockingKey(true);
+        for (let i = 0; i < savedStory.length; i++) {
+            if (savedStory[i]['paragraph'].length === 0) {
+                alert('모든 페이지에 대한 내용을 입력해주세요');
+                setIsBlockingKey(false);
+                return;
+            }
+        }
 
-    for (let i = 0; i < savedStory.length; i++) {
-      if (savedStory[i]["paragraph"].length === 0) {
-        alert("모든 페이지에 대한 내용을 입력해주세요");
-        setIsBlockingKey(false);
-        return;
-      }
-    }
+        setIsLoading(true);
+        window.scrollTo(0, document.body.scrollHeight);
 
-    setIsLoading(true);
-    window.scrollTo(0, document.body.scrollHeight);
+        try {
+            const bookDTO = savedStory.map((item, index) => ({
+                pageNo: index + 1,
+                fullStory: item['paragraph'],
+            }));
+            await createBook({ pages: bookDTO });
+            setIsLoading(false);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        } finally {
+            setIsBlockingKey(false);
+            navigate('/artstyle');
+        }
+    };
 
-    try {
-      const bookDTO = savedStory.map((item, index) => ({
-        pageNo: index + 1,
-        fullStory: item["paragraph"],
-      }));
-      await createBook({ pages: bookDTO });
-      setIsLoading(false);
-    } catch (error) {
-      console.log("Error fetching data:", error);
-    } finally {
-      setIsBlockingKey(false);
-      navigate("/artstyle");
-    }
-  };
+    const regenerateHandler = (e) => {
+        e.preventDefault();
+        setIsLoading(true);
 
-  const regenerateHandler = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    resendkeyword({
-      parameter1: keywords[0],
-      parameter2: keywords[1],
-      parameter3: keywords[2],
-      parameter4: keywords[3] == null || undefined ? "" : keywords[3],
-      parameter5: keywords[4] == null || undefined ? "" : keywords[4],
-    });
-  };
+        resendkeyword({
+            parameter1: keywords[0],
+            parameter2: keywords[1],
+            parameter3: keywords[2],
+            parameter4: keywords[3] == null || undefined ? '' : keywords[3],
+            parameter5: keywords[4] == null || undefined ? '' : keywords[4],
+        });
+    };
 
   const resendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
     try {
@@ -126,24 +127,24 @@ const StoryGenerated = () => {
     }
   });
 
-  const resetSelectedKeywords = useResetRecoilState(SelectedKeywordsState);
+    const resetSelectedKeywords = useResetRecoilState(SelectedKeywordsState);
 
-  const createBook = useRecoilCallback(({ set }) => async (bookDTO) => {
-    try {
-      const response = await call("/book/create/story", "POST", bookDTO);
-      console.log(response);
-      const pages = savedStory.map((item, index) => ({
-        pageNo: index + 1,
-        fullStory: item["paragraph"],
-        imageUrl: null,
-        imageBase64: null,
-        audioUrl: null,
-      }));
-      set(BookState, { bookId: response["bookId"], pages: pages });
-    } catch (error) {
-      console.log(error);
-    }
-  });
+    const createBook = useRecoilCallback(({ set }) => async (bookDTO) => {
+        try {
+            const response = await call('/book/create/story', 'POST', bookDTO);
+            const pages = savedStory.map((item, index) => ({
+                pageNo: index + 1,
+                fullStory: item['paragraph'],
+                imageUrl: null,
+                imageBase64: null,
+                audioUrl: null,
+            }));
+            setBookId(response.bookId);
+            set(BookState, { bookId: response['bookId'], pages: pages });
+        } catch (error) {
+            console.log(error);
+        }
+    });
 
   return (
     <div className='story story-generated '>

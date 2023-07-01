@@ -79,73 +79,71 @@ const RecordButton = ({
       setCountdown(0);
     }, 3000);
 
-    return () => {
-      clearTimeout(countdownTimeout);
-      if (isRecording) {
-        mediaRecorder.current.stop();
+        return () => {
+            clearTimeout(countdownTimeout);
+            if (isRecording) {
+                mediaRecorder.current.stop();
+                setIsRecording(false);
+                clearInterval(stopwatchInterval.current);
+            }
+        };
+    }, []);
+    const handleStartRecording = async () => {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder.current = new MediaRecorder(stream);
+        const audioChunks = [];
+        mediaRecorder.current.ondataavailable = (event) => {
+            audioChunks.push(event.data);
+        };
+        mediaRecorder.current.onstop = () => {
+            const newAudioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            setAudioBlob(newAudioBlob);
+            onRecordingComplete(pageNumber, newAudioBlob);
+            audioRef.current.src = URL.createObjectURL(newAudioBlob);
+        };
+        mediaRecorder.current.start();
+        setIsRecording(true);
+        // Start the stopwatch
+        setStopwatch(0);
+        stopwatchInterval.current = setInterval(() => {
+            setStopwatch((prevStopwatch) => prevStopwatch + 1);
+        }, 1000);
+    };
+    const convertBlobToBase64 = (blob) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    };
+    const handleSaveRecording = async () => {
+        try {
+            const base64Audio = await convertBlobToBase64(audioBlob);
+            const payload = {
+                bookId: bookid,
+                pages: [
+                    {
+                        pageNo: pageNumber,
+                        audioUrl: base64Audio,
+                    },
+                ],
+            };
+            await sendAudioData(payload);
+            if (onCloseAndRefresh) {
+                onCloseAndRefresh();
+            }
+        } catch (error) {
+            console.error('Error converting audio blob to base64', error);
+        }
+    };
+    const handleRecordAgain = () => {
+        setAudioBlob(null);
         setIsRecording(false);
-        clearInterval(stopwatchInterval.current);
-      }
+        if (audioRef.current) {
+            handleStartRecording();
+        }
     };
-  }, []);
-  const handleStartRecording = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder.current = new MediaRecorder(stream);
-    const audioChunks = [];
-    mediaRecorder.current.ondataavailable = (event) => {
-      audioChunks.push(event.data);
-    };
-    mediaRecorder.current.onstop = () => {
-      const newAudioBlob = new Blob(audioChunks, { type: "audio/wav" });
-      setAudioBlob(newAudioBlob);
-      onRecordingComplete(pageNumber, newAudioBlob);
-      audioRef.current.src = URL.createObjectURL(newAudioBlob);
-    };
-    mediaRecorder.current.start();
-    setIsRecording(true);
-    // Start the stopwatch
-    setStopwatch(0);
-    stopwatchInterval.current = setInterval(() => {
-      setStopwatch((prevStopwatch) => prevStopwatch + 1);
-    }, 1000);
-  };
-  const convertBlobToBase64 = (blob) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-  };
-  const handleSaveRecording = async () => {
-    try {
-      const base64Audio = await convertBlobToBase64(audioBlob);
-      console.log("bookid", bookid);
-      const payload = {
-        bookId: bookid,
-        pages: [
-          {
-            pageNo: pageNumber,
-            audioUrl: base64Audio,
-          },
-        ],
-      };
-      console.log(payload);
-      await sendAudioData(payload);
-      if (onCloseAndRefresh) {
-        onCloseAndRefresh();
-      }
-    } catch (error) {
-      console.error("Error converting audio blob to base64", error);
-    }
-  };
-  const handleRecordAgain = () => {
-    setAudioBlob(null);
-    setIsRecording(false);
-    if (audioRef.current) {
-      handleStartRecording();
-    }
-  };
 
   // Format stopwatch time to HH:MM:SS
   const formatStopwatchTime = (time) => {
@@ -195,34 +193,28 @@ const RecordButton = ({
           <div style={recordInfoStyle}>{pageNumber} 페이지 녹음중입니다.</div>
           <div style={recordInfoStyle}>경과 시간: {formatStopwatchTime(stopwatch)}</div>
 
-          <HighlightedText bookstorys={bookstory} />
+                    <HighlightedText bookstorys={bookstory} />
+                </div>
+            ) : null}
+            {!isRecording && countdown > 0 && (
+                <>
+                    <div style={recordInfoStyle}>
+                        ⚠️ {countdown}초 뒤 녹음이 시작됩니다! <br />
+                        긴장을 풀고 녹음해보세요
+                    </div>
+                    <br />
+                    <img src="images/calmdown.gif" alt="침착하세여"></img>
+                </>
+            )}
+            {initialAudioUrl && (
+                <select onChange={(e) => (audioRef.current.src = e.target.value)}>
+                    <option value={initialAudioUrl}>Original Audio</option>
+                    {audioBlob && <option value={URL.createObjectURL(audioBlob)}>User Audio</option>}
+                </select>
+            )}
+            <audio ref={audioRef} controls style={{ marginTop: '10px', display: audioBlob ? 'block' : 'none' }} />
+            {audioBlob && <h1 style={{ marginTop: '3%' }}>스토리: {bookstory}</h1>}
         </div>
-      ) : null}
-      {!isRecording && countdown > 0 && (
-        <>
-          <div style={recordInfoStyle}>
-            ⚠️ {countdown}초 뒤 녹음이 시작됩니다! <br />
-            긴장을 풀고 녹음해보세요
-          </div>
-          <br />
-          <img
-            src='images/calmdown.gif'
-            alt='침착하세여'></img>
-        </>
-      )}
-      {initialAudioUrl && (
-        <select onChange={(e) => (audioRef.current.src = e.target.value)}>
-          <option value={initialAudioUrl}>Original Audio</option>
-          {audioBlob && <option value={URL.createObjectURL(audioBlob)}>User Audio</option>}
-        </select>
-      )}
-      <audio
-        ref={audioRef}
-        controls
-        style={{ marginTop: "10px", display: audioBlob ? "block" : "none" }}
-      />
-      {audioBlob && <h1 style={{ marginTop: "3%" }}>스토리: {bookstory}</h1>}
-    </div>
-  );
+    );
 };
 export default RecordButton;

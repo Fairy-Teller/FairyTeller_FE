@@ -118,11 +118,13 @@ const PreviewGeneratedIamge = (props) => {
     };
   }, [isBlockingKey]);
 
+
   const disableKeyboardEvents = (event) => {
     if (isBlockingKey) {
       event.preventDefault();
     }
   };
+
 
   const createImg = async () => {
     try {
@@ -168,28 +170,26 @@ const PreviewGeneratedIamge = (props) => {
     setSavedImageTemp(newImage);
   };
 
-  const saveImg = async (image) => {
-    try {
-      const bookDTO = {
-        bookId: respones,
-        pages: [
-          {
-            pageNo: props.index + 1,
-            originalImageUrl: image,
-          },
-        ],
-      };
-      const imageData = await call("/book/create/image", "POST", bookDTO);
-      console.log("imageData", imageData);
-    } catch (error) {
-      console.log("Error fetching data:", error);
-    } finally {
-      const newIsSaveImage = [...isSaveImage];
-      newIsSaveImage[props.index] = true;
-      setIsSaveImage(newIsSaveImage);
-      console.log("isSaveImage", isSaveImage);
-    }
-  };
+    const saveImg = async (image) => {
+        try {
+            const bookDTO = {
+                bookId: respones,
+                pages: [
+                    {
+                        pageNo: props.index + 1,
+                        originalImageUrl: image,
+                    },
+                ],
+            };
+            const imageData = await call('/book/create/image', 'POST', bookDTO);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        } finally {
+            const newIsSaveImage = [...isSaveImage];
+            newIsSaveImage[props.index] = true;
+            setIsSaveImage(newIsSaveImage);
+        }
+    };
 
   return (
     <Div>

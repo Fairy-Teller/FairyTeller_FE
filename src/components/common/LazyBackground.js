@@ -29,7 +29,7 @@ const ImageContainer = styled.div`
         width: auto;
         height: 100vh;
         position: fixed;
-        bottom: -120px;
+        bottom: -160px;
       }
     `}
 `;

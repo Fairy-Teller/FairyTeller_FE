@@ -89,10 +89,10 @@ function FairytaleShow(bookid) {
         bookId: props,
       });
 
-      const imgearr = [];
-      const audioarr = [];
-      const userAudioarr = [];
-      const story = [];
+            const imgearr = [];
+            const audioarr = [];
+            const userAudioarr = [];
+            const story = [];
 
       imgearr[0] = bookinfos.thumbnailUrl;
       for (let i = 0; i < bookinfos.pages.length; i++) {
