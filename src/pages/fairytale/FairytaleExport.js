@@ -16,8 +16,23 @@ const ButtonFrame = styled.div`
     justify-content: flex-end;
     padding-right: 5%;
     margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 5%;
+    margin-bottom: 10px;
 `;
 const Button = styled.button`
+    width: 15%;
+    height: 40px;
+    margin-top: 2%;
+    background-color: #ffde67;
+    font-size: 150%;
+    border-radius: 51.5px;
+    margin-right: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
     width: 15%;
     height: 40px;
     margin-top: 2%;
@@ -52,12 +67,28 @@ const FairytaleExport = () => {
             document.body.style.overflow = 'auto';
         };
     }, []);
+    useEffect(() => {
+        fetchData();
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, []);
 
   const fetchData = async () => {
     try {
       const data = await getBookById({ bookId: bookIdshow });
       setTitle(data.title);
 
+            const imgearr = [];
+            for (let i = 0; i < data.pages.length; i++) {
+                imgearr[i] = data.pages[i].finalImageUrl;
+            }
+            setImage(imgearr);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
+    };
             const imgearr = [];
             for (let i = 0; i < data.pages.length; i++) {
                 imgearr[i] = data.pages[i].finalImageUrl;
@@ -86,7 +117,22 @@ const FairytaleExport = () => {
                 link.download = Title + '.png';
                 link.style.display = 'none';
                 document.body.appendChild(link);
+    const exportPDF = async () => {
+        for (var i = 0; i < Image.length; i++) {
+            (function (index) {
+                var link = document.createElement('a');
+                link.href = Image[index];
+                link.download = Title + '.png';
+                link.style.display = 'none';
+                document.body.appendChild(link);
 
+                setTimeout(function () {
+                    link.click();
+                    document.body.removeChild(link);
+                }, index * 1000);
+            })(i);
+        }
+    };
                 setTimeout(function () {
                     link.click();
                     document.body.removeChild(link);
