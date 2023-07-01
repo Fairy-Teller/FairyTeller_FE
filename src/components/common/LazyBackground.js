@@ -39,7 +39,7 @@ const Img = styled.img`
   height: 100%;
   object-fit: cover;
   position: absolute;
-  // transition: opacity 0.4s ease-in-out;
+  transition: opacity 0.4s ease-in-out;
 `;
 
 function LazyBackground(props) {
@@ -56,11 +56,14 @@ function LazyBackground(props) {
   };
 
   useEffect(() => {
+    if (!props.src) {
+      return;
+    }
     loadImage(props.src)
       .then((img) => {
         setTimeout(() => {
           setSrc(img.src);
-        }, 120);
+        }, 240);
       })
       .catch((err) => {
         console.error("Failed to load image at " + props.src, err);
