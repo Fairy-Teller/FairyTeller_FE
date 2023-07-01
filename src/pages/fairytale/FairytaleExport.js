@@ -29,7 +29,7 @@ const Button = styled.button`
 `;
 
 // const PageWrapper = styled.div`
-//     background-image: url('/images/background_blur.png');
+//     background-image: url('/images/StarryNight_export.jpg');
 //     background-size: cover;
 //     background-repeat: no-repeat;
 //     background-position: center;
@@ -96,7 +96,7 @@ const FairytaleExport = () => {
   return (
     <LazyBackground
       type='bg'
-      src='images/background_blur.png'
+      src='images/StarryNight_export.jpg'
       placeholder='https://ik.imagekit.io/hbcho/CartoonStarryNight.png?tr=w-512,h-288,bl-40,q-20'>
       <Header mode={"default"} />
       <ContentCover>

@@ -96,7 +96,7 @@ const ItemButton = styled.button`
   text-align: left;
   border-radius: 0.4rem;
   overflow: hidden;
-  transition: background-color 0.24s, color 0.24s;
+  transition: background-color 0.24s ease-in-out, color 0.24s ease-in-out;
 
   &:first-of-type {
     margin-top: 0;

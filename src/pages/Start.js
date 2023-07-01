@@ -7,16 +7,20 @@ import LazyBackground from "../components/common/LazyBackground";
 import { styled } from "styled-components";
 
 const Button = styled.button`
-  background: #ef9999;
-  border-radius: 20px;
-  padding: 30px 50px;
-  border: none;
-  margin: 1em;
+  padding: 2rem 3.6rem;
+  margin: 0 1.2rem;
   color: #fff;
-  font-size: 25px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-size: 2.4rem;
+  line-height: 1.4;
+  font-weight: 600;
+  background-color: #ef9999;
+  border-radius: 2.4rem;
+  transition: all 0.24s ease-in-out;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    transform: scale(1.012);
+  }
 `;
 
 const Start = () => {
@@ -25,7 +29,7 @@ const Start = () => {
   return (
     <LazyBackground
       type='bg'
-      src='images/CartoonStarryNight.png'
+      src='images/StarryNight_start.jpg'
       placeholder='https://ik.imagekit.io/hbcho/CartoonStarryNight.png?tr=w-512,h-288,bl-40,q-20'>
       <Container>
         <Header />

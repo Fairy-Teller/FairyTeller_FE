@@ -26,7 +26,7 @@ const KeywordInner = styled.div`
   position: relative;
   border-radius: 2rem;
   overflow: hidden;
-  transition: background 0.24s;
+  transition: background 0.24s ease-in-out;
   &:hover {
     color: white;
     background-color: #edaeae;
