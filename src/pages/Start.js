@@ -26,7 +26,7 @@ const Start = () => {
     <LazyBackground
       type='bg'
       src='images/CartoonStarryNight.png'
-      placeholder='https://ik.imagekit.io/hbcho/CartoonStarryNight.png?tr=w-512,h-288,bl-25,q-25'>
+      placeholder='https://ik.imagekit.io/hbcho/CartoonStarryNight.png?tr=w-512,h-288,bl-40,q-20'>
       <Container>
         <Header />
         <div className='start an1'>

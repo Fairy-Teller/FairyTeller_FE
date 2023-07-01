@@ -21,7 +21,7 @@ const BackGround = styled.div`
       right: 0;
       bottom: -80px;
       overflow: visible;
-      padding-top: 40%;
+      padding-top: 100%;
     `}
 `;
 
