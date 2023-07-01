@@ -9,7 +9,7 @@ import ContentCover from "../../components/global/ContentCover";
 import InnerCover from "../../components/global/InnerCover";
 import BookContainer from "../../components/global/BookContainer";
 import Book from "../../components/global/Book";
-
+import PopularBoard from "./PopularBoard";
 const Board = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
@@ -17,6 +17,7 @@ const Board = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [keyword, setKeyword] = useState("");
   const [searchType, setSearchType] = useState("");
+  const [popularBoards, setPopularBoards] = useState([]);
 
   const handleBoardTitleClick = () => {
     setKeyword("");
@@ -38,11 +39,12 @@ const Board = () => {
           params += `&keyword=${encodeURIComponent(keyword)}`;
         }
         const response = await call(endpoint + params, "GET", null);
-        console.log("Board API Response:", response); // API 응답 확인s
+        console.log("Board API Response:", response); // API 응답 확인
         if (response && response.data) {
           console.log("Board Data:", response.data); // 데이터 확인
           setBooks(response.data);
           setTotalPages(response.totalPages);
+          setPopularBoards(response.popularBoards);
         }
       } catch (error) {
         console.log("Error fetching data:", error);
@@ -66,7 +68,7 @@ const Board = () => {
   };
 
   const truncateTitle = (title) => {
-    if (title?.length && title.length > 10) {
+    if (title?.length && title.length > 15) {
       return title.substring(0, 10) + "...";
     }
     return title;
@@ -94,6 +96,18 @@ const Board = () => {
           우리들의 도서관
         </div>
         <BoardSearch handleSearch={handleSearch} />
+
+        <div className="popularBoards-container">
+          <div>인기 게시글</div>
+          <div className="boards-row">
+            {popularBoards &&
+              popularBoards
+                .slice(0, 3)
+                .map((board) => (
+                  <PopularBoard board={board} key={board.boardId} />
+                ))}
+          </div>
+        </div>
         <InnerCover>
           <BookContainer>
             {books && books.length > 0 ? (
