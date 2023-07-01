@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { NewestTemp } from '../service/FairytaleService';
-import Book from '../components/global/Book';
+import { useRecoilState } from 'recoil';
+import { BookId } from '../recoil/FairytaleState';
 
 const Modal = styled.div`
     //   color: white;
@@ -32,6 +33,7 @@ const Div = styled.div`
 
 const TempModal = () => {
     const [tempList, setTemplist] = useState();
+    const [bookId, setBookId] = useRecoilState(BookId);
     useEffect(() => {
         TempListSet();
     }, []);
@@ -40,13 +42,18 @@ const TempModal = () => {
         const response = await NewestTemp();
         await setTemplist(response);
     };
+    const gotoEdit = (bookid) => {
+        setBookId(bookid);
+        // 어디까지 왔는지 확인하는 로직 필요
+    };
+    console.log(bookId);
 
     return (
         <Div>
             <Modal>
                 <p style={{ fontSize: '35px', marginBottom: '2%' }}>임시 저장된 동화 목록입니다.</p>
                 {tempList ? (
-                    tempList.map((book) => <Book book={book} key={book.bookId} />)
+                    tempList.map((book) => <div onClick={() => gotoEdit(book.bookId)}>{book}</div>)
                 ) : (
                     <p style={{ textAlign: 'center' }}>게시물이 없습니다.</p>
                 )}
