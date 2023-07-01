@@ -56,8 +56,6 @@ const ImgGenerate = (props) => {
           const newIsFirstCreated = [...isFirstCreated];
           newIsFirstCreated[props.index] = true;
           setIsFirstCreated(newIsFirstCreated);
-
-          console.log(props.index, isFirstCreated);
         }}>
         이미지 생성
       </Button>

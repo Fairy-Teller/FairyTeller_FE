@@ -39,9 +39,9 @@ const Board = () => {
           params += `&keyword=${encodeURIComponent(keyword)}`;
         }
         const response = await call(endpoint + params, "GET", null);
-        console.log("Board API Response:", response); // API 응답 확인
+        // console.log("Board API Response:", response); // API 응답 확인
         if (response && response.data) {
-          console.log("Board Data:", response.data); // 데이터 확인
+          // console.log("Board Data:", response.data); // 데이터 확인
           setBooks(response.data);
           setTotalPages(response.totalPages);
           setPopularBoards(response.popularBoards);
@@ -74,9 +74,9 @@ const Board = () => {
     return title;
   };
 
-  useEffect(() => {
-    console.log("Books:", books);
-  }, [books]);
+  // useEffect(() => {
+  //   console.log("Books:", books);
+  // }, [books]);
 
   return (
     <Container>

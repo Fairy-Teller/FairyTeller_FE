@@ -46,7 +46,6 @@ const Home = () => {
 
   const gotoLogin = () => {
     const token = localStorage.getItem("ACCESS_TOKEN");
-    console.log(token);
     if (token === null) {
       navigation("/Login");
     } else {

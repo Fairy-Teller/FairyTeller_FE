@@ -10,7 +10,6 @@ export function signup(userDTO) {
 export function signin(userDTO) {
   return call("/auth/signin", "POST", userDTO)
     .then((response) => {
-      console.log(response);
       if (response && response.token) {
         localStorage.setItem("ACCESS_TOKEN", response.token);
         window.location.href = "/start";
