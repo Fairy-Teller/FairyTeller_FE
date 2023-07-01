@@ -117,7 +117,7 @@ const StoryGenerated = () => {
 
   const resendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
     try {
-      const response = await call("/chat-gpt/question/test/6/recreate", "POST", userDTO);
+      const response = await call("/chat-gpt/question/recreate", "POST", userDTO);
       set(StoryState, response);
     } catch (error) {
       console.log(error);
@@ -149,7 +149,7 @@ const StoryGenerated = () => {
     <div className='story story-generated '>
       {isLoading && <LoadingModal message='AI가 그림 그릴 준비를 합니다!' />}
       {loaded ? (
-        <Container>
+        <Container className={"an1"}>
           <Header mode={"default"} />
           <ContentCover>
             <ContentTitle>AI가 만든 동화를 수정할 수 있어요!</ContentTitle>

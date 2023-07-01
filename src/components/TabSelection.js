@@ -16,7 +16,7 @@ const Selection = styled.div`
   box-sizing: border-box;
   border-radius: 0.4rem;
   overflow: hidden;
-  transition: background-color 0.24s, color 0.24s;
+  transition: background-color 0.24s, color 0.24s ease-in-out;
 
   &:first-of-type {
     margin-top: 0;

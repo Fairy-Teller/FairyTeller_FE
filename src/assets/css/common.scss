@@ -1,246 +1,246 @@
-@import 'mixins';
+@import "mixins";
 
 .button {
-    width: auto;
-    height: auto;
-    padding: 0.25rem 0.5rem;
-    margin: 0 auto;
-    display: inline-flex;
-    flex-shrink: 0;
-    font-size: 1.25rem;
-    word-break: keep-all;
-    background-color: $bgc1;
-    padding: 0.25rem 0.5rem;
+  width: auto;
+  height: auto;
+  padding: 0.25rem 0.5rem;
+  margin: 0 auto;
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  word-break: keep-all;
+  background-color: $bgc1;
+  padding: 0.25rem 0.5rem;
 }
 
 .button-wrap {
-    padding: 0 0.25rem;
-    margin: 1.25rem auto 0.25rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  padding: 0 0.25rem;
+  margin: 1.25rem auto 0.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .home {
-    a {
-        width: 24rem;
-        height: 24rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 50%;
-        transition: all 0.24s;
-        background-color: $thc1;
-        &:hover {
-            width: 28rem;
-            height: 28rem;
-            background-color: $thc3;
-        }
+  a {
+    width: 24rem;
+    height: 24rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: all 0.24s ease-in-out;
+    background-color: $thc1;
+    &:hover {
+      width: 28rem;
+      height: 28rem;
+      background-color: $thc3;
     }
+  }
 }
 
 .start {
-    .container {
-        //background-image: url("../../../public/images/tmp_background.jpg");
-        background-size: cover;
-        background-position: center;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+  .container {
+    //background-image: url("../../../public/images/tmp_background.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .story {
-    h1 {
-        margin: 0 0 2rem 0;
-        color: #fff;
-        text-decoration-line: none;
-    }
-    h2 {
-        margin: 0 0 1.2rem 0;
-        color: $txt2;
+  h1 {
+    margin: 0 0 2rem 0;
+    color: #fff;
+    text-decoration-line: none;
+  }
+  h2 {
+    margin: 0 0 1.2rem 0;
+    color: $txt2;
 
-        font-weight: 600;
-        font-size: 2.8rem;
+    font-weight: 600;
+    font-size: 2.8rem;
+  }
+  section {
+    padding: 2rem;
+    box-sizing: border-box;
+    border-radius: 2rem;
+    & + section {
+      margin-top: 1.2rem;
     }
-    section {
-        padding: 2rem;
-        box-sizing: border-box;
-        border-radius: 2rem;
-        & + section {
-            margin-top: 1.2rem;
+  }
+  .button-wrap {
+    justify-content: center;
+    .button {
+      padding: 1.2rem 2rem;
+      color: #fff;
+      text-align: center;
+
+      font-weight: 600;
+      font-size: 2rem;
+      border-radius: 8rem;
+      transition: all 0.24s ease-in-out;
+    }
+  }
+  &.keyword {
+    position: relative;
+    .current {
+      width: 1080px;
+      padding: 1.2rem 2rem;
+      margin: 2.8rem 0 3.6rem;
+      box-sizing: border-box;
+      justify-content: space-between;
+      border: 0.4rem solid #edaeae;
+      border-radius: 12rem;
+      z-index: 99;
+      top: 20px;
+      transition: top 0.24s ease-in-out;
+      &.fixed {
+        margin: 0 1.2rem 2rem;
+        position: fixed;
+        top: 60px;
+        left: 10rem;
+      }
+
+      > div {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        > div {
+          padding: 0.8rem 1.6rem;
+          margin: 0 0.8rem;
+          font-size: 1.6rem;
+          background-color: #edaeae;
+          border-radius: 2rem;
         }
+      }
+
+      > button {
+        justify-self: flex-end;
+        padding: 1.6rem;
+        margin: 0;
+        color: #fff;
+        text-align: center;
+        font-size: 1.6rem;
+        border-radius: 8rem;
+        transition: all 0.24s ease-in-out;
+      }
     }
     .button-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    ul {
+      li {
+        width: 6rem;
+        height: 6rem;
+        display: flex;
+        flex-direction: column;
         justify-content: center;
-        .button {
-            padding: 1.2rem 2rem;
-            color: #fff;
-            text-align: center;
+        align-items: center;
+        border-radius: 2rem;
+        transition: all 0.24s ease-in-out;
+        p {
+          margin-top: 0.8rem;
+          text-align: center;
+          color: $txt1;
 
-            font-weight: 600;
-            font-size: 2rem;
-            border-radius: 8rem;
-            transition: all 0.24s;
+          font-weight: 400;
+          font-size: 1.3rem;
         }
+        &:hover {
+          background-color: $thc3;
+          p {
+            color: #3129d6;
+          }
+        }
+      }
     }
-    &.keyword {
+    .button {
+      background-color: $thc1;
+      &:hover {
+        background-color: $thc3;
+      }
+    }
+  }
+  &-user {
+    textarea {
+      background-color: $thc3;
+    }
+    .button {
+      background-color: $thc1;
+      &:hover {
+        background-color: $thc3;
+      }
+    }
+  }
+  &-generated {
+    textarea {
+      background-color: pink;
+    }
+    form:first-of-type {
+      .button-wrap {
+        margin-top: 4rem;
         position: relative;
-        .current {
-            width: 1080px;
-            padding: 1.2rem 2rem;
-            margin: 2.8rem 0 3.6rem;
-            box-sizing: border-box;
-            justify-content: space-between;
-            border: 0.4rem solid #edaeae;
-            border-radius: 12rem;
-            z-index: 99;
-            top: 20px;
-            transition: top 0.24s;
-            &.fixed {
-                margin: 0 1.2rem 2rem;
-                position: fixed;
-                top: 60px;
-                left: 10rem;
-            }
-
-            > div {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-
-                > div {
-                    padding: 0.8rem 1.6rem;
-                    margin: 0 0.8rem;
-                    font-size: 1.6rem;
-                    background-color: #edaeae;
-                    border-radius: 2rem;
-                }
-            }
-
-            > button {
-                justify-self: flex-end;
-                padding: 1.6rem;
-                margin: 0;
-                color: #fff;
-                text-align: center;
-                font-size: 1.6rem;
-                border-radius: 8rem;
-                transition: all 0.24s;
-            }
+        a {
+          left: 0;
         }
-        .button-wrap {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        button[type="submit"] {
+          right: 0;
         }
-        ul {
-            li {
-                width: 6rem;
-                height: 6rem;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                border-radius: 2rem;
-                transition: all 0.24s;
-                p {
-                    margin-top: 0.8rem;
-                    text-align: center;
-                    color: $txt1;
-
-                    font-weight: 400;
-                    font-size: 1.3rem;
-                }
-                &:hover {
-                    background-color: $thc3;
-                    p {
-                        color: #3129d6;
-                    }
-                }
-            }
-        }
-        .button {
-            background-color: $thc1;
-            &:hover {
-                background-color: $thc3;
-            }
-        }
+      }
     }
-    &-user {
-        textarea {
-            background-color: $thc3;
+    form:last-of-type {
+      height: 0;
+      .button-wrap {
+        margin: -0.2rem;
+        position: relative;
+        button[type="submit"] {
+          // position: absolute;
+          // left: 40%;
         }
-        .button {
-            background-color: $thc1;
-            &:hover {
-                background-color: $thc3;
-            }
-        }
+      }
     }
-    &-generated {
-        textarea {
-            background-color: pink;
-        }
-        form:first-of-type {
-            .button-wrap {
-                margin-top: 4rem;
-                position: relative;
-                a {
-                    left: 0;
-                }
-                button[type='submit'] {
-                    right: 0;
-                }
-            }
-        }
-        form:last-of-type {
-            height: 0;
-            .button-wrap {
-                margin: -0.2rem;
-                position: relative;
-                button[type='submit'] {
-                    // position: absolute;
-                    // left: 40%;
-                }
-            }
-        }
-        .button {
-            position: absolute;
-            background-color: $thc1;
-            &:hover {
-                background-color: $bgc3;
-            }
-        }
+    .button {
+      position: absolute;
+      background-color: $thc1;
+      &:hover {
+        background-color: $bgc3;
+      }
     }
+  }
 }
 
 .edit {
-    padding: 2.4rem 0 0 0 !important;
-    margin: 0 !important;
+  padding: 2.4rem 0 0 0 !important;
+  margin: 0 !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  border: 0;
+  .header-wrap {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    border: 0;
-    .header-wrap {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 99;
-    }
+    z-index: 99;
+  }
 
-    button {
-        transition: all 0.24s ease-in-out;
+  button {
+    transition: all 0.24s ease-in-out;
 
-        &:hover {
-            transform: scale(1.04);
-        }
+    &:hover {
+      transform: scale(1.04);
     }
+  }
 }
 
 ::-webkit-scrollbar {
-    width: 0.04rem;
+  width: 0.04rem;
 }

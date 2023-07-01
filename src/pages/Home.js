@@ -1,84 +1,49 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import styled, { keyframes } from "styled-components";
-import "../css/home.css";
+import styled from "styled-components";
+import LazyBackground from "../components/common/LazyBackground";
+import LazyBackgroundHome from "../components/common/LazyBackgroundHome";
+import base64_StarryNight from "../script/base64_StarryNight";
+import base64_Girl from "../script/base64_Girl";
 
 const Home = () => {
-  const [showMain, setShowMain] = useState(false);
   const navigation = useNavigate();
 
-  const ImagesContainer = styled.div`
-    position: relative;
+  const FixedContainer = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
-    justify-content: center; /* Center horizontally */
-
-    width: 100vw;
-    height: 100vh;
-  `;
-
-  const slideAnimation = keyframes`
-    0% {
-      transform: translateX(0%);
-    }
-    100% {
-      transform: translateX(-20%);
-    }
+    justify-content: center;
+    z-index: 3;
+    background-color: transparent;
   `;
   const ImageLogo = styled.img`
-    filter: drop-shadow(5px 5px 5px #000);
-    position: absolute;
-    width: 100%;
-    height: 100vh;
     object-fit: cover;
-
     opacity: 0;
-    animation: containerFadeIn 1s ease-in forwards;
+    animation: containerFadeIn 0.4s ease-in forwards;
   `;
-  const Image = styled.img`
-    filter: drop-shadow(5px 5px 5px #000);
-    position: absolute;
-    width: 100%;
-    height: 100vh;
-    object-fit: cover;
+  const HeadWrap = styled.div`
+    width: 20%;
+    height: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   `;
-
-
-
-  const BackImage = styled.div`
-    filter: drop-shadow(5px 5px 5px #000);
-    position: absolute;
-    width: 200%;
-    height: 100vh;
-    object-fit: cover;
-    animation: ${slideAnimation} 30s infinite linear;
-    background-repeat: repeat;
-    background-image: url("images/CartoonStarryNight.png");
-  `;
-
   const StartButton = styled.button`
-    /* Star 1 */
-
-    box-sizing: border-box;
-
-    position: absolute;
     width: 207px;
     height: 40px;
-
-    /* 시작하기 */
-
     color: #ffffff;
-    font-size: large;
-    margin-top: 15%;
-    background: linear-gradient(
-      180deg,
-      #fee080 0%,
-      rgba(254, 224, 128, 0) 100%
-    );
+    font-size: 1.2rem;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 22px;
-    animation: containerFadeIn 1s ease-in forwards;
-    z-index: 4;
+    background: linear-gradient(180deg, #fee080 0%, rgba(254, 224, 128, 0) 100%);
+    border-radius: 1.6rem;
+    animation: containerFadeIn 0.4s ease-in forwards;
   `;
+
   const gotoLogin = () => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     console.log(token);
@@ -89,28 +54,25 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    setShowMain(true);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, []);
-
   return (
-    <ImagesContainer>
-      {showMain && (
-        <>
+    <div>
+      <FixedContainer>
+        <HeadWrap>
+          <ImageLogo src='../../logo-bright.png' />
           <StartButton onClick={gotoLogin}>시작하기</StartButton>
-          <BackImage
-            src="images/CartoonStarryNight.png"
-            style={{ zIndex: 1 }}
-          />
-          <Image src="images/girl.png" style={{ zIndex: 2 }} />
-          <ImageLogo src="images/logo_home.png" style={{ zIndex: 3 }} />
-        </>
-      )}
-    </ImagesContainer>
+        </HeadWrap>
+      </FixedContainer>
+
+      <LazyBackground
+        type='home'
+        src='https://ik.imagekit.io/hbcho/Girl.png'
+        placeholder={base64_Girl}
+      />
+      <LazyBackgroundHome
+        src='https://ik.imagekit.io/hbcho/CartoonStarryNight.png'
+        placeholder={base64_StarryNight}
+      />
+    </div>
   );
 };
 

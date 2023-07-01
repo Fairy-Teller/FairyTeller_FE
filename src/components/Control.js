@@ -20,7 +20,7 @@ const Button = styled.button`
   text-align: center;
   color: #edaeae;
   border-radius: 50%;
-  transition: background 0.24s;
+  transition: background 0.24s ease-in-out;
   background-color: #fff;
   &:hover {
     color: #fff;

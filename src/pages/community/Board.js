@@ -83,7 +83,7 @@ const Board = () => {
       <Header mode={"default"} />
       <ContentCover>
         <div
-          id="board-title"
+          id='board-title'
           style={{
             margin: "2rem auto",
             fontWeight: 400,
@@ -91,53 +91,49 @@ const Board = () => {
             textAlign: "left",
             cursor: "pointer",
           }}
-          onClick={handleBoardTitleClick}
-        >
+          onClick={handleBoardTitleClick}>
           우리들의 도서관
         </div>
         <BoardSearch handleSearch={handleSearch} />
 
-        <div className="popularBoards-container">
+        <div className='popularBoards-container'>
           <div>인기 게시글</div>
-          <div className="boards-row">
+          <div className='boards-row'>
             {popularBoards &&
-              popularBoards
-                .slice(0, 3)
-                .map((board) => (
-                  <PopularBoard board={board} key={board.boardId} />
-                ))}
+              popularBoards.slice(0, 3).map((board) => (
+                <PopularBoard
+                  board={board}
+                  key={board.boardId}
+                />
+              ))}
           </div>
         </div>
         <InnerCover>
           <BookContainer>
-            {books && books.length > 0 ? (
+            {books &&
+              books.length > 0 &&
               books.map((book) => (
                 <Book
                   book={book}
-                  linkPath="board"
-                  idProperty="boardId"
+                  linkPath='board'
+                  idProperty='boardId'
                   truncateTitle={truncateTitle}
                   key={book.boardId}
                   showSub={true}
                 />
-              ))
-            ) : (
-              <p style={{ textAlign: "center" }}>게시물이 없습니다.</p>
-            )}
+              ))}
           </BookContainer>
           {/* 페이지네이션 컴포넌트 */}
           {totalPages > 0 && (
-            <div className="pagination">
+            <div className='pagination'>
               {Array.from({ length: totalPages }, (_, index) => (
                 <button
                   key={index}
                   onClick={() => handlePageChange(index)}
-                  className="board-page-button"
+                  className='board-page-button'
                   style={{
-                    backgroundColor:
-                      currentPage === index ? "#99F0CC" : "white",
-                  }}
-                >
+                    backgroundColor: currentPage === index ? "#99F0CC" : "white",
+                  }}>
                   {index + 1}
                 </button>
               ))}

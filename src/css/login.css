@@ -1,7 +1,7 @@
 /* login.css */
 
 #background {
-  background-image: url("/public/images/background2.png");
+  /* background-image: url("/public/images/background2.png"); */
   background-size: cover;
   background-position: center;
   height: 100vh;
@@ -12,6 +12,7 @@
 
 #container {
   width: 600px;
+  margin: 0 auto;
   background-color: rgba(255, 255, 255, 0.8);
   padding: 40px;
   border-radius: 10px;
@@ -53,7 +54,7 @@
   color: #fff;
   cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.24s ease-in-out;
 }
 
 .signup-input-container button:hover {

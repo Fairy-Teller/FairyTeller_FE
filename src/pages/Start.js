@@ -1,46 +1,36 @@
-import { Link } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { styled } from "styled-components";
 import Header from "../components/global/Header";
 import Container from "../components/global/Container";
 import CenteredWrap from "../components/global/CenteredWrap";
-import { styled } from "styled-components";
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import LazyBackground from "../components/common/LazyBackground";
+import base64_bg_start from "../script/base64_bg_start";
 
 const Button = styled.button`
-  background: #ef9999;
-  border-radius: 20px;
-  padding: 30px 50px;
-  border: none;
-  margin: 1em;
+  padding: 2rem 3.6rem;
+  margin: 0 1.2rem;
   color: #fff;
-  font-size: 25px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-size: 2.4rem;
+  line-height: 1.4;
+  font-weight: 600;
+  background-color: #ef9999;
+  border-radius: 2.4rem;
+  transition: all 0.24s ease-in-out;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    transform: scale(1.012);
+  }
 `;
 
 const Start = () => {
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, []);
-
   const navigate = useNavigate();
 
   return (
-    <div
-      style={{
-        backgroundImage: 'url("/images/background_start.png")',
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed", // 배경 이미지를 스크롤에 고정
-        minHeight: "100vh",
-      }}>
+    <div>
       <Container>
-        <Header mode={"default"} />
+        <Header />
         <div className='start an1'>
           <CenteredWrap>
             <Button onClick={() => navigate("/story-user")}>스스로 동화 이야기 만들기</Button>
@@ -49,6 +39,12 @@ const Start = () => {
           </CenteredWrap>
         </div>
       </Container>
+
+      <LazyBackground
+        type='bg'
+        src='https://ik.imagekit.io/hbcho/StarryNight_start.jpg'
+        placeholder={base64_bg_start}
+      />
     </div>
   );
 };

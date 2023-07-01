@@ -75,7 +75,7 @@ const IamgeGenerated = () => {
   };
 
   return (
-    <div className='illu'>
+    <div>
       <Container>
         <Header mode={"default"} />
         <ContentCover>
