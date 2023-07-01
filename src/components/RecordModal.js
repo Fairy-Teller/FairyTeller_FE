@@ -79,73 +79,72 @@ const RecordButton = ({
       setCountdown(0);
     }, 3000);
 
-    return () => {
-      clearTimeout(countdownTimeout);
-      if (isRecording) {
-        mediaRecorder.current.stop();
+        return () => {
+            clearTimeout(countdownTimeout);
+            if (isRecording) {
+                mediaRecorder.current.stop();
+                setIsRecording(false);
+                clearInterval(stopwatchInterval.current);
+            }
+        };
+    }, []);
+    const handleStartRecording = async () => {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder.current = new MediaRecorder(stream);
+        const audioChunks = [];
+        mediaRecorder.current.ondataavailable = (event) => {
+            audioChunks.push(event.data);
+        };
+        mediaRecorder.current.onstop = () => {
+            const newAudioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            setAudioBlob(newAudioBlob);
+            onRecordingComplete(pageNumber, newAudioBlob);
+            audioRef.current.src = URL.createObjectURL(newAudioBlob);
+        };
+        mediaRecorder.current.start();
+        setIsRecording(true);
+        // Start the stopwatch
+        setStopwatch(0);
+        stopwatchInterval.current = setInterval(() => {
+            setStopwatch((prevStopwatch) => prevStopwatch + 1);
+        }, 1000);
+    };
+    const convertBlobToBase64 = (blob) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    };
+    const handleSaveRecording = async () => {
+        try {
+            const base64Audio = await convertBlobToBase64(audioBlob);
+            const payload = {
+                bookId: bookid,
+                pages: [
+                    {
+                        pageNo: pageNumber,
+                        audioUrl: base64Audio,
+                    },
+                ],
+            };
+            console.log(payload);
+            await sendAudioData(payload);
+            if (onCloseAndRefresh) {
+                onCloseAndRefresh();
+            }
+        } catch (error) {
+            console.error('Error converting audio blob to base64', error);
+        }
+    };
+    const handleRecordAgain = () => {
+        setAudioBlob(null);
         setIsRecording(false);
-        clearInterval(stopwatchInterval.current);
-      }
+        if (audioRef.current) {
+            handleStartRecording();
+        }
     };
-  }, []);
-  const handleStartRecording = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder.current = new MediaRecorder(stream);
-    const audioChunks = [];
-    mediaRecorder.current.ondataavailable = (event) => {
-      audioChunks.push(event.data);
-    };
-    mediaRecorder.current.onstop = () => {
-      const newAudioBlob = new Blob(audioChunks, { type: "audio/wav" });
-      setAudioBlob(newAudioBlob);
-      onRecordingComplete(pageNumber, newAudioBlob);
-      audioRef.current.src = URL.createObjectURL(newAudioBlob);
-    };
-    mediaRecorder.current.start();
-    setIsRecording(true);
-    // Start the stopwatch
-    setStopwatch(0);
-    stopwatchInterval.current = setInterval(() => {
-      setStopwatch((prevStopwatch) => prevStopwatch + 1);
-    }, 1000);
-  };
-  const convertBlobToBase64 = (blob) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-  };
-  const handleSaveRecording = async () => {
-    try {
-      const base64Audio = await convertBlobToBase64(audioBlob);
-      console.log("bookid", bookid);
-      const payload = {
-        bookId: bookid,
-        pages: [
-          {
-            pageNo: pageNumber,
-            audioUrl: base64Audio,
-          },
-        ],
-      };
-      console.log(payload);
-      await sendAudioData(payload);
-      if (onCloseAndRefresh) {
-        onCloseAndRefresh();
-      }
-    } catch (error) {
-      console.error("Error converting audio blob to base64", error);
-    }
-  };
-  const handleRecordAgain = () => {
-    setAudioBlob(null);
-    setIsRecording(false);
-    if (audioRef.current) {
-      handleStartRecording();
-    }
-  };
 
   // Format stopwatch time to HH:MM:SS
   const formatStopwatchTime = (time) => {

@@ -100,7 +100,7 @@ const Start = () => {
                                 <TempButton onClick={gotoPage}>수정하러 가기</TempButton>
                             </Tempalert>
                         )}
-                        <Button onClick={() => (!tempState ? navigate('/story-user') : console.log('모달출력'))}>
+                        <Button onClick={() => (!tempState ? navigate('/story-user') : navigate('/story-user'))}>
                             스스로 동화 이야기 만들기
                         </Button>
                         <Button onClick={() => (!tempState ? navigate('/keyword') : console.log('모달출력'))}>

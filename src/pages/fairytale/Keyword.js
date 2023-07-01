@@ -149,8 +149,6 @@ const Keyword = () => {
         } else {
           alert("단어는 최대 5개까지 선택할 수 있어요!");
         }
-
-        console.log(updatedValues);
         return updatedValues;
       });
     }
@@ -200,7 +198,6 @@ const Keyword = () => {
           parameter4: keywords[3] == null || undefined ? "" : keywords[3],
           parameter5: keywords[4] == null || undefined ? "" : keywords[4],
         });
-    console.log(keywords);
   };
 
   const sendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {

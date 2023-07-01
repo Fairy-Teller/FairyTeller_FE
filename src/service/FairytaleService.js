@@ -1,5 +1,4 @@
 import { call } from './ApiService';
-import { API_BASE_URL } from '../api-config';
 
 export function FairytaleNew() {
     return call('/book/my-newest', 'GET', null)
@@ -31,4 +30,8 @@ export function NewestTemp() {
         .catch((error) => {
             console.error(error);
         });
+}
+
+export function getBookById(audioDTO) {
+    return call('/book/getBookById/temp', 'POST', audioDTO);
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useResetRecoilState, useRecoilState } from 'recoil';
-import { StoryState } from '../../recoil/FairytaleState';
+import { useResetRecoilState, useRecoilState, useRecoilValue } from 'recoil';
+import { StoryState, BookId } from '../../recoil/FairytaleState';
 import { history } from '../../history/history';
 // import styled from "styled-components";
 // import useToast from "../../components/global/useToast";
@@ -23,6 +23,7 @@ const IamgeGenerated = () => {
     const saveReset = useResetRecoilState(StoryState);
     const [page, setPage] = useState(0);
     const [story, setStory] = useState(null);
+    const bookIdshow = useRecoilValue(BookId);
 
     useEffect(() => {
         storySave();
@@ -31,10 +32,12 @@ const IamgeGenerated = () => {
         if (story) {
             setsavedStory(story.map((item) => ({ paragraph: item.fullStory })));
         }
-        // else if 프랍으로 임시저장 
+        // else if 프랍으로 임시저장
     }, [story]);
 
+
     const storySave = async () => {
+        // 들어온 bookId로 찾을경우
         const respon = await NewestTemp();
         await setStory(respon.pages);
         await saveReset();

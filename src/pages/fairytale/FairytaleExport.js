@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { call } from "../../service/ApiService";
+import { getBookById } from '../../service/FairytaleService';
 import styled from "styled-components";
 import FairytaleShow from "./FairytaleShow";
 import LazyBackground from "../../components/common/LazyBackground";
 import Header from "../../components/global/Header";
-import ContentCover from "../../components/global/ContentCover";
-import InnerCover from "../../components/global/InnerCover";
+import ContentCover from "../../components/global/ContentCover";import InnerCover from "../../components/global/InnerCover";
+
+import { useRecoilValue } from 'recoil';
+import { BookId } from '../../recoil/FairytaleState';
 
 const ButtonFrame = styled.div`
   display: flex;
@@ -38,9 +41,9 @@ const Button = styled.button`
 // `;
 
 const FairytaleExport = () => {
-  const [BookId, setBookId] = useState("");
-  const [Title, setTitle] = useState("");
-  const [Image, setImage] = useState([]);
+    const [Title, setTitle] = useState('');
+    const [Image, setImage] = useState([]);
+    const bookIdshow = useRecoilValue(BookId);
 
   useEffect(() => {
     fetchData();
@@ -50,11 +53,10 @@ const FairytaleExport = () => {
     };
   }, []);
 
-  const fetchData = async () => {
-    try {
-      const data = await call("/book/my-newest", "GET", null);
-      await setBookId(data.bookId);
-      setTitle(data.title);
+    const fetchData = async () => {
+        try {
+            const data = await getBookById({ dookId: bookIdshow });
+            setTitle(data.title);
 
       const imgearr = [];
       for (let i = 0; i < data.pages.length; i++) {
@@ -66,15 +68,15 @@ const FairytaleExport = () => {
     }
   };
 
-  const gotoBoard = async () => {
-    try {
-      await call("/board/save", "POST", { bookId: BookId });
-      alert("등록되었습니다");
-      window.location.href = "/board";
-    } catch (error) {
-      console.log("Error fetching data:", error);
-    }
-  };
+    const gotoBoard = async () => {
+        try {
+            await call('/board/save', 'POST', { bookId: bookIdshow });
+            alert('등록되었습니다');
+            window.location.href = '/board';
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
+    };
 
   const exportPDF = async () => {
     for (var i = 0; i < Image.length; i++) {

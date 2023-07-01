@@ -22,7 +22,6 @@ export function call(api, method, request) {
 
     return axios(options)
         .then((response) => {
-            console.log(response);
             if (response.status === 200) {
                 return response.data;
             } else if (response.status === 403) {

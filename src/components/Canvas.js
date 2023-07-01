@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef, useReducer } from 'react';
-import { useRecoilValue, useRecoilState, useSetRecoilState, useResetRecoilState } from 'recoil';
-import { SelectStickers, SaveState, Canvasexport } from '../recoil/FairytaleState';
+import { useRecoilValue, useSetRecoilState, useResetRecoilState } from 'recoil';
+import { SelectStickers, SaveState, Canvasexport, BookId } from '../recoil/FairytaleState';
 import { call } from '../service/ApiService';
+import { getBookById } from '../service/FairytaleService';
 import styled, { css } from 'styled-components';
 import { fabric } from 'fabric';
 import { Slider } from '@mui/material';
@@ -123,12 +124,12 @@ const Canvas = (props) => {
     const [canvas, setCanvas] = useState(null);
     const [activeTab, setActiveTab] = useState(null); // 수정탭 출력 여부를 위한 state
     const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
-    const [showImage, setShowImage] = useState(props.BookId);
-    const [showEditToolTab, setShowEditToolTab] = useState(false); // Add new state variable
+
     const selectStickers = useRecoilValue(SelectStickers); // 선택한 스티커의 정보 state
     const saveState = useRecoilValue(SaveState); // 캔버스 저장 버튼 useEffect에 쓰기 위함 state
     const setCanvasExport = useSetRecoilState(Canvasexport); // 캔버스 내보내기 state
     const resetCanvasexport = useResetRecoilState(Canvasexport); // 첫 랜더링 될 때, 이전 저장된 이미지 state 삭제
+    const bookIdshow = useRecoilValue(BookId);
 
     useEffect(() => {
         getNewest();
@@ -137,8 +138,8 @@ const Canvas = (props) => {
     // 최신 저장 가져오기
     const getNewest = async () => {
         try {
-            const data = await call('/book/my-newest', 'GET', null);
-            setShowImage(data);
+            // newest 삭제
+            const data = await getBookById({ bookId: bookIdshow });
 
             const initializedCanvas = initCanvas(data);
             setCanvas(initializedCanvas);
@@ -179,11 +180,9 @@ const Canvas = (props) => {
 
     // 캔버스 초기화
     const initCanvas = (data) => {
-        console.log('data', data);
 
         const windowW = window.innerWidth;
         const windowH = window.innerHeight;
-        console.log(windowW, windowH);
 
         const canvas = new fabric.Canvas(
             canvasRef.current,
@@ -270,8 +269,6 @@ const Canvas = (props) => {
         setShowButtonFunctiontion(!showButtonFunction);
         if (label === TEXT) {
             addTextBox();
-        } else {
-            setShowEditToolTab(false);
         }
     };
 
@@ -480,10 +477,6 @@ const Canvas = (props) => {
         c.renderAll();
     };
 
-    const aaaa = () => {
-        var json = JSON.stringify(canvas);
-        console.log(json); // 확인용
-    };
 
     return (
         <CanvasFrame>
@@ -555,46 +548,44 @@ const Canvas = (props) => {
                 </Item>
             </Tooltab>
 
-      <Tooltab visible={activeTab === DRAWING}>
-        <Item>
-          <ItemTitle>직접 손그림을 그리거나 손글씨를 쓸 수 있어요</ItemTitle>
-          <ItemButton onClick={() => undo(canvas)}>뒤로가기</ItemButton>
-          <ItemButton onClick={() => redo(canvas)}>복구하기</ItemButton>
-          <ItemButton onClick={deleteObject}>삭제하기</ItemButton>
-          {isDrawing ? (
-            <ItemButton
-              onClick={() => {
-                stopDrawing(canvas);
-              }}>
-              손그림 모드 OFF
-            </ItemButton>
-          ) : (
-            <ItemButton
-              onClick={() => {
-                startDrawing(canvas);
-              }}>
-              손그림 모드 ON
-            </ItemButton>
-          )}
-          <ColorPicker
-            type='color'
-            value={brushColor}
-            onChange={handleBrushColor}
-          />
-          <Slider
-            min={5}
-            max={50}
-            sx={{
-              width: 180,
-              height: 8,
-              margin: "0.4rem 0 0 1.2rem",
-              color: "pink",
-            }}
-            value={brushWidth}
-            onChange={handleBrushWidth}
-          />
-        </Item>
-      </Tooltab>
+            <Tooltab visible={activeTab === DRAWING}>
+                <Item>
+                    <ItemTitle>직접 손그림을 그리거나 손글씨를 쓸 수 있어요</ItemTitle>
+                    <ItemButton onClick={() => undo(canvas)}>뒤로가기</ItemButton>
+                    <ItemButton onClick={() => redo(canvas)}>복구하기</ItemButton>
+                    <ItemButton onClick={deleteObject}>삭제하기</ItemButton>
+                    {isDrawing ? (
+                        <ItemButton
+                            onClick={() => {
+                                stopDrawing(canvas);
+                            }}
+                        >
+                            손그림 모드 OFF
+                        </ItemButton>
+                    ) : (
+                        <ItemButton
+                            onClick={() => {
+                                startDrawing(canvas);
+                            }}
+                        >
+                            손그림 모드 ON
+                        </ItemButton>
+                    )}
+                    <ColorPicker type="color" value={brushColor} onChange={handleBrushColor} />
+                    <Slider
+                        min={5}
+                        max={50}
+                        sx={{
+                            width: 180,
+                            height: 8,
+                            margin: '0.4rem 0 0 1.2rem',
+                            color: 'pink',
+                        }}
+                        value={brushWidth}
+                        onChange={handleBrushWidth}
+                    />
+                </Item>
+            </Tooltab>
 
             <Tooltab visible={activeTab === OBJECTS}>
                 <Item>
@@ -624,7 +615,6 @@ const Canvas = (props) => {
 
             <Tooltab visible={activeTab === USERIMAGE}>
                 <input type="file" onChange={readImage} />
-                <button onClick={aaaa}>ddddd</button>
             </Tooltab>
 
             <canvas id="canvas" key={props.canvasid + 'c'} ref={canvasRef} />
