@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { BookId } from "../recoil/FairytaleState";
 import Header from "../components/global/Header";
 import Container from "../components/global/Container";
 import CenteredWrap from "../components/global/CenteredWrap";
@@ -69,7 +67,6 @@ const CloseButton = styled.button`
 const Start = () => {
   const navigate = useNavigate();
   const [tempState, setTempState] = useState(null);
-  const [bookId, setBookId] = useRecoilState(BookId);
   const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -82,24 +79,17 @@ const Start = () => {
       document.body.style.overflow = "auto";
     };
   }, []);
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  // const gotoPage = () => {
+  //   const hasNullImageUrl = tempState.pages.some((item) => item.originalImageUrl === null);
 
-  const gotoPage = () => {
-    const hasNullImageUrl = tempState.pages.some((item) => item.originalImageUrl === null);
-
-    if (hasNullImageUrl) {
-      navigate("/image-generated");
-    }
-    setBookId(tempState.bookId);
-    // originalImageUrl중에 하나라도 null 일경우 /image-generated
-    // 모두 다 있을 경우, finalImageUrl
-  };
+  //   if (hasNullImageUrl) {
+  //     navigate("/image-generated");
+  //   }
+  //   setBookId(tempState.bookId);
+  //   // originalImageUrl중에 하나라도 null 일경우 /image-generated
+  //   // 모두 다 있을 경우, finalImageUrl
+  // };
 
   return (
     <div>
@@ -134,7 +124,7 @@ const Start = () => {
       </Container>
 
       <LazyBackground
-        type='bg'
+        type='default'
         src='https://ik.imagekit.io/hbcho/StarryNight_start.jpg'
         placeholder={base64_bg_start}
       />

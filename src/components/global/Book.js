@@ -27,11 +27,6 @@ const Book = ({ book, truncateTitle, linkPath, idProperty, showSub }) => {
         <div className='book__cover'>
           <div className='book__page book__page--front'>
             <div className='book__content'>
-              <LazyBackground
-                type='book'
-                src={book.thumbnailUrl}
-                placeholder='https://ik.imagekit.io/hbcho/CartoonStarryNight.png?tr=w-512,h-288,bl-40,q-20'
-              />
               <h4 className='book__title'>{title}</h4>
               {/* <div className="book__info">
                 <div className="sub-info">
@@ -58,6 +53,11 @@ const Book = ({ book, truncateTitle, linkPath, idProperty, showSub }) => {
                   comments={comments}
                 />
               )}
+              <LazyBackground
+                type='book'
+                src={book.thumbnailUrl}
+                placeholder='https://ik.imagekit.io/hbcho/CartoonStarryNight.png?tr=w-512,h-288,bl-40,q-20'
+              />
             </div>
           </div>
         </div>
