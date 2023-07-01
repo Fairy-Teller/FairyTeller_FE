@@ -50,8 +50,6 @@ const Img = styled.img`
   transition: opacity 0.4s ease-in-out;
 `;
 
-console.log("check");
-
 function LazyBackground(props) {
   const [src, setSrc] = useState(props.placeholder);
   const [isLoaded, setIsLoaded] = useState(false);
