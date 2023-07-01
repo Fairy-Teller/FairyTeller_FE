@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import LazyBackground from "../components/common/LazyBackground";
 import LazyBackgroundHome from "../components/common/LazyBackgroundHome";
-import BASE64_StarryNight from "../script/BASE64_StarryNight";
-import BASE64_Girl from "../script/BASE64_Girl";
+import base64_StarryNight from "../script/base64_StarryNight";
+import base64_Girl from "../script/base64_Girl";
 
 const Home = () => {
   const navigation = useNavigate();
@@ -66,11 +66,11 @@ const Home = () => {
       <LazyBackground
         type='home'
         src='https://ik.imagekit.io/hbcho/Girl.png'
-        placeholder={BASE64_Girl}
+        placeholder={base64_Girl}
       />
       <LazyBackgroundHome
         src='https://ik.imagekit.io/hbcho/CartoonStarryNight.png'
-        placeholder={BASE64_StarryNight}
+        placeholder={base64_StarryNight}
       />
     </div>
   );
