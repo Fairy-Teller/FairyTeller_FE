@@ -2,10 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import RecordButton from '../../components/RecordModal';
 import { call } from '../../service/ApiService';
+import { getBookById } from '../../service/FairytaleService';
 import Modal from 'react-modal';
 import Book from './Book.js';
 import { useRecoilValue } from 'recoil';
-import { BookPage } from '../../recoil/FairytaleState';
+import { BookId } from '../../recoil/FairytaleState';
 
 const CenteredContainer = styled.div`
     display: flex;
@@ -75,18 +76,18 @@ function FairytaleShow(bookid) {
     const [recordedAudioBlob, setRecordedAudioBlob] = useState(null);
     const [check, setCheck] = useState('user');
 
-    const bookPage = useRecoilValue(BookPage);
+    const bookPage = useRecoilValue(BookId);
 
     useEffect(() => {
         if (bookid.props !== '') {
-            showBook(bookid.props);
+            showBook(bookPage);
         }
     }, [bookid]);
 
     const showBook = async (props) => {
         try {
             const bookinfos = await call('/book/getBookById', 'POST', {
-                bookId: props,
+                bookId: bookPage,
             });
 
             const imgearr = [];

@@ -122,7 +122,7 @@ const PreviewGeneratedIamge = (props) => {
         try {
             setIsLoading(true);
             setIsBlockingKey(true);
-            const imageData = await call('/chat-gpt/textToImage/test', 'POST', {
+            const imageData = await call('/chat-gpt/textToImage/v2', 'POST', {
                 loraNo: imagetheme,
                 text: savedStory[props.index]['paragraph'],
             });
