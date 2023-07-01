@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { call } from '../../service/ApiService';
-import { getBookById } from '../../service/FairytaleService';
-import styled from 'styled-components';
-import FairytaleShow from './FairytaleShow';
-import LazyBackground from '../../components/common/LazyBackground';
-import Header from '../../components/global/Header';
-import ContentCover from '../../components/global/ContentCover';
-import InnerCover from '../../components/global/InnerCover';
-
-import { useRecoilValue } from 'recoil';
-import { BookId } from '../../recoil/FairytaleState';
+import React, { useState, useEffect } from "react";
+import { call } from "../../service/ApiService";
+import { getBookById } from "../../service/FairytaleService";
+import styled from "styled-components";
+import FairytaleShow from "./FairytaleShow";
+import LazyBackground from "../../components/common/LazyBackground";
+import base64_bg_start from "../../script/base64_bg_start";
+import Header from "../../components/global/Header";
+import ContentCover from "../../components/global/ContentCover";
+import InnerCover from "../../components/global/InnerCover";
+import { useRecoilValue } from "recoil";
+import { BookId } from "../../recoil/FairytaleState";
 
 const ButtonFrame = styled.div`
     display: flex;
@@ -17,7 +17,6 @@ const ButtonFrame = styled.div`
     padding-right: 5%;
     margin-bottom: 10px;
 `;
-
 const Button = styled.button`
     width: 15%;
     height: 40px;
@@ -42,9 +41,9 @@ const Button = styled.button`
 // `;
 
 const FairytaleExport = () => {
-    const [Title, setTitle] = useState('');
-    const [Image, setImage] = useState([]);
-    const bookIdshow = useRecoilValue(BookId);
+  const [Title, setTitle] = useState("");
+  const [Image, setImage] = useState([]);
+  const bookIdshow = useRecoilValue(BookId);
 
     useEffect(() => {
         fetchData();
@@ -54,11 +53,10 @@ const FairytaleExport = () => {
         };
     }, []);
 
-    const fetchData = async () => {
-        try {
-            console.log('bookIdshow>>', bookIdshow);
-            const data = await getBookById({ bookId: bookIdshow });
-            setTitle(data.title);
+  const fetchData = async () => {
+    try {
+      const data = await getBookById({ bookId: bookIdshow });
+      setTitle(data.title);
 
             const imgearr = [];
             for (let i = 0; i < data.pages.length; i++) {
@@ -70,15 +68,15 @@ const FairytaleExport = () => {
         }
     };
 
-    const gotoBoard = async () => {
-        try {
-            await call('/board/save', 'POST', { bookId: bookIdshow });
-            alert('등록되었습니다');
-            window.location.href = '/board';
-        } catch (error) {
-            console.log('Error fetching data:', error);
-        }
-    };
+  const gotoBoard = async () => {
+    try {
+      await call("/board/save", "POST", { bookId: bookIdshow });
+      alert("등록되었습니다");
+      window.location.href = "/board";
+    } catch (error) {
+      console.log("Error fetching data:", error);
+    }
+  };
 
     const exportPDF = async () => {
         for (var i = 0; i < Image.length; i++) {
@@ -97,27 +95,27 @@ const FairytaleExport = () => {
         }
     };
 
-    return (
-        <LazyBackground
-            type="bg"
-            src="https://ik.imagekit.io/hbcho/StarryNight_export.jpg"
-            placeholder="https://ik.imagekit.io/hbcho/CartoonStarryNight.png?tr=w-512,h-288,bl-40,q-20"
-        >
-            <Header mode={'default'} />
-            <ContentCover>
-                <InnerCover>
-                    <FairytaleShow props={BookId}></FairytaleShow>
-
-                    <div>
-                        <ButtonFrame>
-                            <Button onClick={gotoBoard}>게시판 전시하기</Button>
-                            <Button onClick={exportPDF}>파일 저장하기</Button>
-                        </ButtonFrame>
-                    </div>
-                </InnerCover>
-            </ContentCover>
-        </LazyBackground>
-    );
+  return (
+    <div>
+      <Header />
+      <ContentCover>
+        <InnerCover>
+          <FairytaleShow props={BookId}></FairytaleShow>
+          <div>
+            <ButtonFrame>
+              <Button onClick={gotoBoard}>게시판 전시하기</Button>
+              <Button onClick={exportPDF}>파일 저장하기</Button>
+            </ButtonFrame>
+          </div>
+        </InnerCover>
+      </ContentCover>
+      <LazyBackground
+        type='show'
+        src='https://ik.imagekit.io/hbcho/StarryNight_export.jpg'
+        placeholder={base64_bg_start}
+      />
+    </div>
+  );
 };
 
 export default FairytaleExport;

@@ -4,22 +4,13 @@ import styled, { css } from "styled-components";
 const ImageContainer = styled.div`
   position: relative;
   ${({ type }) =>
-    type === "bg" &&
+    type === "default" &&
     css`
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      z-index: 0;
-    `}
-  ${({ type }) =>
-    type === "book" &&
-    css`
-      width: 100%;
-      height: 450px;
-      border-radius: 2%;
-      transition: transform 0.4s ease;
     `}
   ${({ type }) =>
     type === "home" &&
@@ -31,6 +22,24 @@ const ImageContainer = styled.div`
         position: fixed;
         bottom: -160px;
       }
+    `}
+  ${({ type }) =>
+    type === "show" &&
+    css`
+      z-index: -1;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    `}
+  ${({ type }) =>
+    type === "book" &&
+    css`
+      width: 100%;
+      height: 450px;
+      border-radius: 2%;
+      transition: transform 0.4s ease;
     `}
 `;
 const Img = styled.img`

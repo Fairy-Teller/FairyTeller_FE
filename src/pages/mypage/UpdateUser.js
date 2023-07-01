@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { updateUser } from "../../service/UserService";
 import { API_BASE_URL } from "../../api-config";
 import axios from "axios";
-
+import LazyBackground from "../../components/common/LazyBackground";
+import base64_bg_start from "../../script/base64_bg_start";
 import "../../css/updateUser.css";
 
 function UpdateUser() {
@@ -45,12 +46,9 @@ function UpdateUser() {
         alert("별명을 입력해주세요");
         return;
       }
-      const response = await axios.get(
-        API_BASE_URL + "/auth/signup/check-nickname",
-        {
-          params: { nickname: nickname },
-        }
-      );
+      const response = await axios.get(API_BASE_URL + "/auth/signup/check-nickname", {
+        params: { nickname: nickname },
+      });
       setIsNicknameAvailable(response.data);
     } catch (error) {
       console.error("There was an error!", error);
@@ -63,57 +61,68 @@ function UpdateUser() {
   };
 
   return (
-    <div id="background">
-      <div id="container" style={{ marginTop: "8%" }}>
+    <div id='background'>
+      <div
+        id='container'
+        style={{ marginTop: "8%" }}>
         <h1>회원 정보 수정</h1>
-        <div id="update-container">
-          <form noValidate onSubmit={handleSubmit}>
-            <div class="update-form">
-              <label htmlFor="password">새로운 패스워드</label>
+        <div id='update-container'>
+          <form
+            noValidate
+            onSubmit={handleSubmit}>
+            <div class='update-form'>
+              <label htmlFor='password'>새로운 패스워드</label>
               <input
-                type="password"
-                id="password"
+                type='password'
+                id='password'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
-            <div class="update-form">
-              <label htmlFor="confirmPassword">패스워드 확인</label>
+            <div class='update-form'>
+              <label htmlFor='confirmPassword'>패스워드 확인</label>
               <input
-                type="password"
-                id="confirmPassword"
+                type='password'
+                id='confirmPassword'
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
             </div>
-            <div class="update-form">
-              <label htmlFor="nickname">닉네임</label>
+            <div class='update-form'>
+              <label htmlFor='nickname'>닉네임</label>
               <input
-                type="text"
-                id="nickname"
+                type='text'
+                id='nickname'
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
                 required
               />
-              <button onClick={checkNicknameAvailability} type="button">
+              <button
+                onClick={checkNicknameAvailability}
+                type='button'>
                 중복확인
               </button>
               {isNicknameAvailable === false && <p>이미 존재하는 별명입니다</p>}
               {isNicknameAvailable === true && <p>사용가능한 별명입니다</p>}
-              {isNicknameAvailable === null && (
-                <p>중복확인 버튼을 입력해주세요</p>
-              )}
+              {isNicknameAvailable === null && <p>중복확인 버튼을 입력해주세요</p>}
             </div>
             <div>
-              <button class="submit" type="submit">
+              <button
+                class='submit'
+                type='submit'>
                 정보 수정
               </button>
             </div>
           </form>
         </div>
       </div>
+      <LazyBackground
+        type='default'
+        src='https://ik.imagekit.io/hbcho/StarryNight_start.jpg'
+        placeholder={base64_bg_start}
+      />
     </div>
   );
 }
