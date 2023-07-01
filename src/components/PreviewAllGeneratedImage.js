@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { ImageTempState, GeneratedBoolState } from '../recoil/FairytaleState';
 import styled from 'styled-components';
+import { ImageAll, FairytaleNew } from '../service/FairytaleService';
 
 const ImageContainerFrame = styled.div`
     display: flex;
@@ -58,8 +59,12 @@ const PreviewAllGeneratedIamge = (props) => {
     const isFirstCreated = useRecoilValue(GeneratedBoolState);
     const navigate = useNavigate();
 
+
     const goEdit = () => {
         let isAllFirstCreated = new Array(props.pagelength).fill(true);
+        FairytaleNew().then((response) => {
+            ImageAll({ bookId: response.bookId });
+        });
         isFirstCreated.every((value, index) => value === isAllFirstCreated[index])
             ? navigate('/f-edit')
             : alert('모든 페이지에 대한 이미지를 생성해주세요!');

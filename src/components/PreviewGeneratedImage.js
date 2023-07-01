@@ -118,11 +118,13 @@ const PreviewGeneratedIamge = (props) => {
     };
   }, [isBlockingKey]);
 
+
   const disableKeyboardEvents = (event) => {
     if (isBlockingKey) {
       event.preventDefault();
     }
   };
+
 
   const createImg = async () => {
     try {

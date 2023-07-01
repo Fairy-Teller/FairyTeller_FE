@@ -12,11 +12,23 @@ export function FairytaleNew() {
 }
 
 export function sendAudioData(audioDTO) {
-    console.log(audioDTO);
     return call('/audio/user-record', 'POST', audioDTO);
 }
 
 export function ImageTheme(audioDTO) {
-    console.log(audioDTO);
     return call('/book/create/theme', 'POST', audioDTO);
+}
+
+export function ImageAll(audioDTO) {
+    return call('/book/create/imageAll', 'POST', audioDTO);
+}
+
+export function NewestTemp() {
+    return call('/book/find/newestTemp', 'GET', null)
+        .then((response) => {
+            return response;
+        })
+        .catch((error) => {
+            console.error(error);
+        });
 }
