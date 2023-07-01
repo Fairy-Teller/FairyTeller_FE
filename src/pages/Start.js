@@ -134,7 +134,7 @@ const Start = () => {
       </Container>
 
       <LazyBackground
-        type='bg'
+        type='default'
         src='https://ik.imagekit.io/hbcho/StarryNight_start.jpg'
         placeholder={base64_bg_start}
       />
