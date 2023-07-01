@@ -3,7 +3,7 @@ import { updateUser } from "../../service/UserService";
 import { API_BASE_URL } from "../../api-config";
 import axios from "axios";
 import LazyBackground from "../../components/common/LazyBackground";
-import base64_bg_start from "../../script/base64_bg_start";
+import base64_Bg from "../../script/base64_Bg";
 import "../../css/updateUser.css";
 
 function UpdateUser() {
@@ -121,7 +121,7 @@ function UpdateUser() {
       <LazyBackground
         type='default'
         src='https://ik.imagekit.io/hbcho/StarryNight_start.jpg'
-        placeholder={base64_bg_start}
+        placeholder={base64_Bg}
       />
     </div>
   );

@@ -4,7 +4,7 @@ import { getBookById } from "../../service/FairytaleService";
 import styled from "styled-components";
 import FairytaleShow from "./FairytaleShow";
 import LazyBackground from "../../components/common/LazyBackground";
-import base64_bg_start from "../../script/base64_bg_start";
+import base64_Bg from "../../script/base64_Bg";
 import Header from "../../components/global/Header";
 import ContentCover from "../../components/global/ContentCover";
 import InnerCover from "../../components/global/InnerCover";
@@ -112,7 +112,7 @@ const FairytaleExport = () => {
       <LazyBackground
         type='show'
         src='https://ik.imagekit.io/hbcho/StarryNight_export.jpg'
-        placeholder={base64_bg_start}
+        placeholder={base64_Bg}
       />
     </div>
   );
@@ -133,7 +133,7 @@ const FairytaleExport = () => {
       <LazyBackground
         type='show'
         src='https://ik.imagekit.io/hbcho/StarryNight_export.jpg'
-        placeholder={base64_bg_start}
+        placeholder={base64_Bg}
       />
     </div>
   );

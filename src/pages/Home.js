@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import LazyBackground from "../components/common/LazyBackground";
 import LazyBackgroundHome from "../components/common/LazyBackgroundHome";
-import base64_StarryNight from "../script/base64_StarryNight";
+import base64_Bg from "../script/base64_Bg";
 import base64_Girl from "../script/base64_Girl";
 
 const Home = () => {
@@ -69,7 +69,7 @@ const Home = () => {
       />
       <LazyBackgroundHome
         src='https://ik.imagekit.io/hbcho/CartoonStarryNight.png'
-        placeholder={base64_StarryNight}
+        placeholder={base64_Bg}
       />
     </div>
   );

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { signin, socialLogin } from "../../service/UserService";
 import { Link } from "react-router-dom";
 import LazyBackground from "../../components/common/LazyBackground";
-import base64_bg_start from "../../script/base64_bg_start";
+import base64_Bg from "../../script/base64_Bg";
 // UserInfo
 import { useSetRecoilState } from "recoil";
 import { UserInfo } from "../../recoil/FairytaleState";
@@ -45,7 +45,7 @@ const Login = () => {
         <LazyBackground
           type='default'
           src='https://ik.imagekit.io/hbcho/StarryNight_start.jpg'
-          placeholder={base64_bg_start}
+          placeholder={base64_Bg}
         />
         <div
           id='container'

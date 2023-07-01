@@ -6,7 +6,7 @@ import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { NewestTemp } from "../service/FairytaleService";
 import LazyBackground from "../components/common/LazyBackground";
-import base64_bg_start from "../script/base64_bg_start";
+import base64_Bg from "../script/base64_Bg";
 import Modal from "../components/TempModal";
 
 const Button = styled.button`
@@ -126,7 +126,7 @@ const Start = () => {
       <LazyBackground
         type='default'
         src='https://ik.imagekit.io/hbcho/StarryNight_start.jpg'
-        placeholder={base64_bg_start}
+        placeholder={base64_Bg}
       />
     </div>
   );
