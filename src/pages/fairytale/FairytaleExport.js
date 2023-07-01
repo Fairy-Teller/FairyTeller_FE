@@ -7,7 +7,6 @@ import LazyBackground from "../../components/common/LazyBackground";
 import base64_bg_start from "../../script/base64_bg_start";
 import Header from "../../components/global/Header";
 import ContentCover from "../../components/global/ContentCover";
-
 import InnerCover from "../../components/global/InnerCover";
 import { useRecoilValue } from "recoil";
 import { BookId } from "../../recoil/FairytaleState";
@@ -96,6 +95,27 @@ const FairytaleExport = () => {
     }
   };
 
+  return (
+    <div>
+      <Header />
+      <ContentCover>
+        <InnerCover>
+          <FairytaleShow props={BookId}></FairytaleShow>
+          <div>
+            <ButtonFrame>
+              <Button onClick={gotoBoard}>게시판 전시하기</Button>
+              <Button onClick={exportPDF}>파일 저장하기</Button>
+            </ButtonFrame>
+          </div>
+        </InnerCover>
+      </ContentCover>
+      <LazyBackground
+        type='show'
+        src='https://ik.imagekit.io/hbcho/StarryNight_export.jpg'
+        placeholder={base64_bg_start}
+      />
+    </div>
+  );
   return (
     <div>
       <Header />
