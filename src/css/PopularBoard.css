@@ -14,7 +14,7 @@
 .board-image {
     width: 100%;
     height: auto;
-    max-height: 100px;
+    max-height: 200px;
     border-radius: 2%;
     transition: transform 0.1s ease;
 }
