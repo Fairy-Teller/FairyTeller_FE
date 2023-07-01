@@ -2,7 +2,9 @@
 
 /* layout */
 * {
+  box-sizing: content-box;
   @include font-taeb(900);
+  word-break: keep-all;
 }
 
 body {
@@ -27,6 +29,8 @@ body {
 .container {
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 1;
   &.fixed {
     position: fixed;
     top: 0;
@@ -147,9 +151,6 @@ button {
   }
 }
 
-* {
-  box-sizing: content-box;
-}
 html,
 body,
 div,

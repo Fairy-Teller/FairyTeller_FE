@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import LazyBackground from "../components/common/LazyBackground";
 import LazyBackgroundHome from "../components/common/LazyBackgroundHome";
+import BASE64_StarryNight from "../script/BASE64_StarryNight";
+import BASE64_Girl from "../script/BASE64_Girl";
 
 const Home = () => {
   const navigation = useNavigate();
@@ -15,13 +17,13 @@ const Home = () => {
     bottom: 0;
     display: flex;
     justify-content: center;
-    z-index: 1;
+    z-index: 3;
     background-color: transparent;
   `;
   const ImageLogo = styled.img`
     object-fit: cover;
     opacity: 0;
-    animation: containerFadeIn 1s ease-in forwards;
+    animation: containerFadeIn 0.4s ease-in forwards;
   `;
   const HeadWrap = styled.div`
     width: 20%;
@@ -39,8 +41,7 @@ const Home = () => {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     background: linear-gradient(180deg, #fee080 0%, rgba(254, 224, 128, 0) 100%);
     border-radius: 1.6rem;
-    animation: containerFadeIn 1s ease-in forwards;
-    z-index: 4;
+    animation: containerFadeIn 0.4s ease-in forwards;
   `;
 
   const gotoLogin = () => {
@@ -55,24 +56,22 @@ const Home = () => {
 
   return (
     <div>
+      <FixedContainer>
+        <HeadWrap>
+          <ImageLogo src='../../logo-bright.png' />
+          <StartButton onClick={gotoLogin}>시작하기</StartButton>
+        </HeadWrap>
+      </FixedContainer>
+
+      <LazyBackground
+        type='home'
+        src='https://ik.imagekit.io/hbcho/Girl.png'
+        placeholder={BASE64_Girl}
+      />
       <LazyBackgroundHome
-        src='images/CartoonStarryNight.png'
-        placeholder='https://ik.imagekit.io/hbcho/CartoonStarryNight.png?tr=w-512,h-288,bl-40,q-20'>
-        <LazyBackground
-          type='home'
-          src='images/HomeGirl.png'
-          placeholder='https://ik.imagekit.io/hbcho/HomeGirl.png?updatedAt=1688197920710?tr=bl-40,q-20'
-        />
-        <FixedContainer>
-          <HeadWrap>
-            <ImageLogo
-              src='../../logo-bright.png'
-              style={{ zIndex: 3 }}
-            />
-            <StartButton onClick={gotoLogin}>시작하기</StartButton>
-          </HeadWrap>
-        </FixedContainer>
-      </LazyBackgroundHome>
+        src='https://ik.imagekit.io/hbcho/CartoonStarryNight.png'
+        placeholder={BASE64_StarryNight}
+      />
     </div>
   );
 };

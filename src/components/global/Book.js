@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import BookSub from "./BookSub";
+import LazyBackground from "../common/LazyBackground";
 
 const Book = ({ book, truncateTitle, linkPath, idProperty, showSub }) => {
   const title = truncateTitle ? truncateTitle(book.title) : book.title;
@@ -18,17 +19,20 @@ const Book = ({ book, truncateTitle, linkPath, idProperty, showSub }) => {
   });
 
   return (
-    <Link to={`/${linkPath}/${id}`} key={id} style={{ textDecoration: "none" }}>
-      <div className="book">
-        <div className="book__cover">
-          <div className="book__page book__page--front">
-            <div className="book__content">
-              <img
+    <Link
+      to={`/${linkPath}/${id}`}
+      key={id}
+      style={{ textDecoration: "none" }}>
+      <div className='book'>
+        <div className='book__cover'>
+          <div className='book__page book__page--front'>
+            <div className='book__content'>
+              <LazyBackground
+                type='book'
                 src={book.thumbnailUrl}
-                alt={book.title}
-                className="book__image"
+                placeholder='https://ik.imagekit.io/hbcho/CartoonStarryNight.png?tr=w-512,h-288,bl-40,q-20'
               />
-              <h4 className="book__title">{title}</h4>
+              <h4 className='book__title'>{title}</h4>
               {/* <div className="book__info">
                 <div className="sub-info">
                   <span>{formattedDate}</span>

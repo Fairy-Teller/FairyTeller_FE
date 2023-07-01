@@ -96,7 +96,7 @@ const FairytaleExport = () => {
   return (
     <LazyBackground
       type='bg'
-      src='images/StarryNight_export.jpg'
+      src='https://ik.imagekit.io/hbcho/StarryNight_export.jpg'
       placeholder='https://ik.imagekit.io/hbcho/CartoonStarryNight.png?tr=w-512,h-288,bl-40,q-20'>
       <Header mode={"default"} />
       <ContentCover>

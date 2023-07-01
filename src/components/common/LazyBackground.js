@@ -1,54 +1,86 @@
 import React, { useState, useEffect } from "react";
-import styled, { css, keyframes } from "styled-components";
+import styled, { css } from "styled-components";
 
-const BackGround = styled.div`
+const ImageContainer = styled.div`
+  position: relative;
   ${({ type }) =>
     type === "bg" &&
     css`
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-attachment: fixed;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 0;
+    `}
+  ${({ type }) =>
+    type === "book" &&
+    css`
       width: 100%;
-      min-height: 100vh;
+      height: 450px;
+      border-radius: 2%;
+      transition: transform 0.4s ease;
     `}
   ${({ type }) =>
     type === "home" &&
     css`
-      background-repeat: no-repeat;
-      background-position: center bottom;
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: -80px;
-      overflow: visible;
-      padding-top: 100%;
+      img {
+        z-index: 1;
+        width: auto;
+        height: 100vh;
+        position: fixed;
+        bottom: -120px;
+      }
     `}
 `;
 
+const Img = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  // transition: opacity 0.4s ease-in-out;
+`;
+
 function LazyBackground(props) {
-  const [src, setSrc] = useState(null);
+  const [src, setSrc] = useState(props.placeholder);
   const [isLoaded, setIsLoaded] = useState(false);
 
+  const loadImage = (src) => {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.src = src;
+      image.onload = () => resolve(image);
+      image.onerror = (err) => reject(err);
+    });
+  };
+
   useEffect(() => {
-    const imageLoader = new Image();
-    imageLoader.src = props.src;
-    imageLoader.onload = () => {
-      setSrc(props.src);
-      setTimeout(() => {
-        setIsLoaded(true);
-      }, 400);
-    };
-  }, [props.src]);
+    loadImage(props.src)
+      .then((img) => {
+        setTimeout(() => {
+          setSrc(img.src);
+        }, 120);
+      })
+      .catch((err) => {
+        console.error("Failed to load image at " + props.src, err);
+      });
+  }, [props.src, props.placeholder]);
 
   return (
-    <BackGround
-      {...props}
-      type={props.type}
-      style={{
-        backgroundImage: `url(${isLoaded ? src : props.placeholder})`,
-      }}
-    />
+    <ImageContainer type={props.type}>
+      <Img
+        src={props.placeholder}
+        alt=''
+        style={{ opacity: isLoaded ? 0 : 1 }}
+      />
+      <Img
+        src={src}
+        alt=''
+        onLoad={() => setIsLoaded(true)}
+        style={{ opacity: isLoaded ? 1 : 0 }}
+      />
+    </ImageContainer>
   );
 }
 

@@ -115,7 +115,7 @@ const StoryGenerated = () => {
   return (
     <div className='story story-user'>
       {isLoading && <LoadingModal message='AI가 그림 그릴 준비를 합니다!' />}
-      <Container>
+      <Container className={"an1"}>
         <Header mode={"default"} />
         <ContentCover>
           <ContentTitle>동화를 직접 써볼 수 있어요!</ContentTitle>

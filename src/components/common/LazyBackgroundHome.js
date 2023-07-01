@@ -1,45 +1,57 @@
 import React, { useState, useEffect } from "react";
-import styled, { css, keyframes } from "styled-components";
+import styled from "styled-components";
 
-const homeBgAnimation = keyframes`
-  0% {
-    background-position-x: 0%;
-  }
-  100% {
-    background-position-x: 10%;
-  }
-`;
-
-const Background = styled.div`
+const ImageContainer = styled.div`
   height: 100vh;
+  position: relative;
+`;
+const Img = styled.img`
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  background-size: cover;
-  background-repeat: no-repeat;
-  animation: ${homeBgAnimation} 30s infinite linear;
+  position: absolute;
+  // transition: opacity 0.4s ease-in-out;
 `;
 
 function LazyBackgroundHome(props) {
-  const [src, setSrc] = useState(null);
+  const [src, setSrc] = useState(props.placeholder);
   const [isLoaded, setIsLoaded] = useState(false);
 
+  const loadImage = (src) => {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.src = src;
+      image.onload = () => resolve(image);
+      image.onerror = (err) => reject(err);
+    });
+  };
+
   useEffect(() => {
-    const imageLoader = new Image();
-    imageLoader.src = props.src;
-    imageLoader.onload = () => {
-      setSrc(props.src);
-      setTimeout(() => {
-        setIsLoaded(true);
-      }, 400);
-    };
-  }, [props.src]);
+    loadImage(props.src)
+      .then((img) => {
+        setTimeout(() => {
+          setSrc(img.src);
+        }, 120);
+      })
+      .catch((err) => {
+        console.error("Failed to load image at " + props.src, err);
+      });
+  }, [props.src, props.placeholder]);
 
   return (
-    <Background
-      {...props}
-      style={{
-        backgroundImage: `url(${isLoaded ? src : props.placeholder})`,
-      }}
-    />
+    <ImageContainer>
+      <Img
+        src={props.placeholder}
+        alt='bg'
+        style={{ opacity: isLoaded ? 0 : 1 }}
+      />
+      <Img
+        src={src}
+        alt='bg'
+        onLoad={() => setIsLoaded(true)}
+        style={{ opacity: isLoaded ? 1 : 0 }}
+      />
+    </ImageContainer>
   );
 }
 

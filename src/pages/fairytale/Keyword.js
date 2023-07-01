@@ -5,7 +5,6 @@ import { SelectedKeywordsState, StoryState } from "../../recoil/FairytaleState";
 import { call } from "../../service/ApiService";
 import styled from "styled-components";
 import Header from "../../components/global/Header";
-import ProgressBar from "../../components/global/ProgressBar";
 import Container from "../../components/global/Container";
 import Row from "../../components/global/Row";
 import Section from "../../components/global/Section";
@@ -207,7 +206,7 @@ const Keyword = () => {
   const sendkeyword = useRecoilCallback(({ set }) => async (userDTO) => {
     try {
       setIsLoading(true);
-      const response = await call("/chat-gpt/question/test/6", "POST", userDTO);
+      const response = await call("/chat-gpt/question", "POST", userDTO);
       set(StoryState, response);
     } catch (error) {
       console.log(error);
@@ -243,7 +242,6 @@ const Keyword = () => {
       <Container className={"an1"}>
         <Header mode={"default"} />
         <ContentCover>
-          <ProgressBar step={1} />
           <ContentTitle>단어를 3개부터 5개까지 선택해보아요!</ContentTitle>
           {loaded ? (
             <InnerCover>
