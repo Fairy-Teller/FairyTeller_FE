@@ -35,7 +35,6 @@ const TempButton = styled.button`
   font-size: 20px;
   z-index: 9999;
 `;
-
 const Tempalert = styled.div`
   position: absolute;
   top: 15%;
@@ -103,18 +102,9 @@ const Start = () => {
   };
 
   return (
-    <div
-      style={{
-        backgroundImage: 'url("/images/background_start.png")',
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed", // 배경 이미지를 스크롤에 고정
-        minHeight: "100vh",
-      }}>
+    <div>
       <Container>
-        <Header mode={"default"} />
-
+        <Header />
         <div className='start an1'>
           <CenteredWrap>
             {tempState && (
@@ -145,7 +135,7 @@ const Start = () => {
 
       <LazyBackground
         type='bg'
-        src='https://ik.imagekit.io/hbcho/StarryNight_start.png'
+        src='https://ik.imagekit.io/hbcho/StarryNight_start.jpg'
         placeholder={base64_bg_start}
       />
     </div>
