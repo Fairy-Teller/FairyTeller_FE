@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const homeBgAnimation = keyframes`
+  0% {   
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(50%);
+  }
+`;
 
 const ImageContainer = styled.div`
   height: 100vh;
@@ -9,8 +18,16 @@ const Img = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  position: absolute;
-  // transition: opacity 0.4s ease-in-out;
+  transition: opacity 0.4s ease-in-out;
+`;
+const OriginImg = styled(Img)`
+  width: auto;
+  max-width: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  animation: ${homeBgAnimation} 240s infinite linear;
 `;
 
 function LazyBackgroundHome(props) {
@@ -27,11 +44,14 @@ function LazyBackgroundHome(props) {
   };
 
   useEffect(() => {
+    if (!props.src) {
+      return;
+    }
     loadImage(props.src)
       .then((img) => {
         setTimeout(() => {
           setSrc(img.src);
-        }, 120);
+        }, 240);
       })
       .catch((err) => {
         console.error("Failed to load image at " + props.src, err);
@@ -45,7 +65,7 @@ function LazyBackgroundHome(props) {
         alt='bg'
         style={{ opacity: isLoaded ? 0 : 1 }}
       />
-      <Img
+      <OriginImg
         src={src}
         alt='bg'
         onLoad={() => setIsLoaded(true)}
