@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { BookId } from '../recoil/FairytaleState';
 import Header from '../components/global/Header';
 import Container from '../components/global/Container';
 import CenteredWrap from '../components/global/CenteredWrap';
@@ -7,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { NewestTemp } from '../service/FairytaleService';
 import LazyBackground from "../components/common/LazyBackground";
 import base64_bg_start from "../script/base64_bg_start";
+import Modal from '../components/TempModal';
 
 const Button = styled.button`
   padding: 2rem 3.6rem;
@@ -51,10 +54,24 @@ const Tempalert = styled.div`
     padding: 10px;
     z-index: 0;
 `;
+const CloseButton = styled.button`
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px;
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 999999;
+`;
 
 const Start = () => {
     const navigate = useNavigate();
     const [tempState, setTempState] = useState(null);
+    const [bookId, setBookId] = useRecoilState(BookId);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     useEffect(() => {
         document.body.style.overflow = 'hidden';
 
@@ -66,6 +83,13 @@ const Start = () => {
             document.body.style.overflow = 'auto';
         };
     }, []);
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
     const gotoPage = () => {
         const hasNullImageUrl = tempState.pages.some((item) => item.originalImageUrl === null);
@@ -73,6 +97,7 @@ const Start = () => {
         if (hasNullImageUrl) {
             navigate('/image-generated');
         }
+        setBookId(tempState.bookId);
         // originalImageUrl중에 하나라도 null 일경우 /image-generated
         // 모두 다 있을 경우, finalImageUrl
     };
@@ -97,15 +122,20 @@ const Start = () => {
                             <Tempalert>
                                 📔 임시 저장된 동화책이 있습니다. <br />
                                 해당 동화책 수정화면으로 이동할까요?
-                                <TempButton onClick={gotoPage}>수정하러 가기</TempButton>
+                                <TempButton onClick={() => setIsModalOpen(true)}>수정하러 가기</TempButton>
                             </Tempalert>
                         )}
-                        <Button onClick={() => (!tempState ? navigate('/story-user') : navigate('/story-user'))}>
-                            스스로 동화 이야기 만들기
-                        </Button>
-                        <Button onClick={() => (!tempState ? navigate('/keyword') : console.log('모달출력'))}>
-                            AI한테 이야기 부탁하기
-                        </Button>
+
+                        {isModalOpen && (
+                            <>
+                                <CloseButton onClick={() => setIsModalOpen(false)}>
+                                    <img src="/images/closeicon.png" alt="Close" />
+                                </CloseButton>
+                                <Modal></Modal>
+                            </>
+                        )}
+                        <Button onClick={() => navigate('/story-user')}>스스로 동화 이야기 만들기</Button>
+                        <Button onClick={() => navigate('/keyword')}>AI한테 이야기 부탁하기</Button>
                         <Button onClick={() => navigate('/board')}>우리들의 도서관 가기</Button>
                     </CenteredWrap>
                 </div>

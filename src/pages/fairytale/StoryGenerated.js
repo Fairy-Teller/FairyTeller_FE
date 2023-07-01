@@ -33,6 +33,7 @@ const StoryGenerated = () => {
     const keywords = useRecoilValue(SelectedKeywordsState);
     const [savedStory, setSavedStory] = useRecoilState(StoryState);
     const setBookId = useSetRecoilState(BookId);
+
     // const showImage = useRecoilValue(ImageFix);
     // const [savedBook, setSavedBook] = useRecoilState(BookState);
     const textAreaRef = useRef(null);

@@ -14,7 +14,8 @@ import ContentCover from '../../components/global/ContentCover';
 import ContentTitle from '../../components/global/ContentTitle';
 import InnerCover from '../../components/global/InnerCover';
 import Control from '../../components/Control';
-import { NewestTemp } from '../../service/FairytaleService';
+import { getBookById } from '../../service/FairytaleService';
+
 
 const [PREV, NEXT] = ['prev', 'next'];
 
@@ -35,11 +36,11 @@ const IamgeGenerated = () => {
         // else if 프랍으로 임시저장
     }, [story]);
 
-
     const storySave = async () => {
         // 들어온 bookId로 찾을경우
-        const respon = await NewestTemp();
-        await setStory(respon.pages);
+        const respons = await getBookById({ bookId: bookIdshow });
+        console.log(respons);
+        await setStory(respons.pages);
         await saveReset();
     };
 
@@ -56,9 +57,6 @@ const IamgeGenerated = () => {
                 history.push(null, '', history.location.href);
                 window.addEventListener('popstate', preventGoBack);
             })();
-            NewestTemp().then((respon) => {
-                setStory(respon.pages);
-            });
 
             return () => {
                 window.removeEventListener('popstate', preventGoBack);

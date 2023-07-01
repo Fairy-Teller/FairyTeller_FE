@@ -55,7 +55,7 @@ const FairytaleExport = () => {
 
     const fetchData = async () => {
         try {
-            const data = await getBookById({ dookId: bookIdshow });
+            const data = await getBookById({ bookId: bookIdshow });
             setTitle(data.title);
 
       const imgearr = [];

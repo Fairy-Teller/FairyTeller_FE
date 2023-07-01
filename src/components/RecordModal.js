@@ -129,7 +129,6 @@ const RecordButton = ({
                     },
                 ],
             };
-            console.log(payload);
             await sendAudioData(payload);
             if (onCloseAndRefresh) {
                 onCloseAndRefresh();
@@ -194,34 +193,28 @@ const RecordButton = ({
           <div style={recordInfoStyle}>{pageNumber} 페이지 녹음중입니다.</div>
           <div style={recordInfoStyle}>경과 시간: {formatStopwatchTime(stopwatch)}</div>
 
-          <HighlightedText bookstorys={bookstory} />
+                    <HighlightedText bookstorys={bookstory} />
+                </div>
+            ) : null}
+            {!isRecording && countdown > 0 && (
+                <>
+                    <div style={recordInfoStyle}>
+                        ⚠️ {countdown}초 뒤 녹음이 시작됩니다! <br />
+                        긴장을 풀고 녹음해보세요
+                    </div>
+                    <br />
+                    <img src="images/calmdown.gif" alt="침착하세여"></img>
+                </>
+            )}
+            {initialAudioUrl && (
+                <select onChange={(e) => (audioRef.current.src = e.target.value)}>
+                    <option value={initialAudioUrl}>Original Audio</option>
+                    {audioBlob && <option value={URL.createObjectURL(audioBlob)}>User Audio</option>}
+                </select>
+            )}
+            <audio ref={audioRef} controls style={{ marginTop: '10px', display: audioBlob ? 'block' : 'none' }} />
+            {audioBlob && <h1 style={{ marginTop: '3%' }}>스토리: {bookstory}</h1>}
         </div>
-      ) : null}
-      {!isRecording && countdown > 0 && (
-        <>
-          <div style={recordInfoStyle}>
-            ⚠️ {countdown}초 뒤 녹음이 시작됩니다! <br />
-            긴장을 풀고 녹음해보세요
-          </div>
-          <br />
-          <img
-            src='images/calmdown.gif'
-            alt='침착하세여'></img>
-        </>
-      )}
-      {initialAudioUrl && (
-        <select onChange={(e) => (audioRef.current.src = e.target.value)}>
-          <option value={initialAudioUrl}>Original Audio</option>
-          {audioBlob && <option value={URL.createObjectURL(audioBlob)}>User Audio</option>}
-        </select>
-      )}
-      <audio
-        ref={audioRef}
-        controls
-        style={{ marginTop: "10px", display: audioBlob ? "block" : "none" }}
-      />
-      {audioBlob && <h1 style={{ marginTop: "3%" }}>스토리: {bookstory}</h1>}
-    </div>
-  );
+    );
 };
 export default RecordButton;
