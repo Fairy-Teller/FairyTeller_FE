@@ -60,7 +60,7 @@ const Story = styled.div`
     white-space: pre-wrap;
 `;
 const DashedLine = styled.div`
-    margin-top: 2%;
+    margin: 2% 0 2% 0;
     border: none;
     border-top: 2px solid rgba(0, 0, 0, 0.65);
 `;
@@ -98,7 +98,7 @@ const TempModal = () => {
         <Div>
             <Modal>
                 <p style={{ fontSize: '35px', marginBottom: '1%' }}>임시 저장된 동화 목록입니다.</p>
-                <p style={{ marginBottom: '2%',color:"red" }}>⚠️  저장된 동화는 48시간 뒤에 사라집니다.</p>
+                <p style={{ marginBottom: '2%', color: 'red' }}>⚠️ 저장된 동화는 48시간 뒤에 사라집니다.</p>
                 <ScrollableDiv>
                     {tempList && tempList.length !== 0 ? (
                         tempList.map((book) => (
@@ -107,8 +107,9 @@ const TempModal = () => {
                                     <h3>{book.lastModifiedDate.slice(0, 16)} 에 저장된 동화입니다.</h3>
                                     <br />
                                     <Story>{book.pages.slice(0, 99)} ...</Story>
-                                    <DashedLine />
                                 </div>
+                                <div style={{ fontSize: '10px', color: 'red' }}>삭제하기</div>
+                                <DashedLine />
                             </>
                         ))
                     ) : (
