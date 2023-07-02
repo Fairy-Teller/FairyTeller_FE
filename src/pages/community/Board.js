@@ -90,8 +90,12 @@ const Board = () => {
             fontSize: "2.8rem",
             textAlign: "left",
             cursor: "pointer",
+            transition: "font-size 0.3s ease",
           }}
-          onClick={handleBoardTitleClick}>
+          onClick={handleBoardTitleClick}
+          onMouseEnter={(e) => e.target.style.fontSize = "2.9rem"}
+          onMouseLeave={(e) => e.target.style.fontSize = "2.8rem"} 
+          >
           우리들의 도서관
         </div>
         <BoardSearch handleSearch={handleSearch} />
