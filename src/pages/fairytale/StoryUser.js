@@ -136,12 +136,8 @@ const StoryGenerated = () => {
         <ContentCover>
           <ContentTitle>동화를 직접 써볼 수 있어요!</ContentTitle>
           <InnerCover>
-            <ButtonWrap
-              style={{
-                justifyContent: "right",
-              }}>
+            <ButtonWrap>
               <FontAwesomeIcon
-                style={{ marginLeft: "0.8rem" }}
                 onClick={plusPageLength}
                 icon={plus}
                 size='2xl'
