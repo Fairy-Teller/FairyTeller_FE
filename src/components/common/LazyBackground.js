@@ -17,10 +17,9 @@ const ImageContainer = styled.div`
     css`
       img {
         z-index: 1;
-        width: auto;
         height: 100vh;
         position: fixed;
-        bottom: -160px;
+        bottom: -20px;
       }
     `}
   ${({ type }) =>
