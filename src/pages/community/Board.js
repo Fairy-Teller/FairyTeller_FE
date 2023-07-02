@@ -11,7 +11,7 @@ import BookContainer from "../../components/global/BookContainer";
 import Book from "../../components/global/Book";
 import PopularBoard from "./PopularBoard";
 import SortBy from "./SortBy";
-
+import PopularAuthor from "./PopularAuthor";
 
 const Board = () => {
   const navigate = useNavigate();
@@ -22,12 +22,25 @@ const Board = () => {
   const [searchType, setSearchType] = useState("");
   const [popularBoards, setPopularBoards] = useState([]);
   const [sortType, setSortType] = useState("");
+  const [topAuthors, setTopAuthors] = useState([]);
+  const [isPopularBoards, setIsPopularBoards] = useState(true);
 
   const handleBoardTitleClick = () => {
     setKeyword("");
     setSearchType("");
     setCurrentPage(0);
     navigate("/board");
+  };
+
+  const fetchTopAuthors = async () => {
+    try {
+      const response = await call("/board/topAuthors", "GET", null);
+      if (response && response.data) {
+        setTopAuthors(response.data);
+      }
+    } catch (error) {
+      console.log("Error fetching top authors:", error);
+    }
   };
 
   useEffect(() => {
@@ -39,6 +52,7 @@ const Board = () => {
         if (sortType) {
           params += `&sort=${sortType}`;
         }
+
         if (searchType === "author") {
           params += `&author=${encodeURIComponent(keyword)}`;
         } else if (searchType === "title") {
@@ -46,10 +60,10 @@ const Board = () => {
         } else {
           params += `&keyword=${encodeURIComponent(keyword)}`;
         }
+
         const response = await call(endpoint + params, "GET", null);
-        // console.log("Board API Response:", response); // API 응답 확인
+
         if (response && response.data) {
-          // console.log("Board Data:", response.data); // 데이터 확인
           setBooks(response.data);
           setTotalPages(response.totalPages);
           setPopularBoards(response.popularBoards);
@@ -58,7 +72,9 @@ const Board = () => {
         console.log("Error fetching data:", error);
       }
     };
+
     fetchData();
+    fetchTopAuthors();
   }, [currentPage, keyword, searchType, sortType]);
 
   const handlePageChange = (pageNumber) => {
@@ -69,7 +85,7 @@ const Board = () => {
     try {
       setKeyword(keyword);
       setSearchType(searchType);
-      setCurrentPage(0); // 검색어가 변경되면 페이지 번호를 0으로 초기화
+      setCurrentPage(0);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
@@ -87,7 +103,10 @@ const Board = () => {
     setCurrentPage(0);
     console.log("Selected sort:", selectedSort);
   };
-  
+
+  const handleSwipe = () => {
+    setIsPopularBoards(!isPopularBoards);
+  };
 
   return (
     <Container>
@@ -104,26 +123,56 @@ const Board = () => {
             transition: "font-size 0.3s ease",
           }}
           onClick={handleBoardTitleClick}
-          onMouseEnter={(e) => e.target.style.fontSize = "2.9rem"}
-          onMouseLeave={(e) => e.target.style.fontSize = "2.8rem"} 
-          >
+          onMouseEnter={(e) => (e.target.style.fontSize = "2.9rem")}
+          onMouseLeave={(e) => (e.target.style.fontSize = "2.8rem")}
+        >
           우리들의 도서관
         </div>
         <BoardSearch handleSearch={handleSearch} />
 
-        <div className='popularBoards-container'>
-          <div>인기 게시글</div>
-          <div className='boards-row'>
-            {popularBoards &&
-              popularBoards.slice(0, 3).map((board) => (
-                <PopularBoard
-                  board={board}
-                  key={board.boardId}
-                />
-              ))}
+        {isPopularBoards ? (
+          <div className='popularBoards-container'>
+            <div>인기 게시글</div>
+            <div className='boards-row'>
+              {popularBoards &&
+                popularBoards.slice(0, 3).map((board) => (
+                  <PopularBoard 
+                   board={board}
+                   key={board.boardId} 
+                   />
+                ))}
+            </div>
+            <div className='bar'></div>
+            <div className='pagination'>
+              <button
+                className='pagination-button'
+                onClick={handleSwipe}
+              >
+                Swipe to Popular Authors
+              </button>
+            </div>
           </div>
-        </div>
-        {/* BoardSort 컴포넌트 추가 */}
+        ) : (
+          <div className='popularAuthors-container'>
+            <div>인기 작가</div>
+            <div className='authors-row'>
+              {topAuthors &&
+                topAuthors.map((author) => (
+                  <PopularAuthor author={author} key={author.authorId} />
+                ))}
+            </div>
+            <div className='bar'></div>
+            <div className='pagination'>
+              <button
+                className='pagination-button'
+                onClick={handleSwipe}
+              >
+                Swipe to Popular Boards
+              </button>
+            </div>
+          </div>
+        )}
+
         <SortBy handleSort={handleSort} />
         <InnerCover>
           <BookContainer>
@@ -150,7 +199,8 @@ const Board = () => {
                   className='board-page-button'
                   style={{
                     backgroundColor: currentPage === index ? "#99F0CC" : "white",
-                  }}>
+                  }}
+                >
                   {index + 1}
                 </button>
               ))}
@@ -161,4 +211,5 @@ const Board = () => {
     </Container>
   );
 };
+
 export default Board;
