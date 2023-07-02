@@ -10,8 +10,6 @@ import BookContainer from "../../components/global/BookContainer";
 import Book from "../../components/global/Book";
 
 const MyBookList = () => {
-  //const [books, setBooks] = useState([]);
-  const [tempBooks, setTempBooks] = useState([]);
   const [finalBooks, setFinalBooks] = useState([]);
 
   const truncateTitle = (title) => {
@@ -36,23 +34,6 @@ const MyBookList = () => {
       <ContentCover>
         <div style={{ height: "35px" }}></div>
         <ContentTitle>내가 만든 책 모음</ContentTitle>
-        <InnerCover>
-          <BookContainer>
-            {tempBooks.length > 0 ? (
-              tempBooks.map((book) => (
-                <Book
-                  book={book}
-                  linkPath="myBookList"
-                  idProperty="bookId" // Use the 'bookId' property
-                  key={book.bookId}
-                  showSub={false}
-                />
-              ))
-            ) : (
-              <p style={{ textAlign: "center" }}>임시저장 내역이 없습니다.</p>
-            )}
-          </BookContainer>
-        </InnerCover>
         <InnerCover>
           <BookContainer>
             {finalBooks.length > 0 ? (
