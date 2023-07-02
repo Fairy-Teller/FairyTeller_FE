@@ -156,7 +156,7 @@ const Canvas = (props) => {
             };
 
             // 1분마다 함수를 실행하기 위한 타이머를 설정합니다.
-            const intervalId = setInterval(logToConsoleEveryMinute, 60000);
+            const intervalId = setInterval(logToConsoleEveryMinute, 20000);
 
             //컴포넌트가 언마운트되면 타이머를 해제합니다.
             return () => clearInterval(intervalId);
