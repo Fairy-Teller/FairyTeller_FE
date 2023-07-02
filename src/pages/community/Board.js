@@ -10,6 +10,9 @@ import InnerCover from "../../components/global/InnerCover";
 import BookContainer from "../../components/global/BookContainer";
 import Book from "../../components/global/Book";
 import PopularBoard from "./PopularBoard";
+import SortBy from "./SortBy";
+
+
 const Board = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
@@ -74,9 +77,11 @@ const Board = () => {
     return title;
   };
 
-  // useEffect(() => {
-  //   console.log("Books:", books);
-  // }, [books]);
+  const handleSort = (selectedSort) => {
+    // 선택된 정렬 방식에 따라 정렬 작업을 수행
+    console.log("Selected sort:", selectedSort);
+  };
+  
 
   return (
     <Container>
@@ -112,6 +117,8 @@ const Board = () => {
               ))}
           </div>
         </div>
+        {/* BoardSort 컴포넌트 추가 */}
+      <SortBy handleSort={handleSort} />
         <InnerCover>
           <BookContainer>
             {books &&
