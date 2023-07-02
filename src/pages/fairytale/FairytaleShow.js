@@ -87,9 +87,8 @@ function FairytaleShow(bookid) {
 
     const showBook = async (props) => {
         try {
-            const bookId = bookid.props ? bookid.props : bookIdshow;
             const bookinfos = await call('/book/getBookById', 'POST', {
-                bookId: bookId,
+                bookId: bookIdshow,
             });
 
             const imgearr = [];
