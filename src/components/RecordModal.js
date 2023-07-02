@@ -43,7 +43,6 @@ const RecordButton = ({
     bookid,
     bookstory,
 }) => {
-    console.log('bookstory>>> ', bookstory);
     const [isRecording, setIsRecording] = useState(false);
     const [audioBlob, setAudioBlob] = useState(null);
     const [countdown, setCountdown] = useState(3);
@@ -130,6 +129,7 @@ const RecordButton = ({
                     },
                 ],
             };
+            console.log('payload', payload);
             await sendAudioData(payload);
             if (onCloseAndRefresh) {
                 onCloseAndRefresh();
