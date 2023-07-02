@@ -1,9 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import BookSub from "./BookSub";
-import LazyBackground from "../common/LazyBackground";
+import LazyImage from "../common/LazyImage";
 
 const Book = ({ book, truncateTitle, linkPath, idProperty, showSub }) => {
   const title = truncateTitle ? truncateTitle(book.title) : book.title;
@@ -53,10 +51,10 @@ const Book = ({ book, truncateTitle, linkPath, idProperty, showSub }) => {
                   comments={comments}
                 />
               )}
-              <LazyBackground
-                type='book'
+              <LazyImage
+                className='book__thumbnail'
                 src={book.thumbnailUrl}
-                placeholder='https://ik.imagekit.io/hbcho/CartoonStarryNight.png?tr=w-512,h-288,bl-40,q-20'
+                alt={title + " created by " + author}
               />
             </div>
           </div>
