@@ -38,15 +38,15 @@ const TextArea = styled.textarea`
 const StoryGenerated = () => {
   const [loaded, setLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isBlockingKey, setIsBlockingKey] = useState(false);
-  const [paraCount, setParaCount] = useState(3);
-  const keywords = useRecoilValue(SelectedKeywordsState);
   const [savedStory, setSavedStory] = useRecoilState(StoryState);
+  const [isBlockingKey, setIsBlockingKey] = useState(false);
+  const [paraCount, setParaCount] = useState(savedStory.length);
+  const keywords = useRecoilValue(SelectedKeywordsState);
   const setBookId = useSetRecoilState(BookId);
 
   // const showImage = useRecoilValue(ImageFix);
   // const [savedBook, setSavedBook] = useRecoilState(BookState);
-  const textAreaRef = useRef(null);
+  // const textAreaRef = useRef(null);
 
   const navigate = useNavigate();
 
