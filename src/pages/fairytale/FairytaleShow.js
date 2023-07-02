@@ -87,8 +87,9 @@ function FairytaleShow(bookid) {
 
     const showBook = async (props) => {
         try {
+            const bookId = bookid.props ? bookid.props : bookIdshow;
             const bookinfos = await call('/book/getBookById', 'POST', {
-                bookId: bookIdshow,
+                bookId: bookId,
             });
 
             const imgearr = [];
@@ -149,7 +150,6 @@ function FairytaleShow(bookid) {
             }
         };
     }, []);
-
 
     return (
         <div>
