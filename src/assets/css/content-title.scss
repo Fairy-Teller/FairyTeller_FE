@@ -1,5 +1,11 @@
+@import "mixins";
+
 .content-title {
   margin: 2.4rem auto 1.2rem;
   font-size: 2.8rem;
   text-align: center;
+  word-break: keep-all;
+  @media screen and (max-width: $tablet) {
+    padding: 0 6.4rem;
+  }
 }

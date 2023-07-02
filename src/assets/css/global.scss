@@ -76,6 +76,11 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+
+  @media screen and (max-width: $tablet) {
+    flex-direction: column;
+    gap: 2rem;
+  }
 }
 
 .center-item {
