@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilCallback, useSetRecoilState } from "recoil";
 import { StoryState, BookState, BookId } from "../../recoil/FairytaleState";
@@ -74,12 +74,14 @@ const StoryGenerated = () => {
     }
   };
 
-  const onChangeHandler = (e, index) => {
-    const updatedStory = [...savedStory];
-
-    updatedStory[index] = { ...updatedStory[index], paragraph: e.target.value };
-    setSavedStory(updatedStory);
-  };
+  const onChangeHandler = useCallback(
+    (e, index) => {
+      const updatedStory = [...savedStory];
+      updatedStory[index] = { ...updatedStory[index], paragraph: e.target.value };
+      setSavedStory(updatedStory);
+    },
+    [savedStory, setSavedStory]
+  );
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();

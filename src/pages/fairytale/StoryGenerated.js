@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   useRecoilState,
@@ -95,11 +95,14 @@ const StoryGenerated = () => {
     }
   };
 
-  const onChangeHandler = (e, index) => {
-    const newStory = [...savedStory];
-    newStory[index] = { ...newStory[index], paragraph: e.target.value };
-    setSavedStory(newStory);
-  };
+  const onChangeHandler = useCallback(
+    (e, index) => {
+      const updatedStory = [...savedStory];
+      updatedStory[index] = { ...updatedStory[index], paragraph: e.target.value };
+      setSavedStory(updatedStory);
+    },
+    [savedStory, setSavedStory]
+  );
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
