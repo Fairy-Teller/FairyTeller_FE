@@ -9,8 +9,8 @@ const SortBy = ({ handleSort }) => {
   return (
     <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem 0' }}>
       <select onChange={handleSortChange} style={{ width: '200px' }}>
-        <option value="newest">최신순</option>
-        <option value="mostLiked">좋아요순</option>
+        <option value="createdDatetime">최신순</option>
+        <option value="likes">좋아요순</option>
       </select>
     </div>
   );
