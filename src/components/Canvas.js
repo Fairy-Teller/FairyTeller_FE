@@ -147,11 +147,11 @@ const Canvas = (props) => {
         // 페이지가 로드되고 나서, 그리고 1분마다 실행되는 함수
         const logToConsoleEveryMinute = async () => {
             // 제이슨 저장 로직이 들어갈 곳
-            tempPost.bookId = props.BookInfo.bookId;
-            tempPost.pages[0].pageNo = props.idx;
-            tempPost.pages[0].objects = [JSON.stringify(canvas)];
-            console.log('>>', tempPost);
-            await tempCreate(tempPost);
+            // tempPost.bookId = props.BookInfo.bookId;
+            // tempPost.pages[0].pageNo = props.idx;
+            // tempPost.pages[0].objects = [JSON.stringify(canvas)];
+            // console.log('>>', tempPost);
+            // await tempCreate(tempPost);
         };
 
         logToConsoleEveryMinute(); // 페이지가 로드된 후 즉시 한번 저장
