@@ -108,7 +108,6 @@ const TitleModal = (bookid) => {
         try {
             await setIsLoading(true);
             await saveState('save');
-            console.log(">>>>>>",bookData);
             const response = await call('/book/create/final', 'POST', bookData);
         } catch (error) {
             console.error(error);
