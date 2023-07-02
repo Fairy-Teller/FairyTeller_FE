@@ -132,7 +132,7 @@ const Board = () => {
 
         {isPopularBoards ? (
           <div className='popularBoards-container'>
-            <div>인기 게시글</div>
+            <div className='popularBoards-container-title'>인기 게시글</div>
             <div className='boards-row'>
               {popularBoards &&
                 popularBoards.slice(0, 3).map((board) => (
@@ -142,7 +142,13 @@ const Board = () => {
                    />
                 ))}
             </div>
-            <div className='popularBoards-container-text'>"일주일 간 가장 인기 있는 작품을 함께 확인해보세요!"</div>
+            {popularBoards.length > 0 ? (
+              <div className='popularBoards-container-text'>
+              "일주일 간 가장 인기 있는 작품을 함께 확인해보세요!"
+              </div>
+              ) : <div className='popularBoards-container-text'>
+              "멋진 작품들을 읽고 하트를 눌러보세요!"
+            </div>}
             <div className='pagination'>
               <button
                 className='pagination-button'
@@ -154,23 +160,34 @@ const Board = () => {
           </div>
         ) : (
           <div className='popularAuthors-container'>
-            <div>인기 작가</div>
-            <div className='authors-row'>
-              {topAuthors &&
-                topAuthors.map((author) => (
-                  <PopularAuthor author={author} key={author.authorId} />
-                ))}
-            </div>
-            <div className='bar'></div>
-            <div className='pagination'>
-              <button
-                className='pagination-button'
-                onClick={handleSwipe}
-              >
-                Swipe to Popular Boards
-              </button>
-            </div>
-          </div>
+           <div className='popularBoards-container-title'>인기 작가</div>
+          <div className='authors-row'>
+          <div className='rank'>1등</div>
+            {topAuthors.length > 0 ? (
+              <PopularAuthor author={topAuthors[0]} key={topAuthors[0].authorId} />
+              ) : (
+            <div>Who's Next?</div>
+              )}
+          <div className='rank'>2등</div>
+            {topAuthors.length > 1 ? (
+              <PopularAuthor author={topAuthors[1]} key={topAuthors[1].authorId} />
+            ) : (
+          <div>Who's Next?</div>
+            )}
+         <div className='rank'>3등</div>
+            {topAuthors.length > 2 ? (
+         <PopularAuthor author={topAuthors[2]} key={topAuthors[2].authorId} />
+         ) : (
+         <div>Who's Next?</div>
+            )}
+       </div>
+  <div className='pagination'>
+    <button className='pagination-button' onClick={handleSwipe}>
+      Swipe to Popular Boards
+    </button>
+  </div>
+</div>
+
         )}
 
         <SortBy handleSort={handleSort} />

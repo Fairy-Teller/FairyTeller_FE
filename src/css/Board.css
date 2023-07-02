@@ -147,3 +147,24 @@
   justify-content: space-around;
   flex-wrap: wrap;
 }
+
+.authors-row {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+  gap: 50px;
+}
+
+.popularBoards-container-title{
+  font-size: 20px;
+}
+
+.popularAuthors-container-title{
+  font-size: 20px;
+}
+
+.rank {
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
