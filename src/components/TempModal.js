@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { NewestTemp, getBookById } from '../service/FairytaleService';
+import { NewestTemp, getBookById, deleteTemp } from '../service/FairytaleService';
 import { useRecoilState } from 'recoil';
 import { BookId } from '../recoil/FairytaleState';
 
@@ -93,6 +93,11 @@ const TempModal = () => {
             navigate('/artstyle');
         }
     };
+    const deleteTempSet = (book) => {
+        console.log('book', book);
+        deleteTemp({ bookId: book });
+        setTemplist(tempList.filter((item) => item.bookId !== book));
+    };
 
     return (
         <Div>
@@ -108,7 +113,12 @@ const TempModal = () => {
                                     <br />
                                     <Story>{book.pages.slice(0, 99)} ...</Story>
                                 </div>
-                                <div style={{color:"red",fontSize:"15px"}}>삭제</div>
+                                <div
+                                    onClick={() => deleteTempSet(book.bookId)}
+                                    style={{ color: 'red', fontSize: '15px' }}
+                                >
+                                    삭제
+                                </div>
                                 <DashedLine />
                             </>
                         ))
