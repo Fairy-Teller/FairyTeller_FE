@@ -10,11 +10,12 @@ import base64_Bg from "../script/BASE64_Bg";
 import Modal from "../components/TempModal";
 
 const Button = styled.button`
-  padding: 2rem 3.6rem;
+  padding: 1.2rem 3.6rem;
   margin: 0 1.2rem;
   color: #fff;
   font-size: 2.4rem;
   line-height: 1.4;
+  word-break: keep-all;
   font-weight: 600;
   background-color: #ef9999;
   border-radius: 2.4rem;
@@ -79,7 +80,6 @@ const Start = () => {
       document.body.style.overflow = "auto";
     };
   }, []);
-
 
   return (
     <div>

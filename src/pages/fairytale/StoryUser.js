@@ -1,110 +1,132 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useRecoilCallback, useSetRecoilState } from 'recoil';
-import { StoryState, BookState, BookId } from '../../recoil/FairytaleState';
-import { call } from '../../service/ApiService';
-import Header from '../../components/global/Header';
-import Container from '../../components/global/Container';
-import Section from '../../components/global/Section';
-import ButtonWrap from '../../components/common/ButtonWrap';
-import LoadingModal from '../../components/LoadingModal';
-import styled from 'styled-components';
-import ContentCover from '../../components/global/ContentCover';
-import ContentTitle from '../../components/global/ContentTitle';
-import InnerCover from '../../components/global/InnerCover';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState, useRecoilCallback, useSetRecoilState } from "recoil";
+import { StoryState, BookState, BookId } from "../../recoil/FairytaleState";
+import { call } from "../../service/ApiService";
+import Header from "../../components/global/Header";
+import Container from "../../components/global/Container";
+import Section from "../../components/global/Section";
+import ButtonWrap from "../../components/common/ButtonWrap";
+import LoadingModal from "../../components/LoadingModal";
+import styled from "styled-components";
+import ContentCover from "../../components/global/ContentCover";
+import ContentTitle from "../../components/global/ContentTitle";
+import InnerCover from "../../components/global/InnerCover";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCirclePlus as plus } from "@fortawesome/free-solid-svg-icons";
+import { faCircleMinus as minus } from "@fortawesome/free-solid-svg-icons";
 
 const TextArea = styled.textarea`
-    width: calc(100% - 8rem);
-    min-height: 6.4rem;
-    height: auto;
-    resize: none;
-    font-size: 1.4rem;
-    line-height: 1.6;
-    border-radius: 2rem;
-    box-sizing: content-box;
-    padding: 2rem 4rem;
-    text-align: center;
+  width: calc(100% - 8rem);
+  min-height: 6.4rem;
+  height: auto;
+  resize: none;
+  font-size: 1.4rem;
+  line-height: 1.6;
+  border-radius: 2rem;
+  box-sizing: content-box;
+  padding: 2rem 4rem;
+  text-align: center;
 `;
 
 const StoryGenerated = () => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [savedStory, setSavedStory] = useRecoilState(StoryState);
-    const [isBlockingKey, setIsBlockingKey] = useState(false);
-    const navigate = useNavigate();
-    const setBookId = useSetRecoilState(BookId);
+  const [isLoading, setIsLoading] = useState(false);
+  const [savedStory, setSavedStory] = useRecoilState(StoryState);
+  const [isBlockingKey, setIsBlockingKey] = useState(false);
+  const [paraCount, setParaCount] = useState(3);
+  const navigate = useNavigate();
+  const setBookId = useSetRecoilState(BookId);
 
-    useEffect(() => {
-        setSavedStory([{ paragraph: '' }, { paragraph: '' }, { paragraph: '' }, { paragraph: '' }, { paragraph: '' }]);
-        setIsLoading(false);
-    }, []);
+  useEffect(() => {
+    setSavedStory([{ paragraph: "" }, { paragraph: "" }, { paragraph: "" }]);
+    setIsLoading(false);
+  }, []);
 
-    useEffect(() => {
-        window.addEventListener('keydown', disableKeyboardEvents);
+  useEffect(() => {
+    window.addEventListener("keydown", disableKeyboardEvents);
 
-        return () => {
-            window.removeEventListener('keydown', disableKeyboardEvents);
-        };
-    }, [isBlockingKey]);
-
-    const disableKeyboardEvents = (event) => {
-        if (isBlockingKey) {
-            event.preventDefault();
-        }
+    return () => {
+      window.removeEventListener("keydown", disableKeyboardEvents);
     };
+  }, [isBlockingKey]);
 
-    const onChangeHandler = (e, index) => {
-        const updatedStory = [...savedStory];
+  const disableKeyboardEvents = (event) => {
+    if (isBlockingKey) {
+      event.preventDefault();
+    }
+  };
 
-        updatedStory[index] = { ...updatedStory[index], paragraph: e.target.value };
-        setSavedStory(updatedStory);
-    };
+  const plusPageLength = () => {
+    if (paraCount >= 7) {
+      alert("동화책의 페이지는 최대 7장까지에요!");
+    } else {
+      setParaCount((prev) => ++prev);
+      setSavedStory((prev) => [...prev, { paragraph: "" }]);
+    }
+  };
 
-    const onSubmitHandler = async (e) => {
-        e.preventDefault();
-        setIsBlockingKey(true);
+  const minusPageLength = () => {
+    if (paraCount <= 3) {
+      alert("동화책의 페이지는 최소 3장까지에요!");
+    } else {
+      setParaCount((prev) => --prev);
+      setSavedStory((prev) => prev.slice(0, -1));
+    }
+  };
 
-        for (let i = 0; i < 5; i++) {
-            if (savedStory[i]['paragraph'].length === 0) {
-                alert('모든 페이지에 대한 내용을 입력해주세요');
-                setIsBlockingKey(false);
-                return;
-            }
-        }
+  const onChangeHandler = (e, index) => {
+    const updatedStory = [...savedStory];
 
-        setIsLoading(true);
-        window.scrollTo(0, document.body.scrollHeight);
+    updatedStory[index] = { ...updatedStory[index], paragraph: e.target.value };
+    setSavedStory(updatedStory);
+  };
 
-        try {
-            const bookDTO = savedStory.map((item, index) => ({
-                pageNo: index + 1,
-                fullStory: item['paragraph'],
-            }));
-            await createBook({ pages: bookDTO });
-        } catch (error) {
-            console.log('Error fetching data:', error);
-        } finally {
-            setIsLoading(false);
-            setIsBlockingKey(false);
-            navigate('/artstyle');
-        }
-    };
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    setIsBlockingKey(true);
 
-    const createBook = useRecoilCallback(({ set }) => async (bookDTO) => {
-        try {
-            const response = await call('/book/create/story', 'POST', bookDTO);
-            const pages = savedStory.map((text, index) => ({
-                pageNo: index + 1,
-                fullStory: text['paragraph'],
-                imageUrl: null,
-                imageBase64: null,
-                audioUrl: null,
-            }));
-            await set(BookState, { bookId: response['bookId'], pages: pages });
-            setBookId(response.bookId);
-        } catch (error) {
-            console.log(error);
-        }
-    });
+    for (let i = 0; i < 3; i++) {
+      if (savedStory[i]["paragraph"].length === 0) {
+        alert("모든 페이지에 대한 내용을 입력해주세요");
+        setIsBlockingKey(false);
+        return;
+      }
+    }
+
+    setIsLoading(true);
+    window.scrollTo(0, document.body.scrollHeight);
+
+    try {
+      const bookDTO = savedStory.map((item, index) => ({
+        pageNo: index + 1,
+        fullStory: item["paragraph"],
+      }));
+      await createBook({ pages: bookDTO });
+    } catch (error) {
+      console.log("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+      setIsBlockingKey(false);
+      navigate("/artstyle");
+    }
+  };
+
+  const createBook = useRecoilCallback(({ set }) => async (bookDTO) => {
+    try {
+      const response = await call("/book/create/story", "POST", bookDTO);
+      const pages = savedStory.map((text, index) => ({
+        pageNo: index + 1,
+        fullStory: text["paragraph"],
+        imageUrl: null,
+        imageBase64: null,
+        audioUrl: null,
+      }));
+      set(BookState, { bookId: response["bookId"], pages: pages });
+      setBookId(response.bookId);
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
   return (
     <div className='story story-user'>
@@ -114,6 +136,19 @@ const StoryGenerated = () => {
         <ContentCover>
           <ContentTitle>동화를 직접 써볼 수 있어요!</ContentTitle>
           <InnerCover>
+            <ButtonWrap>
+              <FontAwesomeIcon
+                onClick={plusPageLength}
+                icon={plus}
+                size='2xl'
+              />
+              <FontAwesomeIcon
+                style={{ marginLeft: "0.8rem" }}
+                onClick={minusPageLength}
+                icon={minus}
+                size='2xl'
+              />
+            </ButtonWrap>
             <form onSubmit={onSubmitHandler}>
               <Section>
                 {savedStory.map((item, index) => (
