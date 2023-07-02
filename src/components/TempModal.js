@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { NewestTemp } from '../service/FairytaleService';
+import { useNavigate } from 'react-router-dom';
+import { NewestTemp, getBookById } from '../service/FairytaleService';
 import { useRecoilState } from 'recoil';
 import { BookId } from '../recoil/FairytaleState';
 
 const Modal = styled.div`
-    //   color: white;
     width: 50%;
     height: 50%;
     display: flex;
     opacity: 1;
-    justify-content: center; /* 수평 가운데 정렬 */
-    align-items: center; /* 수직 가운데 정렬 */
-    flex-direction: column; /* 요소를 세로로 배치 */
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     background-color: white;
-    border-radius: 50px; /* 모달 주위를 10px 둥글게 깎음 */
-    position: relative; /* 부모 요소로부터 상대적 위치 설정 */
+    border-radius: 50px;
+    position: relative;
+    overflow: hidden;
 `;
-
 const Div = styled.div`
     width: 100%;
     height: 100vh;
@@ -31,32 +31,89 @@ const Div = styled.div`
     z-index: 99999;
 `;
 
+const ScrollableDiv = styled.div`
+    height: 70%;
+    overflow: auto;
+
+    /* Styling the scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+`;
+const Story = styled.div`
+    max-height: 50px;
+    max-width: 550px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: pre-wrap;
+`;
+const DashedLine = styled.div`
+    margin-top: 2%;
+    border: none;
+    border-top: 2px solid rgba(0, 0, 0, 0.65);
+`;
+
 const TempModal = () => {
     const [tempList, setTemplist] = useState();
     const [bookId, setBookId] = useRecoilState(BookId);
+    const navigate = useNavigate();
+
     useEffect(() => {
         TempListSet();
     }, []);
 
     const TempListSet = async () => {
         const response = await NewestTemp();
-        await setTemplist(response);
+        setTemplist(response);
     };
-    const gotoEdit = (bookid) => {
+
+    const gotoEdit = async (bookid) => {
+        console.log(bookid);
         setBookId(bookid);
-        // 어디까지 왔는지 확인하는 로직 필요
+        const tempInfo = await getBookById({ bookId: bookid });
+        const theme = tempInfo.theme;
+        // const originalImageUrl =  tempInfo.pages.some((item) => item.originalImageUrl === null);
+        // console.log('originalImageUrl', originalImageUrl);
+        const title = tempInfo.title;
+        if (theme) {
+            navigate(title ? '/f-edit' : '/image-generated');
+        } else {
+            navigate('/artstyle');
+        }
     };
-    console.log(bookId);
 
     return (
         <Div>
             <Modal>
-                <p style={{ fontSize: '35px', marginBottom: '2%' }}>임시 저장된 동화 목록입니다.</p>
-                {tempList ? (
-                    tempList.map((book) => <div onClick={() => gotoEdit(book.bookId)}>{book}</div>)
-                ) : (
-                    <p style={{ textAlign: 'center' }}>게시물이 없습니다.</p>
-                )}
+                <p style={{ fontSize: '35px', marginBottom: '4%' }}>임시 저장된 동화 목록입니다.</p>
+                <ScrollableDiv>
+                    {tempList && tempList.length !== 0 ? (
+                        tempList.map((book) => (
+                            <>
+                                <div style={{ marginBottom: '5%' }} onClick={() => gotoEdit(book.bookId)}>
+                                    <h3>{book.lastModifiedDate.slice(0, 16)} 에 저장된 동화입니다.</h3>
+                                    <br />
+                                    <Story>{book.pages.slice(1, 99)} ...</Story>
+                                    <DashedLine />
+                                </div>
+                            </>
+                        ))
+                    ) : (
+                        <p style={{ textAlign: 'center' }}>게시물이 없습니다.</p>
+                    )}
+                </ScrollableDiv>
             </Modal>
         </Div>
     );

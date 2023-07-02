@@ -80,16 +80,6 @@ const Start = () => {
     };
   }, []);
 
-  // const gotoPage = () => {
-  //   const hasNullImageUrl = tempState.pages.some((item) => item.originalImageUrl === null);
-
-  //   if (hasNullImageUrl) {
-  //     navigate("/image-generated");
-  //   }
-  //   setBookId(tempState.bookId);
-  //   // originalImageUrl중에 하나라도 null 일경우 /image-generated
-  //   // 모두 다 있을 경우, finalImageUrl
-  // };
 
   return (
     <div>
