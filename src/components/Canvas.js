@@ -150,24 +150,24 @@ const Canvas = (props) => {
   }, []);
 
   useEffect(() => {
-    // 페이지가 로드되고 나서, 그리고 1분마다 실행되는 함수
-    const logToConsoleEveryMinute = async () => {
-      // 제이슨 저장 로직이 들어갈 곳
-      // tempPost.bookId = props.BookInfo.bookId;
-      // tempPost.pages[0].pageNo = props.idx;
-      // tempPost.pages[0].objects = [JSON.stringify(canvas)];
-      // console.log('>>', tempPost);
-      // await tempCreate(tempPost);
-    };
+    if (canvas) {
+      const logToConsoleEveryMinute = async () => {
+        // 제이슨 저장 로직이 들어갈 곳
+        tempPost.bookId = props.BookInfo.bookId;
+        console.log("props.idx", props.idx);
+        tempPost.pages[0].pageNo = props.idx;
+        tempPost.pages[0].objects = JSON.stringify(canvas);
+        console.log(JSON.stringify(canvas));
+        await tempCreate(tempPost);
+      };
 
-    logToConsoleEveryMinute(); // 페이지가 로드된 후 즉시 한번 저장
+      // 1분마다 함수를 실행하기 위한 타이머를 설정합니다.
+      const intervalId = setInterval(logToConsoleEveryMinute, 20000);
 
-    // 1분마다 함수를 실행하기 위한 타이머를 설정합니다.
-    const intervalId = setInterval(logToConsoleEveryMinute, 100);
-
-    // 컴포넌트가 언마운트되면 타이머를 해제합니다.
-    return () => clearInterval(intervalId);
-  }, []);
+      //컴포넌트가 언마운트되면 타이머를 해제합니다.
+      return () => clearInterval(intervalId);
+    }
+  }, [canvas]);
 
   // 최신 저장 가져오기
   const getNewest = async () => {
@@ -252,46 +252,56 @@ const Canvas = (props) => {
     canvas.state = [];
     canvas.stateaction = true;
 
-    fabric.Image.fromURL(
-      data.pages[props.idx - 1].originalImageUrl + "?timestamp=" + new Date().getTime(),
-      (defimage) => {
-        canvas.setBackgroundImage(defimage, canvas.requestRenderAll.bind(canvas), {
-          scaleX: canvas.width / defimage.width,
-          scaleY: canvas.height / defimage.height,
-        });
-      },
-      { crossOrigin: "anonymous" }
-    );
+    // 저장된 오브젝트가 있으면 이걸로 되게끔 분기처리~
+    console.log(data.pages[props.idx - 1].objects);
 
-    let deftext = new fabric.Textbox(data.pages[props.idx - 1].fullStory, {
-      selectable: true,
-      originX: "center",
-      originY: "center",
-      textAlign: "right",
-      top: canvas.height / 2,
-      left: canvas.width / 2,
-      width: 640,
-      fontFamily: TAEB,
-      fontSize: 32,
-      lineHeight: 1.4,
-      fill: !data.pages[props.idx - 1].dark ? "white" : "black",
-      shadow: new fabric.Shadow(
-        !data.pages[props.idx - 1].dark
-          ? {
-              color: "rgba(34, 34, 34, 1)",
-              blur: 8,
-              offsetX: 4,
-              offsetY: 4,
-            }
-          : {
-              color: "rgba(255, 255, 255, 0.8)",
-              blur: 8,
-              offsetX: 4,
-              offsetY: 4,
-            }
-      ),
-    });
-    canvas.add(deftext);
+    if (data.pages[props.idx - 1].objects) {
+      const canvasState = data.pages[props.idx - 1].objects;
+      canvas.loadFromJSON(canvasState, () => {
+        canvas.renderAll();
+      });
+    } else {
+      fabric.Image.fromURL(
+        data.pages[props.idx - 1].originalImageUrl + "?timestamp=" + new Date().getTime(),
+        (defimage) => {
+          canvas.setBackgroundImage(defimage, canvas.requestRenderAll.bind(canvas), {
+            scaleX: canvas.width / defimage.width,
+            scaleY: canvas.height / defimage.height,
+          });
+        },
+        { crossOrigin: "anonymous" }
+      );
+
+      let deftext = new fabric.Textbox(data.pages[props.idx - 1].fullStory, {
+        selectable: true,
+        originX: "center",
+        originY: "center",
+        textAlign: "right",
+        top: canvas.height / 2,
+        left: canvas.width / 2,
+        width: 640,
+        fontFamily: TAEB,
+        fontSize: 32,
+        lineHeight: 1.4,
+        fill: !data.pages[props.idx - 1].dark ? "white" : "black",
+        shadow: new fabric.Shadow(
+          !data.pages[props.idx - 1].dark
+            ? {
+                color: "rgba(34, 34, 34, 1)",
+                blur: 8,
+                offsetX: 4,
+                offsetY: 4,
+              }
+            : {
+                color: "rgba(255, 255, 255, 0.8)",
+                blur: 8,
+                offsetX: 4,
+                offsetY: 4,
+              }
+        ),
+      });
+      canvas.add(deftext);
+    }
 
     return canvas;
   };
