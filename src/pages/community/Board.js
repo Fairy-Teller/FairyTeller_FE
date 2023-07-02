@@ -100,6 +100,7 @@ const Board = () => {
             textAlign: "left",
             cursor: "pointer",
             transition: "font-size 0.3s ease",
+            transition: "font-size 0.3s ease",
           }}
           onClick={handleBoardTitleClick}
           onMouseEnter={(e) => (e.target.style.fontSize = "2.9rem")}

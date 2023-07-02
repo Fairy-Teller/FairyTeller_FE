@@ -106,7 +106,7 @@ const TempModal = () => {
                                 <div style={{ marginBottom: '5%' }} onClick={() => gotoEdit(book.bookId)}>
                                     <h3>{book.lastModifiedDate.slice(0, 16)} 에 저장된 동화입니다.</h3>
                                     <br />
-                                    <Story>{book.pages.slice(1, 99)} ...</Story>
+                                    <Story>{book.pages.slice(0, 99)} ...</Story>
                                     <DashedLine />
                                 </div>
                             </>
