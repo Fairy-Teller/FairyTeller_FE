@@ -142,7 +142,7 @@ const Board = () => {
                    />
                 ))}
             </div>
-            <div className='bar'></div>
+            <div className='popularBoards-container-text'>"일주일 간 가장 인기 있는 작품을 함께 확인해보세요!"</div>
             <div className='pagination'>
               <button
                 className='pagination-button'

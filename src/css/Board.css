@@ -7,13 +7,16 @@
   grid-template-columns: repeat(2, 1fr);
   height: auto;
 }
+
 .bar {
   margin-top: 20px;
 }
+
 .pagination {
   display: flex;
   justify-content: center;
 }
+
 .pagination-button {
   margin: 5px;
   padding: 5px 10px;
@@ -22,6 +25,7 @@
   background-color: pink;
   cursor: pointer;
 }
+
 .board-page-button {
   width: 5px;
   margin-top: 10px;
@@ -46,6 +50,7 @@
   line-height: 60px;
   color: #000000;
 }
+
 .book__image {
   width: 100%;
   height: auto;
@@ -53,26 +58,32 @@
   border-radius: 2%;
   transition: transform 0.1s ease;
 }
+
 .book__image:hover {
   transform: scale(1.02);
 }
+
 .book__title {
   font-size: 18px;
   margin-top: 7px;
 }
+
 .book__info {
   margin-top: 7px;
   margin-bottom: 4px;
 }
+
 .sub-info {
   display: flex;
   align-items: center;
   font-size: 14px;
   color: #555555;
 }
+
 .separator {
   margin: 0 8px;
 }
+
 .author-likes {
   display: flex;
   align-items: center;
@@ -81,21 +92,26 @@
   color: #000000;
   margin-top: 5px;
 }
+
 .author-name {
   font-weight: bold;
 }
+
 .likes {
   display: flex;
   align-items: center;
   font-size: 14px;
   color: #555555;
 }
+
 .heart-icon {
   color: #ef3333;
 }
+
 .like-count {
   margin-left: 5px;
 }
+
 .popularBoards-container {
   display: flex;
   flex-direction: column;
@@ -106,7 +122,11 @@
   border-radius: 20px;
   padding: 20px;
   margin-bottom: 15px;
+  background-color: #fcdede;
+  width: 60%;
+  min-height: 350px;
 }
+
 .popularAuthors-container {
   display: flex;
   flex-direction: column;
@@ -117,7 +137,11 @@
   border-radius: 20px;
   padding: 20px;
   margin-bottom: 15px;
+  background-color: #fcdede;
+  width: 60%;
+  min-height: 350px;
 }
+
 .boards-row {
   display: flex;
   justify-content: space-around;
