@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { NewestTemp } from '../service/FairytaleService';
+import { useNavigate } from 'react-router-dom';
+import { NewestTemp, getBookById } from '../service/FairytaleService';
 import { useRecoilState } from 'recoil';
 import { BookId } from '../recoil/FairytaleState';
 
@@ -58,10 +59,16 @@ const Story = styled.div`
     text-overflow: ellipsis;
     white-space: pre-wrap;
 `;
+const DashedLine = styled.div`
+    margin-top: 2%;
+    border: none;
+    border-top: 2px solid rgba(0, 0, 0, 0.65);
+`;
 
 const TempModal = () => {
     const [tempList, setTemplist] = useState();
     const [bookId, setBookId] = useRecoilState(BookId);
+    const navigate = useNavigate();
 
     useEffect(() => {
         TempListSet();
@@ -72,12 +79,20 @@ const TempModal = () => {
         setTemplist(response);
     };
 
-    const gotoEdit = (bookid) => {
+    const gotoEdit = async (bookid) => {
+        console.log(bookid);
         setBookId(bookid);
-        // 어디까지 왔는지 확인하는 로직 필요
+        const tempInfo = await getBookById({ bookId: bookid });
+        const theme = tempInfo.theme;
+        // const originalImageUrl =  tempInfo.pages.some((item) => item.originalImageUrl === null);
+        // console.log('originalImageUrl', originalImageUrl);
+        const title = tempInfo.title;
+        if (theme) {
+            navigate(title ? '/f-edit' : '/image-generated');
+        } else {
+            navigate('/artstyle');
+        }
     };
-
-    console.log(tempList);
 
     return (
         <Div>
@@ -86,11 +101,14 @@ const TempModal = () => {
                 <ScrollableDiv>
                     {tempList && tempList.length !== 0 ? (
                         tempList.map((book) => (
-                            <div style={{ marginBottom: '5%' }}>
-                                <h3>{book.lastModifiedDate.slice(0, 16)}</h3>
-                                <br />
-                                <Story >{book.pages}</Story>
-                            </div>
+                            <>
+                                <div style={{ marginBottom: '5%' }} onClick={() => gotoEdit(book.bookId)}>
+                                    <h3>{book.lastModifiedDate.slice(0, 16)} 에 저장된 동화입니다.</h3>
+                                    <br />
+                                    <Story>{book.pages.slice(1, 99)} ...</Story>
+                                    <DashedLine />
+                                </div>
+                            </>
                         ))
                     ) : (
                         <p style={{ textAlign: 'center' }}>게시물이 없습니다.</p>
