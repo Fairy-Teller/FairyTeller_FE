@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useReducer } from 'react';
 import { useRecoilValue, useSetRecoilState, useResetRecoilState } from 'recoil';
 import { SelectStickers, SaveState, Canvasexport, BookId } from '../recoil/FairytaleState';
 import { call } from '../service/ApiService';
-import { getBookById } from '../service/FairytaleService';
+import { getBookById, tempCreate } from '../service/FairytaleService';
 import styled, { css } from 'styled-components';
 import { fabric } from 'fabric';
 import { Slider } from '@mui/material';
@@ -87,19 +87,17 @@ const ItemTitle = styled.div`
     font-weight: 900;
 `;
 const ItemButton = styled.button`
-
-  max-width: 100%;
-  width: 100%;
-  display: block;
-  margin: 0.4rem 0;
-  padding: 0.8rem 0.4rem;
-  box-sizing: border-box;
-  font-size: 1.6rem;
-  text-align: left;
-  border-radius: 0.4rem;
-  overflow: hidden;
-  transition: background-color 0.24s ease-in-out, color 0.24s ease-in-out;
-
+    max-width: 100%;
+    width: 100%;
+    display: block;
+    margin: 0.4rem 0;
+    padding: 0.8rem 0.4rem;
+    box-sizing: border-box;
+    font-size: 1.6rem;
+    text-align: left;
+    border-radius: 0.4rem;
+    overflow: hidden;
+    transition: background-color 0.24s ease-in-out, color 0.24s ease-in-out;
 
     &:first-of-type {
         margin-top: 0;
@@ -118,6 +116,16 @@ const ColorPicker = styled.input`
     box-sizing: border-box;
 `;
 
+const tempPost = {
+    bookId: 0,
+    pages: [
+        {
+            pageNo: 0,
+            objects: null,
+        },
+    ],
+};
+
 const Canvas = (props) => {
     const btnLabels = [TEXTSTYLE, TEXT, OBJECTS, USERIMAGE, STICKER, DRAWING];
     const canvasRef = useRef(null);
@@ -133,6 +141,26 @@ const Canvas = (props) => {
 
     useEffect(() => {
         getNewest();
+    }, []);
+
+    useEffect(() => {
+        // 페이지가 로드되고 나서, 그리고 1분마다 실행되는 함수
+        const logToConsoleEveryMinute = async () => {
+            // 제이슨 저장 로직이 들어갈 곳
+            tempPost.bookId = props.BookInfo.bookId;
+            tempPost.pages[0].pageNo = props.idx;
+            tempPost.pages[0].objects = [JSON.stringify(canvas)];
+            console.log('>>', tempPost);
+            await tempCreate(tempPost);
+        };
+
+        logToConsoleEveryMinute(); // 페이지가 로드된 후 즉시 한번 저장
+
+        // 1분마다 함수를 실행하기 위한 타이머를 설정합니다.
+        const intervalId = setInterval(logToConsoleEveryMinute, 100);
+
+        // 컴포넌트가 언마운트되면 타이머를 해제합니다.
+        return () => clearInterval(intervalId);
     }, []);
 
     // 최신 저장 가져오기
@@ -180,7 +208,6 @@ const Canvas = (props) => {
 
     // 캔버스 초기화
     const initCanvas = (data) => {
-
         const windowW = window.innerWidth;
         const windowH = window.innerHeight;
 
@@ -476,7 +503,6 @@ const Canvas = (props) => {
         c.sendBackwards(obj);
         c.renderAll();
     };
-
 
     return (
         <CanvasFrame>
