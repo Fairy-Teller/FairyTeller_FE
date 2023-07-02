@@ -1,8 +1,6 @@
 import { call } from "./ApiService";
 import { API_BASE_URL } from "../api-config";
 
-//"../../recoil/FairytaleState";
-
 export function signup(userDTO) {
   return call("/auth/signup", "POST", userDTO);
 }
@@ -40,5 +38,11 @@ export function signout() {
 export function updateUser(userDTO) {
   return call("/mypage/update-user", "PUT", userDTO).then((response) => {
     window.location.href = "/";
+  });
+}
+
+export function fetchUserData(setIsSocialLoginUser) {
+  return call("/mypage/me", "GET", "").then((response) => {
+    setIsSocialLoginUser(response.data);
   });
 }
