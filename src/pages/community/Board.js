@@ -21,6 +21,7 @@ const Board = () => {
   const [keyword, setKeyword] = useState("");
   const [searchType, setSearchType] = useState("");
   const [popularBoards, setPopularBoards] = useState([]);
+  const [sortType, setSortType] = useState("");
 
   const handleBoardTitleClick = () => {
     setKeyword("");
@@ -34,6 +35,10 @@ const Board = () => {
       try {
         let endpoint = "/board";
         let params = `?page=${currentPage}&size=8`;
+        // Add sortType to params
+        if (sortType) {
+          params += `&sort=${sortType}`;
+        }
         if (searchType === "author") {
           params += `&author=${encodeURIComponent(keyword)}`;
         } else if (searchType === "title") {
@@ -54,7 +59,7 @@ const Board = () => {
       }
     };
     fetchData();
-  }, [currentPage, keyword, searchType]);
+  }, [currentPage, keyword, searchType, sortType]);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -78,7 +83,8 @@ const Board = () => {
   };
 
   const handleSort = (selectedSort) => {
-    // 선택된 정렬 방식에 따라 정렬 작업을 수행
+    setSortType(selectedSort);
+    setCurrentPage(0);
     console.log("Selected sort:", selectedSort);
   };
   
@@ -118,7 +124,7 @@ const Board = () => {
           </div>
         </div>
         {/* BoardSort 컴포넌트 추가 */}
-      <SortBy handleSort={handleSort} />
+        <SortBy handleSort={handleSort} />
         <InnerCover>
           <BookContainer>
             {books &&
