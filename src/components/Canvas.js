@@ -154,10 +154,8 @@ const Canvas = (props) => {
       const logToConsoleEveryMinute = async () => {
         // 제이슨 저장 로직이 들어갈 곳
         tempPost.bookId = props.BookInfo.bookId;
-        console.log("props.idx", props.idx);
         tempPost.pages[0].pageNo = props.idx;
         tempPost.pages[0].objects = JSON.stringify(canvas);
-        console.log(JSON.stringify(canvas));
         await tempCreate(tempPost);
       };
 
@@ -252,8 +250,7 @@ const Canvas = (props) => {
     canvas.state = [];
     canvas.stateaction = true;
 
-    // 저장된 오브젝트가 있으면 이걸로 되게끔 분기처리~
-    console.log(data.pages[props.idx - 1].objects);
+    // 저장된 오브젝트가 있으면 이걸로 되게끔 분기처리
 
     if (data.pages[props.idx - 1].objects) {
       const canvasState = data.pages[props.idx - 1].objects;

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import RecordButton from '../../components/RecordModal';
 import { call } from '../../service/ApiService';
-import { getBookById } from '../../service/FairytaleService';
 import Modal from 'react-modal';
 import Book from './Book.js';
 import { useRecoilValue } from 'recoil';
@@ -212,7 +211,7 @@ function FairytaleShow(bookid) {
                                             setIsModalOpen(false);
                                             showBook(bookid.props);
                                         }}
-                                        bookid={bookid.props}
+                                        bookid={bookIdshow}
                                         bookstory={bookStory[bookPage]}
                                     />
                                 </Modal>
