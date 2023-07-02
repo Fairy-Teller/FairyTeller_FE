@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { device } from "../assets/css/devices";
 import Header from "../components/global/Header";
 import Container from "../components/global/Container";
 import CenteredWrap from "../components/global/CenteredWrap";
@@ -24,6 +25,12 @@ const Button = styled.button`
 
   &:hover {
     transform: scale(1.012);
+  }
+
+  @media ${device.tablet} {
+    width: 100%;
+    max-width: calc(100% - 8.8rem);
+    margin: 0 4.4rem;
   }
 `;
 const TempButton = styled.button`

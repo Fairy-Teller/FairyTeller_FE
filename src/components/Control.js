@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { device } from "../assets/css/devices";
 import "../assets/css/control.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowAltCircleLeft as prev } from "@fortawesome/free-regular-svg-icons";
@@ -26,6 +27,11 @@ const Button = styled.button`
     color: #fff;
     background-color: #edaeae;
   }
+
+  @media ${device.tablet} {
+    position: fixed;
+    bottom: 4rem;
+  }
 `;
 
 const Control = (props) => {
@@ -38,7 +44,7 @@ const Control = (props) => {
       <Button
         type='button'
         onClick={onClickHandler}
-        style={{ marginRight: "0.4rem" }}>
+        style={{ marginRight: "0.4rem", left: "1.6rem" }}>
         <FontAwesomeIcon icon={prev} />
       </Button>
     );
@@ -47,7 +53,7 @@ const Control = (props) => {
       <Button
         type='button'
         onClick={onClickHandler}
-        style={{ marginLeft: "0.4rem" }}>
+        style={{ marginLeft: "0.4rem", right: "1.6rem" }}>
         <FontAwesomeIcon icon={next} />
       </Button>
     );

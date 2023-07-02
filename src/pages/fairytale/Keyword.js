@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { device } from "../../assets/css/devices";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilCallback } from "recoil";
 import { SelectedKeywordsState, StoryState } from "../../recoil/FairytaleState";
@@ -16,6 +17,9 @@ import InnerCover from "../../components/global/InnerCover";
 const KeywordItem = styled.div`
   width: 100%;
   max-width: 17.5%;
+  @media ${device.tablet} {
+    max-width: 33.333%;
+  }
   margin: 0.4rem auto 0.4rem;
 `;
 const KeywordInner = styled.div`
@@ -45,6 +49,10 @@ const ItemTitleText = styled.p`
 const ItemInput = styled.input`
   width: 10.4rem;
   height: 12.8rem;
+  @media ${device.tablet} {
+    width: 8.4rem;
+    height: 10.4rem;
+  }
   position: absolute;
   top: 0;
   cursor: pointer;
@@ -74,6 +82,9 @@ const InputWrap = styled.div`
 const InputKeyword = styled.input`
   padding: 0.8rem 1.2rem;
   margin: 0 2rem 0 0;
+  @media ${device.tablet} {
+    margin: 0 0 0.8rem 0;
+  }
   font-size: 1.4rem;
   text-align: left;
   border-radius: 0.4rem;
