@@ -97,7 +97,8 @@ const TempModal = () => {
     return (
         <Div>
             <Modal>
-                <p style={{ fontSize: '35px', marginBottom: '4%' }}>임시 저장된 동화 목록입니다.</p>
+                <p style={{ fontSize: '35px', marginBottom: '1%' }}>임시 저장된 동화 목록입니다.</p>
+                <p style={{ marginBottom: '2%',color:"red" }}>⚠️  저장된 동화는 48시간 뒤에 사라집니다.</p>
                 <ScrollableDiv>
                     {tempList && tempList.length !== 0 ? (
                         tempList.map((book) => (
