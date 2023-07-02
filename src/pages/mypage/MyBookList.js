@@ -10,7 +10,9 @@ import BookContainer from "../../components/global/BookContainer";
 import Book from "../../components/global/Book";
 
 const MyBookList = () => {
-  const [books, setBooks] = useState([]);
+  //const [books, setBooks] = useState([]);
+  const [tempBooks, setTempBooks] = useState([]);
+  const [finalBooks, setFinalBooks] = useState([]);
 
   const truncateTitle = (title) => {
     if (title.length > 10) {
@@ -20,8 +22,11 @@ const MyBookList = () => {
   };
 
   useEffect(() => {
-    call("/book/mine", "GET", null).then((response) => {
-      setBooks(response.data);
+    call("/book/mine/temp", "GET", null).then((response) => {
+      setTempBooks(response.data);
+    });
+    call("/book/mine/final", "GET", null).then((response) => {
+      setFinalBooks(response.data);
     });
   }, []);
 
@@ -33,8 +38,25 @@ const MyBookList = () => {
         <ContentTitle>내가 만든 책 모음</ContentTitle>
         <InnerCover>
           <BookContainer>
-            {books.length > 0 ? (
-              books.map((book) => (
+            {tempBooks.length > 0 ? (
+              tempBooks.map((book) => (
+                <Book
+                  book={book}
+                  linkPath="myBookList"
+                  idProperty="bookId" // Use the 'bookId' property
+                  key={book.bookId}
+                  showSub={false}
+                />
+              ))
+            ) : (
+              <p style={{ textAlign: "center" }}>임시저장 내역이 없습니다.</p>
+            )}
+          </BookContainer>
+        </InnerCover>
+        <InnerCover>
+          <BookContainer>
+            {finalBooks.length > 0 ? (
+              finalBooks.map((book) => (
                 <Book
                   book={book}
                   linkPath="myBookList"
