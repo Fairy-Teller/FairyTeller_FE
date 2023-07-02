@@ -9,6 +9,9 @@ import '../../css/BoardDetail.css';
 import FairytaleShow from '../fairytale/FairytaleShow';
 import Header from '../../components/global/Header';
 
+import { useSetRecoilState } from 'recoil';
+import { BookId } from '../../recoil/FairytaleState';
+
 const BoardDetail = () => {
     const { boardId } = useParams();
     const navigate = useNavigate();
@@ -19,7 +22,7 @@ const BoardDetail = () => {
     const [isLiked, setIsLiked] = useState(false);
     const [commentCount, setCommentCount] = useState(0);
     const [likeCount, setLikeCount] = useState(0);
-
+    const bookIdSet = useSetRecoilState(BookId);
 
     useEffect(() => {
         fetchData();
@@ -29,6 +32,7 @@ const BoardDetail = () => {
         try {
             const response = await call(`/board/${boardId}`, 'GET', null);
             const boardData = response.data[0];
+            bookIdSet(boardData.bookId);
             setBoard(boardData);
             setComments(boardData.comments);
             setCommentCount(boardData.comments.length);
@@ -62,7 +66,7 @@ const BoardDetail = () => {
     const handleLike = async () => {
         try {
             const response = await call(`/board/${boardId}/like`, 'POST', null);
-            
+
             // 응답에서 'likeCount'와 'liked'를 사용하여 상태를 업데이트
             if (response) {
                 setIsLiked(response.liked);
@@ -109,12 +113,12 @@ const BoardDetail = () => {
             <Header mode={'default'} />
             <div>
                 <div className="deleteButtonContainer">
-                <button
-                className={`deleteButton ${board.editable ? 'visible' : 'hidden'}`}
-                onClick={handleDeleteBoard}
-                >
-                    Delete
-                </button>
+                    <button
+                        className={`deleteButton ${board.editable ? 'visible' : 'hidden'}`}
+                        onClick={handleDeleteBoard}
+                    >
+                        Delete
+                    </button>
                 </div>
                 <div>
                     <h2 className="title center" style={{ fontSize: '25px' }}>
@@ -136,7 +140,11 @@ const BoardDetail = () => {
                                 {isLiked ? (
                                     <FontAwesomeIcon icon={solidHeart} className="fa-heart" style={{ color: 'red' }} />
                                 ) : (
-                                    <FontAwesomeIcon icon={regularHeart} className="fa-heart" style={{ color: 'red' }} />
+                                    <FontAwesomeIcon
+                                        icon={regularHeart}
+                                        className="fa-heart"
+                                        style={{ color: 'red' }}
+                                    />
                                 )}
                                 <span style={{ marginLeft: '5px' }}>
                                     {isLiked ? '동화가 마음에 들었어요!' : '동화가 마음에 드시나요?'}
@@ -144,14 +152,14 @@ const BoardDetail = () => {
                             </button>
                         </div>
                         <div className="action-icons" style={{ justifyContent: 'flex-start', marginBottom: '20px' }}>
-                        <div className="like-icon" style={{ marginRight: '15px' }}>
-                        <FontAwesomeIcon icon={solidHeart} className="fa-heart" style={{ color: 'red' }} />
-                        <span>{likeCount}명이 좋아합니다.</span>
-                        </div>
+                            <div className="like-icon" style={{ marginRight: '15px' }}>
+                                <FontAwesomeIcon icon={solidHeart} className="fa-heart" style={{ color: 'red' }} />
+                                <span>{likeCount}명이 좋아합니다.</span>
+                            </div>
 
-                        <div className="comment-icon">
-                            <FontAwesomeIcon icon={faComment} className="fa-comment" style={{ color: '#808080' }} />
-                            <span>{commentCount}개의 댓글이 있습니다.</span> 
+                            <div className="comment-icon">
+                                <FontAwesomeIcon icon={faComment} className="fa-comment" style={{ color: '#808080' }} />
+                                <span>{commentCount}개의 댓글이 있습니다.</span>
                             </div>
                         </div>
 
