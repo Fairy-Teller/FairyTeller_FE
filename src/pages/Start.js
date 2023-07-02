@@ -6,7 +6,7 @@ import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { NewestTemp } from "../service/FairytaleService";
 import LazyBackground from "../components/common/LazyBackground";
-import base64_Bg from "../script/base64_Bg";
+import base64_Bg from "../script/BASE64_Bg";
 import Modal from "../components/TempModal";
 
 const Button = styled.button`

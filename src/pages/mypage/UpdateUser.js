@@ -3,7 +3,7 @@ import { updateUser } from "../../service/UserService";
 import { API_BASE_URL } from "../../api-config";
 import axios from "axios";
 import LazyBackground from "../../components/common/LazyBackground";
-import base64_Bg from "../../script/base64_Bg";
+import base64_Bg from "../../script/BASE64_Bg";
 import "../../css/updateUser.css";
 
 function UpdateUser() {

@@ -4,7 +4,7 @@ import { getBookById } from "../../service/FairytaleService";
 import styled from "styled-components";
 import FairytaleShow from "./FairytaleShow";
 import LazyBackground from "../../components/common/LazyBackground";
-import base64_Bg from "../../script/base64_Bg";
+import base64_Bg from "../../script/BASE64_Bg";
 import Header from "../../components/global/Header";
 import ContentCover from "../../components/global/ContentCover";
 import InnerCover from "../../components/global/InnerCover";
