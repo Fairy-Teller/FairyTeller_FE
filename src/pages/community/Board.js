@@ -12,7 +12,6 @@ import Book from "../../components/global/Book";
 import PopularBoard from "./PopularBoard";
 import SortBy from "./SortBy";
 
-
 const Board = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
@@ -87,7 +86,6 @@ const Board = () => {
     setCurrentPage(0);
     console.log("Selected sort:", selectedSort);
   };
-  
 
   return (
     <Container>
@@ -104,9 +102,8 @@ const Board = () => {
             transition: "font-size 0.3s ease",
           }}
           onClick={handleBoardTitleClick}
-          onMouseEnter={(e) => e.target.style.fontSize = "2.9rem"}
-          onMouseLeave={(e) => e.target.style.fontSize = "2.8rem"} 
-          >
+          onMouseEnter={(e) => (e.target.style.fontSize = "2.9rem")}
+          onMouseLeave={(e) => (e.target.style.fontSize = "2.8rem")}>
           우리들의 도서관
         </div>
         <BoardSearch handleSearch={handleSearch} />
@@ -123,6 +120,7 @@ const Board = () => {
               ))}
           </div>
         </div>
+
         {/* BoardSort 컴포넌트 추가 */}
         <SortBy handleSort={handleSort} />
         <InnerCover>
