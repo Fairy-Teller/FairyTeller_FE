@@ -1,9 +1,9 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { BookId, TitleSave } from '../../recoil/FairytaleState';
 import { getBookById } from '../../service/FairytaleService';
 import { history } from '../../history/history';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Canvas from '../../components/Canvas';
 import TitleModal from '../../components/TitleModal';
 import Header from '../../components/global/Header';
@@ -30,8 +30,53 @@ const Savebutton = styled.button`
     z-index: 98;
 `;
 
+const fadeOut = keyframes`
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 0;
+    }
+`;
+
+const fadeIn = keyframes`
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+`;
+
+const AnimatedTempAlert = styled.div`
+    position: absolute;
+    width: 250px;
+    height: 50px;
+    top: 4.8rem;
+    right: 2.4rem;
+    font-size: 1.6rem;
+    text-align: center;
+    background: #fe5c6b;
+    box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.25);
+    border-radius: 183px;
+    z-index: 100;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: ${(props) => (props.show ? 1 : 0)};
+
+    animation: ${(props) => (props.show ? fadeIn : fadeOut)} 2s ease;
+`;
+
 const FairytaleEdit = () => {
-    const [saveAll, setSaveall] = useState(false);
+    const [saveAll, setSaveAll] = useState(false);
     const [showImage, setShowImage] = useState([]);
     const [activeTab, setActiveTab] = useState(1);
     const [titleSave, setTitleSave] = useRecoilState(TitleSave);
@@ -39,24 +84,24 @@ const FairytaleEdit = () => {
         1: true,
     });
     const bookIdshow = useRecoilValue(BookId);
+    const [showTempAlert, setShowTempAlert] = useState(false);
 
     const addCanvasVisibilityValue = (page) => {
-        setCanvasVisibility((prevState) => {
-            return {
-                ...prevState,
-                [page]: false,
-            };
-        });
+        setCanvasVisibility((prevState) => ({
+            ...prevState,
+            [page]: false,
+        }));
     };
 
     const toggleCanvasVisibility = (id) => {
         setActiveTab(id);
         setCanvasVisibility((prevState) => {
-            const updatedVisibility = { ...prevState };
+            const updatedVisibility = {};
 
-            Object.keys(updatedVisibility).forEach((key) => {
-                updatedVisibility[key] = Number(key) === id ? true : false;
-            });
+            for (let key in prevState) {
+                updatedVisibility[key] = Number(key) === id;
+            }
+
             return updatedVisibility;
         });
     };
@@ -64,6 +109,28 @@ const FairytaleEdit = () => {
     useEffect(() => {
         getNewest();
         window.scrollTo(0, 0);
+
+        const showTimeout = setTimeout(() => {
+            setShowTempAlert(true);
+            const hideTimeout = setTimeout(() => {
+                setShowTempAlert(false);
+            }, 5000);
+            return () => clearTimeout(hideTimeout);
+        }, 20000);
+
+        const interval = setInterval(() => {
+            clearTimeout(showTimeout);
+            setShowTempAlert(true);
+            const hideTimeout = setTimeout(() => {
+                setShowTempAlert(false);
+            }, 5000);
+            return () => clearTimeout(hideTimeout);
+        }, 20000);
+
+        return () => {
+            clearTimeout(showTimeout);
+            clearTimeout(interval);
+        };
     }, []);
 
     const getNewest = async () => {
@@ -87,19 +154,13 @@ const FairytaleEdit = () => {
         };
 
         useEffect(() => {
-            (() => {
-                history.push(null, '', history.location.href);
-                window.addEventListener('popstate', preventGoBack);
-            })();
+            history.push(null, '', history.location.href);
+            window.addEventListener('popstate', preventGoBack);
 
             return () => {
                 window.removeEventListener('popstate', preventGoBack);
             };
         }, []);
-
-        useEffect(() => {
-            history.push(null, '', history.location.href);
-        }, [history.location]);
     };
 
     const usePreventRefresh = () => {
@@ -109,9 +170,7 @@ const FairytaleEdit = () => {
         };
 
         useEffect(() => {
-            (() => {
-                window.addEventListener('beforeunload', preventClose);
-            })();
+            window.addEventListener('beforeunload', preventClose);
 
             return () => {
                 window.removeEventListener('beforeunload', preventClose);
@@ -123,14 +182,15 @@ const FairytaleEdit = () => {
     usePreventRefresh();
 
     const saveClick = () => {
-        setSaveall(true);
+        setSaveAll(true);
         setTitleSave(false);
     };
 
     return (
         <div className="edit">
             <Header />
-            <Savebutton onClick={() => saveClick()}>완성하기</Savebutton>
+            <Savebutton onClick={saveClick}>완성하기</Savebutton>
+            {showTempAlert && <AnimatedTempAlert show={showTempAlert}>임시 저장되었습니다 💾</AnimatedTempAlert>}
             <Frame>
                 {Object.keys(canvasVisibility).map((key) => (
                     <FrameInner

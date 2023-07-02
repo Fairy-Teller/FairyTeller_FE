@@ -94,7 +94,6 @@ const TempModal = () => {
         }
     };
     const deleteTempSet = (book) => {
-        console.log('book', book);
         deleteTemp({ bookId: book });
         setTemplist(tempList.filter((item) => item.bookId !== book));
     };
