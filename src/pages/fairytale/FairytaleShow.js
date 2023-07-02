@@ -6,7 +6,7 @@ import { getBookById } from '../../service/FairytaleService';
 import Modal from 'react-modal';
 import Book from './Book.js';
 import { useRecoilValue } from 'recoil';
-import { BookId } from '../../recoil/FairytaleState';
+import { BookId, BookPage } from '../../recoil/FairytaleState';
 
 const CenteredContainer = styled.div`
     display: flex;
@@ -76,7 +76,8 @@ function FairytaleShow(bookid) {
     const [recordedAudioBlob, setRecordedAudioBlob] = useState(null);
     const [check, setCheck] = useState('user');
 
-    const bookPage = useRecoilValue(BookId);
+    const bookPage = useRecoilValue(BookPage);
+    const bookIdshow = useRecoilValue(BookId);
 
     useEffect(() => {
         if (bookid.props !== '') {
@@ -87,7 +88,7 @@ function FairytaleShow(bookid) {
     const showBook = async (props) => {
         try {
             const bookinfos = await call('/book/getBookById', 'POST', {
-                bookId: bookPage,
+                bookId: bookIdshow,
             });
 
             const imgearr = [];
@@ -148,6 +149,7 @@ function FairytaleShow(bookid) {
             }
         };
     }, []);
+
 
     return (
         <div>
