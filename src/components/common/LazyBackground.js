@@ -17,10 +17,9 @@ const ImageContainer = styled.div`
     css`
       img {
         z-index: 1;
-        width: auto;
         height: 100vh;
         position: fixed;
-        bottom: -160px;
+        bottom: -20px;
       }
     `}
   ${({ type }) =>
@@ -51,7 +50,7 @@ const Img = styled.img`
 `;
 
 function LazyBackground(props) {
-  const [src, setSrc] = useState(props.placeholder);
+  const [src, setSrc] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const loadImage = (src) => {

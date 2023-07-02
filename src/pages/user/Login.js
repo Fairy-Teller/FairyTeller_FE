@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { signin, socialLogin } from "../../service/UserService";
 import { Link } from "react-router-dom";
 import LazyBackground from "../../components/common/LazyBackground";
-import base64_Bg from "../../script/base64_Bg";
+import base64_Bg from "../../script/BASE64_Bg";
 // UserInfo
 import { useSetRecoilState } from "recoil";
 import { UserInfo } from "../../recoil/FairytaleState";

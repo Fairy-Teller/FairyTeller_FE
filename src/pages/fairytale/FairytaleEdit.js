@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect} from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { BookId, TitleSave } from '../../recoil/FairytaleState';
-import { call } from '../../service/ApiService';
 import { getBookById } from '../../service/FairytaleService';
 import { history } from '../../history/history';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Canvas from '../../components/Canvas';
 import TitleModal from '../../components/TitleModal';
 import Header from '../../components/global/Header';

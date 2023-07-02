@@ -13,6 +13,7 @@ const homeBgAnimation = keyframes`
 const ImageContainer = styled.div`
   height: 100vh;
   position: relative;
+  // background-color: #052940;
 `;
 const Img = styled.img`
   width: 100%;
@@ -20,18 +21,21 @@ const Img = styled.img`
   object-fit: cover;
   transition: opacity 0.4s ease-in-out;
 `;
-const OriginImg = styled(Img)`
+const OriginImg = styled.img`
   width: auto;
   max-width: none;
+  height: 100%;
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
+  object-fit: cover;
+  transition: opacity 0.4s ease-in-out;
   animation: ${homeBgAnimation} 240s infinite linear;
 `;
 
 function LazyBackgroundHome(props) {
-  const [src, setSrc] = useState(props.placeholder);
+  const [src, setSrc] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const loadImage = (src) => {

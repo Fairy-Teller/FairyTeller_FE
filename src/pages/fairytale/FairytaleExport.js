@@ -1,34 +1,34 @@
-import React, { useState, useEffect } from "react";
-import { call } from "../../service/ApiService";
-import { getBookById } from "../../service/FairytaleService";
-import styled from "styled-components";
-import FairytaleShow from "./FairytaleShow";
-import LazyBackground from "../../components/common/LazyBackground";
-import base64_Bg from "../../script/base64_Bg";
-import Header from "../../components/global/Header";
-import ContentCover from "../../components/global/ContentCover";
-import InnerCover from "../../components/global/InnerCover";
-import { useRecoilValue } from "recoil";
-import { BookId } from "../../recoil/FairytaleState";
+import React, { useState, useEffect } from 'react';
+import { call } from '../../service/ApiService';
+import { getBookById } from '../../service/FairytaleService';
+import styled from 'styled-components';
+import FairytaleShow from './FairytaleShow';
+import LazyBackground from '../../components/common/LazyBackground';
+import base64_Bg from '../../script/BASE64_Bg';
+import Header from '../../components/global/Header';
+import ContentCover from '../../components/global/ContentCover';
+import InnerCover from '../../components/global/InnerCover';
+import { useRecoilValue } from 'recoil';
+import { BookId } from '../../recoil/FairytaleState';
 
 const ButtonFrame = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding-right: 5%;
-  margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 5%;
+    margin-bottom: 10px;
 `;
 const Button = styled.button`
-  width: 15%;
-  height: 40px;
-  margin-top: 2%;
-  background-color: #ffde67;
-  font-size: 150%;
-  border-radius: 51.5px;
-  margin-right: 1%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
+    width: 15%;
+    height: 40px;
+    margin-top: 2%;
+    background-color: #ffde67;
+    font-size: 150%;
+    border-radius: 51.5px;
+    margin-right: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
 `;
 
 // const PageWrapper = styled.div`
@@ -41,102 +41,81 @@ const Button = styled.button`
 // `;
 
 const FairytaleExport = () => {
-  const [Title, setTitle] = useState("");
-  const [Image, setImage] = useState([]);
-  const bookIdshow = useRecoilValue(BookId);
+    const [Title, setTitle] = useState('');
+    const [Image, setImage] = useState([]);
+    const bookIdshow = useRecoilValue(BookId);
 
-  useEffect(() => {
-    fetchData();
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "auto";
+    useEffect(() => {
+        fetchData();
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            const data = await getBookById({ bookId: bookIdshow });
+            setTitle(data.title);
+
+            const imgearr = [];
+            for (let i = 0; i < data.pages.length; i++) {
+                imgearr[i] = data.pages[i].finalImageUrl;
+            }
+            setImage(imgearr);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
     };
-  }, []);
 
-  const fetchData = async () => {
-    try {
-      const data = await getBookById({ bookId: bookIdshow });
-      setTitle(data.title);
+    const gotoBoard = async () => {
+        try {
+            await call('/board/save', 'POST', { bookId: bookIdshow });
+            alert('등록되었습니다');
+            window.location.href = '/board';
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        }
+    };
 
-      const imgearr = [];
-      for (let i = 0; i < data.pages.length; i++) {
-        imgearr[i] = data.pages[i].finalImageUrl;
-      }
-      setImage(imgearr);
-    } catch (error) {
-      console.log("Error fetching data:", error);
-    }
-  };
+    const exportPDF = async () => {
+        for (var i = 0; i < Image.length; i++) {
+            (function (index) {
+                var link = document.createElement('a');
+                link.href = Image[index];
+                link.download = Title + '.png';
+                link.style.display = 'none';
+                document.body.appendChild(link);
 
-  const gotoBoard = async () => {
-    try {
-      await call("/board/save", "POST", { bookId: bookIdshow });
-      alert("등록되었습니다");
-      window.location.href = "/board";
-    } catch (error) {
-      console.log("Error fetching data:", error);
-    }
-  };
+                setTimeout(function () {
+                    link.click();
+                    document.body.removeChild(link);
+                }, index * 1000);
+            })(i);
+        }
+    };
 
-  const exportPDF = async () => {
-    for (var i = 0; i < Image.length; i++) {
-      (function (index) {
-        var link = document.createElement("a");
-        link.href = Image[index];
-        link.download = Title + ".png";
-        link.style.display = "none";
-        document.body.appendChild(link);
-
-        setTimeout(function () {
-          link.click();
-          document.body.removeChild(link);
-        }, index * 1000);
-      })(i);
-    }
-  };
-
-  return (
-    <div>
-      <Header />
-      <ContentCover>
-        <InnerCover>
-          <FairytaleShow props={BookId}></FairytaleShow>
-          <div>
-            <ButtonFrame>
-              <Button onClick={gotoBoard}>게시판 전시하기</Button>
-              <Button onClick={exportPDF}>파일 저장하기</Button>
-            </ButtonFrame>
-          </div>
-        </InnerCover>
-      </ContentCover>
-      <LazyBackground
-        type='show'
-        src='https://ik.imagekit.io/hbcho/StarryNight_export.jpg'
-        placeholder={base64_Bg}
-      />
-    </div>
-  );
-  return (
-    <div>
-      <Header />
-      <ContentCover>
-        <InnerCover>
-          <FairytaleShow props={BookId}></FairytaleShow>
-          <div>
-            <ButtonFrame>
-              <Button onClick={gotoBoard}>게시판 전시하기</Button>
-              <Button onClick={exportPDF}>파일 저장하기</Button>
-            </ButtonFrame>
-          </div>
-        </InnerCover>
-      </ContentCover>
-      <LazyBackground
-        type='show'
-        src='https://ik.imagekit.io/hbcho/StarryNight_export.jpg'
-        placeholder={base64_Bg}
-      />
-    </div>
-  );
+    return (
+        <div>
+            <Header />
+            <ContentCover>
+                <InnerCover>
+                    <FairytaleShow props={BookId}></FairytaleShow>
+                    <div>
+                        <ButtonFrame>
+                            <Button onClick={gotoBoard}>게시판 전시하기</Button>
+                            <Button onClick={exportPDF}>파일 저장하기</Button>
+                        </ButtonFrame>
+                    </div>
+                </InnerCover>
+            </ContentCover>
+            <LazyBackground
+                type="show"
+                src="https://ik.imagekit.io/hbcho/StarryNight_export.jpg"
+                placeholder={base64_Bg}
+            />
+        </div>
+    );
 };
 
 export default FairytaleExport;

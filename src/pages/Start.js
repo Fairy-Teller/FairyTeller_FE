@@ -6,7 +6,7 @@ import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { NewestTemp } from "../service/FairytaleService";
 import LazyBackground from "../components/common/LazyBackground";
-import base64_Bg from "../script/base64_Bg";
+import base64_Bg from "../script/BASE64_Bg";
 import Modal from "../components/TempModal";
 
 const Button = styled.button`
@@ -80,16 +80,6 @@ const Start = () => {
     };
   }, []);
 
-  // const gotoPage = () => {
-  //   const hasNullImageUrl = tempState.pages.some((item) => item.originalImageUrl === null);
-
-  //   if (hasNullImageUrl) {
-  //     navigate("/image-generated");
-  //   }
-  //   setBookId(tempState.bookId);
-  //   // originalImageUrl중에 하나라도 null 일경우 /image-generated
-  //   // 모두 다 있을 경우, finalImageUrl
-  // };
 
   return (
     <div>

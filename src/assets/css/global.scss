@@ -4,7 +4,6 @@
 * {
   box-sizing: content-box;
   @include font-taeb(900);
-  word-break: keep-all;
 }
 
 body {
@@ -291,6 +290,7 @@ em {
   font-style: normal;
 }
 img {
+  -webkit-user-drag: none;
   vertical-align: top;
   max-width: 100%;
 }
