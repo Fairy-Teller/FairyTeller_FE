@@ -10,6 +10,9 @@ import InnerCover from "../../components/global/InnerCover";
 import BookContainer from "../../components/global/BookContainer";
 import Book from "../../components/global/Book";
 import PopularBoard from "./PopularBoard";
+import SortBy from "./SortBy";
+
+
 const Board = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
@@ -18,6 +21,7 @@ const Board = () => {
   const [keyword, setKeyword] = useState("");
   const [searchType, setSearchType] = useState("");
   const [popularBoards, setPopularBoards] = useState([]);
+  const [sortType, setSortType] = useState("");
 
   const handleBoardTitleClick = () => {
     setKeyword("");
@@ -31,6 +35,10 @@ const Board = () => {
       try {
         let endpoint = "/board";
         let params = `?page=${currentPage}&size=8`;
+        // Add sortType to params
+        if (sortType) {
+          params += `&sort=${sortType}`;
+        }
         if (searchType === "author") {
           params += `&author=${encodeURIComponent(keyword)}`;
         } else if (searchType === "title") {
@@ -51,7 +59,7 @@ const Board = () => {
       }
     };
     fetchData();
-  }, [currentPage, keyword, searchType]);
+  }, [currentPage, keyword, searchType, sortType]);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -74,9 +82,12 @@ const Board = () => {
     return title;
   };
 
-  // useEffect(() => {
-  //   console.log("Books:", books);
-  // }, [books]);
+  const handleSort = (selectedSort) => {
+    setSortType(selectedSort);
+    setCurrentPage(0);
+    console.log("Selected sort:", selectedSort);
+  };
+  
 
   return (
     <Container>
@@ -90,8 +101,12 @@ const Board = () => {
             fontSize: "2.8rem",
             textAlign: "left",
             cursor: "pointer",
+            transition: "font-size 0.3s ease",
           }}
-          onClick={handleBoardTitleClick}>
+          onClick={handleBoardTitleClick}
+          onMouseEnter={(e) => e.target.style.fontSize = "2.9rem"}
+          onMouseLeave={(e) => e.target.style.fontSize = "2.8rem"} 
+          >
           우리들의 도서관
         </div>
         <BoardSearch handleSearch={handleSearch} />
@@ -108,6 +123,8 @@ const Board = () => {
               ))}
           </div>
         </div>
+        {/* BoardSort 컴포넌트 추가 */}
+        <SortBy handleSort={handleSort} />
         <InnerCover>
           <BookContainer>
             {books &&
