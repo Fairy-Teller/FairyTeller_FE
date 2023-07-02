@@ -20,9 +20,9 @@ const MyBookList = () => {
   };
 
   useEffect(() => {
-    call("/book/mine/temp", "GET", null).then((response) => {
-      setTempBooks(response.data);
-    });
+    // call("/book/mine/temp", "GET", null).then((response) => {
+    //   setTempBooks(response.data);
+    // });
     call("/book/mine/final", "GET", null).then((response) => {
       setFinalBooks(response.data);
     });
