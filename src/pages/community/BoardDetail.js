@@ -128,11 +128,12 @@ const BoardDetail = () => {
                     <div className="author center" style={{ fontSize: '20px' }}>
                         Author: {board.nickname}
                     </div>
-                    <div className="viewCount">
-                        Views: {board.viewCount}
-                    </div>
+                    <div className="infoContainer">
+                        <div className="viewCount">
+                          조회수: {board.viewCount}
+                        </div>
                     <div className="dateCreated">
-                        작성일: {new Date(board.createdDatetime).toLocaleDateString("ko-KR", {
+                     작성일: {new Date(board.createdDatetime).toLocaleDateString("ko-KR", {
                         year: "numeric",
                         month: "long",
                         day: "numeric",
@@ -140,6 +141,8 @@ const BoardDetail = () => {
                         minute: "numeric",
                         })}
                     </div>
+                    </div>
+
                     <div>
                         <FairytaleShow props={board.bookId} state="board" />
                     </div>
