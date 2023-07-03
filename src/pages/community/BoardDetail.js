@@ -23,7 +23,6 @@ const BoardDetail = () => {
     const [commentCount, setCommentCount] = useState(0);
     const [likeCount, setLikeCount] = useState(0);
     const bookIdSet = useSetRecoilState(BookId);
-    const [formattedDate, setFormattedDate] = useState('');
 
     useEffect(() => {
         fetchData();
@@ -41,14 +40,6 @@ const BoardDetail = () => {
             setCurrentPage(response.currentPage);
             setTotalPages(response.totalPages);
             setIsLiked(boardData.liked);
-            const createdDatetime = new Date(boardData.createdDatetime).toLocaleDateString("ko-KR", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-              });
-              setFormattedDate(createdDatetime);
         } catch (error) {
             console.log('Error fetching data:', error);
         }
@@ -140,7 +131,13 @@ const BoardDetail = () => {
                         Views: {board.viewCount}
                     </div>
                     <div className="dateCreated">
-                        작성일: {formattedDate}
+                        작성일: {new Date(board.createdDatetime).toLocaleDateString("ko-KR", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                        })}
                     </div>
                     <div>
                         <FairytaleShow props={board.bookId} state="board" />
