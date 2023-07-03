@@ -12,7 +12,8 @@ import Book from "../../components/global/Book";
 import PopularBoard from "./PopularBoard";
 import SortBy from "./SortBy";
 import PopularAuthor from "./PopularAuthor";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrophy } from "@fortawesome/free-solid-svg-icons";
 const Board = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
@@ -162,26 +163,45 @@ const Board = () => {
         ) : (
           <div className='popularAuthors-container'>
            <div className='popularBoards-container-title'>인기 작가</div>
-          <div className='authors-row'>
-          <div className='rank'>1등</div>
+          
+           <div className='authors-row'>
+           <div className='rank'>
+            <FontAwesomeIcon icon={faTrophy} style={{ color: "#FFD700" }} size="2x" />
+            <div style={{ marginTop: "10px" }}>1등</div>
+          </div>
             {topAuthors.length > 0 ? (
-              <PopularAuthor author={topAuthors[0]} key={topAuthors[0].authorId} />
-              ) : (
-            <div>Who's Next?</div>
-              )}
-          <div className='rank'>2등</div>
-            {topAuthors.length > 1 ? (
-              <PopularAuthor author={topAuthors[1]} key={topAuthors[1].authorId} />
+                <PopularAuthor author={topAuthors[0]} key={topAuthors[0].authorId} />
             ) : (
-          <div>Who's Next?</div>
-            )}
-         <div className='rank'>3등</div>
-            {topAuthors.length > 2 ? (
-         <PopularAuthor author={topAuthors[2]} key={topAuthors[2].authorId} />
-         ) : (
-         <div>Who's Next?</div>
-            )}
-       </div>
+              <div className="author-container">
+              <div className="author-nickname">Who's Next?</div>
+            </div>
+          )}
+
+          <div className='rank'>
+            <FontAwesomeIcon icon={faTrophy} style={{ color: "#C0C0C0" }} size="2x" />
+            <div style={{ marginTop: "10px" }}>2등</div>
+          </div>
+          {topAuthors.length > 1 ? (
+              <PopularAuthor author={topAuthors[1]} key={topAuthors[1].authorId} />
+          ) : (
+              <div className="author-container">
+              <div className="author-nickname">Who's Next?</div>
+          </div>
+    )}
+
+    <div className='rank'><FontAwesomeIcon icon={faTrophy} style={{ color: "#CD7F32" }} size="2x" />
+    <div style={{ marginTop: "10px" }}>3등</div>
+    </div>
+    {topAuthors.length > 2 ? (
+        <PopularAuthor author={topAuthors[2]} key={topAuthors[2].authorId} />
+    ) : (
+        <div className="author-container">
+            <div className="author-nickname">Who's Next?</div>
+        </div>
+    )}
+</div>
+
+
   <div className='pagination'>
     <button className='pagination-button' onClick={handleSwipe}>
       Swipe to Popular Boards
