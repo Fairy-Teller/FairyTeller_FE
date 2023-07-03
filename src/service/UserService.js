@@ -27,12 +27,12 @@ export function socialLogin(provider) {
 
 export function signout() {
     localStorage.removeItem('ACCESS_TOKEN');
-    window.location.href = '/login';
+    window.location.href = '/';
 }
 
 export function updateUser(userDTO) {
     return call('/mypage/update-user', 'PUT', userDTO).then((response) => {
-        window.location.href = '/';
+        window.location.href = '/start';
     });
 }
 
