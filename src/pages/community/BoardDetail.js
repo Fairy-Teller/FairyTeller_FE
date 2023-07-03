@@ -8,7 +8,7 @@ import { faHeart as solidHeart, faComment } from '@fortawesome/free-solid-svg-ic
 import '../../css/BoardDetail.css';
 import FairytaleShow from '../fairytale/FairytaleShow';
 import Header from '../../components/global/Header';
-
+import { faEye, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import { useSetRecoilState } from 'recoil';
 import { BookId } from '../../recoil/FairytaleState';
 
@@ -113,6 +113,7 @@ const BoardDetail = () => {
             <Header mode={'default'} />
             <div>
                 <div className="deleteButtonContainer">
+                <button className="goBoardButton" onClick={() => navigate("/board")}>도서관 가기</button>
                     <button
                         className={`deleteButton ${board.editable ? 'visible' : 'hidden'}`}
                         onClick={handleDeleteBoard}
@@ -121,12 +122,34 @@ const BoardDetail = () => {
                     </button>
                 </div>
                 <div>
-                    <h2 className="title center" style={{ fontSize: '25px' }}>
+                <div className="title-container">
+                    <h2 className="title">
                         {board.title}
                     </h2>
-                    <div className="author center" style={{ fontSize: '20px' }}>
+                    <div className="author">
                         Author: {board.nickname}
                     </div>
+                    <div className="info">
+                    <div className="dateCreated">
+                <FontAwesomeIcon icon={faCalendarAlt} />
+                <div>
+                    작성일: {new Date(board.createdDatetime).toLocaleDateString("ko-KR", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                    })}
+                </div>
+            </div>
+                    <div className="viewCount">
+                <FontAwesomeIcon icon={faEye} />
+                <div>
+                    조회수: {board.viewCount}
+                </div>
+            </div>
+                </div>
+                </div>
                     <div>
                         <FairytaleShow props={board.bookId} state="board" />
                     </div>
