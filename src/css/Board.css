@@ -114,8 +114,8 @@
 
 .boards-row {
   display: flex;
-  justify-content: space-around;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .authors-row {
