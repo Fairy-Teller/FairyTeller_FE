@@ -134,7 +134,7 @@ const Board = () => {
 
         {isPopularBoards ? (
           <div className='popularBoards-container'>
-            <div className='popularBoards-container-title'>인기 게시글</div>
+            <div className='popularBoards-container-title'>이번 주 인기 게시물</div>
             <div className='boards-row'>
               {popularBoards &&
                 popularBoards.slice(0, 3).map((board) => (
@@ -162,7 +162,7 @@ const Board = () => {
           </div>
         ) : (
           <div className='popularAuthors-container'>
-           <div className='popularBoards-container-title'>인기 작가</div>
+           <div className='popularBoards-container-title'>이번 주 인기 작가</div>
           
            <div className='authors-row'>
            <div className='rank'>

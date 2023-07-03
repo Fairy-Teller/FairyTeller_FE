@@ -8,13 +8,13 @@
     padding: 15px;
     margin: 10px;
     flex: 1;
-    min-width: 200px;
+    min-width:140px;
 }
 
 .board-image {
     width: 100%;
     height: auto;
-    max-height: 200px;
+    max-height: 140px;
     border-radius: 2%;
     transition: transform 0.1s ease;
 }
