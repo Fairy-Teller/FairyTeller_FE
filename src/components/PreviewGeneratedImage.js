@@ -65,7 +65,7 @@ const Guide = styled.div`
   left: ${(props) => (!props.isHovered ? "4rem" : "2.4rem")};
   z-index: 99;
   border-radius: 50%;
-  transition: left 0.24s ease-in-out;
+  transition: left 0.8s ease-in-out;
   @media ${device.tablet} {
     left: 1.2rem;
   }
@@ -203,7 +203,7 @@ const PreviewGeneratedIamge = (props) => {
         onMouseLeave={() => setIsHovered(false)}>
         <Text isHovered={isHovered}>
           {isHovered
-            ? "다섯 페이지에 대한 이미지를 모두 생성해주어야 동화책을 만들러 갈 수 있어요!"
+            ? "각 페이지에 대한 이미지를 모두 생성해주어야 동화책을 만들러 갈 수 있어요!"
             : "안내"}
         </Text>
       </Guide>

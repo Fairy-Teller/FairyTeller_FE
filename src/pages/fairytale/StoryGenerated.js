@@ -207,6 +207,7 @@ const StoryGenerated = () => {
                         key={"paragraph-" + index}
                         value={item["paragraph"] !== "" ? item["paragraph"] : ""}
                         placeholder='만들어진 시나리오를 확인하고 수정해보아요'
+                        maxLength={200}
                         onChange={(e) => onChangeHandler(e, index)}
                         style={{ margin: "1.2rem 0" }}
                       />
