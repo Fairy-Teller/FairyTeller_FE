@@ -11,7 +11,7 @@ const underlineAnimation = keyframes`
 `;
 
 const Wrapper = styled.h1`
-    font-size: 48px;
+    font-size: 30px;
     font-weight: bold;
     color: black;
     position: relative;
@@ -40,6 +40,10 @@ const Wrapper = styled.h1`
                 animation-delay: ${props.delay};
             `}
     }
+
+    br {
+        animation: ${underlineAnimation} 0.5s linear forwards;
+    }
 `;
 
 const HighlightedText = (props) => {
@@ -48,10 +52,12 @@ const HighlightedText = (props) => {
 
     useEffect(() => {
         const { bookstorys } = props;
+        console.log('bookstorys', bookstorys);
 
         const sentences = bookstorys.split(/(?<=[.?!])\s+/);
         setSentences(sentences);
     }, [props.bookstorys]);
+    console.log('sentences', sentences);
 
     useEffect(() => {
         textRefs.current = new Array(sentences.length).fill(null);
@@ -73,7 +79,7 @@ const HighlightedText = (props) => {
                     paragraph.appendChild(span);
 
                     textElement.appendChild(paragraph);
-                }, index * 5000); // Delay based on the index of the sentence
+                }, index * 4000); // Delay based on the index of the sentence
             }
         });
     }, [sentences]);
@@ -84,7 +90,7 @@ const HighlightedText = (props) => {
                 key={index}
                 className="highlighted-text hide-overflow"
                 ref={(el) => (textRefs.current[index] = el)}
-                delay={index > 0 ? `${index * 5}s` : null} // Delay based on the index of the sentence
+                delay={`${index * 5}s`} // Delay based on the index of the sentence
             >
                 {sentence}
             </Wrapper>

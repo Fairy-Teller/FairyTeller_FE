@@ -129,7 +129,7 @@ const RecordButton = ({
                     },
                 ],
             };
-            console.log('payload', payload);
+
             await sendAudioData(payload);
             if (onCloseAndRefresh) {
                 onCloseAndRefresh();
