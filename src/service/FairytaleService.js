@@ -32,10 +32,14 @@ export function NewestTemp() {
         });
 }
 
-export function getBookById(audioDTO) {
-    return call('/book/getBookById/temp', 'POST', audioDTO);
+export function getBookById(getbookDTO) {
+    return call('/book/getBookById/temp', 'POST', getbookDTO);
 }
 
-export function tempCreate(audioDTO) {
-    return call('/book/create/temp', 'POST', audioDTO);
+export function tempCreate(createDTO) {
+    return call('/book/create/temp', 'POST', createDTO);
+}
+
+export function deleteTemp(deleteDTO) {
+    return call('/book/delete/temp', 'POST', deleteDTO);
 }
