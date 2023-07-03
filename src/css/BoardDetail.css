@@ -182,16 +182,8 @@
   margin-right: 5px;
 }
 
-.viewCount,
-.dateCreated {
-  font-size: 16px;
-  color: #808080;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
 .title-container {
-  background-color: #ffffff;
+  background-color: #f4f4f4;
   padding: 20px;
   border-radius: 10px;
   margin: 20px 0;
@@ -207,6 +199,7 @@
   margin-bottom: 10px;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-weight: bold;
 }
 
 .author {
@@ -214,10 +207,39 @@
   color: #666;
   margin-bottom: 20px;
   text-transform: capitalize;
+  font-weight: 600;
 }
 
 .info {
   display: flex;
   justify-content: space-between;
   width: 80%;
+}
+
+.viewCount,
+.dateCreated {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #808080;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.viewCount::before,
+.dateCreated::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.viewCount::before {
+  background: url('https://image.flaticon.com/icons/png/512/709/709884.png') center/contain no-repeat;
+}
+
+.dateCreated::before {
+  background: url('https://image.flaticon.com/icons/png/512/709/709846.png') center/contain no-repeat;
 }

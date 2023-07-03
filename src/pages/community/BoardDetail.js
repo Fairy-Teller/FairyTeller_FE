@@ -8,7 +8,7 @@ import { faHeart as solidHeart, faComment } from '@fortawesome/free-solid-svg-ic
 import '../../css/BoardDetail.css';
 import FairytaleShow from '../fairytale/FairytaleShow';
 import Header from '../../components/global/Header';
-
+import { faEye, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import { useSetRecoilState } from 'recoil';
 import { BookId } from '../../recoil/FairytaleState';
 
@@ -130,14 +130,24 @@ const BoardDetail = () => {
                         Author: {board.nickname}
                     </div>
                     <div className="info">
-                    <div>작성일: {new Date(board.createdDatetime).toLocaleDateString("ko-KR", {
+                    <div className="dateCreated">
+                <FontAwesomeIcon icon={faCalendarAlt} />
+                <div>
+                    작성일: {new Date(board.createdDatetime).toLocaleDateString("ko-KR", {
                         year: "numeric",
                         month: "long",
                         day: "numeric",
                         hour: "numeric",
                         minute: "numeric",
-                    })}</div>
-                    <div>조회수: {board.viewCount}</div>
+                    })}
+                </div>
+            </div>
+                    <div className="viewCount">
+                <FontAwesomeIcon icon={faEye} />
+                <div>
+                    조회수: {board.viewCount}
+                </div>
+            </div>
                 </div>
                 </div>
                     <div>
