@@ -14,6 +14,8 @@ const Book = ({ book, truncateTitle, linkPath, idProperty, showSub }) => {
     year: "numeric",
     month: "long",
     day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
   });
 
   return (
