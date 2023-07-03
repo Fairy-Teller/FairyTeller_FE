@@ -86,7 +86,7 @@ function SignUp() {
     <div id='background'>
       <LazyBackground
         type='default'
-        src='https://ik.imagekit.io/hbcho/StarryNight_start.jpg'
+        src='https://ik.imagekit.io/hbcho/starrynight.png'
         placeholder={base64_Bg}
       />
       <div id='container'>

@@ -42,28 +42,6 @@ const IamgeGenerated = () => {
     await saveReset();
   };
 
-  const usePreventGoBack = () => {
-    const preventGoBack = () => {
-      history.push(null, "", history.location.href);
-      alert("현재 화면에서 이탈 시 생성된 데이터가 모두 사라집니다.");
-    };
-
-    useEffect(() => {
-      (() => {
-        history.push(null, "", history.location.href);
-        window.addEventListener("popstate", preventGoBack);
-      })();
-
-      return () => {
-        window.removeEventListener("popstate", preventGoBack);
-      };
-    }, []);
-
-    useEffect(() => {
-      history.push(null, "", history.location.href);
-    }, [history.location]);
-  };
-
   const usePreventRefresh = () => {
     const preventClose = (e) => {
       e.preventDefault();
@@ -81,7 +59,6 @@ const IamgeGenerated = () => {
     });
   };
 
-  usePreventGoBack();
   usePreventRefresh();
 
   const handleControl = (mode) => {
