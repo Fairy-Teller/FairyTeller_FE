@@ -230,7 +230,6 @@
       }
     }
     form:last-of-type {
-      margin-top: 2.8rem;
       height: 0;
       .button-wrap {
         margin: -0.2rem;
@@ -239,6 +238,7 @@
 
       @media screen and (max-width: $tablet) {
         height: auto;
+        margin-top: 2.8rem;
         .button-wrap {
           position: static;
           margin: 0;
