@@ -7,14 +7,17 @@ import { device } from "../assets/css/devices";
 import { fabric } from "fabric";
 import { Slider } from "@mui/material";
 import TabSelection from "./TabSelection";
+import LoadingModal from "./LoadingModal";
+import StickerCanvas from "./StickerCanvas";
 
-const [OBJECTS, USERIMAGE, TEXT, TEXTSTYLE, DRAWING, STICKER] = [
+const [OBJECTS, USERIMAGE, TEXT, TEXTSTYLE, DRAWING, STICKER, CUST_STICKER] = [
   "선택",
   "사용자이미지",
   "텍스트추가",
   "글씨스타일",
   "손그림",
   "스티커추가",
+  "커스텀 스티커"
 ];
 const [NOTO, NAMJ, KATU, TAEB] = ["NotoSansKR", "NanumMyeongjo", "Katuri", "TAEBAEK"];
 const fonts = [NOTO, NAMJ, KATU, TAEB];
@@ -133,7 +136,7 @@ const tempPost = {
 };
 
 const Canvas = (props) => {
-  const btnLabels = [TEXTSTYLE, TEXT, OBJECTS, USERIMAGE, STICKER, DRAWING];
+  const btnLabels = [TEXTSTYLE, TEXT, OBJECTS, USERIMAGE, STICKER, DRAWING, CUST_STICKER];
   const canvasRef = useRef(null);
   const [canvas, setCanvas] = useState(null);
   const [activeTab, setActiveTab] = useState(null); // 수정탭 출력 여부를 위한 state
@@ -311,7 +314,9 @@ const Canvas = (props) => {
       addTextBox();
     }
   };
-
+  const handleActivateTapNull =() =>{
+    setActiveTab(null);
+  }
   // 텍스트 박스
   const addTextBox = () => {
     let text = new fabric.Textbox("원하는 내용을 추가하세요", {
@@ -432,6 +437,24 @@ const Canvas = (props) => {
     );
   };
 
+
+  // 커스텀 스티커 투입
+  const selectCustomStickersShow = (item) => {
+    const base64 = "data:image/png;base64," + item;
+    console.log(base64);
+    fabric.Image.fromURL(
+      base64,
+      function (img) {
+        img.scale(0.25).set({
+          left: 150,
+          top: 150,
+          angle: -22.5,
+        });
+        canvas.add(img).setActiveObject(img);
+      }
+    );
+  };
+
   // 손그림
   const [isDrawing, setIsDrawing] = useState(false);
   const [brushColor, setBrushColor] = useState("#FFaaFF");
@@ -529,7 +552,8 @@ const Canvas = (props) => {
           </Tab>
         ))}
       </Nav>
-
+      {activeTab == CUST_STICKER && <StickerCanvas handle={handleActivateTapNull} addSticker={selectCustomStickersShow}  />}
+      <div visible={activeTab === CUST_STICKER}></div>
       <Tooltab visible={activeTab === TEXTSTYLE}>
         <Item>
           <ItemTitle>글씨체</ItemTitle>
