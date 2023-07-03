@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import base64_Bg from "../script/BASE64_Bg";
+import base64_Default from "../script/BASE64_Default";
 
 const useLazyImageObserver = (props) => {
-  const [imgSrc, setImgSrc] = useState(base64_Bg);
+  const [imgSrc, setImgSrc] = useState(base64_Default);
   const imgRef = useRef(null);
 
   useEffect(() => {
@@ -12,7 +12,7 @@ const useLazyImageObserver = (props) => {
   useEffect(() => {
     let observer;
 
-    if (imgRef && imgSrc === base64_Bg) {
+    if (imgRef && imgSrc === base64_Default) {
       observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {

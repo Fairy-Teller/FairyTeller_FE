@@ -33,12 +33,26 @@ const ImageContainer = styled.div`
       bottom: 0;
     `}
   ${({ type }) =>
-    type === "book" &&
+    type === "book-left" &&
     css`
-      width: 100%;
-      height: 450px;
-      border-radius: 2%;
-      transition: transform 0.4s ease;
+      height: 100%;
+      img {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        object-position: left;
+      }
+    `}
+  ${({ type }) =>
+    type === "book-right" &&
+    css`
+      height: 100%;
+      img {
+        top: 0;
+        bottom: 0;
+        right: 0;
+        object-position: right;
+      }
     `}
 `;
 const Img = styled.img`
@@ -81,12 +95,12 @@ function LazyBackground(props) {
     <ImageContainer type={props.type}>
       <Img
         src={props.placeholder}
-        alt=''
+        alt='placeholder'
         style={{ opacity: isLoaded ? 0 : 1 }}
       />
       <Img
         src={src}
-        alt=''
+        alt='origin'
         onLoad={() => setIsLoaded(true)}
         style={{ opacity: isLoaded ? 1 : 0 }}
       />
