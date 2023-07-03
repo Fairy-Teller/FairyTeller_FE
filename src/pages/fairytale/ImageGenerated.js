@@ -37,7 +37,6 @@ const IamgeGenerated = () => {
   const storySave = async () => {
     // 들어온 bookId로 찾을경우
     const respons = await getBookById({ bookId: bookIdshow });
-    console.log(respons);
     await setStory(respons.pages);
     await saveReset();
   };

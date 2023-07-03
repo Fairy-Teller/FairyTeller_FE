@@ -17,7 +17,6 @@ const MyBookDetail = () => {
     useEffect(() => {
         call(`/book/${bookId}`, 'GET', null).then((response) => {
             setBook(response.data[0]);
-            console.log(book);
         });
     }, []);
 

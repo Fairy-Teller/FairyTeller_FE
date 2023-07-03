@@ -31,10 +31,8 @@ const Header = (props) => {
     useEffect(() => {
         const userInfoSet = currentUser();
         userInfoSet.then((item) => {
-            console.log('>>>>>>>>', item);
             setUseInfo(item.nickname);
         });
-        console.log(userInfoSet);
     }, []);
 
     const handleClick = () => {
