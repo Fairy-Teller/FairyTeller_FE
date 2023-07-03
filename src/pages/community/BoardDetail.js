@@ -113,6 +113,7 @@ const BoardDetail = () => {
             <Header mode={'default'} />
             <div>
                 <div className="deleteButtonContainer">
+                <button className="goBoardButton" onClick={() => navigate("/board")}>도서관 가기</button>
                     <button
                         className={`deleteButton ${board.editable ? 'visible' : 'hidden'}`}
                         onClick={handleDeleteBoard}
