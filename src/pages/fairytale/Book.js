@@ -2,9 +2,11 @@ import "../../css/Book.css";
 
 import PageFlip from "react-pageflip";
 import LazyImage from "../../components/common/LazyImage";
+import LazyBackground from "../../components/common/LazyBackground";
 import { useSetRecoilState, useResetRecoilState } from "recoil";
 import { BookPage } from "../../recoil/FairytaleState";
 import { useEffect } from "react";
+import base64_Default from "../../script/BASE64_Default";
 
 function Book({ bookInfo }) {
   const imageUrls = bookInfo;
@@ -52,10 +54,16 @@ function Book({ bookInfo }) {
             onClick={() => handlePageClick(i, "prev")}>
             <div className='half-image-container'>
               {i === 0 ? (
-                <LazyImage
-                  className='left-half-image'
+                // <LazyImage
+                //   className='left-half-image'
+                //   src={url}
+                //   alt={`Left Half ${i}`}
+                // />
+                <LazyBackground
+                  type='book-left'
                   src={url}
-                  alt={`Left Half ${i}`}
+                  className='left-half-image'
+                  placeholder={base64_Default}
                 />
               ) : (
                 <img
@@ -72,10 +80,16 @@ function Book({ bookInfo }) {
             onClick={() => handlePageClick(i, "next")}>
             <div className='half-image-container'>
               {i === 0 ? (
-                <LazyImage
-                  className='right-half-image'
+                // <LazyImage
+                //   className='right-half-image'
+                //   src={url}
+                //   alt={`Right Half ${i}`}
+                // />
+                <LazyBackground
+                  type='book-right'
                   src={url}
-                  alt={`Right Half ${i}`}
+                  className='right-half-image'
+                  placeholder={base64_Default}
                 />
               ) : (
                 <img
