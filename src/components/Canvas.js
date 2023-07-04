@@ -158,16 +158,23 @@ const Canvas = (props) => {
   useEffect(() => {
     if (canvas) {
       const logToConsoleEveryMinute = async () => {
-        // 제이슨 저장 로직이 들어갈 곳
         tempPost.bookId = props.BookInfo.bookId;
         tempPost.pages[0].pageNo = props.idx;
-        tempPost.pages[0].objects = JSON.stringify(canvas);
+
+        let stringifiedCanvas = JSON.stringify(canvas);
+        tempPost.pages[0].objects = stringifiedCanvas;
+
         await tempCreate(tempPost);
 
         if (!objJson[props.idx]) objJson[props.idx] = [];
         if (!undoJsonHistory[props.idx]) undoJsonHistory[props.idx] = [];
 
-        objJson[props.idx].push(JSON.stringify(canvas));
+        if (
+          objJson[props.idx].length === 0 ||
+          objJson[props.idx][objJson[props.idx].length - 1] !== stringifiedCanvas
+        ) {
+          objJson[props.idx].push(stringifiedCanvas);
+        }
         console.log("objJson " + props.idx + " saved : \n", objJson);
       };
 
@@ -266,6 +273,7 @@ const Canvas = (props) => {
             preserveObjectStacking: true,
           }
     );
+    canvas.selection = true;
 
     let left, top;
     if (windowW >= 1920) {
@@ -451,7 +459,11 @@ const Canvas = (props) => {
 
   // 삭제
   const deleteObject = () => {
-    canvas.remove(canvas.getActiveObject());
+    const activeObjects = canvas.getActiveObjects();
+    canvas.discardActiveObject();
+    if (activeObjects.length) {
+      canvas.remove.apply(canvas, activeObjects);
+    }
   };
 
   // 파일 불러와서 이미지 첨부
@@ -607,8 +619,8 @@ const Canvas = (props) => {
     <CanvasFrame>
       {isLoading && <LoadingModal message='AI가 스티커를 만들고 있습니다!' />}
       <Nav>
-        <ItemButton onClick={() => undo(canvas)}>Undo</ItemButton>
-        <ItemButton onClick={() => redo(canvas)}>Redo</ItemButton>
+        <ItemButton onClick={() => undo(canvas)}>되돌리기</ItemButton>
+        <ItemButton onClick={() => redo(canvas)}>복구하기</ItemButton>
 
         {btnLabels.map((label) => (
           <Tab
