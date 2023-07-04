@@ -65,7 +65,7 @@ export function deleteTemp(deleteDTO) {
 }
 
 export function textToImage(textToImageDTO) {
-    return call('/chat-gpt/textToImage/v2', 'POST', textToImageDTO);
+    return call('/chat-gpt/textToImage/test', 'POST', textToImageDTO);
     // /chat-gpt/textToImage/test
     // /chat-gpt/textToImage/v2
 }
