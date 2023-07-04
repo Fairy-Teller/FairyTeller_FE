@@ -7,14 +7,18 @@ import { device } from "../assets/css/devices";
 import { fabric } from "fabric";
 import { Slider } from "@mui/material";
 import TabSelection from "./TabSelection";
+import LoadingModal from "./LoadingModal";
+import StickerCanvas from "./StickerCanvas";
+import { call } from "../service/ApiService";
 
-const [OBJECTS, USERIMAGE, TEXT, TEXTSTYLE, DRAWING, STICKER] = [
+const [OBJECTS, USERIMAGE, TEXT, TEXTSTYLE, DRAWING, STICKER, CUST_STICKER] = [
   "선택",
   "사용자이미지",
   "텍스트추가",
   "글씨스타일",
   "손그림",
   "스티커추가",
+  "커스텀 스티커",
 ];
 const [NOTO, NAMJ, KATU, TAEB] = ["NotoSansKR", "NanumMyeongjo", "Katuri", "TAEBAEK"];
 const fonts = [NOTO, NAMJ, KATU, TAEB];
@@ -133,9 +137,10 @@ const tempPost = {
 };
 
 const Canvas = (props) => {
-  const btnLabels = [TEXTSTYLE, TEXT, OBJECTS, USERIMAGE, STICKER, DRAWING];
+  const btnLabels = [TEXTSTYLE, TEXT, OBJECTS, USERIMAGE, STICKER, DRAWING, CUST_STICKER];
   const canvasRef = useRef(null);
   const [canvas, setCanvas] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(null); // 수정탭 출력 여부를 위한 state
   const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
 
@@ -310,8 +315,35 @@ const Canvas = (props) => {
     if (label === TEXT) {
       addTextBox();
     }
+    if (label === DRAWING) {
+      startDrawing(canvas);
+    }
+    if (label !== DRAWING) {
+      stopDrawing(canvas);
+    }
+  };
+  const handleActivateTapNull = () => {
+    setActiveTab(null);
   };
 
+  const makeSticker = async (customStickerTitle, dataURL) => {
+    console.log(dataURL);
+    console.log(customStickerTitle);
+    setActiveTab(null);
+    setIsLoading(true);
+    try {
+      const stickerData = {
+        prompt: customStickerTitle,
+        img: dataURL, // 추출한 base64 이미지를 stickerData의 img 속성에 할당합니다.
+      };
+      const response = await call("/images/imageToImage", "POST", stickerData);
+      selectCustomStickersShow(response);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   // 텍스트 박스
   const addTextBox = () => {
     let text = new fabric.Textbox("원하는 내용을 추가하세요", {
@@ -432,22 +464,33 @@ const Canvas = (props) => {
     );
   };
 
+  // 커스텀 스티커 투입
+  const selectCustomStickersShow = (item) => {
+    const base64 = "data:image/png;base64," + item;
+    console.log(base64);
+    fabric.Image.fromURL(base64, function (img) {
+      img.scale(0.25).set({
+        left: 150,
+        top: 150,
+        angle: -22.5,
+      });
+      canvas.add(img).setActiveObject(img);
+    });
+  };
+
   // 손그림
   const [isDrawing, setIsDrawing] = useState(false);
   const [brushColor, setBrushColor] = useState("#FFaaFF");
   const [brushWidth, setBrushWidth] = useState(1);
-  const [originLength, setOriginLength] = useState(0);
 
   const startDrawing = (c) => {
-    setIsDrawing(true);
-    setOriginLength(c._objects.length);
     c.isDrawingMode = true;
     c.freeDrawingBrush.color = brushColor;
+    c.freeDrawingBrush.width = brushWidth;
     c.requestRenderAll();
   };
 
   const stopDrawing = (c) => {
-    setIsDrawing(false);
     c.isDrawingMode = false;
     c.requestRenderAll();
   };
@@ -466,15 +509,26 @@ const Canvas = (props) => {
   };
 
   // undo/redo
-  let objHistory = [];
+  let objDrawing = [];
   let undoHistory = [];
 
   const undo = (c) => {
-    let objLength = c._objects.length;
-    if (objLength === 0) {
+    objDrawing = c.getObjects().filter((obj) => obj instanceof fabric.Path && obj.type === "path");
+
+    if (objDrawing.length === 0) {
       return null;
     }
-    let popData = c._objects.pop();
+
+    let popData;
+
+    for (let i = c._objects.length - 1; i >= 0; i--) {
+      if (c._objects[i] instanceof fabric.Path && c._objects[i].type === "path") {
+        popData = c._objects[i];
+        c._objects.splice(i, 1);
+        break;
+      }
+    }
+
     undoHistory.push(popData);
     c.renderAll();
   };
@@ -484,8 +538,8 @@ const Canvas = (props) => {
       return null;
     }
     let popData = undoHistory.pop();
-    objHistory.push(popData);
-    c._objects.push(popData);
+    objDrawing.push(popData);
+    c.add(popData);
     c.renderAll();
   };
 
@@ -519,6 +573,7 @@ const Canvas = (props) => {
 
   return (
     <CanvasFrame>
+      {isLoading && <LoadingModal message='AI가 스티커를 만들고 있습니다!' />}
       <Nav>
         {btnLabels.map((label) => (
           <Tab
@@ -529,7 +584,13 @@ const Canvas = (props) => {
           </Tab>
         ))}
       </Nav>
-
+      {activeTab === CUST_STICKER && (
+        <StickerCanvas
+          handleActivateTapNull={handleActivateTapNull}
+          makeSticker={makeSticker}
+        />
+      )}
+      <div visible={activeTab === CUST_STICKER}></div>
       <Tooltab visible={activeTab === TEXTSTYLE}>
         <Item>
           <ItemTitle>글씨체</ItemTitle>
@@ -596,34 +657,19 @@ const Canvas = (props) => {
           <ItemButton onClick={() => undo(canvas)}>뒤로가기</ItemButton>
           <ItemButton onClick={() => redo(canvas)}>복구하기</ItemButton>
           <ItemButton onClick={deleteObject}>삭제하기</ItemButton>
-          {isDrawing ? (
-            <ItemButton
-              onClick={() => {
-                stopDrawing(canvas);
-              }}>
-              손그림 모드 OFF
-            </ItemButton>
-          ) : (
-            <ItemButton
-              onClick={() => {
-                startDrawing(canvas);
-              }}>
-              손그림 모드 ON
-            </ItemButton>
-          )}
           <ColorPicker
             type='color'
             value={brushColor}
             onChange={handleBrushColor}
           />
           <Slider
-            min={5}
+            min={10}
             max={50}
             sx={{
               width: 180,
               height: 8,
               margin: "0.4rem 0 0 1.2rem",
-              color: "pink",
+              color: brushColor,
             }}
             value={brushWidth}
             onChange={handleBrushWidth}
@@ -668,6 +714,9 @@ const Canvas = (props) => {
         id='canvas'
         key={props.canvasid + "c"}
         ref={canvasRef}
+        onMouseDown={() => setIsDrawing(true)}
+        onMouseUp={() => setIsDrawing(false)}
+        onMouseLeave={() => setIsDrawing(false)}
       />
     </CanvasFrame>
   );

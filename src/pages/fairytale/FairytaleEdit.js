@@ -60,7 +60,7 @@ const AnimatedTempAlert = styled.div`
     height: 50px;
     top: 4.8rem;
     right: 2.4rem;
-    font-size: 1.6rem;
+    font-size: 20px;
     text-align: center;
     background: #fe5c6b;
     box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.25);
@@ -147,22 +147,6 @@ const FairytaleEdit = () => {
         }
     };
 
-    const usePreventGoBack = () => {
-        const preventGoBack = () => {
-            history.push(null, '', history.location.href);
-            alert('현재 화면에서 이탈 시 생성된 데이터가 모두 사라집니다.');
-        };
-
-        useEffect(() => {
-            history.push(null, '', history.location.href);
-            window.addEventListener('popstate', preventGoBack);
-
-            return () => {
-                window.removeEventListener('popstate', preventGoBack);
-            };
-        }, []);
-    };
-
     const usePreventRefresh = () => {
         const preventClose = (e) => {
             e.preventDefault();
@@ -178,7 +162,6 @@ const FairytaleEdit = () => {
         });
     };
 
-    usePreventGoBack();
     usePreventRefresh();
 
     const saveClick = () => {
