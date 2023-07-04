@@ -205,7 +205,6 @@
   animation: gradientAnimation 5s linear infinite;
 }
 
-
 @keyframes gradientAnimation {
   0% {
     background-position: 0% 50%;
