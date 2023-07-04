@@ -87,7 +87,6 @@ const TitleModal = (bookid) => {
         bookData.bookId = bookid.props;
 
         if (canvasExport.length !== 0) {
-            console.log("저장된거 DTO처리 하기")
             canvasExport.forEach((canvas, index) => {
                 if (index <= 2) {
                     if (bookData.pages[index]) {
@@ -108,7 +107,6 @@ const TitleModal = (bookid) => {
         try {
             await setIsLoading(true);
             await saveState('save');
-            await console.log("bookData>>>>>>",bookData)
             await createFinalDTO(bookData);
         } catch (error) {
             console.error(error);

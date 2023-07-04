@@ -52,12 +52,10 @@ const HighlightedText = (props) => {
 
     useEffect(() => {
         const { bookstorys } = props;
-        console.log('bookstorys', bookstorys);
 
         const sentences = bookstorys.split(/(?<=[.?!])\s+/);
         setSentences(sentences);
     }, [props.bookstorys]);
-    console.log('sentences', sentences);
 
     useEffect(() => {
         textRefs.current = new Array(sentences.length).fill(null);

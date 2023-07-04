@@ -193,7 +193,6 @@ const Canvas = (props) => {
                 ) {
                     objJson[props.idx].push(stringifiedCanvas);
                 }
-                console.log('objJson ' + props.idx + ' saved ' + new Date().getTime() + ' : \n', objJson);
             };
 
             // 1분마다 함수를 실행하기 위한 타이머를 설정합니다.
@@ -222,7 +221,6 @@ const Canvas = (props) => {
     // 이미지 저장하기
     useEffect(() => {
         if (saveState === 'save') {
-            console.log('save눌렀습니다.');
             saveAsImage('jpeg');
         }
     }, [saveState]);
@@ -238,16 +236,12 @@ const Canvas = (props) => {
             });
 
             const link = document.createElement('a');
-            console.log('이건 링크', link);
-
-            console.log('이건 링크link.href', dataURL);
             link.href = dataURL;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
 
             setCanvasExport((prev) => [...prev, { id: props.idx, img: link.href }]);
-            console.log('save됐다.');
         }
     };
 
@@ -397,8 +391,6 @@ const Canvas = (props) => {
     };
 
     const makeSticker = async (customStickerTitle, dataURL) => {
-        console.log(dataURL);
-        console.log(customStickerTitle);
         setActiveTab(null);
         setIsLoading(true);
         try {
@@ -542,7 +534,6 @@ const Canvas = (props) => {
     // 커스텀 스티커 투입
     const selectCustomStickersShow = (item) => {
         const base64 = 'data:image/png;base64,' + item;
-        console.log(base64);
         fabric.Image.fromURL(base64, function (img) {
             img.scale(0.25).set({
                 left: 150,

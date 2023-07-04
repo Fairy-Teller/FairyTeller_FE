@@ -101,9 +101,11 @@ const FairytaleExport = () => {
     return (
         <ExportContainer>
             <Header />
+            <div>
+                <FairytaleShow props={BookId}></FairytaleShow>
+            </div>
             <ContentCover>
                 <InnerCover>
-                    <FairytaleShow props={BookId}></FairytaleShow>
                     <div>
                         <ButtonFrame>
                             <Button onClick={gotoBoard}>게시판 전시하기</Button>
