@@ -315,6 +315,9 @@ const Canvas = (props) => {
     if (label === TEXT) {
       addTextBox();
     }
+    if (label === DRAWING) {
+      startDrawing(canvas);
+    }
     if (label !== DRAWING) {
       stopDrawing(canvas);
     }
@@ -479,11 +482,8 @@ const Canvas = (props) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [brushColor, setBrushColor] = useState("#FFaaFF");
   const [brushWidth, setBrushWidth] = useState(1);
-  const [originLength, setOriginLength] = useState(0);
 
   const startDrawing = (c) => {
-    setIsDrawing(true);
-    setOriginLength(c._objects.length);
     c.isDrawingMode = true;
     c.freeDrawingBrush.color = brushColor;
     c.freeDrawingBrush.width = brushWidth;
@@ -491,7 +491,6 @@ const Canvas = (props) => {
   };
 
   const stopDrawing = (c) => {
-    setIsDrawing(false);
     c.isDrawingMode = false;
     c.requestRenderAll();
   };
@@ -651,7 +650,7 @@ const Canvas = (props) => {
       <Tooltab visible={activeTab === DRAWING}>
         <Item>
           <ItemTitle>직접 손그림을 그리거나 손글씨를 쓸 수 있어요</ItemTitle>
-          {isDrawing ? (
+          {/* {isDrawing ? (
             <ItemButton
               onClick={() => {
                 stopDrawing(canvas);
@@ -665,7 +664,7 @@ const Canvas = (props) => {
               }}>
               손그림 모드 ON
             </ItemButton>
-          )}
+          )} */}
           <ItemButton onClick={() => undo(canvas)}>뒤로가기</ItemButton>
           <ItemButton onClick={() => redo(canvas)}>복구하기</ItemButton>
           <ItemButton onClick={deleteObject}>삭제하기</ItemButton>
@@ -726,6 +725,9 @@ const Canvas = (props) => {
         id='canvas'
         key={props.canvasid + "c"}
         ref={canvasRef}
+        onMouseDown={() => setIsDrawing(true)}
+        onMouseUp={() => setIsDrawing(false)}
+        onMouseLeave={() => setIsDrawing(false)}
       />
     </CanvasFrame>
   );
