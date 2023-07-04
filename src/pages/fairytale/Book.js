@@ -60,16 +60,16 @@ function Book({ bookInfo }) {
     width = 768 / 2;
     height = 432;
     objectPosition = 'center';
-  } else if (windowDimensions.width >= 600) {
+  } else if (windowDimensions.width >= 592) {
     // iPad Mini, portrait
-    width = 600 / 2;
-    height = 338;
+    width = 592 / 2;
+    height = 333;
     objectPosition = 'center';
   } else {
     // Mobile
     width = windowDimensions.width / 2;
     height = (windowDimensions.width / 2) * (9 / 16);
-    objectPosition = windowDimensions.width < 1000 ? 'center' : 'left right';
+    objectPosition = 'center';
   }
 
   return (
