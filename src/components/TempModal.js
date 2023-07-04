@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { NewestTemp, getBookById, deleteTemp } from '../service/FairytaleService';
+import { NewestTemp, getBookByIdTemp, deleteTemp } from '../service/FairytaleService';
 import { useRecoilState } from 'recoil';
 import { BookId } from '../recoil/FairytaleState';
 
@@ -82,7 +82,7 @@ const TempModal = () => {
     const gotoEdit = async (bookid) => {
         console.log(bookid);
         setBookId(bookid);
-        const tempInfo = await getBookById({ bookId: bookid });
+        const tempInfo = await getBookByIdTemp({ bookId: bookid });
         const theme = tempInfo.theme;
         // const originalImageUrl =  tempInfo.pages.some((item) => item.originalImageUrl === null);
         // console.log('originalImageUrl', originalImageUrl);

@@ -37,9 +37,17 @@ export function updateUser(userDTO) {
 }
 
 export function fetchUserData(setIsSocialLoginUser) {
-    return call('/mypage/me', 'GET', '').then((response) => {
-        setIsSocialLoginUser(response.data);
-    });
+    return call('/mypage/me', 'GET', '')
+        .then((response) => {
+            setIsSocialLoginUser(response.data);
+        })
+        .catch((error) => {
+            if (error.response.status === 403) {
+                window.location.href = '/forbidden';
+            }
+            console.error(error);
+            throw error;
+        });
 }
 
 export async function currentUser() {

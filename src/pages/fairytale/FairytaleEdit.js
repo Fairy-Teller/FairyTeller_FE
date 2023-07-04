@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { BookId, TitleSave } from '../../recoil/FairytaleState';
-import { getBookById } from '../../service/FairytaleService';
-import { history } from '../../history/history';
+import { getBookByIdTemp } from '../../service/FairytaleService';
 import styled, { keyframes } from 'styled-components';
 import Canvas from '../../components/Canvas';
 import TitleModal from '../../components/TitleModal';
@@ -135,7 +134,7 @@ const FairytaleEdit = () => {
 
     const getNewest = async () => {
         try {
-            const data = await getBookById({ bookId: bookIdshow });
+            const data = await getBookByIdTemp({ bookId: bookIdshow });
             setShowImage(data);
             if (data.pages.length > 1) {
                 for (let i = 2; i <= data.pages.length; i++) {
