@@ -19,7 +19,7 @@
 }
 
 .popular-board:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
 }
 
 @keyframes glow {
