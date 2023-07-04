@@ -117,6 +117,22 @@ const ItemButton = styled.button`
     background-color: white;
   }
 `;
+const FloatButton = styled(ItemButton)`
+  margin: 0;
+  position: fixed;
+  width: 8rem;
+  height: 4rem;
+  top: 3.2rem;
+  right: 30.4rem;
+  text-align: center;
+  border-radius: 1.2rem;
+  background-color: white;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+  z-index: 98;
+  &:last-of-type {
+    right: 20.8rem;
+  }
+`;
 const ColorPicker = styled.input`
   width: 100%;
   max-width: 100%;
@@ -175,7 +191,7 @@ const Canvas = (props) => {
         ) {
           objJson[props.idx].push(stringifiedCanvas);
         }
-        console.log("objJson " + props.idx + " saved : \n", objJson);
+        console.log("objJson " + props.idx + " saved " + new Date().getTime() + " : \n", objJson);
       };
 
       // 1분마다 함수를 실행하기 위한 타이머를 설정합니다.
@@ -231,6 +247,8 @@ const Canvas = (props) => {
 
   // 캔버스 undo/redo
   const undo = async (c) => {
+    canvas.renderOnAddRemove = false;
+
     if (!objJson[props.idx] || objJson[props.idx].length === 0) {
       return;
     }
@@ -239,10 +257,14 @@ const Canvas = (props) => {
     undoJsonHistory[props.idx].push(popData);
 
     await c.loadFromJSON(JSON.parse(popData));
+    canvas.renderOnAddRemove = true;
+
     c.renderAll();
   };
 
   const redo = async (c) => {
+    canvas.renderOnAddRemove = false;
+
     if (!undoJsonHistory[props.idx] || undoJsonHistory[props.idx].length === 0) {
       return;
     }
@@ -251,6 +273,8 @@ const Canvas = (props) => {
     objJson[props.idx].push(popData);
 
     await c.loadFromJSON(JSON.parse(popData));
+    canvas.renderOnAddRemove = true;
+
     c.renderAll();
   };
 
@@ -464,6 +488,7 @@ const Canvas = (props) => {
     if (activeObjects.length) {
       canvas.remove.apply(canvas, activeObjects);
     }
+    canvas.renderAll();
   };
 
   // 파일 불러와서 이미지 첨부
@@ -618,10 +643,9 @@ const Canvas = (props) => {
   return (
     <CanvasFrame>
       {isLoading && <LoadingModal message='AI가 스티커를 만들고 있습니다!' />}
+      <FloatButton onClick={() => undo(canvas)}>되돌리기</FloatButton>
+      <FloatButton onClick={() => redo(canvas)}>복구하기</FloatButton>
       <Nav>
-        <ItemButton onClick={() => undo(canvas)}>되돌리기</ItemButton>
-        <ItemButton onClick={() => redo(canvas)}>복구하기</ItemButton>
-
         {btnLabels.map((label) => (
           <Tab
             key={label}
