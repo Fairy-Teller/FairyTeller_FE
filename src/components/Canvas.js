@@ -510,32 +510,36 @@ const Canvas = (props) => {
 
   // undo/redo
   let objDrawing = [];
-  let objHistory = [];
   let undoHistory = [];
 
   const undo = (c) => {
-    objDrawing = c._objects.filter((obj) => obj instanceof fabric.Path);
-    console.log(objDrawing);
+    objDrawing = c.getObjects().filter((obj) => obj instanceof fabric.Path && obj.type === "path");
 
     if (objDrawing.length === 0) {
       return null;
     }
-    let popData = c._objects.pop();
+
+    let popData;
+
+    for (let i = c._objects.length - 1; i >= 0; i--) {
+      if (c._objects[i] instanceof fabric.Path && c._objects[i].type === "path") {
+        popData = c._objects[i];
+        c._objects.splice(i, 1);
+        break;
+      }
+    }
+
     undoHistory.push(popData);
     c.renderAll();
   };
 
   const redo = (c) => {
-    objDrawing = c._objects.filter((obj) => obj instanceof fabric.Path);
-    console.log(objDrawing);
-
     if (undoHistory.length === 0) {
       return null;
     }
     let popData = undoHistory.pop();
-    objHistory.push(popData);
     objDrawing.push(popData);
-    c._objects.push(popData);
+    c.add(popData);
     c.renderAll();
   };
 
@@ -580,7 +584,7 @@ const Canvas = (props) => {
           </Tab>
         ))}
       </Nav>
-      {activeTab == CUST_STICKER && (
+      {activeTab === CUST_STICKER && (
         <StickerCanvas
           handleActivateTapNull={handleActivateTapNull}
           makeSticker={makeSticker}
@@ -650,21 +654,6 @@ const Canvas = (props) => {
       <Tooltab visible={activeTab === DRAWING}>
         <Item>
           <ItemTitle>직접 손그림을 그리거나 손글씨를 쓸 수 있어요</ItemTitle>
-          {/* {isDrawing ? (
-            <ItemButton
-              onClick={() => {
-                stopDrawing(canvas);
-              }}>
-              손그림 모드 OFF
-            </ItemButton>
-          ) : (
-            <ItemButton
-              onClick={() => {
-                startDrawing(canvas);
-              }}>
-              손그림 모드 ON
-            </ItemButton>
-          )} */}
           <ItemButton onClick={() => undo(canvas)}>뒤로가기</ItemButton>
           <ItemButton onClick={() => redo(canvas)}>복구하기</ItemButton>
           <ItemButton onClick={deleteObject}>삭제하기</ItemButton>
@@ -680,7 +669,7 @@ const Canvas = (props) => {
               width: 180,
               height: 8,
               margin: "0.4rem 0 0 1.2rem",
-              color: "pink",
+              color: brushColor,
             }}
             value={brushWidth}
             onChange={handleBrushWidth}
