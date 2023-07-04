@@ -1,0 +1,55 @@
+@charset "utf-8";
+
+$txt1: #3f545b;
+$txt2: #90adb7;
+
+$bgc1: #a2b5bc;
+$bgc2: #c1debf;
+$bgc3: #fee080;
+
+$thc1: #fe5c6b;
+$thc2: #ff9768;
+$thc3: #87ddde;
+
+//~~~~~~~~~~~~~  선명
+$color1: #052940;
+$color1: #113e59;
+$color1: #326173;
+$color1: #f2c166;
+$color1: #d9a362;
+
+//~~~~~~~~~~~~~  연하게
+$color1: #052940;
+$color1: #366273;
+$color1: #64888c;
+$color1: #f2c166;
+$color1: #d9a362;
+
+@mixin font-noto($weight) {
+  font-family: "NotoSansKR";
+  font-style: normal;
+  font-weight: $weight;
+}
+
+@mixin font-namj($weight) {
+  font-family: "NanumMyeongjo";
+  font-style: normal;
+  font-weight: $weight;
+}
+
+@mixin font-taeb($weight) {
+  font-family: "TAEBAEK";
+  font-style: normal;
+  font-weight: $weight;
+}
+
+@mixin font-katu($weight) {
+  font-family: "Katuri";
+  font-style: normal;
+  font-weight: $weight;
+}
+
+// $mobile: 390px,
+$tablet: 1024px;
+// $tablet: 768px;
+// $desktop: 1024px,

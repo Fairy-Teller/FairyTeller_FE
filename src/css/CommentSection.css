@@ -1,0 +1,147 @@
+.comment {
+    margin-bottom: 10px;
+  }
+
+  .buttonContainer {
+    display: inline-block;
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+  
+  .smallButton {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    color: #999999;
+  }
+  
+
+  .commentSection {
+    width: 100%;
+  }
+
+  .commentForm {
+    display: flex;
+    align-items: center; /* 세로 중앙 정렬을 위해 추가 */
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  .commentInput {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .commentSubmitButton {
+    padding: 8px 10px;
+    height: 32px;
+    border: none;
+    background-color: #FCDEDE;
+    color: #333;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+    vertical-align: middle;
+    margin-top: -8px; 
+  }
+
+  .commentSubmitButton:hover {
+    background-color: #FFC0C0;
+  }
+
+  .buttonContainer {
+    display: flex;
+    align-items: center; /* 세로 중앙 정렬을 위해 추가 */
+    margin-left: 10px;
+  }
+
+  .saveButton {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    width: 40px;
+    background-color: #7ea6d5;
+  }
+
+  .cancelButton {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    width: 40px;
+    background-color: #da7373;
+  }
+
+  .commentList {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 10px;
+  }
+  
+  .commentItem {
+    position: relative;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 0px 10px #eee;
+  }
+  .commentItem strong {
+    display: block;
+    margin-bottom: 5px; /* 텍스트를 아래로 내리기 위한 여백 지정 */
+  }
+  
+
+  .commentContent {
+    margin-left: 10px;
+  }
+  
+  .commentActionButtons {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .commentActionButton {
+    padding: 5px 10px;
+    border: none;
+    background-color: #FCDEDE;
+    color: #333;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin-right: 5px;
+  }
+  
+  .commentActionButton:hover {
+    background-color: #FFC0C0;
+  }
+  
+  .editButton {
+    color: #999999; /* 연한 글자색 지정 */
+    /* 기타 스타일 유지 */
+  }
+  
+  .deleteButton {
+    color: #999999; /* 연한 글자색 지정 */
+    /* 기타 스타일 유지 */
+  }
+
+  strong {
+    font-size: 17px; /* 원하는 크기로 설정하세요 */
+  }
+  @media (max-width: 600px) {
+    .commentItem {
+      /* 반응형 스타일을 적용할 내용 */
+    }
+  }
+
+  .commentItem {
+    /* 다른 스타일들 */
+    overflow: hidden; /* 넘치는 부분 감춤 */
+    text-overflow: ellipsis; /* 넘치는 부분에 대한 표시 (...) */
+    word-break: break-word;
+    word-wrap: break-word;
+  }
+

@@ -1,0 +1,31 @@
+.flip-paper-page {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.half-image-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.left-half-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--objectPosition);
+}
+.right-half-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--objectPosition);
+}
+.left-half-image {
+  object-position: left;
+}
+
+.right-half-image {
+  object-position: right;
+}

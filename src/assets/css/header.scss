@@ -1,0 +1,54 @@
+.header-wrap {
+  width: 100%;
+  max-width: 100%;
+  background-color: #052940;
+}
+
+.header {
+  width: 100%;
+  max-width: 1600px;
+  height: 2.4rem;
+  padding: 0.4rem 0;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.24s ease-in-out;
+  h1 {
+    padding: 0;
+    margin: 0;
+    font : {
+      style: normal;
+      size: 2.2rem;
+      weight: 700;
+    }
+    text-align: left;
+    color: #000000;
+    transition: all 0.24s ease-in-out;
+  }
+
+  &:hover {
+    height: 4.4rem;
+    h1 {
+      font-size: 2.4rem;
+      line-height: 60px;
+    }
+  }
+}
+
+.logo {
+  display: inline-block;
+  a {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.header #logo {
+  height: 100%;
+}
+.header img {
+  height: 100%;
+}

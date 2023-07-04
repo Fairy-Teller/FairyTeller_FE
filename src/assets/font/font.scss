@@ -1,0 +1,60 @@
+/* 
+  src: 사용할 폰트의 위치 및 형식 
+    Safari, Android, iOS => ttf
+    Modern Browsers => woff
+  */
+
+@font-face {
+  font-family: "NanumMyeongjo";
+  font-style: normal;
+  font-weight: 700;
+  src: url("./NanumMyeongjo/NanumMyeongjoBold.woff") format("woff"),
+    url("./NanumMyeongjo/NanumMyeongjoBold.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "NanumMyeongjo";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./NanumMyeongjo/NanumMyeongjo.woff") format("woff"),
+    url("./NanumMyeongjo/NanumMyeongjo.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Katuri";
+  font-style: normal;
+  font-weight: normal;
+  src: url("./Katuri/KATURI.woff") format("woff"), url("./Katuri/KATURI.TTF") format("ttf");
+}
+
+@font-face {
+  font-family: "NotoSansKR";
+  font-style: normal;
+  font-weight: 700;
+  src: url("./Noto_Sans_KR/NotoSansKR-Bold.woff") format("woff"),
+    url("./Noto_Sans_KR/NotoSansKR-Bold.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "NotoSansKR";
+  font-style: normal;
+  font-weight: 300;
+  src: url("./Noto_Sans_KR/NotoSansKR-Light.woff") format("woff"),
+    url("./Noto_Sans_KR/NotoSansKR-Light.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "NotoSansKR";
+  font-style: normal;
+  font-weight: 100;
+  src: url("./Noto_Sans_KR/NotoSansKR-Thin.woff") format("woff"),
+    url("./Noto_Sans_KR/NotoSansKR-Thin.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "TAEBAEK";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./TAEBAEK_milkyway/TAEBAEK_milkyway.woff") format("woff"),
+    url("./TAEBAEK_milkyway/TAEBAEK_milkyway.ttf") format("ttf");
+}
