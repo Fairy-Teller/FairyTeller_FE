@@ -6,26 +6,29 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 1px solid #eee;
+    border: 1px solid #ffffff;
     border-radius: 5px;
     padding: 15px;
     margin: 10px;
     flex: 1;
-    background: #f9f9f9;
-    background: linear-gradient(45deg, #f9f9f9 10%, #edebeb 30%, #f9f9f9 50%);
-    background-size: 800px 104px;
-    position: relative;
-    animation: shimmer 1.8s infinite linear;
+    background: linear-gradient(135deg, #ffffff, #f5f5f5, #ffffff);
+    background-size: 200% 200%;
+    box-shadow: 0px 2px 3px #e4e1e1;
+    animation: glow 3s ease-in-out infinite;
+    transition: transform 0.3s ease-in-out; 
 }
 
-@keyframes shimmer {
+@keyframes glow {
     0% {
-      background-position: -468px 0;
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
     }
     100% {
-      background-position: 468px 0;
+      background-position: 0% 50%;
     }
-  }
+}
 
 .board-image {
     width: 100%;
