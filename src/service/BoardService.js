@@ -6,10 +6,11 @@ export function topAuthorsData() {
             return response;
         })
         .catch((error) => {
-            if (error.request.status === 403) {
-                window.location.href = '/forbidden';
+            if (error.response.status === 403) {
+                window.location.href = '/forbidden'; 
             }
             console.error(error);
+            throw error; 
         });
 }
 

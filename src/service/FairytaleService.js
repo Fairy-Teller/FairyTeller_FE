@@ -6,7 +6,11 @@ export function FairytaleNew() {
             return response;
         })
         .catch((error) => {
+            if (error.response.status === 403) {
+                window.location.href = '/forbidden';
+            }
             console.error(error);
+            throw error;
         });
 }
 
@@ -28,10 +32,11 @@ export function NewestTemp() {
             return response;
         })
         .catch((error) => {
-            if (error.request.status === 403) {
+            if (error.response.status === 403) {
                 window.location.href = '/forbidden';
             }
             console.error(error);
+            throw error;
         });
 }
 
@@ -41,10 +46,11 @@ export function getBookByIdTemp(getbookDTO) {
             return response;
         })
         .catch((error) => {
-            if (error.request.status === 403) {
+            if (error.response.status === 403) {
                 window.location.href = '/forbidden';
             }
             console.error(error);
+            throw error;
         });
 }
 export function getBookById(getbookDTO) {
@@ -76,10 +82,11 @@ export function boardSave(boardSaveDTO) {
             return response;
         })
         .catch((error) => {
-            if (error.request.status === 403) {
+            if (error.response.status === 403) {
                 window.location.href = '/forbidden';
             }
             console.error(error);
+            throw error;
         });
 }
 
@@ -93,10 +100,11 @@ export function createStoryBook(bookDTO) {
             return response;
         })
         .catch((error) => {
-            if (error.request.status === 403) {
+            if (error.response.status === 403) {
                 window.location.href = '/forbidden';
             }
             console.error(error);
+            throw error;
         });
 }
 
@@ -106,10 +114,11 @@ export function keyword(keywordDTO) {
             return response;
         })
         .catch((error) => {
-            if (error.request.status === 403) {
-                window.location.href = '/forbidden';
+            if (error.response.status === 403) {
+                window.location.href = '/forbidden'; // 403 오류 발생 시 예외를 throw
             }
             console.error(error);
+            throw error; // 다른 오류의 경우 예외를 다시 throw
         });
 }
 
