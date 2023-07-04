@@ -28,12 +28,24 @@ export function NewestTemp() {
             return response;
         })
         .catch((error) => {
+            if (error.request.status === 403) {
+                window.location.href = '/forbidden';
+            }
             console.error(error);
         });
 }
 
 export function getBookByIdTemp(getbookDTO) {
-    return call('/book/getBookById/temp', 'POST', getbookDTO);
+    return call('/book/getBookById/temp', 'POST', getbookDTO)
+        .then((response) => {
+            return response;
+        })
+        .catch((error) => {
+            if (error.request.status === 403) {
+                window.location.href = '/forbidden';
+            }
+            console.error(error);
+        });
 }
 export function getBookById(getbookDTO) {
     return call('/book/getBookById', 'POST', getbookDTO);
@@ -59,7 +71,16 @@ export function createFinalDTO(createFinalDTO) {
 }
 
 export function boardSave(boardSaveDTO) {
-    return call('/board/save', 'POST', boardSaveDTO);
+    return call('/board/save', 'POST', boardSaveDTO)
+        .then((response) => {
+            return response;
+        })
+        .catch((error) => {
+            if (error.request.status === 403) {
+                window.location.href = '/forbidden';
+            }
+            console.error(error);
+        });
 }
 
 export function imageToImage(imageToImageDTO) {
@@ -67,11 +88,29 @@ export function imageToImage(imageToImageDTO) {
 }
 
 export function createStoryBook(bookDTO) {
-    return call('/book/create/story', 'POST', bookDTO);
+    return call('/book/create/story', 'POST', bookDTO)
+        .then((response) => {
+            return response;
+        })
+        .catch((error) => {
+            if (error.request.status === 403) {
+                window.location.href = '/forbidden';
+            }
+            console.error(error);
+        });
 }
 
 export function keyword(keywordDTO) {
-    return call('/keyword', 'GET', keywordDTO);
+    return call('/keyword', 'GET', keywordDTO)
+        .then((response) => {
+            return response;
+        })
+        .catch((error) => {
+            if (error.request.status === 403) {
+                window.location.href = '/forbidden';
+            }
+            console.error(error);
+        });
 }
 
 export function recreate(userDTO) {

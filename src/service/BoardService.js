@@ -1,7 +1,16 @@
 import { call } from './ApiService';
 
 export function topAuthorsData() {
-    return call('/board/topAuthors', 'GET', null);
+    return call('/board/topAuthors', 'GET', null)
+        .then((response) => {
+            return response;
+        })
+        .catch((error) => {
+            if (error.request.status === 403) {
+                window.location.href = '/forbidden';
+            }
+            console.error(error);
+        });
 }
 
 export function pageShowData(currentPage) {
