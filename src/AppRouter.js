@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import App from './App';
 //home
 import Home from './pages/Home';
@@ -17,8 +17,6 @@ import MyBookDetail from './pages/mypage/MyBookDetail';
 import Board from './pages/community/Board';
 import BoardDetail from './pages/community/BoardDetail';
 
-
-
 //fairytale
 import Artstyle from './pages/fairytale/Artstyle';
 import FairytaleEdit from './pages/fairytale/FairytaleEdit';
@@ -28,9 +26,13 @@ import Keyword from './pages/fairytale/Keyword';
 import StoryGenerated from './pages/fairytale/StoryGenerated';
 import ImageGenerated from './pages/fairytale/ImageGenerated';
 import StoryUser from './pages/fairytale/StoryUser';
-//exam
 
+//error
+import Forbidden from './pages/error/Forbidden';
+import NotFound from './pages/error/NotFound';
+//exam
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+const token = localStorage.getItem('ACCESS_TOKEN');
 
 function AppRouter() {
     return (
@@ -55,6 +57,8 @@ function AppRouter() {
                 <Route path="story-generated" element={<StoryGenerated />} />
                 <Route path="image-generated" element={<ImageGenerated />} />
                 <Route path="story-user" element={<StoryUser />} />
+                <Route path="*" element={<NotFound />} />
+                <Route path="forbidden" element={<Forbidden />} />
             </Routes>
         </BrowserRouter>
     );
