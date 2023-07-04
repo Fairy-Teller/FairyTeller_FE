@@ -222,7 +222,7 @@
 }
 
 .pagination-button:hover {
-  transform: scale(1.05);
+  transform: scale(1.01);
   box-shadow: 0 4px 5px 0 rgba(200, 17, 95, .4); 
 }
 
