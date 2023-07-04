@@ -36,6 +36,7 @@ const StoryGenerated = () => {
     const [paraCount, setParaCount] = useState(3);
     const navigate = useNavigate();
     const setBookId = useSetRecoilState(BookId);
+    const token = localStorage.getItem('ACCESS_TOKEN');
 
     useEffect(() => {
         setSavedStory([{ paragraph: '' }, { paragraph: '' }, { paragraph: '' }]);
@@ -130,7 +131,7 @@ const StoryGenerated = () => {
         }
     });
 
-    return (
+    return token ? (
         <div className="story story-user">
             {isLoading && <LoadingModal message="AI가 그림 그릴 준비를 합니다!" />}
             <Container className={'an1'}>
@@ -170,6 +171,8 @@ const StoryGenerated = () => {
                 </ContentCover>
             </Container>
         </div>
+    ) : (
+        (window.location.href = '/forbidden')
     );
 };
 

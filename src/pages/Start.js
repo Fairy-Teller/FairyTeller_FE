@@ -85,10 +85,17 @@ const Start = () => {
         };
     }, []);
     const TempUPdate = () => {
-        NewestTemp().then((response) => {
-            setTempState(response);
-            return response;
-        });
+        NewestTemp()
+            .then((response) => {
+                setTempState(response);
+            })
+            .catch((error) => {
+                if (error.response.status === 403) {
+                    window.location.href = '/forbidden';
+                }
+                console.error(error);
+                throw error;
+            });
     };
     const closeAction = () => {
         setIsModalOpen(false);

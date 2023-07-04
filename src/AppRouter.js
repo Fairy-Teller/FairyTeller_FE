@@ -32,7 +32,6 @@ import Forbidden from './pages/error/Forbidden';
 import NotFound from './pages/error/NotFound';
 //exam
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-const token = localStorage.getItem('ACCESS_TOKEN');
 
 function AppRouter() {
     return (

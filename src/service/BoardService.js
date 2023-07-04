@@ -7,10 +7,10 @@ export function topAuthorsData() {
         })
         .catch((error) => {
             if (error.response.status === 403) {
-                window.location.href = '/forbidden'; 
+                window.location.href = '/forbidden';
             }
             console.error(error);
-            throw error; 
+            throw error;
         });
 }
 
@@ -20,7 +20,13 @@ export function pageShowData(currentPage) {
 }
 
 export function BoardDetailShow(boardIdDTO) {
-    return call(`/board/${boardIdDTO}`, 'GET', null);
+    return call(`/board/${boardIdDTO}`, 'GET', null).catch((error) => {
+        if (error.response.status === 403) {
+            window.location.href = '/forbidden';
+        }
+        console.error(error);
+        throw error;
+    });
 }
 
 export function BoardCommentSubmit(boardId, commantDTO) {
