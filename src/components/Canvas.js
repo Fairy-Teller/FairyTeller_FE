@@ -9,7 +9,7 @@ import { Slider } from "@mui/material";
 import TabSelection from "./TabSelection";
 import LoadingModal from "./LoadingModal";
 import StickerCanvas from "./StickerCanvas";
-import { call } from '../service/ApiService';
+import { call } from "../service/ApiService";
 
 const [OBJECTS, USERIMAGE, TEXT, TEXTSTYLE, DRAWING, STICKER, CUST_STICKER] = [
   "선택",
@@ -18,7 +18,7 @@ const [OBJECTS, USERIMAGE, TEXT, TEXTSTYLE, DRAWING, STICKER, CUST_STICKER] = [
   "글씨스타일",
   "손그림",
   "스티커추가",
-  "커스텀 스티커"
+  "커스텀 스티커",
 ];
 const [NOTO, NAMJ, KATU, TAEB] = ["NotoSansKR", "NanumMyeongjo", "Katuri", "TAEBAEK"];
 const fonts = [NOTO, NAMJ, KATU, TAEB];
@@ -315,14 +315,17 @@ const Canvas = (props) => {
     if (label === TEXT) {
       addTextBox();
     }
+    if (label !== DRAWING) {
+      stopDrawing(canvas);
+    }
   };
-  const handleActivateTapNull =() =>{
+  const handleActivateTapNull = () => {
     setActiveTab(null);
   };
 
   const makeSticker = async (customStickerTitle, dataURL) => {
     console.log(dataURL);
-    console.log(customStickerTitle)
+    console.log(customStickerTitle);
     setActiveTab(null);
     setIsLoading(true);
     try {
@@ -330,13 +333,11 @@ const Canvas = (props) => {
         prompt: customStickerTitle,
         img: dataURL, // 추출한 base64 이미지를 stickerData의 img 속성에 할당합니다.
       };
-      const response = await call('/images/imageToImage', 'POST', stickerData);
+      const response = await call("/images/imageToImage", "POST", stickerData);
       selectCustomStickersShow(response);
-      
     } catch (error) {
-        console.error(error);
-    }
-    finally{
+      console.error(error);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -460,22 +461,18 @@ const Canvas = (props) => {
     );
   };
 
-
   // 커스텀 스티커 투입
   const selectCustomStickersShow = (item) => {
     const base64 = "data:image/png;base64," + item;
     console.log(base64);
-    fabric.Image.fromURL(
-      base64,
-      function (img) {
-        img.scale(0.25).set({
-          left: 150,
-          top: 150,
-          angle: -22.5,
-        });
-        canvas.add(img).setActiveObject(img);
-      }
-    );
+    fabric.Image.fromURL(base64, function (img) {
+      img.scale(0.25).set({
+        left: 150,
+        top: 150,
+        angle: -22.5,
+      });
+      canvas.add(img).setActiveObject(img);
+    });
   };
 
   // 손그림
@@ -489,6 +486,7 @@ const Canvas = (props) => {
     setOriginLength(c._objects.length);
     c.isDrawingMode = true;
     c.freeDrawingBrush.color = brushColor;
+    c.freeDrawingBrush.width = brushWidth;
     c.requestRenderAll();
   };
 
@@ -512,12 +510,15 @@ const Canvas = (props) => {
   };
 
   // undo/redo
+  let objDrawing = [];
   let objHistory = [];
   let undoHistory = [];
 
   const undo = (c) => {
-    let objLength = c._objects.length;
-    if (objLength === 0) {
+    objDrawing = c._objects.filter((obj) => obj instanceof fabric.Path);
+    console.log(objDrawing);
+
+    if (objDrawing.length === 0) {
       return null;
     }
     let popData = c._objects.pop();
@@ -526,11 +527,15 @@ const Canvas = (props) => {
   };
 
   const redo = (c) => {
+    objDrawing = c._objects.filter((obj) => obj instanceof fabric.Path);
+    console.log(objDrawing);
+
     if (undoHistory.length === 0) {
       return null;
     }
     let popData = undoHistory.pop();
     objHistory.push(popData);
+    objDrawing.push(popData);
     c._objects.push(popData);
     c.renderAll();
   };
@@ -576,7 +581,12 @@ const Canvas = (props) => {
           </Tab>
         ))}
       </Nav>
-      {activeTab == CUST_STICKER && <StickerCanvas handleActivateTapNull={handleActivateTapNull} makeSticker={makeSticker}  />}
+      {activeTab == CUST_STICKER && (
+        <StickerCanvas
+          handleActivateTapNull={handleActivateTapNull}
+          makeSticker={makeSticker}
+        />
+      )}
       <div visible={activeTab === CUST_STICKER}></div>
       <Tooltab visible={activeTab === TEXTSTYLE}>
         <Item>
@@ -641,9 +651,6 @@ const Canvas = (props) => {
       <Tooltab visible={activeTab === DRAWING}>
         <Item>
           <ItemTitle>직접 손그림을 그리거나 손글씨를 쓸 수 있어요</ItemTitle>
-          <ItemButton onClick={() => undo(canvas)}>뒤로가기</ItemButton>
-          <ItemButton onClick={() => redo(canvas)}>복구하기</ItemButton>
-          <ItemButton onClick={deleteObject}>삭제하기</ItemButton>
           {isDrawing ? (
             <ItemButton
               onClick={() => {
@@ -659,13 +666,16 @@ const Canvas = (props) => {
               손그림 모드 ON
             </ItemButton>
           )}
+          <ItemButton onClick={() => undo(canvas)}>뒤로가기</ItemButton>
+          <ItemButton onClick={() => redo(canvas)}>복구하기</ItemButton>
+          <ItemButton onClick={deleteObject}>삭제하기</ItemButton>
           <ColorPicker
             type='color'
             value={brushColor}
             onChange={handleBrushColor}
           />
           <Slider
-            min={5}
+            min={10}
             max={50}
             sx={{
               width: 180,
