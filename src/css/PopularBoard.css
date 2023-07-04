@@ -15,6 +15,11 @@
     background-size: 200% 200%;
     box-shadow: 0px 4px 5px #d6d2d2;
     animation: glow 3s ease-in-out infinite;
+    transition: transform 0.3s ease-in-out; 
+}
+
+.popular-board:hover {
+    transform: translateY(-5px);
 }
 
 @keyframes glow {
