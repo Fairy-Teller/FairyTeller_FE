@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { call } from '../../service/ApiService';
+import {
+    BoardDetailShow,
+    BoardCommentSubmit,
+    BoardDelete,
+    LikeCommit,
+    modifyCommit,
+    DeleteBoard,
+} from '../../service/BoardService';
 import CommentSection from './CommentSection';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
@@ -30,7 +37,7 @@ const BoardDetail = () => {
 
     const fetchData = async () => {
         try {
-            const response = await call(`/board/${boardId}`, 'GET', null);
+            const response = await BoardDetailShow(boardId);
             const boardData = response.data[0];
             bookIdSet(boardData.bookId);
             setBoard(boardData);
@@ -47,7 +54,7 @@ const BoardDetail = () => {
 
     const handleCommentSubmit = async (comment) => {
         try {
-            await call(`/board/${boardId}/comment`, 'POST', comment);
+            await BoardCommentSubmit(boardId, comment);
             fetchDataComments(currentPage);
         } catch (error) {
             console.log('Error submitting comment:', error);
@@ -56,7 +63,7 @@ const BoardDetail = () => {
 
     const handleDeleteComment = async (commentId) => {
         try {
-            await call(`/board/${boardId}/comment/${commentId}`, 'DELETE', null);
+            await BoardDelete(boardId, commentId);
             fetchDataComments(currentPage);
         } catch (error) {
             console.log('Error deleting comment:', error);
@@ -65,7 +72,7 @@ const BoardDetail = () => {
 
     const handleLike = async () => {
         try {
-            const response = await call(`/board/${boardId}/like`, 'POST', null);
+            const response = await LikeCommit(boardId);
 
             // 응답에서 'likeCount'와 'liked'를 사용하여 상태를 업데이트
             if (response) {
@@ -85,7 +92,8 @@ const BoardDetail = () => {
     const fetchDataComments = async (page) => {
         try {
             const pageSize = 10;
-            const response = await call(`/board/${boardId}/comment?page=${page}&size=${pageSize}`, 'GET', null);
+            const response = await modifyCommit(boardId, page, pageSize);
+
             setComments(response.data);
             setCommentCount(response.data.length);
             setCurrentPage(response.currentPage);
@@ -97,7 +105,7 @@ const BoardDetail = () => {
 
     const handleDeleteBoard = async () => {
         try {
-            await call(`/board/${boardId}`, 'DELETE', null);
+            await DeleteBoard(boardId);
             navigate('/board'); // 삭제 후 게시판 목록 페이지로 이동
         } catch (error) {
             console.log('Error deleting board:', error);
@@ -113,7 +121,9 @@ const BoardDetail = () => {
             <Header mode={'default'} />
             <div>
                 <div className="deleteButtonContainer">
-                <button className="goBoardButton" onClick={() => navigate("/board")}>도서관 가기</button>
+                    <button className="goBoardButton" onClick={() => navigate('/board')}>
+                        도서관 가기
+                    </button>
                     <button
                         className={`deleteButton ${board.editable ? 'visible' : 'hidden'}`}
                         onClick={handleDeleteBoard}
@@ -122,34 +132,29 @@ const BoardDetail = () => {
                     </button>
                 </div>
                 <div>
-                <div className="title-container">
-                    <h2 className="title">
-                        {board.title}
-                    </h2>
-                    <div className="author">
-                        Author: {board.nickname}
+                    <div className="title-container">
+                        <h2 className="title">{board.title}</h2>
+                        <div className="author">Author: {board.nickname}</div>
+                        <div className="info">
+                            <div className="dateCreated">
+                                <FontAwesomeIcon icon={faCalendarAlt} />
+                                <div>
+                                    작성일:{' '}
+                                    {new Date(board.createdDatetime).toLocaleDateString('ko-KR', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: 'numeric',
+                                        minute: 'numeric',
+                                    })}
+                                </div>
+                            </div>
+                            <div className="viewCount">
+                                <FontAwesomeIcon icon={faEye} />
+                                <div>조회수: {board.viewCount}</div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="info">
-                    <div className="dateCreated">
-                <FontAwesomeIcon icon={faCalendarAlt} />
-                <div>
-                    작성일: {new Date(board.createdDatetime).toLocaleDateString("ko-KR", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                        hour: "numeric",
-                        minute: "numeric",
-                    })}
-                </div>
-            </div>
-                    <div className="viewCount">
-                <FontAwesomeIcon icon={faEye} />
-                <div>
-                    조회수: {board.viewCount}
-                </div>
-            </div>
-                </div>
-                </div>
                     <div>
                         <FairytaleShow props={board.bookId} state="board" />
                     </div>

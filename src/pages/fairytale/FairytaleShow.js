@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import RecordButton from '../../components/RecordModal';
-import { call } from '../../service/ApiService';
+import { getBookById } from '../../service/FairytaleService';
 import Modal from 'react-modal';
 import Book from './Book.js';
 import { useRecoilValue } from 'recoil';
@@ -84,9 +84,9 @@ function FairytaleShow(bookid) {
         }
     }, [bookid]);
 
-    const showBook = async (props) => {
+    const showBook = async () => {
         try {
-            const bookinfos = await call('/book/getBookById', 'POST', {
+            const bookinfos = await getBookById({
                 bookId: bookIdshow,
             });
 

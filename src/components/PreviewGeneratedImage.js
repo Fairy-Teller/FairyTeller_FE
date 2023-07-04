@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { isSaveImageState, StoryState, ImageTempState, BookState, Imagetheme } from '../recoil/FairytaleState';
-import { call } from '../service/ApiService';
-import { FairytaleNew, ImageTheme } from '../service/FairytaleService';
+import { FairytaleNew, ImageTheme, textToImage, createImageDTO } from '../service/FairytaleService';
 import styled from 'styled-components';
 import { device } from '../assets/css/devices';
 import LoadingModal from './LoadingModal';
@@ -54,17 +53,15 @@ const StoryText = styled.div`
     background-color: pink;
 `;
 const Guide = styled.div`
-
-  position: fixed;
-  top: 4rem;
-  left: ${(props) => (!props.isHovered ? "4rem" : "2.4rem")};
-  z-index: 99;
-  border-radius: 50%;
-  transition: left 0.8s ease-in-out;
-  @media ${device.tablet} {
-    left: 1.2rem;
-  }
-
+    position: fixed;
+    top: 4rem;
+    left: ${(props) => (!props.isHovered ? '4rem' : '2.4rem')};
+    z-index: 99;
+    border-radius: 50%;
+    transition: left 0.8s ease-in-out;
+    @media ${device.tablet} {
+        left: 1.2rem;
+    }
 `;
 const TextContent = styled.p`
     width: ${(props) => (!props.isHovered ? '88px' : '480px')};
@@ -118,110 +115,104 @@ const PreviewGeneratedIamge = (props) => {
         };
     }, [isBlockingKey]);
 
+    const disableKeyboardEvents = (event) => {
+        if (isBlockingKey) {
+            event.preventDefault();
+        }
+    };
 
-  const disableKeyboardEvents = (event) => {
-    if (isBlockingKey) {
-      event.preventDefault();
-    }
-  };
+    const createImg = async () => {
+        try {
+            setIsLoading(true);
+            setIsBlockingKey(true);
+            const imageData = await textToImage({
+                loraNo: imagetheme,
+                text: savedStory[props.index]['paragraph'],
+            });
 
-  const createImg = async () => {
-    try {
-      setIsLoading(true);
-      setIsBlockingKey(true);
-      const imageData = await call("/chat-gpt/textToImage/v2", "POST", {
-        loraNo: imagetheme,
-        text: savedStory[props.index]["paragraph"],
-      });
+            const byteCharacters = atob(imageData); // Base64 디코딩
+            const byteArrays = new Uint8Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteArrays[i] = byteCharacters.charCodeAt(i);
+            }
 
-      const byteCharacters = atob(imageData); // Base64 디코딩
-      const byteArrays = new Uint8Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteArrays[i] = byteCharacters.charCodeAt(i);
-      }
+            const imageBlob = new Blob([byteArrays], { type: 'image/jpeg' });
+            const imageUrl = URL.createObjectURL(imageBlob);
 
-      const imageBlob = new Blob([byteArrays], { type: "image/jpeg" });
-      const imageUrl = URL.createObjectURL(imageBlob);
+            const newPage = [...savedBook['pages']];
+            newPage[props.index] = {
+                ...newPage[props.index],
+                imageBase64: imageData,
+            };
+            // setSavedBook({ ...savedBook, pages: newPage });
 
-      const newPage = [...savedBook["pages"]];
-      newPage[props.index] = {
-        ...newPage[props.index],
-        imageBase64: imageData,
-      };
-      // setSavedBook({ ...savedBook, pages: newPage });
+            onChangeHandler(imageUrl, props.index);
 
-      onChangeHandler(imageUrl, props.index);
+            await saveImg(imageData);
 
-      await saveImg(imageData);
+            setIsLoading(false);
+            setIsBlockingKey(false);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+            setIsLoading(false);
+            setIsBlockingKey(false);
+        }
+    };
 
-      setIsLoading(false);
-      setIsBlockingKey(false);
-    } catch (error) {
-      console.log("Error fetching data:", error);
-      setIsLoading(false);
-      setIsBlockingKey(false);
-    }
-  };
+    const onChangeHandler = (targetUrl, index) => {
+        const newImage = [...savedImageTemp];
+        newImage[index] = { ...newImage[index], url: targetUrl };
+        setSavedImageTemp(newImage);
+    };
 
-  const onChangeHandler = (targetUrl, index) => {
-    const newImage = [...savedImageTemp];
-    newImage[index] = { ...newImage[index], url: targetUrl };
-    setSavedImageTemp(newImage);
-  };
+    const saveImg = async (image) => {
+        try {
+            const bookDTO = {
+                bookId: respones,
+                pages: [
+                    {
+                        pageNo: props.index + 1,
+                        originalImageUrl: image,
+                    },
+                ],
+            };
+            await createImageDTO(bookDTO);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+        } finally {
+            const newIsSaveImage = [...isSaveImage];
+            newIsSaveImage[props.index] = true;
+            setIsSaveImage(newIsSaveImage);
+        }
+    };
 
-  const saveImg = async (image) => {
-    try {
-      const bookDTO = {
-        bookId: respones,
-        pages: [
-          {
-            pageNo: props.index + 1,
-            originalImageUrl: image,
-          },
-        ],
-      };
-      const imageData = await call("/book/create/image", "POST", bookDTO);
-    } catch (error) {
-      console.log("Error fetching data:", error);
-    } finally {
-      const newIsSaveImage = [...isSaveImage];
-      newIsSaveImage[props.index] = true;
-      setIsSaveImage(newIsSaveImage);
-    }
-  };
+    return (
+        <Div>
+            <StoryText>{savedStory[props.index]['paragraph']}</StoryText>
+            {isLoading && <LoadingModal message="AI가 열심히 그림을 그리는 중입니다." />}
+            <Guide
+                isHovered={isHovered}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+            >
+                <Text isHovered={isHovered}>
+                    {isHovered ? '각 페이지에 대한 이미지를 모두 생성해주어야 동화책을 만들러 갈 수 있어요!' : '안내'}
+                </Text>
+            </Guide>
 
-  return (
-    <Div>
-      <StoryText>{savedStory[props.index]["paragraph"]}</StoryText>
-      {isLoading && <LoadingModal message='AI가 열심히 그림을 그리는 중입니다.' />}
-      <Guide
-        isHovered={isHovered}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}>
-        <Text isHovered={isHovered}>
-          {isHovered
-            ? "각 페이지에 대한 이미지를 모두 생성해주어야 동화책을 만들러 갈 수 있어요!"
-            : "안내"}
-        </Text>
-      </Guide>
+            <ImageWrap>
+                {savedImageTemp[props.index]['url'] !== '' ? (
+                    <Img src={savedImageTemp[props.index] && savedImageTemp[props.index]['url']} />
+                ) : (
+                    <ImgArea />
+                )}
+            </ImageWrap>
 
-      <ImageWrap>
-        {savedImageTemp[props.index]["url"] !== "" ? (
-          <Img src={savedImageTemp[props.index] && savedImageTemp[props.index]["url"]} />
-        ) : (
-          <ImgArea />
-        )}
-      </ImageWrap>
-
-      <ButtonWrap>
-        <ImgGenerate
-          onCreate={createImg}
-          index={props.index}
-        />
-      </ButtonWrap>
-    </Div>
-  );
-
+            <ButtonWrap>
+                <ImgGenerate onCreate={createImg} index={props.index} />
+            </ButtonWrap>
+        </Div>
+    );
 };
 
 export default PreviewGeneratedIamge;

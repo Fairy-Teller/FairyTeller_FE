@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-import { call } from '../service/ApiService';
+import { createFinalDTO } from '../service/FairytaleService';
 import LoadingModal from './LoadingModal';
 
 import { SaveState, Canvasexport, TitleSave } from '../recoil/FairytaleState';
-import { useSetRecoilState, useRecoilValue, useRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 
 const Modal = styled.div`
     //   color: white;
@@ -77,12 +77,11 @@ const bookData = {
 
 const TitleModal = (bookid) => {
     const navigate = useNavigate();
-    const [titles, setTitle] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const saveState = useSetRecoilState(SaveState);
     const canvasExport = useRecoilValue(Canvasexport);
-    const [titleSave, setTitleSave] = useRecoilState(TitleSave);
+    const setTitleSave = useSetRecoilState(TitleSave);
 
     useEffect(() => {
         bookData.bookId = bookid.props;
@@ -108,7 +107,7 @@ const TitleModal = (bookid) => {
         try {
             await setIsLoading(true);
             await saveState('save');
-            const response = await call('/book/create/final', 'POST', bookData);
+            await createFinalDTO(bookData);
         } catch (error) {
             console.error(error);
         }
@@ -118,7 +117,6 @@ const TitleModal = (bookid) => {
 
     const onChangeHandler = (e) => {
         const { value } = e.target;
-        setTitle(value);
         bookData.title = value;
     };
     const closeModal = () => {

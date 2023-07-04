@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { call } from '../../service/ApiService';
-
+import { mineFinal } from '../../service/MyPageService';
 import Container from '../../components/global/Container';
 import Header from '../../components/global/Header';
 import ContentCover from '../../components/global/ContentCover';
@@ -12,24 +11,18 @@ import Book from '../../components/global/Book';
 const MyBookList = () => {
     const [finalBooks, setFinalBooks] = useState([]);
 
-    const truncateTitle = (title) => {
-        if (title.length > 10) {
-            return title.substring(0, 10) + '...';
-        }
-        return title;
-    };
+    // const truncateTitle = (title) => {
+    //     if (title.length > 10) {
+    //         return title.substring(0, 10) + '...';
+    //     }
+    //     return title;
+    // };
 
     useEffect(() => {
-        // call("/book/mine/temp", "GET", null).then((response) => {
-        //   setTempBooks(response.data);
-        // });
-        call('/book/mine/final', 'GET', null)
-            .then((response) => {
-                setFinalBooks(response.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        const respoone = mineFinal();
+        respoone.then((respoone) => {
+            setFinalBooks(respoone.data);
+        });
     }, []);
 
     return (
@@ -40,7 +33,7 @@ const MyBookList = () => {
                 <ContentTitle>내가 만든 책 모음</ContentTitle>
                 <InnerCover>
                     <BookContainer>
-                        {finalBooks.length > 0 ? (
+                        {finalBooks ? (
                             finalBooks.map((book) => (
                                 <Book
                                     book={book}
