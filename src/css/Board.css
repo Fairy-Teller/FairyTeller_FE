@@ -19,12 +19,11 @@
 
 .pagination-button {
   margin: 10px;
-  padding: 10px 20px;
+  padding: 9px 18px;
   border: none;
-  border-radius: 50px;
-  background: linear-gradient(to right, #f78fa7, #fbb8ac); /* 그라데이션 배경을 더 은은한 핑크색으로 변경했습니다 */
+  border-radius: 15px;
+  background: linear-gradient(to right, #f78fa7, #fbb8ac);
   color: white;
-  box-shadow: 0 2px 5px 0 rgba(200, 17, 95, .5); /* 그림자 효과를 줄였습니다 */
   transition: transform .2s;
   cursor: pointer;
 }
@@ -223,9 +222,4 @@
 
 .pagination-button:hover {
   transform: scale(1.01);
-  box-shadow: 0 4px 5px 0 rgba(200, 17, 95, .4); 
-}
-
-.pagination-button:active {
-  transform: scale(.90);
 }
