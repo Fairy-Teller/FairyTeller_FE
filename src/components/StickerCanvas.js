@@ -1,7 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
-import { call } from '../service/ApiService';
-
 
 const ModalWrap = styled.div`
   display: flex;
@@ -16,23 +14,36 @@ const ModalWrap = styled.div`
   z-index: 9999;
   background-color: rgba(0, 0, 0, 0.4);
 `;
+const CloseButton = styled.button`
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px;
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 999999;
+`;
 const Modal = styled.div`
-  width: 60rem;
-  height: 40rem;
+  width: 70rem;
+  height: 50rem;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   background-color: white;
   border-radius: 2rem;
-  z-index : 99999;
-  border : 1px solid gray;
-  padding : 10px;
+  z-index: 99999;
+  border: 1px solid gray;
+  position: relative; /* 추가: close 버튼을 포지션:absolute로 정렬하기 위해 필요합니다. */
 `;
 
 const Message = styled.p`
   font-size: 1.6rem;
   color: black;
+  padding : 30px;
 `;
 
 const Canvas = styled.canvas`
@@ -43,12 +54,21 @@ const Canvas = styled.canvas`
 const Input = styled.input`
   border : 1px solid gray;
   padding : 10px;
+  width : 500px;
+  height : 30px;
+  font-size : 25px;
+`
+const SaveButton = styled.button`
+border : 1px solid gray;
+padding : 10px;
+height : 30px;
+font-size : 16px;
 `
 const Button = styled.button`
   border : 1px solid gray;
-  padding : 10px;
+  padding : 20px;
+  font-size : 20px;
 `
-
 const Palette = styled.div`
   /* 팔레트 컨테이너의 스타일링을 여기에 추가합니다. */
   display : flex;
@@ -59,7 +79,7 @@ const ColorButton = styled.button`
   background-color : "red";
 `;
 
-const StickerCanvas = ({handle, addSticker}) => {
+const StickerCanvas = ({handleActivateTapNull, makeSticker}) => {
   
   // useRef
   const canvasRef = useRef(null);
@@ -111,39 +131,31 @@ const StickerCanvas = ({handle, addSticker}) => {
       getCtx.lineTo(mouseX, mouseY);
       getCtx.stroke();
     }
-  }
-
-  const makeSticker = async () => {
-    const stickerTitle = document.getElementById("sticker-title");
-    try {
-        const canvas = canvasRef.current;
-        const dataURL = canvas.toDataURL(); // 캔버스의 이미지를 base64로 추출합니다.
-
-        const stickerData = {
-          prompt: stickerTitle.value,
-          img: dataURL, // 추출한 base64 이미지를 stickerData의 img 속성에 할당합니다.
-        };
-        const response = await call('/images/imageToImage', 'POST', stickerData);
-        handle()
-        addSticker(response)
-    } catch (error) {
-        console.error(error);
     }
-};
+
+    const readMakeSticker = () => {
+      const title = document.getElementById("sticker-title").value;
+      const canvas = canvasRef.current;
+      const dataURL = canvas.toDataURL();
+      makeSticker(title, dataURL);
+    };
+    
 
   return (
     <ModalWrap>
       <Modal>
-      <button onClick={handle}>닫기</button>
+      <CloseButton onClick={handleActivateTapNull}>
+              <img src="/images/closeicon.png" alt="Close" />
+      </CloseButton>
+      <Message>원하는 스티커를 만들어보아요!!!!</Message>
       <Palette>
         <Button onClick={() => handleColorChange("#FF5555")} style={{ backgroundColor: "#FF5555" }} />
-        <Button onClick={() => handleColorChange("#AA9999")} style={{ backgroundColor: "#FF9999" }} />
+        <Button onClick={() => handleColorChange("#FF9999")} style={{ backgroundColor: "#FF9999" }} />
         <Button onClick={() => handleColorChange("#FFFF55")} style={{ backgroundColor: "#FFFF55" }} />
         <Button onClick={() => handleColorChange("#55FF55")} style={{ backgroundColor: "#55FF55" }} />
         <Button onClick={() => handleColorChange("#5555ff")} style={{ backgroundColor: "#5555ff" }}  />
+        <Button onClick={() => handleColorChange("#333333")} style={{ backgroundColor: "#333333" }}  />
       </Palette>
-        
-        <Message>원하는 스티커를 만들어보아요!</Message>
         <div className="view">
         <div className="canvasWrap">
           <Canvas 
@@ -160,7 +172,7 @@ const StickerCanvas = ({handle, addSticker}) => {
       <div>
           {/* <Button onClick={handlePaletteToggle}>색상 선택</Button> */}
           <Input id="sticker-title" placeholder="어떤 그림인가요?" />
-          <Button onClick={makeSticker}>스티커 만들기!</Button>
+          <SaveButton onClick={readMakeSticker}>스티커 만들기!</SaveButton>
         </div>
       </Modal>
     </ModalWrap>

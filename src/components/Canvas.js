@@ -9,6 +9,7 @@ import { Slider } from "@mui/material";
 import TabSelection from "./TabSelection";
 import LoadingModal from "./LoadingModal";
 import StickerCanvas from "./StickerCanvas";
+import { call } from '../service/ApiService';
 
 const [OBJECTS, USERIMAGE, TEXT, TEXTSTYLE, DRAWING, STICKER, CUST_STICKER] = [
   "선택",
@@ -139,6 +140,7 @@ const Canvas = (props) => {
   const btnLabels = [TEXTSTYLE, TEXT, OBJECTS, USERIMAGE, STICKER, DRAWING, CUST_STICKER];
   const canvasRef = useRef(null);
   const [canvas, setCanvas] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(null); // 수정탭 출력 여부를 위한 state
   const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
 
@@ -316,7 +318,28 @@ const Canvas = (props) => {
   };
   const handleActivateTapNull =() =>{
     setActiveTab(null);
-  }
+  };
+
+  const makeSticker = async (customStickerTitle, dataURL) => {
+    console.log(dataURL);
+    console.log(customStickerTitle)
+    setActiveTab(null);
+    setIsLoading(true);
+    try {
+      const stickerData = {
+        prompt: customStickerTitle,
+        img: dataURL, // 추출한 base64 이미지를 stickerData의 img 속성에 할당합니다.
+      };
+      const response = await call('/images/imageToImage', 'POST', stickerData);
+      selectCustomStickersShow(response);
+      
+    } catch (error) {
+        console.error(error);
+    }
+    finally{
+      setIsLoading(false);
+    }
+  };
   // 텍스트 박스
   const addTextBox = () => {
     let text = new fabric.Textbox("원하는 내용을 추가하세요", {
@@ -542,6 +565,7 @@ const Canvas = (props) => {
 
   return (
     <CanvasFrame>
+      {isLoading && <LoadingModal message='AI가 스티커를 만들고 있습니다!' />}
       <Nav>
         {btnLabels.map((label) => (
           <Tab
@@ -552,7 +576,7 @@ const Canvas = (props) => {
           </Tab>
         ))}
       </Nav>
-      {activeTab == CUST_STICKER && <StickerCanvas handle={handleActivateTapNull} addSticker={selectCustomStickersShow}  />}
+      {activeTab == CUST_STICKER && <StickerCanvas handleActivateTapNull={handleActivateTapNull} makeSticker={makeSticker}  />}
       <div visible={activeTab === CUST_STICKER}></div>
       <Tooltab visible={activeTab === TEXTSTYLE}>
         <Item>
