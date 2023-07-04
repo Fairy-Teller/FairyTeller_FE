@@ -1,15 +1,31 @@
 .popular-board {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 1px solid #ddd;
+    border: 1px solid #eee;
     border-radius: 5px;
     padding: 15px;
     margin: 10px;
     flex: 1;
-    min-width:140px;
+    background: #f9f9f9;
+    background: linear-gradient(45deg, #f9f9f9 10%, #edebeb 30%, #f9f9f9 50%);
+    background-size: 800px 104px;
+    position: relative;
+    animation: shimmer 1.8s infinite linear;
 }
+
+@keyframes shimmer {
+    0% {
+      background-position: -468px 0;
+    }
+    100% {
+      background-position: 468px 0;
+    }
+  }
 
 .board-image {
     width: 100%;

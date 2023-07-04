@@ -114,8 +114,8 @@
 
 .boards-row {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
 }
 
 .authors-row {
@@ -198,6 +198,7 @@
   margin-bottom: 15px;
   background-color: #fcdede;
   width: 60%;
+  margin: auto;
   min-height: 350px;
   overflow: hidden;
   background: linear-gradient(to right, #fcdede, #fefefe, #fcdede);
