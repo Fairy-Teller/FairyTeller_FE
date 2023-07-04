@@ -120,7 +120,6 @@ const ItemButton = styled.button`
 const FloatButton = styled(ItemButton)`
   margin: 0;
   position: fixed;
-  width: 8rem;
   height: 4rem;
   top: 3.2rem;
   right: 30.4rem;
@@ -129,7 +128,11 @@ const FloatButton = styled(ItemButton)`
   background-color: white;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
   z-index: 98;
+  &:first-of-type {
+    width: 16rem;
+  }
   &:last-of-type {
+    width: 8rem;
     right: 20.8rem;
   }
 `;
@@ -643,7 +646,7 @@ const Canvas = (props) => {
   return (
     <CanvasFrame>
       {isLoading && <LoadingModal message='AI가 스티커를 만들고 있습니다!' />}
-      <FloatButton onClick={() => undo(canvas)}>되돌리기</FloatButton>
+      <FloatButton onClick={() => undo(canvas)}>이전으로 되돌리기</FloatButton>
       <FloatButton onClick={() => redo(canvas)}>복구하기</FloatButton>
       <Nav>
         {btnLabels.map((label) => (
