@@ -117,7 +117,22 @@ const ItemButton = styled.button`
     background-color: white;
   }
 `;
-
+const FloatButton = styled(ItemButton)`
+  margin: 0;
+  position: fixed;
+  width: 8rem;
+  height: 4rem;
+  top: 3.2rem;
+  right: 30.4rem;
+  text-align: center;
+  border-radius: 1.2rem;
+  background-color: white;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
+  z-index: 98;
+  &:last-of-type {
+    right: 20.8rem;
+  }
+`;
 const ColorPicker = styled.input`
   width: 100%;
   max-width: 100%;
@@ -136,6 +151,9 @@ const tempPost = {
   ],
 };
 
+let objJson = {};
+let undoJsonHistory = {};
+
 const Canvas = (props) => {
   const btnLabels = [TEXTSTYLE, TEXT, OBJECTS, USERIMAGE, STICKER, DRAWING, CUST_STICKER];
   const canvasRef = useRef(null);
@@ -143,7 +161,6 @@ const Canvas = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(null); // 수정탭 출력 여부를 위한 state
   const [showButtonFunction, setShowButtonFunctiontion] = useState(false);
-
   const selectStickers = useRecoilValue(SelectStickers); // 선택한 스티커의 정보 state
   const saveState = useRecoilValue(SaveState); // 캔버스 저장 버튼 useEffect에 쓰기 위함 state
   const setCanvasExport = useSetRecoilState(Canvasexport); // 캔버스 내보내기 state
@@ -157,11 +174,24 @@ const Canvas = (props) => {
   useEffect(() => {
     if (canvas) {
       const logToConsoleEveryMinute = async () => {
-        // 제이슨 저장 로직이 들어갈 곳
         tempPost.bookId = props.BookInfo.bookId;
         tempPost.pages[0].pageNo = props.idx;
-        tempPost.pages[0].objects = JSON.stringify(canvas);
+
+        let stringifiedCanvas = JSON.stringify(canvas);
+        tempPost.pages[0].objects = stringifiedCanvas;
+
         await tempCreate(tempPost);
+
+        if (!objJson[props.idx]) objJson[props.idx] = [];
+        if (!undoJsonHistory[props.idx]) undoJsonHistory[props.idx] = [];
+
+        if (
+          objJson[props.idx].length === 0 ||
+          objJson[props.idx][objJson[props.idx].length - 1] !== stringifiedCanvas
+        ) {
+          objJson[props.idx].push(stringifiedCanvas);
+        }
+        console.log("objJson " + props.idx + " saved " + new Date().getTime() + " : \n", objJson);
       };
 
       // 1분마다 함수를 실행하기 위한 타이머를 설정합니다.
@@ -215,6 +245,39 @@ const Canvas = (props) => {
     }
   };
 
+  // 캔버스 undo/redo
+  const undo = async (c) => {
+    canvas.renderOnAddRemove = false;
+
+    if (!objJson[props.idx] || objJson[props.idx].length === 0) {
+      return;
+    }
+
+    let popData = objJson[props.idx].pop();
+    undoJsonHistory[props.idx].push(popData);
+
+    await c.loadFromJSON(JSON.parse(popData));
+    canvas.renderOnAddRemove = true;
+
+    c.renderAll();
+  };
+
+  const redo = async (c) => {
+    canvas.renderOnAddRemove = false;
+
+    if (!undoJsonHistory[props.idx] || undoJsonHistory[props.idx].length === 0) {
+      return;
+    }
+
+    let popData = undoJsonHistory[props.idx].pop();
+    objJson[props.idx].push(popData);
+
+    await c.loadFromJSON(JSON.parse(popData));
+    canvas.renderOnAddRemove = true;
+
+    c.renderAll();
+  };
+
   // 캔버스 초기화
   const initCanvas = (data) => {
     const windowW = window.innerWidth;
@@ -234,6 +297,7 @@ const Canvas = (props) => {
             preserveObjectStacking: true,
           }
     );
+    canvas.selection = true;
 
     let left, top;
     if (windowW >= 1920) {
@@ -419,7 +483,12 @@ const Canvas = (props) => {
 
   // 삭제
   const deleteObject = () => {
-    canvas.remove(canvas.getActiveObject());
+    const activeObjects = canvas.getActiveObjects();
+    canvas.discardActiveObject();
+    if (activeObjects.length) {
+      canvas.remove.apply(canvas, activeObjects);
+    }
+    canvas.renderAll();
   };
 
   // 파일 불러와서 이미지 첨부
@@ -508,11 +577,11 @@ const Canvas = (props) => {
     canvas.renderAll();
   };
 
-  // undo/redo
+  // 손그림 undoD/redoD
   let objDrawing = [];
-  let undoHistory = [];
+  let undoDrawingHistory = [];
 
-  const undo = (c) => {
+  const undoD = (c) => {
     objDrawing = c.getObjects().filter((obj) => obj instanceof fabric.Path && obj.type === "path");
 
     if (objDrawing.length === 0) {
@@ -529,15 +598,15 @@ const Canvas = (props) => {
       }
     }
 
-    undoHistory.push(popData);
+    undoDrawingHistory.push(popData);
     c.renderAll();
   };
 
-  const redo = (c) => {
-    if (undoHistory.length === 0) {
+  const redoD = (c) => {
+    if (undoDrawingHistory.length === 0) {
       return null;
     }
-    let popData = undoHistory.pop();
+    let popData = undoDrawingHistory.pop();
     objDrawing.push(popData);
     c.add(popData);
     c.renderAll();
@@ -574,6 +643,8 @@ const Canvas = (props) => {
   return (
     <CanvasFrame>
       {isLoading && <LoadingModal message='AI가 스티커를 만들고 있습니다!' />}
+      <FloatButton onClick={() => undo(canvas)}>되돌리기</FloatButton>
+      <FloatButton onClick={() => redo(canvas)}>복구하기</FloatButton>
       <Nav>
         {btnLabels.map((label) => (
           <Tab
@@ -654,8 +725,8 @@ const Canvas = (props) => {
       <Tooltab visible={activeTab === DRAWING}>
         <Item>
           <ItemTitle>직접 손그림을 그리거나 손글씨를 쓸 수 있어요</ItemTitle>
-          <ItemButton onClick={() => undo(canvas)}>뒤로가기</ItemButton>
-          <ItemButton onClick={() => redo(canvas)}>복구하기</ItemButton>
+          <ItemButton onClick={() => undoD(canvas)}>뒤로가기</ItemButton>
+          <ItemButton onClick={() => redoD(canvas)}>복구하기</ItemButton>
           <ItemButton onClick={deleteObject}>삭제하기</ItemButton>
           <ColorPicker
             type='color'
@@ -711,7 +782,7 @@ const Canvas = (props) => {
       </Tooltab>
 
       <canvas
-        id='canvas'
+        id={props.canvasid + "c"}
         key={props.canvasid + "c"}
         ref={canvasRef}
         onMouseDown={() => setIsDrawing(true)}
