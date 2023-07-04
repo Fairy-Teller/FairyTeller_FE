@@ -14,6 +14,6 @@ export function mineFinal() {
         });
 }
 
-export function bookShow(bookId) {
+export function bookShowInfo(bookId) {
     return call(`/book/${bookId}`, 'GET', null);
 }

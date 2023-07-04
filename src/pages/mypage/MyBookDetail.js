@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { bookShow } from '../../service/MyPageService';
+import { bookShowInfo } from '../../service/MyPageService';
 import FairytaleShow from '../fairytale/FairytaleShow';
 import { useSetRecoilState } from 'recoil';
 import { BookId } from '../../recoil/FairytaleState';
@@ -15,8 +15,10 @@ const MyBookDetail = () => {
     changeBookId(bookId);
 
     useEffect(() => {
-        const bookShow = bookShow(bookId);
-        setBook(bookShow.data[0]);
+        const bookShow = bookShowInfo(bookId);
+        bookShow.then((responce) => {
+            setBook(responce.data[0]);
+        });
     }, []);
 
     return (
