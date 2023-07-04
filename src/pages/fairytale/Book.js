@@ -66,11 +66,6 @@ function Book({ bookInfo }) {
     width = 592 / 2;
     height = 333;
     objectPosition = 'center';
-  } else if (windowDimensions.width >= 592) {
-    // iPad Mini, portrait
-    width = 592 / 2;
-    height = 333;
-    objectPosition = 'center';
   } else {
     // Mobile
     width = windowDimensions.width / 2;
@@ -79,7 +74,7 @@ function Book({ bookInfo }) {
   }
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <div style={{ overflow: "hidden", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <PageFlip width={width} height={height}>
         {imageUrls.flatMap((url, i) => [
           <div
