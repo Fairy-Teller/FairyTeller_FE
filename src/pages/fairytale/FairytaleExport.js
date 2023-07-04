@@ -50,10 +50,6 @@ const FairytaleExport = () => {
 
     useEffect(() => {
         fetchData();
-        document.body.style.overflow = 'hidden';
-        return () => {
-            document.body.style.overflow = 'auto';
-        };
     }, []);
 
     const fetchData = async () => {
