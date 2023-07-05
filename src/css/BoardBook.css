@@ -1,6 +1,7 @@
 .container {
     z-index: 1;
-    perspective: 3000px;
+    display: flex;
+    flex-direction: column;
 }
 
 .container .book {
@@ -33,20 +34,56 @@
     border: 1px solid rgba(0,0,0,0.1);
     background-image: linear-gradient(to bottom right, #fff, #eee);
     transition: transform 1s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .container .book:hover .book__cover {
     transform: rotateY(-20deg);
+    overflow: hidden;
 }
 
+.book__page--front {
+    width: 100%;
+    height: 100%;
+}
 
 .container .book__content {
-    padding: 20px;
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
+.book__title__container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .book__sub__container {
+    flex-grow: 2;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .book__thumbnail__container {
+    flex-grow: 7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
 .author-likes {
-    margin-bottom: 20px; 
+    margin-bottom: 10px; 
 }
 .book__thumbnail {
     border-radius: 10px;
+    width: 80%;
+    height: auto;
 }
