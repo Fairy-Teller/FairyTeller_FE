@@ -6,7 +6,6 @@ const BookSub = ({ book, formattedDate, author, likeCount, comments }) => {
   return (
     <div className="book__info">
       <div className="sub-info">
-        <span>{formattedDate}</span>
         <span className="separator">·</span>
         <span>{comments ? `${comments.length}개의 댓글` : ""}</span>
       </div>
