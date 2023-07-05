@@ -51,6 +51,9 @@ const Book = ({ book, truncateTitle, linkPath, idProperty, showSub }) => {
                    alt={title + " created by " + author}
                  />
                </div>
+               <div className='book__date__container'>
+               <div className="book__date">{formattedDate}</div>
+               </div>
               </div>
             </div>
           </div>
