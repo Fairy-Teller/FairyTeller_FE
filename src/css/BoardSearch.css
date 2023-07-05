@@ -1,7 +1,15 @@
 .board-search-container {
   display: flex;
   justify-content: center;
-  width: 40%;
+  width: 100%;
+  max-width: 730px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .board-search-container {
+    width: 60%;
+  }
 }
 
 .board-search {
