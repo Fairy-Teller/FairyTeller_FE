@@ -4,7 +4,7 @@ function Forbidden() {
     useEffect(() => {
         // 홈으로 이동하는 동작
         const goHome = () => {
-            window.location.replace('/'); // 홈으로 이동
+            window.location.replace('/Login'); // 홈으로 이동
             alert('로그인을 진행해 주세요'); // 알림 메시지 띄우기
         };
 
