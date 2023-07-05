@@ -61,6 +61,9 @@ export async function currentUser() {
                         return response;
                     })
                     .catch((error) => {
+                        if (error.response.status === 403) {
+                            window.location.href = '/forbidden';
+                        }
                         console.error(error);
                         reject(error);
                     });

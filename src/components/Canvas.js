@@ -591,7 +591,7 @@ const Canvas = (props) => {
   const selectCustomStickersShow = (item) => {
     const base64 = "data:image/png;base64," + item;
     fabric.Image.fromURL(base64, function (img) {
-      img.scale(0.25).set({
+      img.scale(1).set({
         left: 150,
         top: 150,
         angle: -22.5,

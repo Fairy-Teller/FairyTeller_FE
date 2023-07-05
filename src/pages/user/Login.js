@@ -54,20 +54,20 @@ const Login = () => {
           <form
             noValidate
             onSubmit={handleSubmit}>
-            <div class='textContainer'>
+            <div className='textContainer'>
               <label htmlFor='userid'>아이디</label>
               <input
-                class='textField'
+                className='textField'
                 type='text'
                 id='userid'
                 name='userid'
                 autoComplete='userid'
               />
             </div>
-            <div class='textContainer'>
+            <div className='textContainer'>
               <label htmlFor='password'>패스워드</label>
               <input
-                class='textField'
+                className='textField'
                 type='password'
                 id='password'
                 name='password'
@@ -76,7 +76,7 @@ const Login = () => {
             </div>
             <div>
               <button
-                class='submit'
+                className='submit'
                 type='submit'>
                 로그인
               </button>
@@ -84,7 +84,7 @@ const Login = () => {
             <div>
               <button
                 type='button'
-                class='submit'
+                className='submit'
                 onClick={() => {
                   setIsSocialLogin(true);
                   handleSocialLogin("kakao");
@@ -96,7 +96,7 @@ const Login = () => {
             <div>
               <button
                 type='button'
-                class='submit'
+                className='submit'
                 onClick={() => {
                   setIsSocialLogin(true);
                   handleSocialLogin("naver");
@@ -108,7 +108,7 @@ const Login = () => {
             <div>
               <button
                 type='button'
-                class='submit'
+                className='submit'
                 onClick={() => {
                   setIsSocialLogin(true);
                   handleSocialLogin("google");
@@ -117,7 +117,7 @@ const Login = () => {
                 구글로 로그인하기
               </button>
             </div>
-            <div class='linkContainer'>
+            <div className='linkContainer'>
               <Link to='/signup'>계정이 없습니까? 여기서 가입하세요</Link>
             </div>
           </form>

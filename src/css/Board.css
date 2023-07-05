@@ -18,11 +18,13 @@
 }
 
 .pagination-button {
-  margin: 5px;
-  padding: 5px 10px;
+  margin: 10px;
+  padding: 9px 18px;
   border: none;
-  border-radius: 5px;
-  background-color: pink;
+  border-radius: 15px;
+  background: linear-gradient(to right, #f78fa7, #fbb8ac);
+  color: white;
+  transition: transform .2s;
   cursor: pointer;
 }
 
@@ -114,8 +116,8 @@
 
 .boards-row {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
 }
 
 .authors-row {
@@ -198,6 +200,7 @@
   margin-bottom: 15px;
   background-color: #fcdede;
   width: 60%;
+  margin: auto;
   min-height: 350px;
   overflow: hidden;
   background: linear-gradient(to right, #fcdede, #fefefe, #fcdede);
@@ -215,4 +218,8 @@
   100% {
     background-position: 0% 50%;
   }
+}
+
+.pagination-button:hover {
+  transform: scale(1.01);
 }
