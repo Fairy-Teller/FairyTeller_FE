@@ -32,6 +32,7 @@ const Book = ({ book, truncateTitle, linkPath, idProperty, showSub }) => {
                 <h4 className='book__title'>{title}</h4>
                 {showSub && (
                   <BookSub
+                    className='book__sub'
                     book={book}
                     formattedDate={formattedDate}
                     author={author}
@@ -52,5 +53,4 @@ const Book = ({ book, truncateTitle, linkPath, idProperty, showSub }) => {
     </Link>
   );
 };
-
 export default Book;

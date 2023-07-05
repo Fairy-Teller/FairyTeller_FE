@@ -53,14 +53,6 @@
   color: #000000;
 }
 
-.book__image {
-  width: 100%;
-  height: auto;
-  max-height: 200px;
-  border-radius: 2%;
-  transition: transform 0.1s ease;
-}
-
 .book__image:hover {
   transform: scale(1.02);
 }

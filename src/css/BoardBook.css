@@ -5,9 +5,9 @@
 
 .container .book {
     position: relative;
-    width: 80%; /* Adjust this to match your design */
-    height: 0; /* Zero out the height */
-    padding-bottom: 67%; /* Set padding-bottom to maintain aspect ratio */
+    width: 95%; 
+    height: 0; 
+    padding-bottom: 67%; 
     margin: 5% auto;
     border-radius: 2px 4px 4px 2px;
     background: linear-gradient(45deg,  #DAD5DC 0%, #f2ebf4 100%);
@@ -16,7 +16,7 @@
     font-weight: 400;
     color: #2b2b2b;
     transform-style: preserve-3d;
-    transition: transform 1s;
+    transition: transform 1s ease-in-out;
 }
 
 .container .book .book__cover {
@@ -29,8 +29,21 @@
     background: white;
     box-shadow: -80px 0 80px -25px grey;
     transition: transform 1s;
+    box-shadow: -10px 0 50px -10px rgba(0,0,0,0.3);
+    border: 1px solid rgba(0,0,0,0.1);
+    background-image: linear-gradient(to bottom right, #fff, #eee);
+    transition: transform 1s ease-in-out;
 }
 
 .container .book:hover .book__cover {
     transform: rotateY(-20deg);
+}
+
+
+.container .book__content {
+    padding: 20px; 
+}
+
+.author-likes {
+    margin-bottom: 20px; 
 }
