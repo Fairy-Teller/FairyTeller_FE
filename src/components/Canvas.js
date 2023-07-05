@@ -696,7 +696,7 @@ const Canvas = (props) => {
   return (
     <CanvasFrame>
       {isLoading && <LoadingModal message='잠시만 기다려 주세요!' />}
-      <FloatButton onClick={() => undo(canvas)}>되돌리기</FloatButton>
+      <FloatButton onClick={() => undo(canvas)}>이전으로 되돌리기</FloatButton>
       <FloatButton onClick={() => redo(canvas)}>복구하기</FloatButton>
       <Nav>
         {btnLabels.map((label) => (
