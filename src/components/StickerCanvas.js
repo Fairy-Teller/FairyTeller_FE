@@ -107,7 +107,7 @@ const StickerCanvas = ({handleActivateTapNull, makeSticker}) => {
     canvas.height = 540;
     const ctx = canvas.getContext("2d");
     ctx.lineJoin = "round";
-    ctx.lineWidth = 2.5;
+    ctx.lineWidth = 20;
     ctx.strokeStyle = penColor; // 펜 색상을 설정합니다.
     setGetCtx(ctx);
   }, []);
