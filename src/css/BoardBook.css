@@ -11,7 +11,7 @@
     margin: 5% auto;
     border-radius: 2px 4px 4px 2px;
     background: linear-gradient(45deg,  #DAD5DC 0%, #f2ebf4 100%);
-    box-shadow: 13px 13px 8px 0px rgba(151, 146, 153,0.6);
+    box-shadow: 8px 8px 5px 0px rgba(151, 146, 153,0.4);
     font-family: acumin-pro, sans-serif;
     font-weight: 400;
     color: #2b2b2b;
@@ -41,9 +41,12 @@
 
 
 .container .book__content {
-    padding: 20px; 
+    padding: 20px;
 }
 
 .author-likes {
     margin-bottom: 20px; 
+}
+.book__thumbnail {
+    border-radius: 10px;
 }
