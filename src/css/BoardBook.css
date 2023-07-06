@@ -77,9 +77,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
+  padding-top: 1rem;
   text-align: center;
-  font-size: 1.2em;
   font-weight: bold;
 }
 
