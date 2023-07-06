@@ -31,9 +31,10 @@
   }
 }
 
+
 .board-image {
   width: 100%;
-  height: 140px;
+  height: auto;
   max-height: 140px;
   border-radius: 2%;
   transition: transform 0.1s ease;
