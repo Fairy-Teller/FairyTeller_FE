@@ -66,8 +66,18 @@
 }
 
 .book__title {
-  font-size: 18px;
+  font-size: 23px;
   margin-top: 7px;
+  font-weight: bold;
+  background-color: #fcdede;
+  border: none;
+  padding: 9px 18px;
+  color: #271c1c;
+  text-align: center;
+  letter-spacing: 1px;
+  box-shadow: 2px 2px 4px rgba(255, 233, 233, 0.2);
+  border-radius: 5px;
+  color: white;
 }
 
 .sub-info {
@@ -81,14 +91,6 @@
   margin: 0 8px;
 }
 
-.author-likes {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 10px;
-}
-
 .author {
   display: flex;
   flex-direction: column;
@@ -97,7 +99,6 @@
 
 .author-name {
   font-size: 16px;
-  font-weight: bold;
   text-align: center;
 }
 
@@ -108,7 +109,8 @@
   border: 1px solid #ef3333;
   border-radius: 15px;
   padding: 5px;
-  margin-top: 10px;
+  width: 60px;
+  min-width: 60px;
 }
 
 .heart-icon {
@@ -120,6 +122,7 @@
 .like-count {
   font-size: 16px;
   font-weight: bold;
+  margin-right: 2px;
 }
 
 

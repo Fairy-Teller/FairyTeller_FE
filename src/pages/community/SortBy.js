@@ -24,7 +24,7 @@ const SortBy = ({ handleSort }) => {
     display: "flex",
     justifyContent: "flex-start",
     alignItems: "center",
-    margin: "2rem 0 1rem 0",
+    margin: "2.5rem 0 0rem 0",
     width: "77%",
   },
   select: {
