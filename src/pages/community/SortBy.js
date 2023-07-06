@@ -25,7 +25,7 @@ const SortBy = ({ handleSort }) => {
     justifyContent: "flex-start",
     alignItems: "center",
     margin: "2rem 0 1rem 0",
-    width: "80%",
+    width: "77%",
   },
   select: {
     width: "170px",
