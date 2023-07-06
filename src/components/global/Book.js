@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import BookSub from "./BookSub";
 import LazyImage from "../common/LazyImage";

@@ -3,14 +3,12 @@ import { signin, socialLogin } from "../../service/UserService";
 import { Link } from "react-router-dom";
 import LazyBackground from "../../components/common/LazyBackground";
 import base64_Bg from "../../script/BASE64_Bg";
-// UserInfo
-import { useSetRecoilState } from "recoil";
-import { UserInfo } from "../../recoil/FairytaleState";
+
 
 import "../../css/login.css";
 
 const Login = () => {
-  const userInfo = useSetRecoilState(UserInfo);
+
   const [isSocialLogin, setIsSocialLogin] = useState(false);
 
   const handleSubmit = (event) => {
@@ -27,7 +25,7 @@ const Login = () => {
     }
     signin({ userid: userid, password: password })
       .then((response) => {
-        userInfo(response.nickname);
+        
       })
       .catch((error) => {
         console.error("Login failed:", error);

@@ -1,17 +1,7 @@
 import { call } from './ApiService';
 
 export function topAuthorsData() {
-    return call('/board/topAuthors', 'GET', null)
-        .then((response) => {
-            return response;
-        })
-        .catch((error) => {
-            if (error.response.status === 403) {
-                window.location.href = '/forbidden';
-            }
-            console.error(error);
-            throw error;
-        });
+    return call('/board/topAuthors', 'GET', null);
 }
 
 export function pageShowData(currentPage) {
@@ -20,13 +10,7 @@ export function pageShowData(currentPage) {
 }
 
 export function BoardDetailShow(boardIdDTO) {
-    return call(`/board/${boardIdDTO}`, 'GET', null).catch((error) => {
-        if (error.response.status === 403) {
-            window.location.href = '/forbidden';
-        }
-        console.error(error);
-        throw error;
-    });
+    return call(`/board/${boardIdDTO}`, 'GET', null);
 }
 
 export function BoardCommentSubmit(boardId, commantDTO) {
