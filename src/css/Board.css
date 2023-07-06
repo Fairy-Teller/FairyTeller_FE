@@ -99,6 +99,8 @@
   border: 1px solid #ef3333;
   border-radius: 15px;
   padding: 5px;
+  width: 60px;
+  min-width: 60px;
 }
 
 .heart-icon {
