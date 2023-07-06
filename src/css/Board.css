@@ -66,8 +66,16 @@
 }
 
 .book__title {
-  font-size: 18px;
+  font-size: 23px;
   margin-top: 7px;
+  font-weight: bold;
+  background-color: #fcdede;
+  border: 1px solid #fcdede;
+  padding: 6px;
+  color: #271c1c;
+  text-align: center;
+  letter-spacing: 1px;
+  box-shadow: 2px 2px 4px rgba(255, 233, 233, 0.2);
 }
 
 .sub-info {
