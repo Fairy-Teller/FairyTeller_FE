@@ -4,10 +4,10 @@ import BookSub from "./BookSub";
 import LazyImage from "../common/LazyImage";
 import '../../css/BoardBook.css';
 
-const Book = ({ book, truncateTitle, linkPath, idProperty, showSub }) => {
+const Book = ({ book, truncateTitle, linkPath, idProperty, showSub}) => {
   const title = truncateTitle ? truncateTitle(book.title) : book.title;
   const author = truncateTitle ? truncateTitle(book.nickname) : book.nickname;
-  const { comments, likeCount, createdDatetime } = book;
+  const { comments, likeCount, createdDatetime, liked } = book;
 
   const id = book[idProperty];
 
@@ -41,6 +41,7 @@ const Book = ({ book, truncateTitle, linkPath, idProperty, showSub }) => {
                     author={author}
                     likeCount={likeCount}
                     comments={comments}
+                    liked={liked}
                   />
                   </div>
                 )}
