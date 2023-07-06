@@ -17,6 +17,7 @@ const BookSub = ({ book, formattedDate, author, likeCount, comments, liked: init
           <span className="author-name">{author}</span>
         </div>
         <div className="likes" onClick={handleLike}>
+        <div className="date__info">{formattedDate}</div>
           <FontAwesomeIcon icon={liked ? solidHeart : regularHeart} className="heart-icon" />
           <span className="like-count">{likeCount ? likeCount : 0}</span>
         </div>
