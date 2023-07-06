@@ -124,6 +124,13 @@
   background-color: #f9f9f9;
 }
 
+@media (max-width: 600px) {
+  .likes {
+    min-width: auto;
+    width: 100%;
+  }
+}
+
 .heart-icon {
   font-size: 18px;
   color: #ef3333;
