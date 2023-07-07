@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { isSaveImageState, StoryState, ImageTempState, BookState, Imagetheme, BookId } from '../recoil/FairytaleState';
-import { getBookByIdTemp, ImageTheme, textToImage, createImageDTO } from '../service/FairytaleService';
+import { isSaveImageState, ImageTempState, BookState, BookId } from '../recoil/FairytaleState';
+import { getBookByIdTemp, textToImage, createImageDTO } from '../service/FairytaleService';
 import styled from 'styled-components';
 import { device } from '../assets/css/devices';
 import LoadingModal from './LoadingModal';
@@ -90,9 +90,6 @@ const PreviewGeneratedIamge = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isBlockingKey, setIsBlockingKey] = useState(false);
     const [imageTheme, setImageTheme] = useState(null);
-    const savedStory = useRecoilValue(StoryState);
-
-    const [saveStory, setSavedStory] = useState(null);
 
     const [savedImageTemp, setSavedImageTemp] = useRecoilState(ImageTempState);
     const savedBook = useRecoilValue(BookState);
@@ -103,7 +100,7 @@ const PreviewGeneratedIamge = (props) => {
 
     useEffect(() => {
         getBookInfo();
-    }, []);
+    }, [isLoading]);
 
     const getBookInfo = async () => {
         await getBookByIdTemp({ bookId: bookIdShow }).then((respones) => {
@@ -113,10 +110,7 @@ const PreviewGeneratedIamge = (props) => {
             });
             setSavedImageTemp(respones.pages);
         });
-    };
-    // 이미지 테마랑 북아이디 불러오는 함수
-
-    console.log(savedImageTemp[props.index]['originalImageUrl']);
+    }; // 이미지 테마랑 북아이디 불러오는 함수
 
     useEffect(() => {
         window.addEventListener('keydown', disableKeyboardEvents);
@@ -137,6 +131,8 @@ const PreviewGeneratedIamge = (props) => {
             setIsLoading(true); // 로딩모달
             setIsBlockingKey(true); // 키보드 블락
             const imageData = await textToImage({
+                bookId: bookIdShow,
+                pageNo: props.index + 1,
                 loraNo: imageTheme.theme,
                 text: savedImageTemp[props.index]['fullStory'],
             }); //이미지 생성
@@ -156,8 +152,7 @@ const PreviewGeneratedIamge = (props) => {
                 imageBase64: imageData,
             };
             // setSavedBook({ ...savedBook, pages: newPage });
-
-            onChangeHandler(imageUrl, props.index);
+            // onChangeHandler(imageUrl, props.index);
 
             await saveImg(imageData);
 
@@ -170,13 +165,14 @@ const PreviewGeneratedIamge = (props) => {
         }
     };
 
-    const onChangeHandler = (targetUrl, index) => {
-        if (savedImageTemp) {
-            const newImage = [...savedImageTemp];
-            newImage[index] = { ...newImage[index], url: targetUrl };
-            setSavedImageTemp(newImage);
-        }
-    };
+    // const onChangeHandler = (targetUrl, index) => {
+    //     if (savedImageTemp) {
+    //         const newImage = [...savedImageTemp];
+    //         newImage[index] = { ...newImage[index], url: targetUrl };
+    //         setSavedImageTemp(newImage);
+    //         // getBookInfo();
+    //     }
+    // };
 
     const saveImg = async (image) => {
         try {
@@ -215,7 +211,7 @@ const PreviewGeneratedIamge = (props) => {
 
             <ImageWrap>
                 {savedImageTemp[props.index]['originalImageUrl'] !== null ? (
-                    <Img src={savedImageTemp[props.index]['originalImageUrl']} />
+                    <Img key={`image-${new Date().getTime()}`} src={savedImageTemp[props.index]['originalImageUrl']} />
                 ) : (
                     <ImgArea />
                 )}

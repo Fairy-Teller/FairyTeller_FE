@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { ImageTempState, GeneratedBoolState } from '../recoil/FairytaleState';
+import { ImageTempState, BookId } from '../recoil/FairytaleState';
 import styled from 'styled-components';
-import { ImageAll, FairytaleNew } from '../service/FairytaleService';
+import { ImageAll, getBookByIdTemp } from '../service/FairytaleService';
 
 const ImageContainerFrame = styled.div`
     display: flex;
@@ -56,18 +56,20 @@ const Button = styled.button`
 
 const PreviewAllGeneratedIamge = (props) => {
     const savedImageTemp = useRecoilValue(ImageTempState);
-    const isFirstCreated = useRecoilValue(GeneratedBoolState);
     const navigate = useNavigate();
-    console.log('PreviewAllGeneratedIamge', props);
+    const bookIdShow = useRecoilValue(BookId);
 
     const goEdit = () => {
-        let isAllFirstCreated = new Array(props.pagelength).fill(true);
-        FairytaleNew().then((response) => {
-            ImageAll({ bookId: response.bookId });
+        getBookByIdTemp({ bookId: bookIdShow }).then((reponse) => {
+            console.log('reponse', reponse.pages);
+            const ImageAllCheck = reponse.pages.every((item) => item.originalImageUrl !== null);
+            if (ImageAllCheck) {
+                ImageAll({ bookId: bookIdShow });
+                navigate('/f-edit');
+            } else {
+                alert('모든 페이지에 대한 이미지를 생성해주세요!');
+            }
         });
-        isFirstCreated.every((value, index) => value === isAllFirstCreated[index])
-            ? navigate('/f-edit')
-            : alert('모든 페이지에 대한 이미지를 생성해주세요!');
     };
 
     return (
@@ -77,7 +79,9 @@ const PreviewAllGeneratedIamge = (props) => {
                     {savedImageTemp.map((item, index) => (
                         <Image
                             key={index + '-generated'}
-                            src={item['originalImageUrl'] !== '' ? item['url'] : '/images/default-image.jpg'}
+                            src={
+                                item['originalImageUrl'] !== '' ? item['originalImageUrl'] : '/images/default-image.jpg'
+                            }
                             alt={`Generated-Image-${index + 1}`}
                         />
                     ))}
