@@ -24,7 +24,7 @@ const Book = ({ book, truncateTitle, linkPath, idProperty, showSub}) => {
       to={`/${linkPath}/${id}`}
       key={id}
       style={{ textDecoration: "none" }}>
-      <div className='container'>
+      <div className='board-book-container'>
         <div className='book'>
           <div className='book__cover'>
             <div className='book__page book__page--front'>
