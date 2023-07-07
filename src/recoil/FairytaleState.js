@@ -9,7 +9,6 @@ const { persistAtom } = recoilPersist();
 //   default: "default",
 // });
 
-
 export const SelectedKeywordsState = atom({
     key: 'SelectedKeywordsState',
     default: [],
@@ -40,8 +39,18 @@ export const Imagetheme = atom({
 
 export const ImageTempState = atom({
     key: 'ImageTempState',
-    default: null,
-    effects_UNSTABLE: [persistAtom],
+    default: [
+        {
+            pageNo: "에러!",
+            fullStory: '줄거리1',
+            originalImageUrl: null,
+            finalImageUrl: null,
+            audioUrl: null,
+            userAudioUrl: null,
+            objects: null,
+            dark: false,
+        },
+    ],
 });
 
 export const GeneratedBoolState = atom({

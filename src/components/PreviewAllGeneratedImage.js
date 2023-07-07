@@ -58,7 +58,7 @@ const PreviewAllGeneratedIamge = (props) => {
     const savedImageTemp = useRecoilValue(ImageTempState);
     const isFirstCreated = useRecoilValue(GeneratedBoolState);
     const navigate = useNavigate();
-
+    console.log('PreviewAllGeneratedIamge', props);
 
     const goEdit = () => {
         let isAllFirstCreated = new Array(props.pagelength).fill(true);
@@ -71,20 +71,22 @@ const PreviewAllGeneratedIamge = (props) => {
     };
 
     return (
-        <ImageContainerFrame>
-            <ImageContainer>
-                {savedImageTemp.map((item, index) => (
-                    <Image
-                        key={index + '-generated'}
-                        src={item['url'] !== '' ? item['url'] : '/images/default-image.jpg'}
-                        alt={`Generated-Image-${index + 1}`}
-                    />
-                ))}
-            </ImageContainer>
-            <ButtonWrap>
-                <Button onClick={goEdit}>동화책 꾸미기</Button>
-            </ButtonWrap>
-        </ImageContainerFrame>
+        <>
+            <ImageContainerFrame>
+                <ImageContainer>
+                    {savedImageTemp.map((item, index) => (
+                        <Image
+                            key={index + '-generated'}
+                            src={item['originalImageUrl'] !== '' ? item['url'] : '/images/default-image.jpg'}
+                            alt={`Generated-Image-${index + 1}`}
+                        />
+                    ))}
+                </ImageContainer>
+                <ButtonWrap>
+                    <Button onClick={goEdit}>동화책 꾸미기</Button>
+                </ButtonWrap>
+            </ImageContainerFrame>
+        </>
     );
 };
 
