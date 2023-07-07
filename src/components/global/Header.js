@@ -1,7 +1,5 @@
 import '../../assets/css/header.scss';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue, useResetRecoilState } from 'recoil';
-import { UserInfo } from '../../recoil/FairytaleState';
 import { styled } from 'styled-components';
 import { signout, currentUser } from '../../service/UserService';
 import { useEffect, useState } from 'react';
@@ -27,7 +25,6 @@ const UserNickname = styled.button`
 const Header = (props) => {
     const navigate = useNavigate();
     const [useInfo, setUseInfo] = useState(null);
-    const userReset = useResetRecoilState(UserInfo);
     useEffect(() => {
         const userInfoSet = currentUser();
         userInfoSet.then((item) => {
@@ -40,7 +37,6 @@ const Header = (props) => {
     };
 
     const signoutClick = () => {
-        userReset();
         signout();
     };
     const myPageClick = () => {

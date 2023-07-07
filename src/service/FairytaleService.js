@@ -1,17 +1,7 @@
 import { call } from './ApiService';
 
 export function FairytaleNew() {
-    return call('/book/my-newest', 'GET', null)
-        .then((response) => {
-            return response;
-        })
-        .catch((error) => {
-            if (error.response.status === 403) {
-                window.location.href = '/forbidden';
-            }
-            console.error(error);
-            throw error;
-        });
+    return call('/book/my-newest', 'GET', null);
 }
 
 export function sendAudioData(audioDTO) {
@@ -27,32 +17,13 @@ export function ImageAll(imageDTO) {
 }
 
 export function NewestTemp() {
-    return call('/book/find/newestTemp', 'GET', null)
-        .then((response) => {
-            return response;
-        })
-        .catch((error) => {
-            if (error.response.status === 403) {
-                window.location.href = '/forbidden';
-            }
-            console.error(error);
-            throw error;
-        });
+    return call('/book/find/newestTemp', 'GET', null);
 }
 
 export function getBookByIdTemp(getbookDTO) {
-    return call('/book/getBookById/temp', 'POST', getbookDTO)
-        .then((response) => {
-            return response;
-        })
-        .catch((error) => {
-            if (error.response.status === 403) {
-                window.location.href = '/forbidden';
-            }
-            console.error(error);
-            throw error;
-        });
+    return call('/book/getBookById/temp', 'POST', getbookDTO);
 }
+
 export function getBookById(getbookDTO) {
     return call('/book/getBookById', 'POST', getbookDTO);
 }
@@ -79,17 +50,7 @@ export function createFinalDTO(createFinalDTO) {
 }
 
 export function boardSave(boardSaveDTO) {
-    return call('/board/save', 'POST', boardSaveDTO)
-        .then((response) => {
-            return response;
-        })
-        .catch((error) => {
-            if (error.response.status === 403) {
-                window.location.href = '/forbidden';
-            }
-            console.error(error);
-            throw error;
-        });
+    return call('/board/save', 'POST', boardSaveDTO);
 }
 
 export function imageToImage(imageToImageDTO) {
@@ -97,31 +58,11 @@ export function imageToImage(imageToImageDTO) {
 }
 
 export function createStoryBook(bookDTO) {
-    return call('/book/create/story', 'POST', bookDTO)
-        .then((response) => {
-            return response;
-        })
-        .catch((error) => {
-            if (error.response.status === 403) {
-                window.location.href = '/forbidden';
-            }
-            console.error(error);
-            throw error;
-        });
+    return call('/book/create/story', 'POST', bookDTO);
 }
 
 export function keyword(keywordDTO) {
-    return call('/keyword', 'GET', keywordDTO)
-        .then((response) => {
-            return response;
-        })
-        .catch((error) => {
-            if (error.response.status === 403) {
-                window.location.href = '/forbidden'; // 403 오류 발생 시 예외를 throw
-            }
-            console.error(error);
-            throw error; // 다른 오류의 경우 예외를 다시 throw
-        });
+    return call('/keyword', 'GET', keywordDTO);
 }
 
 export function recreate(userDTO) {
