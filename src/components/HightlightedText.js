@@ -53,7 +53,8 @@ const HighlightedText = (props) => {
     useEffect(() => {
         const { bookstorys } = props;
 
-        const sentences = bookstorys.split(/(?<=[.?!])\s+/);
+        const sentences = bookstorys.split(/[\n]/);
+
         setSentences(sentences);
     }, [props.bookstorys]);
 
@@ -95,11 +96,7 @@ const HighlightedText = (props) => {
         ));
     };
 
-    return (
-        <>
-            <div style={{ marginTop: '10%', marginLeft: '15%' }}>{renderHighlightedText()}</div>
-        </>
-    );
+    return <div style={{ margin: '10% 10% 0 10%' }}>{renderHighlightedText()}</div>;
 };
 
 export default HighlightedText;

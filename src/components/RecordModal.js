@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { sendAudioData } from '../service/FairytaleService';
 import HighlightedText from './HightlightedText';
 import styled from 'styled-components';
+
 const buttonStyle = {
     backgroundColor: '#70A5E3',
     color: '#fff',
@@ -33,6 +34,12 @@ const VerticallyCenteredDiv = styled.div`
     align-items: center;
     justify-content: center;
     text-align: center;
+`;
+
+const HighlightedTextWrapper = styled.div`
+    max-height: 100%;
+    overflow: auto;
+    margin-top: 10px;
 `;
 const RecordButton = ({
     pageNumber,
@@ -156,6 +163,11 @@ const RecordButton = ({
         const formattedSeconds = seconds.toString().padStart(2, '0');
         return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
     };
+    const split = (bookstory) => {
+        const sentences = bookstory.split(/[\n]/);
+
+        return sentences.map((item) => <h1>{item}</h1>);
+    };
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <VerticallyCenteredDiv>
@@ -191,8 +203,9 @@ const RecordButton = ({
                     </div>
                     <div style={recordInfoStyle}>{pageNumber} 페이지 녹음중입니다.</div>
                     <div style={recordInfoStyle}>경과 시간: {formatStopwatchTime(stopwatch)}</div>
-
-                    <HighlightedText bookstorys={bookstory} />
+                    <HighlightedTextWrapper>
+                        <HighlightedText bookstorys={bookstory} />
+                    </HighlightedTextWrapper>
                 </div>
             ) : null}
             {!isRecording && countdown > 0 && (
@@ -212,7 +225,15 @@ const RecordButton = ({
                 </select>
             )}
             <audio ref={audioRef} controls style={{ marginTop: '10px', display: audioBlob ? 'block' : 'none' }} />
-            {audioBlob && <h1 style={{ marginTop: '3%' }}>스토리: {bookstory}</h1>}
+            {audioBlob && (
+                <>
+                    <div style={{ textAlign: 'center', marginTop: '15px' }}>
+                        🎙️ 멋진 녹음이에요! <br />
+                        녹음이 마음에 안드신다면 다시 녹음하기를 눌러보세요
+                    </div>
+                    <h2 style={{ textAlign: 'center', margin: '5% 10% 0 10%' }}>{split(bookstory)}</h2>
+                </>
+            )}
         </div>
     );
 };

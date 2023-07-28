@@ -1,4 +1,4 @@
-import { atom, selector } from 'recoil';
+import { atom } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
 
 const { persistAtom } = recoilPersist();
@@ -9,11 +9,6 @@ const { persistAtom } = recoilPersist();
 //   default: "default",
 // });
 
-export const UserInfo = atom({
-    key: 'UserInfo',
-    default: '',
-    effects_UNSTABLE: [persistAtom],
-});
 
 export const SelectedKeywordsState = atom({
     key: 'SelectedKeywordsState',

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { isSaveImageState, StoryState, ImageTempState, BookState, Imagetheme } from '../recoil/FairytaleState';
+import { isSaveImageState, StoryState, ImageTempState, BookState, Imagetheme,BookId } from '../recoil/FairytaleState';
 import { FairytaleNew, ImageTheme, textToImage, createImageDTO } from '../service/FairytaleService';
 import styled from 'styled-components';
 import { device } from '../assets/css/devices';
@@ -48,6 +48,7 @@ const StoryText = styled.div`
     padding: 1.2rem 1.6rem;
     margin: 0.4rem auto;
     color: black;
+    font-size: 1.6rem;
     line-height: 1.4;
     word-break: keep-all;
     background-color: pink;
@@ -58,13 +59,13 @@ const Guide = styled.div`
     left: ${(props) => (!props.isHovered ? '4rem' : '2.4rem')};
     z-index: 99;
     border-radius: 50%;
-    transition: left 0.8s ease-in-out;
+    transition: left 0.24s ease-in-out;
     @media ${device.tablet} {
         left: 1.2rem;
     }
 `;
 const TextContent = styled.p`
-    width: ${(props) => (!props.isHovered ? '88px' : '480px')};
+    width: ${(props) => (!props.isHovered ? '88px' : '400px')};
     height: 88px;
     padding: ${(props) => (!props.isHovered ? '0' : '0.8rem 1.2rem')};
     font-size: ${(props) => (!props.isHovered ? '1.6rem' : '1.2rem')};
@@ -95,6 +96,7 @@ const PreviewGeneratedIamge = (props) => {
     const [isSaveImage, setIsSaveImage] = useRecoilState(isSaveImageState);
     const [isHovered, setIsHovered] = useState(false);
     const imagetheme = useRecoilValue(Imagetheme);
+    const bookIdShow = useRecoilValue(BookId);
 
     useEffect(() => {
         FairytaleNew().then((response) => {
@@ -126,6 +128,8 @@ const PreviewGeneratedIamge = (props) => {
             setIsLoading(true);
             setIsBlockingKey(true);
             const imageData = await textToImage({
+                bookId: bookIdShow,
+                pageNo: props.index+1,
                 loraNo: imagetheme,
                 text: savedStory[props.index]['paragraph'],
             });

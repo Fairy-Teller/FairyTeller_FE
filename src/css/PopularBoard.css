@@ -1,59 +1,64 @@
 .popular-board {
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #eee;
-    border-radius: 5px;
-    padding: 15px;
-    margin: 10px;
-    flex: 1;
-    background: #f9f9f9;
-    background: linear-gradient(45deg, #f9f9f9 10%, #edebeb 30%, #f9f9f9 50%);
-    background-size: 800px 104px;
-    position: relative;
-    animation: shimmer 1.8s infinite linear;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  height: 190px;
+  padding: 15px;
+  margin: 10px;
+  flex: 1;
+  background: linear-gradient(135deg, #ffffff, #f5f5f5, #ffffff);
+  background-size: 200% 200%;
+  box-shadow: 0px 2px 3px #e4e1e1;
+  animation: glow 3s ease-in-out infinite;
+  transition: transform 0.3s ease-in-out;
 }
 
-@keyframes shimmer {
-    0% {
-      background-position: -468px 0;
-    }
-    100% {
-      background-position: 468px 0;
-    }
+@keyframes glow {
+  0% {
+    background-position: 0% 50%;
   }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 
 .board-image {
-    width: 100%;
-    height: auto;
-    max-height: 140px;
-    border-radius: 2%;
-    transition: transform 0.1s ease;
+  width: 100%;
+  height: auto;
+  max-height: 140px;
+  border-radius: 2%;
+  transition: transform 0.1s ease;
 }
 
 .board-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 10px 0; /* 위 아래 마진 추가 */
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px 0; /* 위 아래 마진 추가 */
 }
 
 .board-price {
-    font-size: 16px;
-    color: #444;
-    margin-bottom: 5px;
+  font-size: 16px;
+  color: #444;
+  margin-bottom: 5px;
 }
 
 .board-region-name {
-    font-size: 14px;
-    color: #888;
-    margin-bottom: 10px;
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 10px;
 }
 
 .board-counts {
-    font-size: 14px;
-    color: #888;
+  font-size: 14px;
+  color: #888;
 }

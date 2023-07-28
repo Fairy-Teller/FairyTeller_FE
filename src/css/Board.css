@@ -18,11 +18,13 @@
 }
 
 .pagination-button {
-  margin: 5px;
-  padding: 5px 10px;
+  margin: 10px;
+  padding: 9px 18px;
   border: none;
-  border-radius: 5px;
-  background-color: pink;
+  border-radius: 15px;
+  background: linear-gradient(to right, #f78fa7, #fbb8ac);
+  color: white;
+  transition: transform .2s;
   cursor: pointer;
 }
 
@@ -64,13 +66,18 @@
 }
 
 .book__title {
-  font-size: 18px;
+  font-size: 23px;
   margin-top: 7px;
-}
-
-.book__info {
-  margin-top: 7px;
-  margin-bottom: 4px;
+  font-weight: bold;
+  background-color: #fcdede;
+  border: none;
+  padding: 9px 18px;
+  color: #271c1c;
+  text-align: center;
+  letter-spacing: 1px;
+  box-shadow: 2px 2px 4px rgba(255, 233, 233, 0.2);
+  border-radius: 5px;
+  color: white;
 }
 
 .sub-info {
@@ -84,33 +91,58 @@
   margin: 0 8px;
 }
 
-.author-likes {
+.author {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  font-size: 14px;
-  color: #000000;
-  margin-top: 5px;
 }
 
 .author-name {
-  font-weight: bold;
-}
-
-.likes {
+  font-size: 18px;
+  text-align: center;
   display: flex;
   align-items: center;
-  font-size: 14px;
-  color: #555555;
+}
+
+.author-likes
+.book__sub__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.likes {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid #fff8f8;
+  border-radius: 5px;
+  padding: 8px;
+  width: 60px;
+  min-width: 390px;
+  background-color: #f9f9f9;
+}
+
+@media (max-width: 600px) {
+  .likes {
+    min-width: auto;
+    width: 100%;
+  }
 }
 
 .heart-icon {
+  font-size: 18px;
   color: #ef3333;
+  margin-right: 5px;
 }
 
 .like-count {
-  margin-left: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 2px;
 }
+
 
 .boards-row {
   display: flex;
@@ -216,4 +248,12 @@
   100% {
     background-position: 0% 50%;
   }
+}
+
+.pagination-button:hover {
+  transform: scale(1.01);
+}
+
+.date__info {
+  margin-right: 12px;
 }

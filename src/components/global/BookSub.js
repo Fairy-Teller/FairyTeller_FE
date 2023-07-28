@@ -1,20 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 
-const BookSub = ({ book, formattedDate, author, likeCount, comments }) => {
+const BookSub = ({ book, formattedDate, author, likeCount, comments, liked: initialLikeState }) => {
+  const [liked, setLiked] = useState(initialLikeState);
+
+  const handleLike = () => {
+    setLiked(!liked);
+  };
+
   return (
     <div className="book__info">
-      <div className="sub-info">
-        <span>{formattedDate}</span>
-        <span className="separator">·</span>
-        <span>{comments ? `${comments.length}개의 댓글` : ""}</span>
-      </div>
       <div className="author-likes">
-        <span className="author-name">{author}</span>
-        <div className="likes">
-          <FontAwesomeIcon icon={faHeart} className="heart-icon" />
-          <span className="like-count">{likeCount ? likeCount : ""}</span>
+        <div className="author">
+          <span className="author-name">{author}</span>
+        </div>
+        <div className="likes" onClick={handleLike}>
+        <div className="date__info">{formattedDate}</div>
+          <FontAwesomeIcon icon={liked ? solidHeart : regularHeart} className="heart-icon" />
+          <span className="like-count">{likeCount ? likeCount : 0}</span>
         </div>
       </div>
     </div>

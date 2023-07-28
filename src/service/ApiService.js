@@ -24,14 +24,14 @@ export function call(api, method, request) {
         .then((response) => {
             if (response.status === 200) {
                 return response.data;
-            } else if (response.status === 403) {
-                window.location.href = '/login';
-            } else {
-                return Promise.reject(response);
             }
         })
         .catch((error) => {
-            console.log(error);
-            throw error;
+            if (error.request.status === 403) {
+                // 에러 처리 로직
+                return window.location.replace('/forbidden'); // 현재 페이지를 '/new-page'로 대체하여 페이지 이동
+              
+            }
+            return Promise.reject(error);
         });
 }
